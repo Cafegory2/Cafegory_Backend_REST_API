@@ -10,6 +10,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+      pull-requests: write
+      issues: write
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
