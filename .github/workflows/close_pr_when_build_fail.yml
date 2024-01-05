@@ -24,12 +24,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
+        continue-on-error: true
+        id: build_and_test
         run:
           ./gradlew clean build --stacktrace
 
       - name: If build fail
+        continue-on-error: true
         # 이전 step이 실패한 경우에만 이 step을 실행시키는 syntax
-        if: ${{ failure() }}
+        if: ${{ steps.build_and_test.conclusion == 'failure'}}
+        id: close_pr
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -50,6 +54,9 @@ jobs:
               title: updated_title,
               state: 'closed'
             })
+      - name: Send Build Fail Message to Discord
+        continue-on-error: true
+        if: ${{ steps.build_and_test.conclusion == 'failure'}}
         run: |
           curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
           --header 'Content-Type: application/json' \
