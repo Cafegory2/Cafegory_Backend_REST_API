@@ -67,6 +67,6 @@ jobs:
             "title": "${{ github.event.pull_request.title }}",
             "type": "rich",
             "description": "빌드가 실패했습니다.",
-            "url": "${{github.ref}}"
+            "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
           }
           ]}'
