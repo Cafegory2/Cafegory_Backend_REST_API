@@ -70,3 +70,20 @@ jobs:
             "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
           }
           ]}'
+
+      - name: Send Build Success Message to Discord
+        continue-on-error: true
+        if: ${{ steps.build_and_test.outcome == 'success'}}
+        run: |
+          curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
+          --header 'Content-Type: application/json' \
+          --data '{
+          "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+          "embeds": [
+          {
+            "title": "${{ github.event.pull_request.title }}",
+            "type": "rich",
+            "description": "빌드가 성공했습니다! 아싸!",
+            "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
+          }
+          ]}'
