@@ -25,7 +25,7 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run:
-            ./gradlew clean build --stacktrace
+          ./gradlew clean build --stacktrace
 
       - name: If build fail
         # 이전 step이 실패한 경우에만 이 step을 실행시키는 syntax
@@ -50,3 +50,16 @@ jobs:
               title: updated_title,
               state: 'closed'
             })
+        run: |
+          curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
+          --header 'Content-Type: application/json' \
+          --data '{
+          "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+          "embeds": [
+          {
+            "title": "${{ github.event.pull_request.title }}",
+            "type": "rich",
+            "description": "빌드가 실패했습니다.",
+            "url": "${{github.ref}}"
+          }
+          ]}'
