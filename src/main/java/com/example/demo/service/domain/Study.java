@@ -6,9 +6,7 @@ import com.example.demo.service.dto.StudySearchBase;
 
 public interface Study {
 
-	default PagedLogicResult<Study> searchStudies(StudySearchBase studySearchBase) {
-		throw new UnsupportedOperationException("미구현 메서드"); // ToDo 구현 필요
-	}
+	PagedLogicResult<Study> searchStudies(StudySearchBase studySearchBase);
 
 	LogicResult<Boolean> tryJoin(Member memberThatExpectedToJoin);
 
