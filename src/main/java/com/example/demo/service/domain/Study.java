@@ -1,5 +1,7 @@
 package com.example.demo.service.domain;
 
+import java.util.List;
+
 import com.example.demo.service.dto.LogicResult;
 import com.example.demo.service.dto.PagedLogicResult;
 import com.example.demo.service.dto.StudySearchBase;
@@ -23,4 +25,6 @@ public interface Study {
 	 * @return 스터디 취소 요청 결괴
 	 */
 	LogicResult<Boolean> tryCancel(Member memberThatExpectedToCancel);
+
+	List<LogicResult<Boolean>> updateAttendance(Member leader, Member member, boolean attendance);
 }
