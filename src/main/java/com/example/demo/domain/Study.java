@@ -3,12 +3,8 @@ package com.example.demo.domain;
 import java.util.List;
 
 import com.example.demo.service.dto.LogicResult;
-import com.example.demo.service.dto.PagedLogicResult;
-import com.example.demo.service.dto.StudySearchBase;
 
 public interface Study {
-
-	PagedLogicResult<Study> searchStudies(StudySearchBase studySearchBase);
 
 	LogicResult<Boolean> tryJoin(Member memberThatExpectedToJoin);
 
