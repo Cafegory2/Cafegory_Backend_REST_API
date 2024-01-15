@@ -40,5 +40,6 @@ out/
 application-dev.yml
 application-pub.yml
 application-local.yml
+application-*.yml
 application_log
 *.gz
