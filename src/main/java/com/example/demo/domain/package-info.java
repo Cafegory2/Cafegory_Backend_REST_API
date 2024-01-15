@@ -7,4 +7,4 @@
  *     entity 패키지에 속한 클래스의 인스턴스를 참조할 수 있다. 이를 이용해 도메인 로직을 수행한다. 이 패키지 내의 클래스는 service 패키지 외부에서 참조하지 않도록 한다.
  * </p>
  */
-package com.example.demo.service.domain;
+package com.example.demo.domain;

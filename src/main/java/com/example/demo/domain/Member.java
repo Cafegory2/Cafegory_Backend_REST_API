@@ -1,4 +1,4 @@
-package com.example.demo.service.domain;
+package com.example.demo.domain;
 
 import com.example.demo.service.dto.LogicResult;
 
