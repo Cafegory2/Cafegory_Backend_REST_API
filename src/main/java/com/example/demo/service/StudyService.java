@@ -3,10 +3,10 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.domain.Member;
-import com.example.demo.service.dto.LogicResult;
-import com.example.demo.service.dto.PagedLogicResult;
-import com.example.demo.service.dto.StudySearchBase;
-import com.example.demo.service.dto.StudySearchResult;
+import com.example.demo.dto.LogicResult;
+import com.example.demo.dto.PagedLogicResult;
+import com.example.demo.dto.StudySearchBase;
+import com.example.demo.dto.StudySearchResult;
 
 public interface StudyService {
 	LogicResult<Boolean> tryJoin(String memberIdThatExpectedToJoin, String studyId);

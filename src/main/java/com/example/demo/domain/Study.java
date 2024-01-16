@@ -2,7 +2,7 @@ package com.example.demo.domain;
 
 import java.util.List;
 
-import com.example.demo.service.dto.LogicResult;
+import com.example.demo.dto.LogicResult;
 
 public interface Study {
 
