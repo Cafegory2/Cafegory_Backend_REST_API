@@ -1,7 +1,5 @@
 package com.example.demo.log;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -25,7 +23,7 @@ public class BusinessLogicLogger {
 
 	@Around("execution(* com.example.demo.controller.*Controller.*(..)) "
 		+ "|| execution(* com.example.demo.service.*Service.*(..)) "
-		+ "|| execution(* com.example.demo.service.domain.*.*(..)) "
+		+ "|| execution(* com.example.demo.domain.*.*(..)) "
 		+ "|| execution(* com.example.demo.repository.*Repository.*(..)) ")
 	public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable {
 		String className = joinPoint.getSignature().getDeclaringTypeName();
@@ -60,7 +58,7 @@ public class BusinessLogicLogger {
 		return "";
 	}
 
-	private void printRequestBody() throws IOException {
+	private void printRequestBody() {
 		HttpServletRequest request = getRequest();
 		final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper)request;
 		String requestId = (String)cachingRequest.getAttribute("requestId");
