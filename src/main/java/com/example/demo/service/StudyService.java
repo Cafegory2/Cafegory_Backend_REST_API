@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.domain.Member;
 import com.example.demo.dto.LogicResult;
 import com.example.demo.dto.PagedLogicResult;
 import com.example.demo.dto.StudySearchBase;
@@ -17,5 +16,5 @@ public interface StudyService {
 
 	PagedLogicResult<StudySearchResult> searchStudy(StudySearchBase studySearchBase);
 
-	List<LogicResult<Boolean>> updateAttendance(Member leader, Member member, boolean attendance);
+	List<LogicResult<Boolean>> updateAttendance(String leaderId, String memberId, boolean attendance);
 }
