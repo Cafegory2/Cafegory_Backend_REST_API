@@ -1,4 +1,4 @@
-name: Close PR when Build Fail
+name: Test And Build And Deploy
 on:
   pull_request:
     types: [ opened ]
@@ -23,12 +23,30 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Import secret files
+        run: |
+          echo -e "${{ secrets.APPLICATION_COMMON}}" >> ./src/main/resources/application-common.yml
+          echo -e "${{ secrets.APPLICATION_PRODUCT}}" >> ./src/main/resources/application-product.yml
+          echo -e "${{ secrets.APPLICATION_LOCAL}}" >> ./src/main/resources/application-local.yml
+          echo -e "${{ secrets.APPLICATION_INFO_LOGGING}}" >> ./src/main/resources/application-info-logging.yml
+          echo -e "${{ secrets.APPLICATION_DEBUG_LOGGING}}" >> ./src/main/resources/application-debug-logging.yml
       - name: Build with Gradle
         continue-on-error: true
         id: build_and_test
         run:
           ./gradlew clean build --stacktrace
-
+      - name: Deploy file
+        continue-on-error: true
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        id: deploy_file
+        if: ${{ steps.build_and_test.outcome == 'success'}}
+        with:
+          username: ${{ secrets.SSH_USERNAME }}
+          server: ${{ secrets.SSH_HOST }}
+          local_path: './build/libs/*'
+          remote_path: ${{ secrets.SSH_REMOTE_PATH }}
+          sftp_only: true
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: If build fail
         continue-on-error: true
         # 이전 step이 실패한 경우에만 이 step을 실행시키는 syntax
@@ -84,6 +102,38 @@ jobs:
             "title": "${{ github.event.pull_request.title }}",
             "type": "rich",
             "description": "빌드가 성공했습니다! 아싸!",
+            "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
+          }
+          ]}'
+      - name: Send Deploy Fail Message to Discord
+        continue-on-error: true
+        if: ${{ steps.deploy_file.outcome == 'failure'}}
+        run: |
+          curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
+          --header 'Content-Type: application/json' \
+          --data '{
+          "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+          "embeds": [
+          {
+            "title": "${{ github.event.pull_request.title }}",
+            "type": "rich",
+            "description": "배포가 실패했습니다.",
+            "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
+          }
+          ]}'
+      - name: Send Deploy Success Message to Discord
+        continue-on-error: true
+        if: ${{ steps.deploy_file.outcome == 'success'}}
+        run: |
+          curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
+          --header 'Content-Type: application/json' \
+          --data '{
+          "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
+          "embeds": [
+          {
+            "title": "${{ github.event.pull_request.title }}",
+            "type": "rich",
+            "description": "배포가 성공했습니다!!! 아싸!!!",
             "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
           }
           ]}'
