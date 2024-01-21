@@ -56,7 +56,7 @@ jobs:
           "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
           "embeds": [
           {
-            "title": "${{ github.event.pull_request.title }}",
+            "title": "배포가 실패했습니다.",
             "type": "rich",
             "description": "배포가 실패했습니다.",
             "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API"
@@ -72,9 +72,9 @@ jobs:
           "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
           "embeds": [
           {
-            "title": "${{ github.event.pull_request.title }}",
+            "title": "배포 성공!!",
             "type": "rich",
             "description": "배포가 성공했습니다!!! 아싸!!!",
-            "url": "http://${{ secrets.SSH_HOST }}/"
+            "url": "${{ secrets.HTTP_API_SERVER_URL}}/"
           }
           ]}'
