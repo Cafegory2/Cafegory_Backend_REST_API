@@ -1,5 +1,5 @@
 spring:
   profiles:
     group:
-      local: localDB, common
-      product: productDB, common
+      local: local, common
+      product: product, common
