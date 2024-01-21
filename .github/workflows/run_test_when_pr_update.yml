@@ -1,7 +1,7 @@
-name: Close PR when Build Fail
+name: Test And Build And Deploy
 on:
   pull_request:
-    types: [ opened ]
+    types: [ opened, reopened, edited, synchronize ]
     branches: [ 'main' ]
 
 jobs:
@@ -23,12 +23,18 @@ jobs:
           settings-path: ${{ github.workspace }} # location for the settings.xml file
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+      - name: Import secret files
+        run: |
+          echo -e "${{ secrets.APPLICATION_COMMON}}" >> ./src/main/resources/application-common.yml
+          echo -e "${{ secrets.APPLICATION_PRODUCT}}" >> ./src/main/resources/application-product.yml
+          echo -e "${{ secrets.APPLICATION_LOCAL}}" >> ./src/main/resources/application-local.yml
+          echo -e "${{ secrets.APPLICATION_INFO_LOGGING}}" >> ./src/main/resources/application-info-logging.yml
+          echo -e "${{ secrets.APPLICATION_DEBUG_LOGGING}}" >> ./src/main/resources/application-debug-logging.yml
       - name: Build with Gradle
         continue-on-error: true
         id: build_and_test
         run:
           ./gradlew clean build --stacktrace
-
       - name: If build fail
         continue-on-error: true
         # 이전 step이 실패한 경우에만 이 step을 실행시키는 syntax
