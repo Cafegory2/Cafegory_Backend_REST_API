@@ -75,6 +75,6 @@ jobs:
             "title": "배포 성공!!",
             "type": "rich",
             "description": "배포가 성공했습니다!!! 아싸!!!",
-            "url": "${{ secrets.HTTP_API_SERVER_URL}}/"
+            "url": "${{ secrets.HTTP_API_SERVER_URL}}"
           }
           ]}'
