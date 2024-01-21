@@ -77,4 +77,4 @@ jobs:
             "description": "배포가 성공했습니다!!! 아싸!!!",
             "url": "http://${{ secrets.SSH_HOST }}/"
           }
-          ]}'제
+          ]}'
