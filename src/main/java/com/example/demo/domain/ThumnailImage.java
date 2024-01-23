@@ -1,12 +1,10 @@
 package com.example.demo.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -18,15 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "sns_detail")
-public class SnsDetail {
+@Table(name = "thumnail_image")
+public class ThumnailImage {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "thumnailImage_id")
 	private Long id;
-	private String name;
-	private String url;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id")
-	private CafeImpl cafe;
+	private String thumbNailImage;
 }
