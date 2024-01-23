@@ -1,10 +1,11 @@
 package com.example.demo.domain;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -23,12 +24,12 @@ import lombok.NoArgsConstructor;
 public class MemberImpl implements Member {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "member_id")
 	private Long id;
 	private String name;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "thumnail_image_id")
+	@JoinColumn(name = "thumnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private ThumnailImage thumnailImage;
 }

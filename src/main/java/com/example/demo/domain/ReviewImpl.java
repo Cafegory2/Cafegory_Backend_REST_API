@@ -1,10 +1,11 @@
 package com.example.demo.domain;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "review")
 public class ReviewImpl implements Review {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "review_id")
 	private Long id;
 
@@ -32,11 +33,11 @@ public class ReviewImpl implements Review {
 	private double rate;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id")
+	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id")
+	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private MemberImpl member;
 
 	@Override

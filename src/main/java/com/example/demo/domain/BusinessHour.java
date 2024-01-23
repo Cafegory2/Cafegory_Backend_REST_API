@@ -3,10 +3,11 @@ package com.example.demo.domain;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 public class BusinessHour {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "business_hour_id")
 	private Long id;
 
@@ -36,7 +37,7 @@ public class BusinessHour {
 	private LocalTime endTime;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id")
+	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 
 }

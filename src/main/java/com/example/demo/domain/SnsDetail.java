@@ -1,9 +1,10 @@
 package com.example.demo.domain;
 
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,12 +22,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "sns_detail")
 public class SnsDetail {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
 	private String name;
 	private String url;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id")
+	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 }
