@@ -30,6 +30,6 @@ public class MemberImpl implements Member {
 	private String name;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "thumnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private ThumnailImage thumnailImage;
+	@JoinColumn(name = "thumbnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private ThumbnailImage thumbnailImage;
 }

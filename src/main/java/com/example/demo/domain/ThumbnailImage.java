@@ -15,13 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "thumnail_image")
-public class ThumnailImage {
+@Table(name = "thumbnail_image")
+public class ThumbnailImage {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "thumnailImage_id")
+	@Column(name = "thumbnailImage_id")
 	private Long id;
 
-	private String thumbNailImage;
+	private String thumbnailImage;
 }
