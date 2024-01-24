@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class ThumbnailImage {
 	@Id
 	@GeneratedValue
-	@Column(name = "thumbnailImage_id")
+	@Column(name = "thumbnail_image_id")
 	private Long id;
 
 	private String thumbnailImage;
