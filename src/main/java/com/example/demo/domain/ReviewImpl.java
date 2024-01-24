@@ -43,9 +43,8 @@ public class ReviewImpl implements Review {
 
 	@Override
 	public void updateContent(String content) {
-
 	}
-	
+
 	@Override
 	public void updateRate(double rate) {
 
