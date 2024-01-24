@@ -12,41 +12,24 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "review")
-public class ReviewImpl implements Review {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "menu")
+public class Menu {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "review_id")
+	@Column(name = "menu_id")
 	private Long id;
 
-	private String content;
-	private double rate;
+	private String name;
+	private int price;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private MemberImpl member;
-
-	@Override
-	public void updateContent(String content) {
-	}
-
-	@Override
-	public void updateRate(double rate) {
-
-	}
 }

@@ -1,9 +1,16 @@
 package com.example.demo.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,24 +23,35 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Table(name = "cafe")
 public class CafeImpl implements Cafe {
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
+	@Column(name = "cafe_id")
 	private Long id;
 
-	private String address;
+	private String name;
 
-	private String region;
+	@Embedded
+	private Address address;
 
+	@Transient
 	private boolean isOpen;
-
 	private String phone;
-	private int minBeveragePrice;
-	private int maxTime;
+
+	private int maxAllowableStay;
 	private double avgReviewRate;
 
-	@Override
-	public void addReview(Review review) {
+	@OneToMany(mappedBy = "cafe")
+	private List<BusinessHour> businessHours = new ArrayList<>();
 
+	@OneToMany(mappedBy = "cafe")
+	private List<SnsDetail> snsDetails = new ArrayList<>();
+
+	@Override
+	public String showFullAddress() {
+		return null;
 	}
+
 }
