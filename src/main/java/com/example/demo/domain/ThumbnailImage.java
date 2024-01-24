@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "thumbnail_image")
 public class ThumbnailImage {
-
 	@Id
 	@GeneratedValue
 	@Column(name = "thumbnailImage_id")

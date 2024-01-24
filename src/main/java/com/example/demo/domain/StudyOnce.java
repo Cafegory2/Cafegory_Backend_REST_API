@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-public interface Study {
+public interface StudyOnce {
 
 	void tryJoin(Member memberThatExpectedToJoin);
 

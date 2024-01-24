@@ -24,12 +24,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "study")
-public class StudyImpl implements Study {
+@Table(name = "study_once")
+public class StudyOnceImpl implements StudyOnce {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "study_id")
+	@Column(name = "study_once_id")
 	private Long id;
 
 	private String name;
@@ -40,17 +40,8 @@ public class StudyImpl implements Study {
 
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
-
-	// private LocalDate date;
-	//
-	// private LocalTime startTime;
-	//
-	// private LocalTime endTime;
-
 	private int maxMemberCount;
-
 	private int nowMemberCount;
-
 	private boolean isEnd;
 	private boolean canTalk;
 

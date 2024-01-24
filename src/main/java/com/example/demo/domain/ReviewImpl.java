@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "review")
 public class ReviewImpl implements Review {
+
 	@Id
 	@GeneratedValue
 	@Column(name = "review_id")
@@ -44,9 +45,9 @@ public class ReviewImpl implements Review {
 	public void updateContent(String content) {
 
 	}
-
+	
 	@Override
-	public void delete() {
+	public void updateRate(double rate) {
 
 	}
 }

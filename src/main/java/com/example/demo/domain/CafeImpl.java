@@ -28,25 +28,18 @@ public class CafeImpl implements Cafe {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "member_id")
+	@Column(name = "cafe_id")
 	private Long id;
 
 	private String name;
 
-	// private String address;
-	// private String region;
 	@Embedded
 	private Address address;
-
-	// private int minBeveragePrice;
-	@Transient
-	private Menu menu;
 
 	@Transient
 	private boolean isOpen;
 	private String phone;
 
-	// private int maxTime;
 	private int maxAllowableStay;
 	private double avgReviewRate;
 
@@ -57,19 +50,8 @@ public class CafeImpl implements Cafe {
 	private List<SnsDetail> snsDetails = new ArrayList<>();
 
 	@Override
-	public int calcMinBeveragePrice() {
-		return 0;
-	}
-
-	@Override
-	public String showAddress() {
-		// return address.showFullAddress();
+	public String showFullAddress() {
 		return null;
 	}
-
-	// @Override
-	// public void addReview(Review review) {
-	//
-	// }
 
 }

@@ -5,14 +5,10 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Address {
 
-	// 서울시
-	private String si;
-	// 강남구
-	private String gu;
-	// 방배동
-	private String dong;
+	private String fullAddress;
+	private String region;
 
-	public boolean isInRegion(String dong) {
+	public boolean isInRegion(String region) {
 		return true;
 	}
 
