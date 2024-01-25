@@ -17,8 +17,16 @@ class StudyOnceServiceImplTest {
 	StudyOnceServiceImpl studyOnceService;
 
 	@Test
+	@DisplayName("정상 조회 테스트")
+	void searchByStudyId() {
+		StudyOnceSearchResponse created = create();
+		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(1L);
+		Assertions.assertEquals(created.getId(), studyOnceSearchResponse.getId());
+	}
+
+	@Test
 	@DisplayName("정상 생성 테스트")
-	void create() {
+	StudyOnceSearchResponse create() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = 1L;
@@ -28,6 +36,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
 		Assertions.assertEquals(expected, result);
+		return result;
 	}
 
 	@Test

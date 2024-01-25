@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +57,14 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
 		return null;
+	}
+
+	@Override
+	public StudyOnceSearchResponse searchByStudyId(long studyId) {
+		StudyOnceImpl searched = studyOnceRepository.findById(studyId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 카공을 찾을 수 없습니다."));
+		boolean canJoin = searched.canJoin(LocalDateTime.now());
+		return makeStudyOnceSearchResponse(searched, canJoin);
 	}
 
 	@Override

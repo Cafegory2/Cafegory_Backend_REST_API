@@ -17,6 +17,8 @@ public interface StudyOnceService {
 
 	PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest);
 
+	StudyOnceSearchResponse searchByStudyId(long studyId);
+
 	List<UpdateAttendanceResponse> updateAttendance(long leaderId, long memberId, boolean attendance);
 
 	StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
