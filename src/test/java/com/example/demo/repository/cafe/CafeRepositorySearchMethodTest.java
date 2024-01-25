@@ -82,8 +82,8 @@ class CafeRepositorySearchMethodTest {
 	}
 
 	@Test
-	@DisplayName("필터링없는 카페를 조회하는데 데이터가 없으면 빈값을 반환한다")
-	void search_Cafes_No_Filtering_When_No_Data_Then_EmptyList() {
+	@DisplayName("데이터가 없으면 빈값을 반환한다")
+	void search_Cafes_When_No_Data_Then_EmptyList() {
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(new CafeSearchCondition(true));
 		assertThat(cafes).isEqualTo(Collections.emptyList());
 	}
