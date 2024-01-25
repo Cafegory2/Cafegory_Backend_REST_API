@@ -7,4 +7,6 @@ import com.example.demo.dto.StudyOnceSearchRequest;
 
 public interface StudyOnceRepositoryCustom {
 	List<StudyOnceImpl> findAllByStudyOnceSearchRequest(StudyOnceSearchRequest studyOnceSearchRequest);
+
+	Long count(StudyOnceSearchRequest studyOnceSearchRequest);
 }

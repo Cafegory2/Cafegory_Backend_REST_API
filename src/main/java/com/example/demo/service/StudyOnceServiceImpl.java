@@ -57,11 +57,22 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
-		List<StudyOnceSearchResponse> studyOnceSearchResponses = studyOnceRepository.findAllByStudyOnceSearchRequest(
+		int totalCount = Math.toIntExact(studyOnceRepository.count(studyOnceSearchRequest));
+		int sizePerPage = studyOnceSearchRequest.getSizePerPage();
+		int maxPage = calculateMaxPage(totalCount, sizePerPage);
+		List<StudyOnceSearchResponse> searchResults = studyOnceRepository.findAllByStudyOnceSearchRequest(
 				studyOnceSearchRequest)
-			.stream().map(studyOnce -> makeStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(LocalDateTime.now())))
+			.stream()
+			.map(studyOnce -> makeStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(LocalDateTime.now())))
 			.collect(Collectors.toList());
-		return new PagedResponse<>(1, 1, studyOnceSearchResponses.size(), studyOnceSearchResponses);
+		return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), searchResults);
+	}
+
+	private int calculateMaxPage(int totalCount, int sizePerPage) {
+		if (totalCount % sizePerPage == 0) {
+			return totalCount / sizePerPage;
+		}
+		return totalCount / sizePerPage + 1;
 	}
 
 	@Override

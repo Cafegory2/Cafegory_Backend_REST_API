@@ -36,6 +36,23 @@ public class StudyOnceRepositoryImpl implements StudyOnceRepositoryCustom {
 			.fetch();
 	}
 
+	@Override
+	public Long count(StudyOnceSearchRequest studyOnceSearchRequest) {
+		int maxMemberCount = studyOnceSearchRequest.getMaxMemberCount();
+		TalkAbleState canTalk = studyOnceSearchRequest.getCanTalk();
+		String area = studyOnceSearchRequest.getArea();
+		boolean onlyJoinAble = studyOnceSearchRequest.isOnlyJoinAble();
+		Long count = queryFactory.select(qStudyOnce.count())
+			.from(qStudyOnce)
+			.where(talkAbleFilter(canTalk), maxMemberCountFilter(maxMemberCount), areaFilter(area),
+				studyJoinAbleFilter(onlyJoinAble))
+			.fetchFirst();
+		if (count == null) {
+			return 0L;
+		}
+		return count;
+	}
+
 	private BooleanExpression studyJoinAbleFilter(boolean onlyJoinAble) {
 		LocalDateTime base = LocalDateTime.now().plusHours(3);
 		if (onlyJoinAble) {
