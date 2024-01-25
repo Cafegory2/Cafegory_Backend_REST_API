@@ -19,8 +19,8 @@ class StudyOnceServiceImplTest {
 	@Test
 	@DisplayName("정상 생성 테스트")
 	void create() {
-		LocalDateTime start = LocalDateTime.now();
-		LocalDateTime end = start.plusHours(3);
+		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
 		long cafeId = 1L;
 		long leaderId = 1L;
 		StudyOnceCreateRequest studyOnceCreateRequest = new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4,
@@ -60,7 +60,7 @@ class StudyOnceServiceImplTest {
 	@DisplayName("카공 시작 시간과 종료시간 차이가 5시간 초과일 경우 실패")
 	void createFailByStartTimeAndEndTimePeriodIsTooLong() {
 		LocalDateTime start = LocalDateTime.now().minusSeconds(1);
-		LocalDateTime end = start.plusHours(5).minusSeconds(1);
+		LocalDateTime end = start.plusHours(5).plusSeconds(1);
 		long cafeId = 1L;
 		long leaderId = 1L;
 		StudyOnceCreateRequest studyOnceCreateRequest = new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4,
