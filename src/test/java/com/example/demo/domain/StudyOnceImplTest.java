@@ -26,8 +26,8 @@ class StudyOnceImplTest {
 	static Stream<Arguments> canJoinParameter() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		return Stream.of(
-			Arguments.of(start.plusHours(1), start, true),
-			Arguments.of(start.plusHours(1).minusSeconds(1), start, false)
+			Arguments.of(start.minusHours(1), start, true),
+			Arguments.of(start.minusHours(1).plusSeconds(1), start, false)
 		);
 	}
 }

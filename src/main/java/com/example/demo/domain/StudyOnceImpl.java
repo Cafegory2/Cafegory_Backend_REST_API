@@ -98,7 +98,7 @@ public class StudyOnceImpl implements StudyOnce {
 	}
 
 	public boolean canJoin(LocalDateTime baseDateTime) {
-		Duration between = Duration.between(startDateTime, baseDateTime);
+		Duration between = Duration.between(baseDateTime, startDateTime);
 		return between.toSeconds() >= 60 * 60;
 	}
 }
