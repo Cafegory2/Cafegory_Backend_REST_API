@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -14,14 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "study_once")
@@ -44,6 +43,39 @@ public class StudyOnceImpl implements StudyOnce {
 	private int nowMemberCount;
 	private boolean isEnd;
 	private boolean canTalk;
+
+	private StudyOnceImpl(Long id, String name, CafeImpl cafe, LocalDateTime startDateTime, LocalDateTime endDateTime,
+		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean canTalk) {
+		validateStartDateTime(startDateTime);
+		validateStudyOnceTime(startDateTime, endDateTime);
+		this.id = id;
+		this.name = name;
+		this.cafe = cafe;
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+		this.maxMemberCount = maxMemberCount;
+		this.nowMemberCount = nowMemberCount;
+		this.isEnd = isEnd;
+		this.canTalk = canTalk;
+	}
+
+	private static void validateStartDateTime(LocalDateTime startDateTime) {
+		LocalDateTime now = LocalDateTime.now();
+		Duration between = Duration.between(now, startDateTime);
+		if (between.toSeconds() < 3 * 60 * 60) {
+			throw new IllegalArgumentException("카공 시작 시간은 현재 시간보다 최소 3시간 이후여야 합니다.");
+		}
+	}
+
+	private static void validateStudyOnceTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		Duration between = Duration.between(startDateTime, endDateTime);
+		if (between.toSeconds() < 60 * 60) {
+			throw new IllegalArgumentException("카공 시간은 1시간 이상이어야 합니다.");
+		}
+		if (between.toSeconds() > 5 * 60 * 60) {
+			throw new IllegalArgumentException("카공 시간은 5시간 미만이어야 합니다.");
+		}
+	}
 
 	@Override
 	public void tryJoin(Member memberThatExpectedToJoin) {
