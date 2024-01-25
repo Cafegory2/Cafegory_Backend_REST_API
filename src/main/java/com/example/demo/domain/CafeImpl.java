@@ -49,8 +49,15 @@ public class CafeImpl implements Cafe {
 	@OneToMany(mappedBy = "cafe")
 	private List<SnsDetail> snsDetails = new ArrayList<>();
 
+	@OneToMany(mappedBy = "cafe")
+	private List<ReviewImpl> reviews = new ArrayList<>();
+
+	@OneToMany(mappedBy = "cafe")
+	private List<Menu> menus = new ArrayList<>();
+	
 	@Override
 	public String showFullAddress() {
+
 		return null;
 	}
 
