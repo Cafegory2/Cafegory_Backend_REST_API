@@ -44,9 +44,11 @@ public class CafeImpl implements Cafe {
 	private double avgReviewRate;
 
 	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
 	private List<BusinessHour> businessHours = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
 	private List<SnsDetail> snsDetails = new ArrayList<>();
 
 	@Override
