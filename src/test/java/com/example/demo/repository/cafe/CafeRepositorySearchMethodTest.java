@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.controller.dto.CafeSearchCondition;
 import com.example.demo.domain.Address;
 import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.CafeImpl;
@@ -34,7 +35,7 @@ class CafeRepositorySearchMethodTest {
 	@Autowired
 	private CafeRepository cafeRepository;
 
-	void setUp() {
+	void setUp(CafeSearchCondition searchCondition) {
 
 		for (int i = 0; i < 20; i++) {
 			CafeImpl cafe = CafeImpl.builder()
@@ -42,6 +43,7 @@ class CafeRepositorySearchMethodTest {
 				.address(new Address("서울 마포구 상수동", "상수동"))
 				.phone("010-1234-5678")
 				.maxAllowableStay(3)
+				.isAbleToStudy(searchCondition.isAbleToStudy())
 				.build();
 			em.persist(cafe);
 
@@ -82,19 +84,44 @@ class CafeRepositorySearchMethodTest {
 	@Test
 	@DisplayName("필터링없는 카페를 조회하는데 데이터가 없으면 빈값을 반환한다")
 	void search_Cafes_No_Filtering_When_No_Data_Then_EmptyList() {
-		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter();
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(new CafeSearchCondition(true));
 		assertThat(cafes).isEqualTo(Collections.emptyList());
 	}
 
+	// @Test
+	// @DisplayName("데이터가 존재, 필터링 없는 카페를 조회")
+	// void search_Cafes_No_Filtering_When_Exists_Data_Then_Success() {
+	// 	//given
+	// 	CafeSearchCondition searchCondition = new CafeSearchCondition(true);
+	// 	setUp(searchCondition);
+	// 	//when
+	// 	List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+	// 	//then
+	// 	assertThat(cafes.size()).isEqualTo(20);
+	// }
+
 	@Test
-	@DisplayName("데이터가 존재, 필터링 없는 카페를 조회")
-	void search_Cafes_No_Filtering_When_Exists_Data_Then_Success() {
-		//givne
-		setUp();
+	@DisplayName("공부가 가능한 카페가 존재할때, 공부가 가능한 카페로 필터링 조회")
+	void search_Cafes_Filtering_With_CanStudy_If_Exists_CanStudyCafe() {
+		//given
+		setUp(new CafeSearchCondition(true));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true);
 		//when
-		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter();
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
 		assertThat(cafes.size()).isEqualTo(20);
 	}
-	
+
+	@Test
+	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 가능한 카페로 필터링 조회")
+	void search_Cafes_Filtering_With_CanStudy_If_Not_Exists_CanStudyCafe() {
+		//given
+		setUp(new CafeSearchCondition(false));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true);
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(0);
+	}
+
 }

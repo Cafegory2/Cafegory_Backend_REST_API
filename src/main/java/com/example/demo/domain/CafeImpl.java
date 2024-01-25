@@ -41,6 +41,7 @@ public class CafeImpl implements Cafe {
 
 	private int maxAllowableStay;
 	private double avgReviewRate;
+	private boolean isAbleToStudy;
 
 	@OneToMany(mappedBy = "cafe")
 	private List<BusinessHour> businessHours = new ArrayList<>();
@@ -56,7 +57,7 @@ public class CafeImpl implements Cafe {
 
 	@Builder
 	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone, int maxAllowableStay,
-		double avgReviewRate) {
+		double avgReviewRate, boolean isAbleToStudy) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -64,6 +65,7 @@ public class CafeImpl implements Cafe {
 		this.phone = phone;
 		this.maxAllowableStay = maxAllowableStay;
 		this.avgReviewRate = avgReviewRate;
+		this.isAbleToStudy = isAbleToStudy;
 	}
 
 	@Override

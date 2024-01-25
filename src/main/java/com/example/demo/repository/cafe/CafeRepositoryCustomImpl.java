@@ -6,7 +6,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.example.demo.controller.dto.CafeSearchCondition;
 import com.example.demo.domain.CafeImpl;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
@@ -20,16 +22,21 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 	}
 
 	@Override
-	public List<CafeImpl> findWithDynamicFilter() {
+	public List<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition) {
 		List<CafeImpl> cafes = queryFactory
 			.selectFrom(cafeImpl)
 			// .join(cafeImpl.businessHours, businessHour)
 			// .join(cafeImpl.snsDetails, snsDetail)
 			// .join(cafeImpl.reviews, reviewImpl)
 			// .join(cafeImpl.menus, menu)
+			.where(isAbleToStudy(searchCondition.isAbleToStudy()))
 			.fetch();
 
 		return cafes;
 
+	}
+
+	private BooleanExpression isAbleToStudy(boolean isAbleToStudy) {
+		return cafeImpl.isAbleToStudy.eq(isAbleToStudy);
 	}
 }
