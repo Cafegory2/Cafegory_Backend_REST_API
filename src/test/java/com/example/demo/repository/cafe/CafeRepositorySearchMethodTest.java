@@ -113,6 +113,18 @@ class CafeRepositorySearchMethodTest {
 	}
 
 	@Test
+	@DisplayName("공부가 가능한 카페가 존재할때, 공부가 불가능한 카페로 필터링 조회")
+	void search_Cafes_Filtering_With_CanNotStudy_If_Exists_CanStudyCafe() {
+		//given
+		setUp(new CafeSearchCondition(true));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(false);
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(0);
+	}
+
+	@Test
 	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 가능한 카페로 필터링 조회")
 	void search_Cafes_Filtering_With_CanStudy_If_Not_Exists_CanStudyCafe() {
 		//given
@@ -123,5 +135,46 @@ class CafeRepositorySearchMethodTest {
 		//then
 		assertThat(cafes.size()).isEqualTo(0);
 	}
+
+	@Test
+	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 불가능한 카페로 필터링 조회")
+	void search_Cafes_Filtering_With_CanNotStudy_If_Not_Exists_CanStudyCafe() {
+		//given
+		setUp(new CafeSearchCondition(false));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(false);
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(20);
+	}
+
+	@Test
+	@DisplayName("공부가 가능한 카페와 불가능한 카페가 존재할때, 공부가 불가능한 카페로 필터링 조회")
+	void search_Cafes_Filtering_With_CanNotStudy_If_Exists_Both() {
+		//given
+		setUp(new CafeSearchCondition(true));
+		setUp(new CafeSearchCondition(false));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(false);
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(20);
+	}
+
+	@Test
+	@DisplayName("공부가 가능한 카페와 불가능한 카페가 존재할때, 공부가 가능한 카페로 필터링 조회")
+	void search_Cafes_Filtering_With_CanStudy_If_Exists_Both() {
+		//given
+		setUp(new CafeSearchCondition(true));
+		setUp(new CafeSearchCondition(false));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true);
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(20);
+	}
+
+	// @Test
+	// void search_Cafes_Filtering_With_
 
 }
