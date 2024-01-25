@@ -6,6 +6,6 @@ import com.example.demo.domain.CafeImpl;
 
 public interface CafeRepositoryCustom {
 
-	List<CafeImpl> findWithBasicDetails();
+	List<CafeImpl> findWithDynamicFilter();
 
 }

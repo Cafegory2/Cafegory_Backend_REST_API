@@ -32,4 +32,13 @@ public class Menu {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
+
+	public Menu(String name, int price) {
+		this.name = name;
+		this.price = price;
+	}
+
+	public void setCafe(CafeImpl cafe) {
+		this.cafe = cafe;
+	}
 }

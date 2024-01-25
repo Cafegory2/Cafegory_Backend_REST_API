@@ -13,14 +13,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+// @Builder
+// @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cafe")
@@ -54,11 +53,43 @@ public class CafeImpl implements Cafe {
 
 	@OneToMany(mappedBy = "cafe")
 	private List<Menu> menus = new ArrayList<>();
-	
+
+	@Builder
+	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone, int maxAllowableStay,
+		double avgReviewRate) {
+		this.id = id;
+		this.name = name;
+		this.address = address;
+		this.isOpen = isOpen;
+		this.phone = phone;
+		this.maxAllowableStay = maxAllowableStay;
+		this.avgReviewRate = avgReviewRate;
+	}
+
 	@Override
 	public String showFullAddress() {
 
 		return null;
+	}
+
+	public void addBusinessHour(BusinessHour businessHour) {
+		businessHours.add(businessHour);
+		businessHour.setCafe(this);
+	}
+
+	public void addSnsDetail(SnsDetail snsDetail) {
+		snsDetails.add(snsDetail);
+		snsDetail.setCafe(this);
+	}
+
+	public void addReview(ReviewImpl review) {
+		reviews.add(review);
+		review.setCafe(this);
+	}
+
+	public void addMenu(Menu menu) {
+		menus.add(menu);
+		menu.setCafe(this);
 	}
 
 }

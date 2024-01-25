@@ -40,4 +40,13 @@ public class BusinessHour {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 
+	public BusinessHour(String day, LocalTime startTime, LocalTime endTime) {
+		this.day = day;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+
+	public void setCafe(CafeImpl cafe) {
+		this.cafe = cafe;
+	}
 }

@@ -1,10 +1,6 @@
 package com.example.demo.repository.cafe;
 
-import static com.example.demo.domain.QBusinessHour.*;
 import static com.example.demo.domain.QCafeImpl.*;
-import static com.example.demo.domain.QMenu.*;
-import static com.example.demo.domain.QReviewImpl.*;
-import static com.example.demo.domain.QSnsDetail.*;
 
 import java.util.List;
 
@@ -24,13 +20,13 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 	}
 
 	@Override
-	public List<CafeImpl> findWithBasicDetails() {
+	public List<CafeImpl> findWithDynamicFilter() {
 		List<CafeImpl> cafes = queryFactory
 			.selectFrom(cafeImpl)
-			.join(cafeImpl.businessHours, businessHour)
-			.join(cafeImpl.snsDetails, snsDetail)
-			.join(cafeImpl.reviews, reviewImpl)
-			.join(cafeImpl.menus, menu)
+			// .join(cafeImpl.businessHours, businessHour)
+			// .join(cafeImpl.snsDetails, snsDetail)
+			// .join(cafeImpl.reviews, reviewImpl)
+			// .join(cafeImpl.menus, menu)
 			.fetch();
 
 		return cafes;

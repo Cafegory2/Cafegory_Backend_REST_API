@@ -30,4 +30,13 @@ public class SnsDetail {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
+
+	public void setCafe(CafeImpl cafe) {
+		this.cafe = cafe;
+	}
+
+	public SnsDetail(String name, String url) {
+		this.name = name;
+		this.url = url;
+	}
 }

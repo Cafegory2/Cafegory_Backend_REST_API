@@ -41,6 +41,13 @@ public class ReviewImpl implements Review {
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private MemberImpl member;
 
+	public ReviewImpl(String content, double rate, CafeImpl cafe, MemberImpl member) {
+		this.content = content;
+		this.rate = rate;
+		this.cafe = cafe;
+		this.member = member;
+	}
+
 	@Override
 	public void updateContent(String content) {
 	}
@@ -48,5 +55,9 @@ public class ReviewImpl implements Review {
 	@Override
 	public void updateRate(double rate) {
 
+	}
+
+	public void setCafe(CafeImpl cafe) {
+		this.cafe = cafe;
 	}
 }
