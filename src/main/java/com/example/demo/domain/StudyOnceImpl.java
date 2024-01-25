@@ -96,4 +96,9 @@ public class StudyOnceImpl implements StudyOnce {
 	public void updateAttendance(Member leader, Member member, boolean attendance) {
 
 	}
+
+	public boolean canJoin(LocalDateTime baseDateTime) {
+		Duration between = Duration.between(startDateTime, baseDateTime);
+		return between.toSeconds() >= 60 * 60;
+	}
 }
