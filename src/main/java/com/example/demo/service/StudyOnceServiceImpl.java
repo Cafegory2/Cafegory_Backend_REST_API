@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,11 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
-		return null;
+		List<StudyOnceSearchResponse> studyOnceSearchResponses = studyOnceRepository.findAllByStudyOnceSearchRequest(
+				studyOnceSearchRequest)
+			.stream().map(studyOnce -> makeStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(LocalDateTime.now())))
+			.collect(Collectors.toList());
+		return new PagedResponse<>(1, 1, studyOnceSearchResponses.size(), studyOnceSearchResponses);
 	}
 
 	@Override

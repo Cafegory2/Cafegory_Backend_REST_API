@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
-import java.util.Collections;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,9 +31,8 @@ public class StudyOnceController {
 
 	@GetMapping("/list")
 	public ResponseEntity<PagedResponse<StudyOnceSearchResponse>> searchList(
-		StudyOnceSearchRequest studyOnceSearchRequest) {
-		PagedResponse<StudyOnceSearchResponse> pagedResponse = new PagedResponse<>(1, 1, 1,
-			Collections.emptyList());
+		@ModelAttribute StudyOnceSearchRequest studyOnceSearchRequest) {
+		PagedResponse<StudyOnceSearchResponse> pagedResponse = studyOnceService.searchStudy(studyOnceSearchRequest);
 		return ResponseEntity.ok(pagedResponse);
 	}
 
