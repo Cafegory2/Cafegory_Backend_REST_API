@@ -38,7 +38,6 @@ jobs:
       - name: If build fail
         continue-on-error: true
         if: ${{ steps.build_and_test.outcome == 'failure'}}
-        id: close_pr
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -62,7 +61,6 @@ jobs:
       - name: If build success
         continue-on-error: true
         if: ${{ steps.build_and_test.outcome == 'success'}}
-        id: close_pr
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
