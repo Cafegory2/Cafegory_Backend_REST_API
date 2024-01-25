@@ -39,17 +39,17 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final StudyOnceRepository studyOnceRepository;
 
 	@Override
-	public void tryJoin(String memberIdThatExpectedToJoin, String studyId) {
+	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
 
 	}
 
 	@Override
-	public void tryQuit(String memberIdThatExpectedToQuit, String studyId) {
+	public void tryQuit(long memberIdThatExpectedToQuit, long studyId) {
 
 	}
 
 	@Override
-	public void tryCancel(String memberIdThatExpectedToCancel, String studyId) {
+	public void tryCancel(long memberIdThatExpectedToCancel, long studyId) {
 
 	}
 
@@ -59,17 +59,17 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public List<UpdateAttendanceResponse> updateAttendance(String leaderId, String memberId, boolean attendance) {
+	public List<UpdateAttendanceResponse> updateAttendance(long leaderId, long memberId, boolean attendance) {
 		return null;
 	}
 
 	@Override
-	public StudyOnceSearchResponse createStudy(String leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
+	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		CafeImpl cafe = cafeRepositoryWrapper.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
 		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
-		return makeStudyOnceSearchRespone(saved, canJoin);
+		return makeStudyOnceSearchResponse(saved, canJoin);
 	}
 
 	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe) {
@@ -86,7 +86,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	}
 
-	private static StudyOnceSearchResponse makeStudyOnceSearchRespone(StudyOnceImpl saved, boolean canJoin) {
+	private static StudyOnceSearchResponse makeStudyOnceSearchResponse(StudyOnceImpl saved, boolean canJoin) {
 		return StudyOnceSearchResponse.builder()
 			.cafeId(saved.getCafe().getId())
 			.id(saved.getId())
