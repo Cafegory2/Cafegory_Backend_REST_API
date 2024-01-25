@@ -19,24 +19,32 @@ class StudyOnceServiceImplTest {
 	@Test
 	@DisplayName("정상 조회 테스트")
 	void searchByStudyId() {
-		StudyOnceSearchResponse created = create();
-		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(1L);
-		Assertions.assertEquals(created.getId(), studyOnceSearchResponse.getId());
-	}
-
-	@Test
-	@DisplayName("정상 생성 테스트")
-	StudyOnceSearchResponse create() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = 1L;
 		long leaderId = 1L;
-		StudyOnceCreateRequest studyOnceCreateRequest = new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4,
-			true);
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getId());
+		Assertions.assertEquals(result.getId(), studyOnceSearchResponse.getId());
+	}
+
+	@Test
+	@DisplayName("정상 생성 테스트")
+	void create() {
+		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
+		long cafeId = 1L;
+		long leaderId = 1L;
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
 		Assertions.assertEquals(expected, result);
-		return result;
+	}
+
+	private static StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
+		long cafeId) {
+		return new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4, true);
 	}
 
 	@Test
@@ -46,8 +54,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime end = start.plusHours(3);
 		long cafeId = 1L;
 		long leaderId = 1L;
-		StudyOnceCreateRequest studyOnceCreateRequest = new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4,
-			true);
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		Assertions.assertThrows(IllegalArgumentException.class,
 			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
 	}
@@ -59,8 +66,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime end = start.plusMinutes(59);
 		long cafeId = 1L;
 		long leaderId = 1L;
-		StudyOnceCreateRequest studyOnceCreateRequest = new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4,
-			true);
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		Assertions.assertThrows(IllegalArgumentException.class,
 			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
 	}
@@ -72,8 +78,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime end = start.plusHours(5).plusSeconds(1);
 		long cafeId = 1L;
 		long leaderId = 1L;
-		StudyOnceCreateRequest studyOnceCreateRequest = new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4,
-			true);
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		Assertions.assertThrows(IllegalArgumentException.class,
 			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
 	}
