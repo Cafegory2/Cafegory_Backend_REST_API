@@ -40,7 +40,7 @@ class CafeRepositorySearchMethodTest {
 		for (int i = 0; i < 20; i++) {
 			CafeImpl cafe = CafeImpl.builder()
 				.name("카페고리" + i)
-				.address(new Address("서울 마포구 상수동", "상수동"))
+				.address(new Address("서울 마포구 " + searchCondition.getRegion(), searchCondition.getRegion()))
 				.phone("010-1234-5678")
 				.maxAllowableStay(3)
 				.isAbleToStudy(searchCondition.isAbleToStudy())
@@ -84,7 +84,7 @@ class CafeRepositorySearchMethodTest {
 	@Test
 	@DisplayName("데이터가 없으면 빈값을 반환한다")
 	void search_Cafes_When_No_Data_Then_EmptyList() {
-		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(new CafeSearchCondition(true));
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(new CafeSearchCondition(true, "상수동"));
 		assertThat(cafes).isEqualTo(Collections.emptyList());
 	}
 
@@ -102,10 +102,10 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	@DisplayName("공부가 가능한 카페가 존재할때, 공부가 가능한 카페로 필터링 조회")
-	void search_Cafes_Filtering_With_CanStudy_If_Exists_CanStudyCafe() {
+	void search_Cafes_Filtering_With_CanStudy_When_Exists_CanStudyCafe() {
 		//given
-		setUp(new CafeSearchCondition(true));
-		CafeSearchCondition searchCondition = new CafeSearchCondition(true);
+		setUp(new CafeSearchCondition(true, "상수동"));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true, "상수동");
 		//when
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
@@ -114,10 +114,10 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	@DisplayName("공부가 가능한 카페가 존재할때, 공부가 불가능한 카페로 필터링 조회")
-	void search_Cafes_Filtering_With_CanNotStudy_If_Exists_CanStudyCafe() {
+	void search_Cafes_Filtering_With_CanNotStudy_When_Exists_CanStudyCafe() {
 		//given
-		setUp(new CafeSearchCondition(true));
-		CafeSearchCondition searchCondition = new CafeSearchCondition(false);
+		setUp(new CafeSearchCondition(true, "상수동"));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(false, "상수동");
 		//when
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
@@ -126,10 +126,10 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 가능한 카페로 필터링 조회")
-	void search_Cafes_Filtering_With_CanStudy_If_Not_Exists_CanStudyCafe() {
+	void search_Cafes_Filtering_With_CanStudy_When_Not_Exists_CanStudyCafe() {
 		//given
-		setUp(new CafeSearchCondition(false));
-		CafeSearchCondition searchCondition = new CafeSearchCondition(true);
+		setUp(new CafeSearchCondition(false, "상수동"));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true, "상수동");
 		//when
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
@@ -138,10 +138,10 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 불가능한 카페로 필터링 조회")
-	void search_Cafes_Filtering_With_CanNotStudy_If_Not_Exists_CanStudyCafe() {
+	void search_Cafes_Filtering_With_CanNotStudy_When_Not_Exists_CanStudyCafe() {
 		//given
-		setUp(new CafeSearchCondition(false));
-		CafeSearchCondition searchCondition = new CafeSearchCondition(false);
+		setUp(new CafeSearchCondition(false, "상수동"));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(false, "상수동");
 		//when
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
@@ -150,11 +150,11 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	@DisplayName("공부가 가능한 카페와 불가능한 카페가 존재할때, 공부가 불가능한 카페로 필터링 조회")
-	void search_Cafes_Filtering_With_CanNotStudy_If_Exists_Both() {
+	void search_Cafes_Filtering_With_CanNotStudy_When_Exists_Both() {
 		//given
-		setUp(new CafeSearchCondition(true));
-		setUp(new CafeSearchCondition(false));
-		CafeSearchCondition searchCondition = new CafeSearchCondition(false);
+		setUp(new CafeSearchCondition(true, "상수동"));
+		setUp(new CafeSearchCondition(false, "상수동"));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(false, "상수동");
 		//when
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
@@ -163,18 +163,84 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	@DisplayName("공부가 가능한 카페와 불가능한 카페가 존재할때, 공부가 가능한 카페로 필터링 조회")
-	void search_Cafes_Filtering_With_CanStudy_If_Exists_Both() {
+	void search_Cafes_Filtering_With_CanStudy_When_Exists_Both() {
 		//given
-		setUp(new CafeSearchCondition(true));
-		setUp(new CafeSearchCondition(false));
-		CafeSearchCondition searchCondition = new CafeSearchCondition(true);
+		setUp(new CafeSearchCondition(true, "상수동"));
+		setUp(new CafeSearchCondition(false, "상수동"));
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true, "상수동");
 		//when
 		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
 		//then
 		assertThat(cafes.size()).isEqualTo(20);
 	}
 
-	// @Test
-	// void search_Cafes_Filtering_With_
+	@Test
+	@DisplayName("행정동으로 필터링, 조건에 맞는 데이터가 존재.")
+	void search_Cafes_Filtering_With_Region() {
+		//given
+		setUp(new CafeSearchCondition(true, "상수동"));
+		setUp(new CafeSearchCondition(true, "합정동"));
+
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true, "상수동");
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(20);
+	}
+
+	@Test
+	@DisplayName("일부 문자열만 입력된 행정동으로 필터링, 조건에 맞는 데이터가 존재.")
+	void search_Cafes_Filtering_With_Like_Region() {
+		//given
+		setUp(new CafeSearchCondition(true, "상수동"));
+		setUp(new CafeSearchCondition(true, "합정동"));
+
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true, "상수");
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(20);
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 행정동으로 필터링, 데이터가 존재하지 않음")
+	void search_Cafes_Filtering_With_Invalid_Region_Then_NO_Data() {
+		//given
+		setUp(new CafeSearchCondition(true, "상수동"));
+
+		CafeSearchCondition searchCondition = new CafeSearchCondition(true, "쌍수100동");
+		//when
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
+		//then
+		assertThat(cafes.size()).isEqualTo(0);
+	}
+
+	@Test
+	@DisplayName("whiteSpace, 공백문자, null인 행정동으로 필터링하면 필터링이 되지 않는다.")
+	void search_Cafes_Filtering_With_Blank_Region_Then_No_Filtering() {
+		setUp(new CafeSearchCondition(true, "상수동"));
+		setUp(new CafeSearchCondition(true, "합정동"));
+
+		//given
+		CafeSearchCondition searchCondition1 = new CafeSearchCondition(true, null);
+		//when
+		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilter(searchCondition1);
+		//then
+		assertThat(cafes1.size()).isEqualTo(40);
+
+		//given
+		CafeSearchCondition searchCondition2 = new CafeSearchCondition(true, "");
+		//when
+		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilter(searchCondition2);
+		//then
+		assertThat(cafes2.size()).isEqualTo(40);
+
+		//given
+		CafeSearchCondition searchCondition3 = new CafeSearchCondition(true, " ");
+		//when
+		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilter(searchCondition3);
+		//then
+		assertThat(cafes3.size()).isEqualTo(40);
+	}
 
 }

@@ -1,6 +1,7 @@
 package com.example.demo.repository.cafe;
 
 import static com.example.demo.domain.QCafeImpl.*;
+import static io.hypersistence.utils.hibernate.util.StringUtils.*;
 
 import java.util.List;
 
@@ -29,11 +30,17 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 			// .join(cafeImpl.snsDetails, snsDetail)
 			// .join(cafeImpl.reviews, reviewImpl)
 			// .join(cafeImpl.menus, menu)
-			.where(isAbleToStudy(searchCondition.isAbleToStudy()))
+			.where(
+				isAbleToStudy(searchCondition.isAbleToStudy()),
+				regionContains(searchCondition.getRegion()))
 			.fetch();
 
 		return cafes;
 
+	}
+
+	private BooleanExpression regionContains(String region) {
+		return isBlank(region) ? null : cafeImpl.address.region.contains(region);
 	}
 
 	private BooleanExpression isAbleToStudy(boolean isAbleToStudy) {

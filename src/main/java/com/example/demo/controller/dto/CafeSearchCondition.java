@@ -8,5 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class CafeSearchCondition {
 
 	private final boolean isAbleToStudy;
-
+	private final String region;
+	
 }
