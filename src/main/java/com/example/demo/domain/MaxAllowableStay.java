@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 public enum MaxAllowableStay {
 
 	IRRELEVANT(0, hour -> true),
-	ONE_HOUR(1, hour -> isLittleOfEqualThanHour(1, hour) || isZero(hour)),
-	TWO_HOUR(2, hour -> isLittleOfEqualThanHour(2, hour) || isZero(hour)),
-	THREE_HOUR(3, hour -> isLittleOfEqualThanHour(3, hour) || isZero(hour)),
-	FOUR_HOUR(4, hour -> isLittleOfEqualThanHour(4, hour) || isZero(hour)),
-	FIVE_HOUR(5, hour -> isLittleOfEqualThanHour(5, hour) || isZero(hour)),
-	SIX_HOUR(6, hour -> isLittleOfEqualThanHour(6, hour) || isZero(hour)),
+	ONE_HOUR(1, hour -> isLittleOrEqualThanHour(1, hour) || isZero(hour)),
+	TWO_HOUR(2, hour -> isLittleOrEqualThanHour(2, hour) || isZero(hour)),
+	THREE_HOUR(3, hour -> isLittleOrEqualThanHour(3, hour) || isZero(hour)),
+	FOUR_HOUR(4, hour -> isLittleOrEqualThanHour(4, hour) || isZero(hour)),
+	FIVE_HOUR(5, hour -> isLittleOrEqualThanHour(5, hour) || isZero(hour)),
+	SIX_HOUR(6, hour -> isLittleOrEqualThanHour(6, hour) || isZero(hour)),
 	OVER_SIX_HOUR(7, hour -> equals(7, hour) || isZero(hour));
 
 	private final int value;
@@ -41,7 +41,7 @@ public enum MaxAllowableStay {
 		return value == 0;
 	}
 
-	private static boolean isLittleOfEqualThanHour(int value, int hour) {
+	private static boolean isLittleOrEqualThanHour(int value, int hour) {
 		return value <= hour;
 	}
 
