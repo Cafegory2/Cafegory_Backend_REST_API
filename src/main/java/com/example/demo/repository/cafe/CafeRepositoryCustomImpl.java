@@ -7,8 +7,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import com.example.demo.controller.dto.CafeSearchCondition;
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.MaxAllowableStay;
+import com.example.demo.service.dto.CafeSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -32,11 +33,19 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 			// .join(cafeImpl.menus, menu)
 			.where(
 				isAbleToStudy(searchCondition.isAbleToStudy()),
-				regionContains(searchCondition.getRegion()))
+				regionContains(searchCondition.getRegion()),
+				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay())
+			)
 			.fetch();
 
 		return cafes;
 
+	}
+
+	//매개변수인 MaxAllowableStay보다 작거나 같은 MaxAllowableStay의 Enum상수가 in절안에 List로 들어감
+	private BooleanExpression maxAllowableStayInLoe(MaxAllowableStay maxTime) {
+		return maxTime == null
+			? null : cafeImpl.maxAllowableStay.in(MaxAllowableStay.findByLoeCondition(maxTime));
 	}
 
 	private BooleanExpression regionContains(String region) {

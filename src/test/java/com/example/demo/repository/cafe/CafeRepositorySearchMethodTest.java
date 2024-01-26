@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.controller.dto.CafeSearchCondition;
 import com.example.demo.domain.Address;
 import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.CafeImpl;
@@ -23,6 +22,7 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.Menu;
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.SnsDetail;
+import com.example.demo.service.dto.CafeSearchCondition;
 
 @DataJpaTest
 @Profile("test")
@@ -42,7 +42,7 @@ class CafeRepositorySearchMethodTest {
 				.name("카페고리" + i)
 				.address(new Address("서울 마포구 " + searchCondition.getRegion(), searchCondition.getRegion()))
 				.phone("010-1234-5678")
-				.maxAllowableStay(3)
+				.maxAllowableStay(searchCondition.getMaxAllowableStay())
 				.isAbleToStudy(searchCondition.isAbleToStudy())
 				.build();
 			em.persist(cafe);
@@ -241,6 +241,51 @@ class CafeRepositorySearchMethodTest {
 		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilter(searchCondition3);
 		//then
 		assertThat(cafes3.size()).isEqualTo(40);
+	}
+
+	@Test
+	@DisplayName("최대 이용 가능시간으로 필터링")
+	void search_Cafes_Filtering_With_maxAllowableStay() {
+		setUp(new CafeSearchCondition(true, "상수동", 1));
+		setUp(new CafeSearchCondition(true, "상수동", 2));
+		setUp(new CafeSearchCondition(true, "상수동", 7));
+		setUp(new CafeSearchCondition(true, "상수동", 0));
+
+		//given
+		CafeSearchCondition searchCondition1 = new CafeSearchCondition(true, "상수동", 1);
+		//when
+		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilter(searchCondition1);
+		//then
+		assertThat(cafes1.size()).isEqualTo(40);
+
+		//given
+		CafeSearchCondition searchCondition2 = new CafeSearchCondition(true, "상수동", 2);
+		//when
+		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilter(searchCondition2);
+		//then
+		assertThat(cafes2.size()).isEqualTo(60);
+
+		//given
+		CafeSearchCondition searchCondition3 = new CafeSearchCondition(true, "상수동", 0);
+		//when
+		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilter(searchCondition3);
+		//then
+		assertThat(cafes3.size()).isEqualTo(80);
+
+		//given
+		CafeSearchCondition searchCondition4 = new CafeSearchCondition(true, "상수동", 7);
+		//when
+		List<CafeImpl> cafes4 = cafeRepository.findWithDynamicFilter(searchCondition4);
+		//then
+		assertThat(cafes4.size()).isEqualTo(80);
+
+		//given
+		CafeSearchCondition searchCondition5 = new CafeSearchCondition(true, "상수동", 6);
+		//when
+		List<CafeImpl> cafes5 = cafeRepository.findWithDynamicFilter(searchCondition5);
+		//then
+		assertThat(cafes5.size()).isEqualTo(60);
+
 	}
 
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -39,7 +41,8 @@ public class CafeImpl implements Cafe {
 	private boolean isOpen;
 	private String phone;
 
-	private int maxAllowableStay;
+	@Enumerated(EnumType.STRING)
+	private MaxAllowableStay maxAllowableStay;
 	private double avgReviewRate;
 	private boolean isAbleToStudy;
 
@@ -56,7 +59,8 @@ public class CafeImpl implements Cafe {
 	private List<Menu> menus = new ArrayList<>();
 
 	@Builder
-	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone, int maxAllowableStay,
+	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone,
+		MaxAllowableStay maxAllowableStay,
 		double avgReviewRate, boolean isAbleToStudy) {
 		this.id = id;
 		this.name = name;
