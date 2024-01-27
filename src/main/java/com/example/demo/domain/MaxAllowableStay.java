@@ -31,7 +31,7 @@ public enum MaxAllowableStay {
 			.orElseThrow(() -> new IllegalArgumentException("최대 이용가능시간을 찾을 수 없습니다."));
 	}
 
-	public static List<MaxAllowableStay> findByLoeCondition(MaxAllowableStay maxAllowableStay) {
+	public static List<MaxAllowableStay> findLoe(MaxAllowableStay maxAllowableStay) {
 		return Arrays.stream(values())
 			.filter(hour -> hour.predicate.test(maxAllowableStay.value))
 			.collect(Collectors.toList());

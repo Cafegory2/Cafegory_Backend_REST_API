@@ -45,7 +45,7 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 	//매개변수인 MaxAllowableStay보다 작거나 같은 MaxAllowableStay의 Enum상수가 in절안에 List로 들어감
 	private BooleanExpression maxAllowableStayInLoe(MaxAllowableStay maxTime) {
 		return maxTime == null
-			? null : cafeImpl.maxAllowableStay.in(MaxAllowableStay.findByLoeCondition(maxTime));
+			? null : cafeImpl.maxAllowableStay.in(MaxAllowableStay.findLoe(maxTime));
 	}
 
 	private BooleanExpression regionContains(String region) {
