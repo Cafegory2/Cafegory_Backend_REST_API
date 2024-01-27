@@ -46,6 +46,9 @@ public class CafeImpl implements Cafe {
 	private double avgReviewRate;
 	private boolean isAbleToStudy;
 
+	@Enumerated(EnumType.STRING)
+	private MinMenuPrice minBeveragePrice;
+
 	@OneToMany(mappedBy = "cafe")
 	private List<BusinessHour> businessHours = new ArrayList<>();
 
@@ -61,7 +64,7 @@ public class CafeImpl implements Cafe {
 	@Builder
 	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone,
 		MaxAllowableStay maxAllowableStay,
-		double avgReviewRate, boolean isAbleToStudy) {
+		double avgReviewRate, boolean isAbleToStudy, MinMenuPrice minMenuPrice) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -70,6 +73,7 @@ public class CafeImpl implements Cafe {
 		this.maxAllowableStay = maxAllowableStay;
 		this.avgReviewRate = avgReviewRate;
 		this.isAbleToStudy = isAbleToStudy;
+		this.minBeveragePrice = minMenuPrice;
 	}
 
 	@Override

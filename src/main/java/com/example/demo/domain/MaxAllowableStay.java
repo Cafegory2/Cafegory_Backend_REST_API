@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public enum MaxAllowableStay {
 
-	IRRELEVANT(0, maxHour -> true),
+	IRRELEVANT(0, maxHour -> false),
 	ONE_HOUR(1, maxHour -> isLittleOrEqualThanHour(1, maxHour) || isZero(maxHour)),
 	TWO_HOUR(2, maxHour -> isLittleOrEqualThanHour(2, maxHour) || isZero(maxHour)),
 	THREE_HOUR(3, maxHour -> isLittleOrEqualThanHour(3, maxHour) || isZero(maxHour)),
@@ -37,8 +37,8 @@ public enum MaxAllowableStay {
 			.collect(Collectors.toList());
 	}
 
-	private static boolean isZero(int value) {
-		return value == 0;
+	private static boolean isZero(int hour) {
+		return hour == 0;
 	}
 
 	private static boolean isLittleOrEqualThanHour(int value, int hour) {

@@ -44,6 +44,7 @@ class CafeRepositorySearchMethodTest {
 				.phone("010-1234-5678")
 				.maxAllowableStay(searchCondition.getMaxAllowableStay())
 				.isAbleToStudy(searchCondition.isAbleToStudy())
+				.minMenuPrice(searchCondition.getMinMenuPrice())
 				.build();
 			em.persist(cafe);
 
@@ -82,9 +83,7 @@ class CafeRepositorySearchMethodTest {
 	}
 
 	private CafeSearchCondition createSearchConditionByRequirements(boolean isAbleToStudy, String region) {
-		return CafeSearchCondition.builder()
-			.isAbleToStudy(isAbleToStudy)
-			.region(region)
+		return new CafeSearchCondition.Builder(isAbleToStudy, region)
 			.build();
 	}
 
@@ -252,9 +251,7 @@ class CafeRepositorySearchMethodTest {
 	}
 
 	private CafeSearchCondition createSearchConditionByMaxTime(boolean isAbleToStudy, String region, int maxTime) {
-		return CafeSearchCondition.builder()
-			.isAbleToStudy(isAbleToStudy)
-			.region(region)
+		return new CafeSearchCondition.Builder(isAbleToStudy, region)
 			.maxTime(maxTime)
 			.build();
 	}
@@ -265,50 +262,85 @@ class CafeRepositorySearchMethodTest {
 		setUp(createSearchConditionByMaxTime(true, "상수동", 1));
 		setUp(createSearchConditionByMaxTime(true, "상수동", 2));
 		setUp(createSearchConditionByMaxTime(true, "상수동", 7));
-		setUp(createSearchConditionByMaxTime(true, "상수동", 0));
 
 		//given
 		CafeSearchCondition searchCondition1 = createSearchConditionByMaxTime(true, "상수동", 1);
 		//when
 		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilter(searchCondition1);
 		//then
-		assertThat(cafes1.size()).isEqualTo(40);
+		assertThat(cafes1.size()).isEqualTo(20);
 
 		//given
 		CafeSearchCondition searchCondition2 = createSearchConditionByMaxTime(true, "상수동", 2);
 		//when
 		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilter(searchCondition2);
 		//then
-		assertThat(cafes2.size()).isEqualTo(60);
+		assertThat(cafes2.size()).isEqualTo(40);
 
 		//given
 		CafeSearchCondition searchCondition3 = createSearchConditionByMaxTime(true, "상수동", 0);
 		//when
 		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilter(searchCondition3);
 		//then
-		assertThat(cafes3.size()).isEqualTo(80);
+		assertThat(cafes3.size()).isEqualTo(60);
 
 		//given
 		CafeSearchCondition searchCondition4 = createSearchConditionByMaxTime(true, "상수동", 7);
 		//when
 		List<CafeImpl> cafes4 = cafeRepository.findWithDynamicFilter(searchCondition4);
 		//then
-		assertThat(cafes4.size()).isEqualTo(80);
+		assertThat(cafes4.size()).isEqualTo(60);
 
 		//given
 		CafeSearchCondition searchCondition5 = createSearchConditionByMaxTime(true, "상수동", 6);
 		//when
 		List<CafeImpl> cafes5 = cafeRepository.findWithDynamicFilter(searchCondition5);
 		//then
-		assertThat(cafes5.size()).isEqualTo(60);
+		assertThat(cafes5.size()).isEqualTo(40);
 
 	}
 
-	// @Test
-	// @DisplayName("최소 음료금액으로 필터링")
-	// void search_Cafes_Filtering_With_minBeveragePrice() {
-	// 	setUp(new CafeSearchCondition(true, "상수동", ));
-	//
-	// }
+	private CafeSearchCondition createSearchConditionByMinMenuPrice(boolean isAbleToStudy, String region,
+		int minMenuPrice) {
+		return new CafeSearchCondition.Builder(isAbleToStudy, region)
+			.minMenuPrice(minMenuPrice)
+			.build();
+	}
+
+	@Test
+	@DisplayName("최소 음료금액으로 필터링")
+	void search_Cafes_Filtering_With_minBeveragePrice() {
+		setUp(createSearchConditionByMinMenuPrice(true, "상수동", 1));
+		setUp(createSearchConditionByMinMenuPrice(true, "상수동", 2));
+		setUp(createSearchConditionByMinMenuPrice(true, "상수동", 11));
+
+		//given
+		CafeSearchCondition searchCondition1 = createSearchConditionByMinMenuPrice(true, "상수동", 1);
+		//when
+		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilter(searchCondition1);
+		//then
+		assertThat(cafes1.size()).isEqualTo(20);
+
+		//given
+		CafeSearchCondition searchCondition2 = createSearchConditionByMinMenuPrice(true, "상수동", 2);
+		//when
+		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilter(searchCondition2);
+		//then
+		assertThat(cafes2.size()).isEqualTo(40);
+
+		//given
+		CafeSearchCondition searchCondition3 = createSearchConditionByMinMenuPrice(true, "상수동", 0);
+		//when
+		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilter(searchCondition3);
+		//then
+		assertThat(cafes3.size()).isEqualTo(60);
+
+		//given
+		CafeSearchCondition searchCondition4 = createSearchConditionByMinMenuPrice(true, "상수동", 11);
+		//when
+		List<CafeImpl> cafes4 = cafeRepository.findWithDynamicFilter(searchCondition4);
+		//then
+		assertThat(cafes4.size()).isEqualTo(60);
+	}
 
 }
