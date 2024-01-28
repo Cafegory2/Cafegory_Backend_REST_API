@@ -8,7 +8,9 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.CafeImpl;
@@ -16,6 +18,7 @@ import com.example.demo.domain.MaxAllowableStay;
 import com.example.demo.domain.MinMenuPrice;
 import com.example.demo.service.dto.CafeSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 @Repository
@@ -47,8 +50,8 @@ public class CafeQueryRepository {
 
 	}
 
-	public List<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition, Pageable pageable) {
-		return queryFactory
+	public Page<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition, Pageable pageable) {
+		List<CafeImpl> content = queryFactory
 			.selectFrom(cafeImpl)
 			// .join(cafeImpl.businessHours, businessHour)
 			// .join(cafeImpl.snsDetails, snsDetail)
@@ -63,6 +66,22 @@ public class CafeQueryRepository {
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
+
+		JPAQuery<Long> countQuery = queryFactory
+			.select(cafeImpl.count())
+			.from(cafeImpl)
+			// .join(cafeImpl.businessHours, businessHour)
+			// .join(cafeImpl.snsDetails, snsDetail)
+			// .join(cafeImpl.reviews, reviewImpl)
+			// .join(cafeImpl.menus, menu)
+			.where(
+				isAbleToStudy(searchCondition.isAbleToStudy()),
+				regionContains(searchCondition.getRegion()),
+				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
+				minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
+			);
+		
+		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
 
 	}
 

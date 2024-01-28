@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.Address;
@@ -354,14 +355,18 @@ class CafeRepositorySearchMethodTest {
 		//given
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
 		//when
-		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.createByDefault());
 
 		// for (CafeImpl cafe : cafes) {
 		// 	System.out.println("cafe = " + cafe);
 		// }
 		//then
-		assertThat(cafes.size()).isEqualTo(10);
+		assertThat(pagedCafes.getContent().size()).isEqualTo(10);
+		assertThat(pagedCafes.getTotalPages()).isEqualTo(2);
+		assertThat(pagedCafes.getSize()).isEqualTo(10);
+		assertThat(pagedCafes.getTotalElements()).isEqualTo(20);
+
 	}
 
 	@Test
@@ -372,34 +377,48 @@ class CafeRepositorySearchMethodTest {
 		//given
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
 		//when
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes1 = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.of(1, 20));
 		//then
-		assertThat(cafes1.size()).isEqualTo(20);
+		assertThat(pagedCafes1.getContent().size()).isEqualTo(20);
 
 		//when
-		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes2 = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.of(1, 5));
 		//then
-		assertThat(cafes2.size()).isEqualTo(5);
+		assertThat(pagedCafes2.getContent().size()).isEqualTo(5);
 
 		//when
-		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes3 = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.of(2, 20));
 		//then
-		assertThat(cafes3.size()).isEqualTo(20);
+		assertThat(pagedCafes3.getContent().size()).isEqualTo(20);
 
 		//when
-		List<CafeImpl> cafes4 = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes4 = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.of(3, 20));
 		//then
-		assertThat(cafes4.size()).isEqualTo(0);
+		assertThat(pagedCafes4.getContent()).size().isEqualTo(0);
 
 		//when
-		List<CafeImpl> cafes5 = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes5 = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.of(1, 50));
 		//then
-		assertThat(cafes5.size()).isEqualTo(40);
+		assertThat(pagedCafes5.getContent().size()).isEqualTo(40);
+
+	}
+
+	@Test
+	void countQuery() {
+		setUp(createSearchConditionByRequirements(true, "상수동"));
+		setUp(createSearchConditionByRequirements(true, "상수동"));
+		//given
+		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
+		//when
+		Page<CafeImpl> pagedCafes = cafeRepository.findWithDynamicFilter(searchCondition,
+			PageRequestCustom.of(1, 20));
+		//then
+		assertThat(pagedCafes.getTotalElements()).isEqualTo(40);
 	}
 
 }
