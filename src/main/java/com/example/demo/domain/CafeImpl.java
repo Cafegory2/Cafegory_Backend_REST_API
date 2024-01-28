@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cafe")
+// @ToString(of = {"id", "name"})
 public class CafeImpl implements Cafe {
 
 	@Id
@@ -45,9 +46,10 @@ public class CafeImpl implements Cafe {
 	private MaxAllowableStay maxAllowableStay;
 	private double avgReviewRate;
 	private boolean isAbleToStudy;
+	private int minBeveragePrice;
 
-	@Enumerated(EnumType.STRING)
-	private MinMenuPrice minBeveragePrice;
+	// @Enumerated(EnumType.STRING)
+	// private MinMenuPrice minBeveragePrice;
 
 	@OneToMany(mappedBy = "cafe")
 	private List<BusinessHour> businessHours = new ArrayList<>();
@@ -64,7 +66,9 @@ public class CafeImpl implements Cafe {
 	@Builder
 	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone,
 		MaxAllowableStay maxAllowableStay,
-		double avgReviewRate, boolean isAbleToStudy, MinMenuPrice minMenuPrice) {
+		double avgReviewRate, boolean isAbleToStudy, int minBeveragePrice
+		// , MinMenuPrice minMenuPrice
+	) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -73,7 +77,8 @@ public class CafeImpl implements Cafe {
 		this.maxAllowableStay = maxAllowableStay;
 		this.avgReviewRate = avgReviewRate;
 		this.isAbleToStudy = isAbleToStudy;
-		this.minBeveragePrice = minMenuPrice;
+		this.minBeveragePrice = minBeveragePrice;
+		// this.minBeveragePrice = minMenuPrice;
 	}
 
 	@Override

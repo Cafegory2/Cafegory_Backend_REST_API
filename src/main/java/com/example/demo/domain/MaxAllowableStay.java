@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import lombok.Getter;
+
+@Getter
 public enum MaxAllowableStay {
 
 	IRRELEVANT(0, maxHour -> false),

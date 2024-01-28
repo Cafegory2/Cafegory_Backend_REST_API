@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MaxAllowableStay;
-import com.example.demo.domain.MinMenuPrice;
 import com.example.demo.service.dto.CafeSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -29,15 +28,11 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 	public List<CafeImpl> findWithDynamicFilterAndNoPaging(CafeSearchCondition searchCondition) {
 		return queryFactory
 			.selectFrom(cafeImpl)
-			// .join(cafeImpl.businessHours, businessHour)
-			// .join(cafeImpl.snsDetails, snsDetail)
-			// .join(cafeImpl.reviews, reviewImpl)
-			// .join(cafeImpl.menus, menu)
 			.where(
 				isAbleToStudy(searchCondition.isAbleToStudy()),
 				regionContains(searchCondition.getRegion()),
-				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-				minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
+				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay())
+				// minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
 			)
 			.fetch();
 
@@ -46,15 +41,11 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 	public List<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition, Pageable pageable) {
 		return queryFactory
 			.selectFrom(cafeImpl)
-			// .join(cafeImpl.businessHours, businessHour)
-			// .join(cafeImpl.snsDetails, snsDetail)
-			// .join(cafeImpl.reviews, reviewImpl)
-			// .join(cafeImpl.menus, menu)
 			.where(
 				isAbleToStudy(searchCondition.isAbleToStudy()),
 				regionContains(searchCondition.getRegion()),
-				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-				minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
+				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay())
+				// minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
 			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -62,10 +53,10 @@ public class CafeRepositoryCustomImpl implements CafeRepositoryCustom {
 
 	}
 
-	private BooleanExpression minBeveragePriceInLoe(MinMenuPrice minMenuPrice) {
-		return minMenuPrice == null
-			? null : cafeImpl.minBeveragePrice.in(MinMenuPrice.findLoe(minMenuPrice));
-	}
+	// private BooleanExpression minBeveragePriceInLoe(MinMenuPrice minMenuPrice) {
+	// 	return minMenuPrice == null
+	// 		? null : cafeImpl.minBeveragePrice.in(MinMenuPrice.findLoe(minMenuPrice));
+	// }
 
 	//매개변수인 MaxAllowableStay보다 작거나 같은 MaxAllowableStay의 Enum상수가 in절안에 List로 들어감
 	private BooleanExpression maxAllowableStayInLoe(MaxAllowableStay maxTime) {
