@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public abstract class PagedRequest {
-	protected int page;
-	protected int sizePerPage;
+	protected int page = 1;
+	protected int sizePerPage = 10;
 }
