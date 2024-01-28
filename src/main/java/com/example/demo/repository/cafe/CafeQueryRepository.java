@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.CafeImpl;
@@ -29,7 +30,7 @@ public class CafeQueryRepository {
 		this.queryFactory = new JPAQueryFactory(em);
 	}
 
-	public List<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition) {
+	public List<CafeImpl> findWithDynamicFilterAndNoPaging(CafeSearchCondition searchCondition) {
 		return queryFactory
 			.selectFrom(cafeImpl)
 			// .join(cafeImpl.businessHours, businessHour)
@@ -42,6 +43,25 @@ public class CafeQueryRepository {
 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
 				minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
 			)
+			.fetch();
+
+	}
+
+	public List<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition, Pageable pageable) {
+		return queryFactory
+			.selectFrom(cafeImpl)
+			// .join(cafeImpl.businessHours, businessHour)
+			// .join(cafeImpl.snsDetails, snsDetail)
+			// .join(cafeImpl.reviews, reviewImpl)
+			// .join(cafeImpl.menus, menu)
+			.where(
+				isAbleToStudy(searchCondition.isAbleToStudy()),
+				regionContains(searchCondition.getRegion()),
+				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
+				minBeveragePriceInLoe(searchCondition.getMinMenuPrice())
+			)
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
 			.fetch();
 
 	}
