@@ -69,9 +69,9 @@ public class StudyOnceRepositoryImpl implements StudyOnceRepositoryCustom {
 	private BooleanExpression talkAbleFilter(TalkAbleState talkAbleState) {
 		switch (talkAbleState) {
 			case NO:
-				return qStudyOnce.canTalk.eq(false);
+				return qStudyOnce.ableToTalk.eq(false);
 			case YES:
-				return qStudyOnce.canTalk.eq(true);
+				return qStudyOnce.ableToTalk.eq(true);
 			case BOTH:
 				return null;
 			default:

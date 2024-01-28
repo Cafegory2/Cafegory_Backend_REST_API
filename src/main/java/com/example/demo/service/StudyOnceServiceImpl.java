@@ -105,7 +105,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			.maxMemberCount(studyOnceCreateRequest.getMaxMemberCount())
 			.nowMemberCount(0)
 			.isEnd(false)
-			.canTalk(studyOnceCreateRequest.isCanTalk())
+			.ableToTalk(studyOnceCreateRequest.isCanTalk())
 			.cafe(cafe)
 			.build();
 
@@ -120,7 +120,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			.endDateTime(saved.getEndDateTime())
 			.maxMemberCount(saved.getMaxMemberCount())
 			.nowMemberCount(saved.getNowMemberCount())
-			.canTalk(saved.isCanTalk())
+			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
 			.build();
