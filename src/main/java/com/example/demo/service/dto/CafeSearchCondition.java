@@ -39,6 +39,7 @@ public class CafeSearchCondition {
 		}
 
 		public Builder minMenuPrice(int value) {
+			// this.minMenuPrice = MinMenuPrice.find(value);
 			this.minMenuPrice = MinMenuPrice.find(value);
 			return this;
 		}
