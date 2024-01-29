@@ -11,9 +11,9 @@ import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.domain.oauth2.KakaoOAuth2ProfileRequester;
 import com.example.demo.domain.oauth2.KakaoOAuth2TokenRequester;
 import com.example.demo.dto.auth.CafegoryToken;
-import com.example.demo.dto.oauth2.OAuth2LoginRequest;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2Token;
+import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ public class KakaoOAuth2Service implements OAuth2Service {
 	private final MemberRepository memberRepository;
 
 	@Override
-	public CafegoryToken joinOrLogin(OAuth2LoginRequest oAuth2LoginRequest) {
-		OAuth2Profile oAuth2Profile = callOAuth2Api(oAuth2LoginRequest);
+	public CafegoryToken joinOrLogin(OAuth2TokenRequest oAuth2TokenRequest) {
+		OAuth2Profile oAuth2Profile = callOAuth2Api(oAuth2TokenRequest);
 		Optional<MemberImpl> byEmail = memberRepository.findByEmail(oAuth2Profile.getEmailAddress());
 		if (byEmail.isEmpty()) {
 			MemberImpl save = memberRepository.save(makeNewMember(oAuth2Profile));
@@ -50,8 +50,8 @@ public class KakaoOAuth2Service implements OAuth2Service {
 		return new MemberImpl(null, nickName, emailAddress, thumbnailImage);
 	}
 
-	private OAuth2Profile callOAuth2Api(OAuth2LoginRequest oAuth2LoginRequest) {
-		OAuth2Token token = oAuth2TokenRequester.getToken(oAuth2LoginRequest);
+	private OAuth2Profile callOAuth2Api(OAuth2TokenRequest oAuth2TokenRequest) {
+		OAuth2Token token = oAuth2TokenRequester.getToken(oAuth2TokenRequest);
 		return oAuth2ProfileRequester.getOAuth2Profile(token);
 	}
 }

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.auth.CafegoryToken;
-import com.example.demo.dto.oauth2.KakaoOAuth2LoginRequest;
-import com.example.demo.dto.oauth2.NaverOAuth2LoginRequest;
+import com.example.demo.dto.oauth2.KakaoOAuth2TokenRequest;
+import com.example.demo.dto.oauth2.NaverOAuth2TokenRequest;
 import com.example.demo.service.KakaoOAuth2Service;
 import com.example.demo.service.NaverOAuth2Service;
 
@@ -22,13 +22,13 @@ public class OAuthController {
 
 	@GetMapping("/kakao")
 	public CafegoryToken kakao(@RequestParam String code) {
-		KakaoOAuth2LoginRequest kakaoOAuth2LoginRequest = new KakaoOAuth2LoginRequest(code);
+		KakaoOAuth2TokenRequest kakaoOAuth2LoginRequest = new KakaoOAuth2TokenRequest(code);
 		return kakaoOAuth2Service.joinOrLogin(kakaoOAuth2LoginRequest);
 	}
 
 	@GetMapping("/naver")
 	public CafegoryToken naver(@RequestParam String code, @RequestParam String state) {
-		NaverOAuth2LoginRequest naverOAuth2LoginRequest = new NaverOAuth2LoginRequest(code, state);
+		NaverOAuth2TokenRequest naverOAuth2LoginRequest = new NaverOAuth2TokenRequest(code, state);
 		return naverOAuth2Service.joinOrLogin(naverOAuth2LoginRequest);
 	}
 }

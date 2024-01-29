@@ -11,9 +11,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.oauth2.NaverOAuth2Token;
-import com.example.demo.dto.oauth2.OAuth2LoginRequest;
 import com.example.demo.dto.oauth2.OAuth2Provider;
 import com.example.demo.dto.oauth2.OAuth2Token;
+import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,11 +31,11 @@ public class NaverOAuth2TokenRequester implements OAuth2TokenRequester {
 	private String clientSecret;
 
 	@Override
-	public OAuth2Token getToken(OAuth2LoginRequest oAuth2LoginRequest) {
-		validateProvider(oAuth2LoginRequest);
+	public OAuth2Token getToken(OAuth2TokenRequest oAuth2TokenRequest) {
+		validateProvider(oAuth2TokenRequest);
 		String url = makeUrl();
 		HttpHeaders httpHeaders = makeHeader();
-		MultiValueMap<String, String> httpBody = makeBody(oAuth2LoginRequest);
+		MultiValueMap<String, String> httpBody = makeBody(oAuth2TokenRequest);
 		ResponseEntity<NaverOAuth2Token> naverOAuth2TokenResponseEntity = callNaverTokenApi(url, httpHeaders, httpBody);
 		validateNaverTokenApiResponse(naverOAuth2TokenResponseEntity);
 		return naverOAuth2TokenResponseEntity.getBody();
@@ -58,8 +58,8 @@ public class NaverOAuth2TokenRequester implements OAuth2TokenRequester {
 		return authUrl + "/oauth2.0/token";
 	}
 
-	private MultiValueMap<String, String> makeBody(OAuth2LoginRequest oAuth2LoginRequest) {
-		MultiValueMap<String, String> httpBody = oAuth2LoginRequest.getParameters();
+	private MultiValueMap<String, String> makeBody(OAuth2TokenRequest oAuth2TokenRequest) {
+		MultiValueMap<String, String> httpBody = oAuth2TokenRequest.getParameters();
 		httpBody.add("grant_type", GRANT_TYPE);
 		httpBody.add("client_id", clientId);
 		httpBody.add("client_secret", clientSecret);
@@ -72,8 +72,8 @@ public class NaverOAuth2TokenRequester implements OAuth2TokenRequester {
 		return httpHeaders;
 	}
 
-	private static void validateProvider(OAuth2LoginRequest oAuth2LoginRequest) {
-		if (oAuth2LoginRequest.getProvider() != OAuth2Provider.NAVER) {
+	private static void validateProvider(OAuth2TokenRequest oAuth2TokenRequest) {
+		if (oAuth2TokenRequest.getProvider() != OAuth2Provider.NAVER) {
 			throw new IllegalArgumentException("잘못된 OAuth2.0 요청입니다.");
 		}
 	}

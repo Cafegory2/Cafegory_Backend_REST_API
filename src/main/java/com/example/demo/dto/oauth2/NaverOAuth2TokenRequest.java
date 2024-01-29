@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NonNull;
 
 @Data
-public class NaverOAuth2LoginRequest implements OAuth2LoginRequest {
+public class NaverOAuth2TokenRequest implements OAuth2TokenRequest {
 	@NonNull
 	private final String code;
 	@NonNull
