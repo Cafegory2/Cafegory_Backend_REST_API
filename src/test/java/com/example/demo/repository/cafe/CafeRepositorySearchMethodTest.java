@@ -87,7 +87,7 @@ class CafeRepositorySearchMethodTest {
 
 	}
 
-	void setUp(CafeSearchCondition searchCondition, int minBeveragePrice) {
+	void setUpWithMinBeveragePrice(CafeSearchCondition searchCondition, int minBeveragePrice) {
 
 		for (int i = 0; i < 20; i++) {
 			CafeImpl cafe = CafeImpl.builder()
@@ -363,10 +363,10 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	void 최소음료필터링() {
-		setUp(createSearchConditionByRequirements(true, "상수동"), 2_500);
-		setUp(createSearchConditionByRequirements(true, "상수동"), 3_000);
-		setUp(createSearchConditionByRequirements(true, "상수동"), 11_000);
-		setUp(createSearchConditionByRequirements(true, "상수동"), 12_000);
+		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 2_500);
+		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 3_000);
+		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 11_000);
+		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 12_000);
 
 		//when
 		CafeSearchCondition searchCondition1 = createSearchConditionByMinMenuPrice(true, "상수동", 3);
@@ -393,42 +393,6 @@ class CafeRepositorySearchMethodTest {
 		assertThat(cafes4.size()).isEqualTo(80);
 
 	}
-
-	// @Test
-	// @DisplayName("최소 음료금액으로 필터링")
-	// void search_Cafes_Filtering_With_minBeveragePrice() {
-	// 	setUp(createSearchConditionByMinMenuPrice(true, "상수동", 1));
-	// 	setUp(createSearchConditionByMinMenuPrice(true, "상수동", 2));
-	// 	setUp(createSearchConditionByMinMenuPrice(true, "상수동", 11));
-	//
-	// 	//given
-	// 	CafeSearchCondition searchCondition1 = createSearchConditionByMinMenuPrice(true, "상수동", 1);
-	// 	//when
-	// 	List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition1);
-	// 	//then
-	// 	assertThat(cafes1.size()).isEqualTo(20);
-	//
-	// 	//given
-	// 	CafeSearchCondition searchCondition2 = createSearchConditionByMinMenuPrice(true, "상수동", 2);
-	// 	//when
-	// 	List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition2);
-	// 	//then
-	// 	assertThat(cafes2.size()).isEqualTo(40);
-	//
-	// 	//given
-	// 	CafeSearchCondition searchCondition3 = createSearchConditionByMinMenuPrice(true, "상수동", 0);
-	// 	//when
-	// 	List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition3);
-	// 	//then
-	// 	assertThat(cafes3.size()).isEqualTo(60);
-	//
-	// 	//given
-	// 	CafeSearchCondition searchCondition4 = createSearchConditionByMinMenuPrice(true, "상수동", 11);
-	// 	//when
-	// 	List<CafeImpl> cafes4 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition4);
-	// 	//then
-	// 	assertThat(cafes4.size()).isEqualTo(60);
-	// }
 
 	@Test
 	@DisplayName("페이징 기본값")
