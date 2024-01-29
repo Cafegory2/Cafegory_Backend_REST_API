@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,8 +38,8 @@ public class CafeImpl implements Cafe {
 	@Embedded
 	private Address address;
 
-	@Transient
-	private boolean isOpen;
+	// @Transient
+	// private boolean isOpen;
 	private String phone;
 
 	@Enumerated(EnumType.STRING)
@@ -72,7 +72,7 @@ public class CafeImpl implements Cafe {
 		this.id = id;
 		this.name = name;
 		this.address = address;
-		this.isOpen = isOpen;
+		// this.isOpen = isOpen;
 		this.phone = phone;
 		this.maxAllowableStay = maxAllowableStay;
 		this.avgReviewRate = avgReviewRate;
@@ -85,6 +85,10 @@ public class CafeImpl implements Cafe {
 	public String showFullAddress() {
 
 		return null;
+	}
+
+	public boolean isOpen(OpenChecker<BusinessHour> openChecker) {
+		return openChecker.checkWithBusinessHours(this.businessHours, LocalDateTime.now());
 	}
 
 	public void addBusinessHour(BusinessHour businessHour) {

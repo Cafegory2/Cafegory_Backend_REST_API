@@ -69,6 +69,7 @@ public class CafeQueryRepository {
 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
 				minBeveragePriceLoe(searchCondition.getMinMenuPrice())
 			);
+		System.out.println(content);
 		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
 	}
 

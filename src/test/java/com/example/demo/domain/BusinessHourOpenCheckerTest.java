@@ -24,7 +24,6 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
@@ -39,7 +38,6 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
@@ -54,7 +52,6 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isFalse();
@@ -69,7 +66,6 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
@@ -85,8 +81,6 @@ public class BusinessHourOpenCheckerTest {
 		businessHours.add(monday);
 		businessHours.add(tuesday);
 		businessHours.add(wednesday);
-
-		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 
 		//when
 		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
@@ -107,9 +101,7 @@ public class BusinessHourOpenCheckerTest {
 		List<BusinessHour> businessHours = new ArrayList<>();
 		BusinessHour weekends = new BusinessHour("WEEKENDS", LocalTime.of(9, 0), LocalTime.of(21, 0));
 		businessHours.add(weekends);
-
-		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
-
+		
 		//when
 		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
 		//then

@@ -8,8 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.BusinessHourOpenChecker;
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.OpenChecker;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.repository.cafe.CafeQueryRepository;
 import com.example.demo.service.dto.BusinessHourDto;
@@ -33,7 +35,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(request.getSearchCondition(),
 			pageable);
 
-		BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
+		OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
 
 		System.out.println("pagedCafes = " + pagedCafes.getContent());
 		List<CafeSearchResponse> cafeSearchResponses = pagedCafes.getContent().stream()
@@ -41,21 +43,17 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 				new CafeSearchResponse(
 					cafe.getId(),
 					cafe.getName(),
-					cafe.getAddress().showFullAddress(),
+					cafe.showFullAddress(),
 					cafe.getBusinessHours().stream()
 						.map(hour -> new BusinessHourDto(hour.getDay(), hour.getStartTime().toString(),
 							hour.getEndTime().toString()))
 						.collect(Collectors.toList()),
-
-					// openChecker.check(cafe.getBusinessHours())
-					true
-					,
-
+					cafe.isOpen(openChecker),
 					cafe.getSnsDetails().stream()
 						.map(s -> new SnsDto(s.getName(), s.getUrl()))
 						.collect(Collectors.toList()),
 					cafe.getPhone(),
-					1000,
+					cafe.getMinBeveragePrice(),
 					cafe.getMaxAllowableStay().getValue(),
 					cafe.getAvgReviewRate()
 				)
