@@ -28,7 +28,7 @@ public class OpenCheckerTest {
 
 	@Test
 	@DisplayName("현재시간이 요일에 맞는 영업 시작시간이랑 일치하면 open이다")
-	void contains_When_NowTime_Is_StartTime_Then_Open() {
+	void when_NowTime_Is_StartTime_Then_Open() {
 		//given
 		LocalDateTime now = LocalDateTime.of(2024, 1, 29, 9, 0, 0);
 		DayOfWeek dayOfWeek = now.getDayOfWeek();
@@ -43,7 +43,7 @@ public class OpenCheckerTest {
 
 	@Test
 	@DisplayName("현재시간이 요일에 맞는 영업 종료시작이랑 일치하면 close이다")
-	void contains_When_NowTime_Is_EndTime_Then_Close() {
+	void when_NowTime_Is_EndTime_Then_Close() {
 		//given
 		LocalDateTime now = LocalDateTime.of(2024, 1, 29, 21, 0, 0);
 		DayOfWeek dayOfWeek = now.getDayOfWeek();
@@ -58,7 +58,7 @@ public class OpenCheckerTest {
 
 	@Test
 	@DisplayName("현재시간이 요일에 맞는 영업 종료시간 1초전이라면 open이다")
-	void contains_When_NowTime_Is_EndTime_Before_1Sec_Then_Close() {
+	void when_NowTime_Is_EndTime_Before_1Sec_Then_Close() {
 		//given
 		LocalDateTime now = LocalDateTime.of(2024, 1, 29, 20, 59, 59);
 		DayOfWeek dayOfWeek = now.getDayOfWeek();
