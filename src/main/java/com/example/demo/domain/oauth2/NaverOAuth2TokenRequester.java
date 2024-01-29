@@ -3,7 +3,6 @@ package com.example.demo.domain.oauth2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class NaverOAuth2TokenRequester implements OAuth2TokenRequester {
+public class NaverOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
 	private final RestTemplate restTemplate;
 	@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 	private final String GRANT_TYPE = "authorization_code";
@@ -31,34 +30,21 @@ public class NaverOAuth2TokenRequester implements OAuth2TokenRequester {
 	private String clientSecret;
 
 	@Override
-	public OAuth2Token getToken(OAuth2TokenRequest oAuth2TokenRequest) {
-		validateProvider(oAuth2TokenRequest);
-		String url = makeUrl();
-		HttpHeaders httpHeaders = makeHeader();
-		MultiValueMap<String, String> httpBody = makeBody(oAuth2TokenRequest);
-		ResponseEntity<NaverOAuth2Token> naverOAuth2TokenResponseEntity = callNaverTokenApi(url, httpHeaders, httpBody);
-		validateNaverTokenApiResponse(naverOAuth2TokenResponseEntity);
-		return naverOAuth2TokenResponseEntity.getBody();
+	protected OAuth2Provider getOAuth2Provider() {
+		return OAuth2Provider.NAVER;
 	}
 
-	private ResponseEntity<NaverOAuth2Token> callNaverTokenApi(String url, HttpHeaders httpHeaders,
-		MultiValueMap<String, String> httpBody) {
-		HttpEntity<?> request = new HttpEntity<>(httpBody, httpHeaders);
-		return restTemplate.postForEntity(url, request, NaverOAuth2Token.class);
-	}
-
-	private static void validateNaverTokenApiResponse(
-		ResponseEntity<NaverOAuth2Token> naverOAuth2TokenResponseEntity) {
-		if (naverOAuth2TokenResponseEntity.getStatusCode() != HttpStatus.OK) {
-			throw new RuntimeException("토큰이 잘못되었습니다.");
-		}
-	}
-
-	private String makeUrl() {
+	protected String makeUrl() {
 		return authUrl + "/oauth2.0/token";
 	}
 
-	private MultiValueMap<String, String> makeBody(OAuth2TokenRequest oAuth2TokenRequest) {
+	protected HttpHeaders makeHeader() {
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		return httpHeaders;
+	}
+
+	protected MultiValueMap<String, String> makeBody(OAuth2TokenRequest oAuth2TokenRequest) {
 		MultiValueMap<String, String> httpBody = oAuth2TokenRequest.getParameters();
 		httpBody.add("grant_type", GRANT_TYPE);
 		httpBody.add("client_id", clientId);
@@ -66,15 +52,9 @@ public class NaverOAuth2TokenRequester implements OAuth2TokenRequester {
 		return httpBody;
 	}
 
-	private static HttpHeaders makeHeader() {
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		return httpHeaders;
-	}
-
-	private static void validateProvider(OAuth2TokenRequest oAuth2TokenRequest) {
-		if (oAuth2TokenRequest.getProvider() != OAuth2Provider.NAVER) {
-			throw new IllegalArgumentException("잘못된 OAuth2.0 요청입니다.");
-		}
+	protected ResponseEntity<? extends OAuth2Token> callTokenApi(String url, HttpHeaders httpHeaders,
+		MultiValueMap<String, String> httpBody) {
+		HttpEntity<?> request = new HttpEntity<>(httpBody, httpHeaders);
+		return restTemplate.postForEntity(url, request, NaverOAuth2Token.class);
 	}
 }
