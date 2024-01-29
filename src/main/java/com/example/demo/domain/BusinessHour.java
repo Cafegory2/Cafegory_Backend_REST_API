@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -46,7 +48,16 @@ public class BusinessHour {
 		this.endTime = endTime;
 	}
 
+	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
+		try {
+			return now.getDayOfWeek().equals(DayOfWeek.valueOf(day));
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	public void setCafe(CafeImpl cafe) {
 		this.cafe = cafe;
 	}
+
 }

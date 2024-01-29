@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,6 +71,48 @@ public class OpenCheckerTest {
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
+	}
+
+	@Test
+	@DisplayName("BusinessHours를 가지고 영업시간을 체크한다.")
+	void checkWithBusinessHours() {
+		List<BusinessHour> businessHours = new ArrayList<>();
+		BusinessHour monday = new BusinessHour("MONDAY", LocalTime.of(9, 0), LocalTime.of(21, 0));
+		BusinessHour tuesday = new BusinessHour("TUESDAY", LocalTime.of(9, 0), LocalTime.of(21, 0));
+		BusinessHour wednesday = new BusinessHour("WEDNESDAY", LocalTime.of(9, 0), LocalTime.of(21, 0));
+		businessHours.add(monday);
+		businessHours.add(tuesday);
+		businessHours.add(wednesday);
+
+		OpenChecker openChecker = new OpenChecker();
+
+		//when
+		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
+		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		//then
+		assertThat(isOpen1).isTrue();
+
+		//when
+		LocalDateTime now2 = LocalDateTime.of(2024, 1, 31, 8, 30, 0);
+		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
+		//then
+		assertThat(isOpen2).isFalse();
+	}
+
+	@Test
+	@DisplayName("DayOfWeek Enum상수가 가지고 있는 요일이 BusinessHours에 존재하지 않으면 예외가 터진다.")
+	void checkDayOfWeekWithBusinessHours() {
+		List<BusinessHour> businessHours = new ArrayList<>();
+		BusinessHour weekends = new BusinessHour("WEEKENDS", LocalTime.of(9, 0), LocalTime.of(21, 0));
+		businessHours.add(weekends);
+
+		OpenChecker openChecker = new OpenChecker();
+
+		//when
+		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
+		//then
+		assertThatThrownBy(() -> openChecker.checkWithBusinessHours(businessHours, now1))
+			.isInstanceOf(IllegalStateException.class);
 	}
 
 }

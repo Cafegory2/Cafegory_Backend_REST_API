@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public class OpenChecker {
 
@@ -14,5 +15,18 @@ public class OpenChecker {
 			}
 		}
 		return false;
+	}
+
+	public boolean checkWithBusinessHours(List<BusinessHour> businessHours, LocalDateTime now) {
+		if (!hasMatchingDayOfWeek(businessHours, now)) {
+			throw new IllegalStateException("현재 요일과 일치하는 요일을 찾을 수 없습니다.");
+		}
+		return businessHours.stream()
+			.anyMatch(hour -> check(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
+	}
+
+	private boolean hasMatchingDayOfWeek(List<BusinessHour> businessHours, LocalDateTime now) {
+		return businessHours.stream()
+			.anyMatch(hour -> hour.existsMatchingDayOfWeek(now));
 	}
 }
