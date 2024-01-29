@@ -17,11 +17,13 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "business_hour")
@@ -42,12 +44,6 @@ public class BusinessHour {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 
-	public BusinessHour(String day, LocalTime startTime, LocalTime endTime) {
-		this.day = day;
-		this.startTime = startTime;
-		this.endTime = endTime;
-	}
-
 	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
 		try {
 			return now.getDayOfWeek().equals(DayOfWeek.valueOf(day));
@@ -55,9 +51,5 @@ public class BusinessHour {
 			return false;
 		}
 	}
-
-	public void setCafe(CafeImpl cafe) {
-		this.cafe = cafe;
-	}
-
+	
 }

@@ -6,8 +6,6 @@ import com.example.demo.domain.MinMenuPrice;
 import lombok.Getter;
 
 @Getter
-// @RequiredArgsConstructor
-// @Builder
 public class CafeSearchCondition {
 
 	private final boolean isAbleToStudy;
@@ -39,7 +37,6 @@ public class CafeSearchCondition {
 		}
 
 		public Builder minMenuPrice(int value) {
-			// this.minMenuPrice = MinMenuPrice.find(value);
 			this.minMenuPrice = MinMenuPrice.find(value);
 			return this;
 		}
@@ -48,19 +45,5 @@ public class CafeSearchCondition {
 			return new CafeSearchCondition(this);
 		}
 	}
-
-	// @Builder
-	// private CafeSearchCondition(boolean isAbleToStudy, String region, int maxTime) {
-	// 	this.isAbleToStudy = isAbleToStudy;
-	// 	this.region = region;
-	// 	this.maxAllowableStay = MaxAllowableStay.find(maxTime);
-	// }
-	//
-	// @Builder
-	// private CafeSearchCondition(boolean isAbleToStudy, String region, int minMenuPrice) {
-	// 	this.isAbleToStudy = isAbleToStudy;
-	// 	this.region = region;
-	// 	this.maxAllowableStay = MinMenuPrice.find(minMenuPrice);
-	// }
 
 }

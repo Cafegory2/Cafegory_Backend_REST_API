@@ -53,33 +53,80 @@ class CafeRepositorySearchMethodTest {
 				.build();
 			em.persist(cafe);
 
-			BusinessHour monday = new BusinessHour("월", LocalTime.of(9, 0), LocalTime.of(21, 0));
-			cafe.addBusinessHour(monday);
-			BusinessHour tuesday = new BusinessHour("화", LocalTime.of(9, 0), LocalTime.of(21, 0));
-			cafe.addBusinessHour(tuesday);
+			// BusinessHour monday = new BusinessHour("월", LocalTime.of(9, 0), LocalTime.of(21, 0));
+			BusinessHour monday = BusinessHour.builder()
+				.day("월")
+				.startTime(LocalTime.of(9, 0))
+				.endTime(LocalTime.of(21, 0))
+				.cafe(cafe)
+				.build();
+			BusinessHour tuesday = BusinessHour.builder()
+				.day("화")
+				.startTime(LocalTime.of(9, 0))
+				.endTime(LocalTime.of(21, 0))
+				.cafe(cafe)
+				.build();
+
+			// cafe.addBusinessHour(monday);
+			// BusinessHour tuesday = new BusinessHour("화", LocalTime.of(9, 0), LocalTime.of(21, 0));
+			// cafe.addBusinessHour(tuesday);
 			em.persist(monday);
 			em.persist(tuesday);
 
-			SnsDetail instagram = new SnsDetail("인스타그램", "https://www.instagram.com/cafegory/" + i);
-			cafe.addSnsDetail(instagram);
+			// SnsDetail instagram = new SnsDetail("인스타그램", "https://www.instagram.com/cafegory/" + i);
+			SnsDetail instagram = SnsDetail.builder()
+				.name("인스타그램")
+				.url("https://www.instagram.com/cafegory/" + i)
+				.cafe(cafe)
+				.build();
+			// cafe.addSnsDetail(instagram);
 			em.persist(instagram);
 
-			MemberImpl member1 = new MemberImpl("김동현");
+			// MemberImpl member1 = new MemberImpl("김동현");
+			MemberImpl member1 = MemberImpl.builder()
+				.name("김동현")
+				.build();
+			MemberImpl member2 = MemberImpl.builder()
+				.name("임수빈")
+				.build();
 			em.persist(member1);
-			MemberImpl member2 = new MemberImpl("임수빈");
+			// MemberImpl member2 = new MemberImpl("임수빈");
 			em.persist(member2);
 
-			ReviewImpl review1 = new ReviewImpl("카페가 너무 이뻐요", 5, cafe, member1);
-			cafe.addReview(review1);
-			ReviewImpl review2 = new ReviewImpl("콘센트가 있어서 좋아요", 4.5, cafe, member2);
-			cafe.addReview(review2);
+			// ReviewImpl review1 = new ReviewImpl("카페가 너무 이뻐요", 5, cafe, member1);
+			ReviewImpl review1 = ReviewImpl.builder()
+				.content("카페가 너무 이뻐요")
+				.rate(5)
+				.cafe(cafe)
+				.member(member1)
+				.build();
+
+			// cafe.addReview(review1);
+			// ReviewImpl review2 = new ReviewImpl("콘센트가 있어서 좋아요", 4.5, cafe, member2);
+			ReviewImpl review2 = ReviewImpl.builder()
+				.content("콘센트가 있어서 좋아요")
+				.rate(4.5)
+				.cafe(cafe)
+				.member(member2)
+				.build();
+			// cafe.addReview(review2);
 			em.persist(review1);
 			em.persist(review2);
 
-			Menu menu1 = new Menu("아메리카노", 2000);
-			cafe.addMenu(menu1);
-			Menu menu2 = new Menu("카페라떼", 2500);
-			cafe.addMenu(menu2);
+			// Menu menu1 = new Menu("아메리카노", 2000);
+			Menu menu1 = Menu.builder()
+				.name("아메리카노")
+				.price(2000)
+				.cafe(cafe)
+				.build();
+			// cafe.addMenu(menu1);
+			// Menu menu2 = new Menu("카페라떼", 2500);
+			Menu menu2 = Menu.builder()
+				.name("카페라떼")
+				.price(2500)
+				.cafe(cafe)
+				.build();
+			// cafe.addMenu(menu2);
 			em.persist(menu1);
 			em.persist(menu2);
 
@@ -101,33 +148,80 @@ class CafeRepositorySearchMethodTest {
 				.build();
 			em.persist(cafe);
 
-			BusinessHour monday = new BusinessHour("월", LocalTime.of(9, 0), LocalTime.of(21, 0));
-			cafe.addBusinessHour(monday);
-			BusinessHour tuesday = new BusinessHour("화", LocalTime.of(9, 0), LocalTime.of(21, 0));
-			cafe.addBusinessHour(tuesday);
+			// BusinessHour monday = new BusinessHour("월", LocalTime.of(9, 0), LocalTime.of(21, 0));
+			BusinessHour monday = BusinessHour.builder()
+				.day("월")
+				.startTime(LocalTime.of(9, 0))
+				.endTime(LocalTime.of(21, 0))
+				.cafe(cafe)
+				.build();
+			BusinessHour tuesday = BusinessHour.builder()
+				.day("화")
+				.startTime(LocalTime.of(9, 0))
+				.endTime(LocalTime.of(21, 0))
+				.cafe(cafe)
+				.build();
+			// cafe.addBusinessHour(monday);
+			// BusinessHour tuesday = new BusinessHour("화", LocalTime.of(9, 0), LocalTime.of(21, 0));
+			// cafe.addBusinessHour(tuesday);
 			em.persist(monday);
 			em.persist(tuesday);
 
-			SnsDetail instagram = new SnsDetail("인스타그램", "https://www.instagram.com/cafegory/" + i);
-			cafe.addSnsDetail(instagram);
+			// SnsDetail instagram = new SnsDetail("인스타그램", "https://www.instagram.com/cafegory/" + i);
+			SnsDetail instagram = SnsDetail.builder()
+				.name("인스타그램")
+				.url("https://www.instagram.com/cafegory/" + i)
+				.cafe(cafe)
+				.build();
+			// cafe.addSnsDetail(instagram);
 			em.persist(instagram);
 
-			MemberImpl member1 = new MemberImpl("김동현");
+			// MemberImpl member1 = new MemberImpl("김동현");
+			MemberImpl member1 = MemberImpl.builder()
+				.name("김동현")
+				.build();
+			MemberImpl member2 = MemberImpl.builder()
+				.name("임수빈")
+				.build();
 			em.persist(member1);
-			MemberImpl member2 = new MemberImpl("임수빈");
+			// MemberImpl member2 = new MemberImpl("임수빈");
 			em.persist(member2);
 
-			ReviewImpl review1 = new ReviewImpl("카페가 너무 이뻐요", 5, cafe, member1);
-			cafe.addReview(review1);
-			ReviewImpl review2 = new ReviewImpl("콘센트가 있어서 좋아요", 4.5, cafe, member2);
-			cafe.addReview(review2);
+			// ReviewImpl review1 = new ReviewImpl("카페가 너무 이뻐요", 5, cafe, member1);
+			ReviewImpl review1 = ReviewImpl.builder()
+				.content("카페가 너무 이뻐요")
+				.rate(5)
+				.cafe(cafe)
+				.member(member1)
+				.build();
+			// cafe.addReview(review1);
+			// ReviewImpl review2 = new ReviewImpl("콘센트가 있어서 좋아요", 4.5, cafe, member2);
+			ReviewImpl review2 = ReviewImpl.builder()
+				.content("콘센트가 있어서 좋아요")
+				.rate(4.5)
+				.cafe(cafe)
+				.member(member2)
+				.build();
+			// cafe.addReview(review2);
 			em.persist(review1);
 			em.persist(review2);
 
-			Menu menu1 = new Menu("아메리카노", 2000);
-			cafe.addMenu(menu1);
-			Menu menu2 = new Menu("카페라떼", 2500);
-			cafe.addMenu(menu2);
+			Menu menu1 = Menu.builder()
+				.name("아메리카노")
+				.price(2000)
+				.cafe(cafe)
+				.build();
+			// cafe.addMenu(menu1);
+			// Menu menu2 = new Menu("카페라떼", 2500);
+			Menu menu2 = Menu.builder()
+				.name("카페라떼")
+				.price(2500)
+				.cafe(cafe)
+				.build();
+			// Menu menu1 = new Menu("아메리카노", 2000);
+			// cafe.addMenu(menu1);
+			// Menu menu2 = new Menu("카페라떼", 2500);
+			// cafe.addMenu(menu2);
 			em.persist(menu1);
 			em.persist(menu2);
 

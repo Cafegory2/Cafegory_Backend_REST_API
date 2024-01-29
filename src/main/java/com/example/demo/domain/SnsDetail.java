@@ -12,11 +12,13 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "sns_detail")
@@ -34,9 +36,5 @@ public class SnsDetail {
 	public void setCafe(CafeImpl cafe) {
 		this.cafe = cafe;
 	}
-
-	public SnsDetail(String name, String url) {
-		this.name = name;
-		this.url = url;
-	}
+	
 }

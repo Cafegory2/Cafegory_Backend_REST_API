@@ -13,11 +13,13 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "member")
@@ -32,8 +34,5 @@ public class MemberImpl implements Member {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "thumbnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private ThumbnailImage thumbnailImage;
-
-	public MemberImpl(String name) {
-		this.name = name;
-	}
+	
 }

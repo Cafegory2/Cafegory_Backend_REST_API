@@ -2,7 +2,10 @@ package com.example.demo.domain;
 
 import javax.persistence.Embeddable;
 
+import lombok.Getter;
+
 @Embeddable
+@Getter
 public class Address {
 
 	private String fullAddress;
@@ -21,7 +24,7 @@ public class Address {
 	}
 
 	public String showFullAddress() {
-		return null;
+		return getFullAddress();
 	}
 
 }

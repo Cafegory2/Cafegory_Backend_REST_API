@@ -8,7 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CafeSearchRequest {
-
+	
 	private int page;
 	private int sizePerPage = 10;
 	private int startTime = 0;

@@ -15,17 +15,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-// @Builder
-// @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cafe")
-// @ToString(of = {"id", "name"})
 public class CafeImpl implements Cafe {
 
 	@Id
@@ -37,78 +37,38 @@ public class CafeImpl implements Cafe {
 
 	@Embedded
 	private Address address;
-
-	// @Transient
-	// private boolean isOpen;
 	private String phone;
 
 	@Enumerated(EnumType.STRING)
 	private MaxAllowableStay maxAllowableStay;
+
 	private double avgReviewRate;
 	private boolean isAbleToStudy;
 	private int minBeveragePrice;
 
-	// @Enumerated(EnumType.STRING)
-	// private MinMenuPrice minBeveragePrice;
-
 	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
 	private List<BusinessHour> businessHours = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
 	private List<SnsDetail> snsDetails = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
 	private List<ReviewImpl> reviews = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
 	private List<Menu> menus = new ArrayList<>();
-
-	@Builder
-	public CafeImpl(Long id, String name, Address address, boolean isOpen, String phone,
-		MaxAllowableStay maxAllowableStay,
-		double avgReviewRate, boolean isAbleToStudy, int minBeveragePrice
-		// , MinMenuPrice minMenuPrice
-	) {
-		this.id = id;
-		this.name = name;
-		this.address = address;
-		// this.isOpen = isOpen;
-		this.phone = phone;
-		this.maxAllowableStay = maxAllowableStay;
-		this.avgReviewRate = avgReviewRate;
-		this.isAbleToStudy = isAbleToStudy;
-		this.minBeveragePrice = minBeveragePrice;
-		// this.minBeveragePrice = minMenuPrice;
-	}
 
 	@Override
 	public String showFullAddress() {
-
-		return null;
+		return address.showFullAddress();
 	}
 
 	public boolean isOpen(OpenChecker<BusinessHour> openChecker) {
 		return openChecker.checkWithBusinessHours(this.businessHours, LocalDateTime.now());
-	}
-
-	public void addBusinessHour(BusinessHour businessHour) {
-		businessHours.add(businessHour);
-		businessHour.setCafe(this);
-	}
-
-	public void addSnsDetail(SnsDetail snsDetail) {
-		snsDetails.add(snsDetail);
-		snsDetail.setCafe(this);
-	}
-
-	public void addReview(ReviewImpl review) {
-		reviews.add(review);
-		review.setCafe(this);
-	}
-
-	public void addMenu(Menu menu) {
-		menus.add(menu);
-		menu.setCafe(this);
 	}
 
 }
