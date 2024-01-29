@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.BusinessHourOpenChecker;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.repository.cafe.CafeQueryRepository;
@@ -31,6 +32,9 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(request.getSearchCondition(),
 			pageable);
+
+		BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
+
 		System.out.println("pagedCafes = " + pagedCafes.getContent());
 		List<CafeSearchResponse> cafeSearchResponses = pagedCafes.getContent().stream()
 			.map(cafe ->
@@ -42,7 +46,11 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 						.map(hour -> new BusinessHourDto(hour.getDay(), hour.getStartTime().toString(),
 							hour.getEndTime().toString()))
 						.collect(Collectors.toList()),
-					true,
+
+					// openChecker.check(cafe.getBusinessHours())
+					true
+					,
+
 					cafe.getSnsDetails().stream()
 						.map(s -> new SnsDto(s.getName(), s.getUrl()))
 						.collect(Collectors.toList()),

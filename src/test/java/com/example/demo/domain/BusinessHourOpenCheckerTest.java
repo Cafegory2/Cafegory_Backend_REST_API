@@ -11,7 +11,9 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class OpenCheckerTest {
+public class BusinessHourOpenCheckerTest {
+
+	private OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
 
 	@Test
 	@DisplayName("현재시간이 요일에 맞는 영업시간에 포함하면 open이다")
@@ -22,7 +24,7 @@ public class OpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		OpenChecker openChecker = new OpenChecker();
+		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
@@ -37,7 +39,7 @@ public class OpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		OpenChecker openChecker = new OpenChecker();
+		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
@@ -52,7 +54,7 @@ public class OpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		OpenChecker openChecker = new OpenChecker();
+		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isFalse();
@@ -67,7 +69,7 @@ public class OpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		OpenChecker openChecker = new OpenChecker();
+		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
@@ -84,7 +86,7 @@ public class OpenCheckerTest {
 		businessHours.add(tuesday);
 		businessHours.add(wednesday);
 
-		OpenChecker openChecker = new OpenChecker();
+		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 
 		//when
 		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
@@ -106,7 +108,7 @@ public class OpenCheckerTest {
 		BusinessHour weekends = new BusinessHour("WEEKENDS", LocalTime.of(9, 0), LocalTime.of(21, 0));
 		businessHours.add(weekends);
 
-		OpenChecker openChecker = new OpenChecker();
+		// BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 
 		//when
 		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
