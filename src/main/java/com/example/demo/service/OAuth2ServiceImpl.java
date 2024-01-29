@@ -3,13 +3,13 @@ package com.example.demo.service;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.domain.auth.CafegoryTokenManager;
-import com.example.demo.domain.oauth2.NaverOAuth2ProfileRequester;
-import com.example.demo.domain.oauth2.NaverOAuth2TokenRequester;
+import com.example.demo.domain.oauth2.OAuth2ProfileRequester;
+import com.example.demo.domain.oauth2.OAuth2TokenRequester;
 import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2Token;
@@ -18,13 +18,14 @@ import com.example.demo.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
-public class NaverOAuth2Service implements OAuth2Service {
-	private final NaverOAuth2ProfileRequester oAuth2ProfileRequester;
-	private final NaverOAuth2TokenRequester oAuth2TokenRequester;
-	private final CafegoryTokenManager cafegoryTokenManager;
-	private final MemberRepository memberRepository;
+public class OAuth2ServiceImpl implements OAuth2Service {
+	private final OAuth2ProfileRequester oAuth2ProfileRequester;
+	private final OAuth2TokenRequester oAuth2TokenRequester;
+	@Autowired
+	private CafegoryTokenManager cafegoryTokenManager;
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Override
 	public CafegoryToken joinOrLogin(OAuth2TokenRequest oAuth2TokenRequest) {

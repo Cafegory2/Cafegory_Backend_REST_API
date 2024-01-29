@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.dto.oauth2.KakaoOAuth2TokenRequest;
 import com.example.demo.dto.oauth2.NaverOAuth2TokenRequest;
-import com.example.demo.service.KakaoOAuth2Service;
-import com.example.demo.service.NaverOAuth2Service;
+import com.example.demo.service.OAuth2Service;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/oauth2")
 @RequiredArgsConstructor
 public class OAuthController {
-	private final KakaoOAuth2Service kakaoOAuth2Service;
-	private final NaverOAuth2Service naverOAuth2Service;
+	private final OAuth2Service kakaoOAuth2Service;
+	private final OAuth2Service naverOAuth2Service;
 
 	@GetMapping("/kakao")
 	public CafegoryToken kakao(@RequestParam String code) {

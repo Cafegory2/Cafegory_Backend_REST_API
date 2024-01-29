@@ -5,7 +5,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +15,6 @@ import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
 @RequiredArgsConstructor
 public class KakaoOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
 	private final RestTemplate restTemplate;
