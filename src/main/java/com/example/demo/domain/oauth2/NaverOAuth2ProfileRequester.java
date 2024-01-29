@@ -19,34 +19,18 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class NaverOAuth2ProfileRequester implements OAuth2ProfileRequester {
+public final class NaverOAuth2ProfileRequester extends AbstractOAuth2ProfileRequester {
 	private final RestTemplate restTemplate;
 	@Value("${oauth.naver.url.api}")
 	private String apiUrl;
 
 	@Override
-	public OAuth2Profile getOAuth2Profile(OAuth2Token oAuth2Token) {
-		String url = makeUrl();
-		HttpHeaders httpHeaders = makeHeader(oAuth2Token);
-		MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-		ResponseEntity<NaverOAuth2Profile> naverOAuth2ProfileResponse = callNaverProfileApi(url, httpHeaders, body);
-		validateNaverProfileApiResponse(naverOAuth2ProfileResponse);
-		return naverOAuth2ProfileResponse.getBody();
+	protected String makeUrl() {
+		return apiUrl + "/v1/nid/me";
 	}
 
-	private static void validateNaverProfileApiResponse(ResponseEntity<NaverOAuth2Profile> naverOAuth2ProfileResponse) {
-		if (naverOAuth2ProfileResponse.getStatusCode() != HttpStatus.OK) {
-			throw new RuntimeException("네이버에서 거부했습니다.");
-		}
-	}
-
-	private ResponseEntity<NaverOAuth2Profile> callNaverProfileApi(String url, HttpHeaders httpHeaders,
-		MultiValueMap<String, String> body) {
-		HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-		return restTemplate.postForEntity(url, request, NaverOAuth2Profile.class);
-	}
-
-	private static HttpHeaders makeHeader(OAuth2Token oAuth2Token) {
+	@Override
+	protected HttpHeaders makeHeader(OAuth2Token oAuth2Token) {
 		String accessToken = oAuth2Token.getAccessToken();
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -54,7 +38,22 @@ public class NaverOAuth2ProfileRequester implements OAuth2ProfileRequester {
 		return httpHeaders;
 	}
 
-	private String makeUrl() {
-		return apiUrl + "/v1/nid/me";
+	@Override
+	protected MultiValueMap<String, String> makeBody() {
+		return new LinkedMultiValueMap<>();
+	}
+
+	@Override
+	protected ResponseEntity<? extends OAuth2Profile> callProfileApi(String url, HttpHeaders httpHeaders,
+		MultiValueMap<String, String> body) {
+		HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+		return restTemplate.postForEntity(url, request, NaverOAuth2Profile.class);
+	}
+
+	@Override
+	protected void validateProfileApiResponse(ResponseEntity<? extends OAuth2Profile> oAuth2ProfileResponse) {
+		if (oAuth2ProfileResponse.getStatusCode() != HttpStatus.OK) {
+			throw new RuntimeException("네이버에서 거부했습니다.");
+		}
 	}
 }

@@ -19,40 +19,24 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class KakaoOAuth2ProfileRequester implements OAuth2ProfileRequester {
+public final class KakaoOAuth2ProfileRequester extends AbstractOAuth2ProfileRequester {
 	private final RestTemplate restTemplate;
 	@Value("${oauth.kakao.url.api}")
 	private String apiUrl;
 
+	protected String makeUrl() {
+		return apiUrl + "/v2/user/me";
+	}
+
 	@Override
-	public OAuth2Profile getOAuth2Profile(OAuth2Token oAuth2Token) {
-		String url = makeUrl();
-		HttpHeaders httpHeaders = makeHeader(oAuth2Token);
-		MultiValueMap<String, String> body = makeBody();
-		ResponseEntity<KakaoOAuth2Profile> kakaoOAuth2ProfileResponse = callKakaoProfileApi(url, httpHeaders, body);
-		validateKakaoProfileApiResponse(kakaoOAuth2ProfileResponse);
-		return kakaoOAuth2ProfileResponse.getBody();
-	}
-
-	private static void validateKakaoProfileApiResponse(ResponseEntity<KakaoOAuth2Profile> kakaoOAuth2ProfileResponse) {
-		if (kakaoOAuth2ProfileResponse.getStatusCode() != HttpStatus.OK) {
-			throw new RuntimeException("카카오에서 거부했습니다.");
-		}
-	}
-
-	private ResponseEntity<KakaoOAuth2Profile> callKakaoProfileApi(String url, HttpHeaders httpHeaders,
-		MultiValueMap<String, String> body) {
-		HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-		return restTemplate.postForEntity(url, request, KakaoOAuth2Profile.class);
-	}
-
-	private static MultiValueMap<String, String> makeBody() {
+	protected MultiValueMap<String, String> makeBody() {
 		MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
 		body.add("property_keys", "[\"kakao_account.email\", \"kakao_account.profile\"]");
 		return body;
 	}
 
-	private static HttpHeaders makeHeader(OAuth2Token oAuth2Token) {
+	@Override
+	protected HttpHeaders makeHeader(OAuth2Token oAuth2Token) {
 		String accessToken = oAuth2Token.getAccessToken();
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -60,7 +44,17 @@ public class KakaoOAuth2ProfileRequester implements OAuth2ProfileRequester {
 		return httpHeaders;
 	}
 
-	private String makeUrl() {
-		return apiUrl + "/v2/user/me";
+	@Override
+	protected ResponseEntity<? extends OAuth2Profile> callProfileApi(String url, HttpHeaders httpHeaders,
+		MultiValueMap<String, String> body) {
+		HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+		return restTemplate.postForEntity(url, request, KakaoOAuth2Profile.class);
+	}
+
+	@Override
+	protected void validateProfileApiResponse(ResponseEntity<? extends OAuth2Profile> oAuth2ProfileResponse) {
+		if (oAuth2ProfileResponse.getStatusCode() != HttpStatus.OK) {
+			throw new RuntimeException("카카오에서 거부했습니다.");
+		}
 	}
 }
