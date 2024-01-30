@@ -6,7 +6,6 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
-	
 	@Override
 	public boolean check(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, LocalDateTime now) {
 		LocalTime currentTime = now.toLocalTime();

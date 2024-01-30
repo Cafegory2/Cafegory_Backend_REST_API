@@ -456,7 +456,8 @@ class CafeRepositorySearchMethodTest {
 	}
 
 	@Test
-	void 최소음료필터링() {
+	@DisplayName("최소음료필터링")
+	void minBeveragePrice() {
 		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 2_500);
 		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 3_000);
 		setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 11_000);

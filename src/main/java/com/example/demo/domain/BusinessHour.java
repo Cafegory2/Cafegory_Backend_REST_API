@@ -51,5 +51,4 @@ public class BusinessHour {
 			return false;
 		}
 	}
-	
 }

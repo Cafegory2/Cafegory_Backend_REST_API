@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class BusinessHourDto {
-
 	private final String day;
 	private final String startTime;
 	private final String endTime;
-	
 }

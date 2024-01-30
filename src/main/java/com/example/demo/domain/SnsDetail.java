@@ -36,5 +36,4 @@ public class SnsDetail {
 	public void setCafe(CafeImpl cafe) {
 		this.cafe = cafe;
 	}
-	
 }
