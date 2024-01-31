@@ -1,14 +1,15 @@
 package com.example.demo.domain.auth;
 
 import java.util.Date;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -44,11 +45,18 @@ class JwtManager {
 		return jwt;
 	}
 
-	public Map<String, Object> decode(String jwtString) {
+	public Claims decode(String jwtString) {
 		JwtParserBuilder parser = Jwts.parser();
-		Jws<Claims> claimsJws = parser.verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
-			.build()
-			.parseSignedClaims(jwtString);
-		return claimsJws.getPayload();
+		try {
+			Jws<Claims> claimsJws = parser.verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+				.build()
+				.parseSignedClaims(jwtString);
+			return claimsJws.getPayload();
+
+		} catch (ExpiredJwtException e) {
+			throw new IllegalArgumentException("JWT 토큰이 만료되었습니다.");
+		} catch (JwtException e) {
+			throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
+		}
 	}
 }
