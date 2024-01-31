@@ -13,7 +13,7 @@ public class CafeSearchResponse {
 	private final String name;
 	private final String address;
 	private final List<BusinessHourDto> businessHours;
-	private final boolean isOpen;
+	private final Boolean isOpen;
 	private final List<SnsDto> sns;
 	private final String phone;
 	private final int minBeveragePrice;
