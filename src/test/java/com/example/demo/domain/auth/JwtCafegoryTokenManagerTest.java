@@ -67,9 +67,19 @@ class JwtCafegoryTokenManagerTest {
 			.isEqualTo(memberInfo);
 	}
 
-	private CafegoryToken createToken() {
+	@Test
+	@DisplayName("토큰에서 인증 식별자 추출 테스트")
+	void getIdentityId() {
+		CafegoryToken token = createToken("1");
+		String accessToken = token.getAccessToken();
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
-		Map<String, String> memberInfo = Map.of("key1", "value1", "key2", "value2");
+		long identityId = jwtCafegoryTokenManager.getIdentityId(accessToken);
+		Assertions.assertThat(identityId).isEqualTo(1);
+	}
+
+	private CafegoryToken createToken(String id) {
+		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
+		Map<String, String> memberInfo = Map.of("memberId", id, "key1", "value1", "key2", "value2");
 		return jwtCafegoryTokenManager.createToken(memberInfo);
 	}
 }

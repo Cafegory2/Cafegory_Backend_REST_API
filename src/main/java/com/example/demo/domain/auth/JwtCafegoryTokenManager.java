@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.dto.auth.CafegoryToken;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -23,6 +24,12 @@ public class JwtCafegoryTokenManager implements CafegoryTokenManager {
 		String accessToken = makeAccessToken(memberInformation, issuedAt);
 		String refreshToken = makeRefreshToken(accessToken, memberInformation, issuedAt);
 		return new CafegoryToken(accessToken, refreshToken);
+	}
+
+	@Override
+	public long getIdentityId(String accessToken) {
+		Claims claims = jwtManager.decode(accessToken);
+		return Long.parseLong(claims.get("memberId", String.class));
 	}
 
 	private String makeAccessToken(Map<String, String> memberInformation, Date issuedAt) {
