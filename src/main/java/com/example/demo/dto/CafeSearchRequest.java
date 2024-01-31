@@ -1,4 +1,4 @@
-package com.example.demo.controller.dto;
+package com.example.demo.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,10 +7,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CafeSearchRequest {
-	
-	private int page;
-	private int sizePerPage = 10;
+public class CafeSearchRequest extends PagedRequest {
+
+	// private int page;
+	// private int sizePerPage = 10;
 	private int startTime = 0;
 	private int endTime = 24;
 	private boolean canStudy;

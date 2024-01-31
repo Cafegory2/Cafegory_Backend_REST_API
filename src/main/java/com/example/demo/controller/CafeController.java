@@ -6,11 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.controller.dto.CafeSearchRequest;
-import com.example.demo.controller.mapper.ControllerCafeMapper;
+import com.example.demo.dto.CafeSearchRequest;
+import com.example.demo.dto.CafeSearchResponse;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.service.CafeQueryService;
-import com.example.demo.service.dto.CafeSearchResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,9 +24,11 @@ public class CafeController {
 		@ModelAttribute CafeSearchRequest cafeSearchRequest) {
 
 		System.out.println("cafeSearchRequest = " + cafeSearchRequest);
+		// PagedResponse<CafeSearchResponse> response = cafeQueryService.searchWithPagingByDynamicFilter(
+		// 	new ControllerCafeMapper().convertToServiceCafeSearchRequest(cafeSearchRequest)
+		// );
 		PagedResponse<CafeSearchResponse> response = cafeQueryService.searchWithPagingByDynamicFilter(
-			new ControllerCafeMapper().convertToServiceCafeSearchRequest(cafeSearchRequest)
-		);
+			cafeSearchRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

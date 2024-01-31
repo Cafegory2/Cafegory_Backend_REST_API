@@ -1,4 +1,4 @@
-package com.example.demo.service.dto;
+package com.example.demo.dto;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ public class CafeSearchResponse {
 	private final long id;
 	private final String name;
 	private final String address;
-	private final List<BusinessHourDto> businessHours;
+	private final List<BusinessHourResponse> businessHours;
 	private final Boolean isOpen;
-	private final List<SnsDto> sns;
+	private final List<SnsResponse> sns;
 	private final String phone;
 	private final int minBeveragePrice;
 	private final int maxTime;

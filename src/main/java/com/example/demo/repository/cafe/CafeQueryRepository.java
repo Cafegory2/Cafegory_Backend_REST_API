@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MaxAllowableStay;
 import com.example.demo.domain.MinMenuPrice;
-import com.example.demo.service.dto.CafeSearchCondition;
+import com.example.demo.dto.CafeSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;

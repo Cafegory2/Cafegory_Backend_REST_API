@@ -12,12 +12,13 @@ import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.BusinessHourOpenChecker;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.OpenChecker;
+import com.example.demo.dto.BusinessHourResponse;
+import com.example.demo.dto.CafeSearchCondition;
+import com.example.demo.dto.CafeSearchRequest;
+import com.example.demo.dto.CafeSearchResponse;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.SnsResponse;
 import com.example.demo.repository.cafe.CafeQueryRepository;
-import com.example.demo.service.dto.BusinessHourDto;
-import com.example.demo.service.dto.CafeSearchResponse;
-import com.example.demo.service.dto.ServiceCafeSearchRequest;
-import com.example.demo.service.dto.SnsDto;
 import com.example.demo.util.PageRequestCustom;
 
 import lombok.RequiredArgsConstructor;
@@ -30,9 +31,19 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	private final CafeQueryRepository cafeQueryRepository;
 
 	@Override
-	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(ServiceCafeSearchRequest request) {
+	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
+
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
-		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(request.getSearchCondition(),
+
+		//변환코드
+		CafeSearchCondition newSearchCondition = new CafeSearchCondition.Builder(request.isCanStudy(),
+			request.getArea())
+			.maxTime(request.getMaxTime())
+			.minMenuPrice(request.getMinBeveragePrice())
+			.build();
+		//변환코드 끝
+
+		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(newSearchCondition,
 			pageable);
 
 		OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
@@ -45,12 +56,12 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 					cafe.getName(),
 					cafe.showFullAddress(),
 					cafe.getBusinessHours().stream()
-						.map(hour -> new BusinessHourDto(hour.getDay(), hour.getStartTime().toString(),
+						.map(hour -> new BusinessHourResponse(hour.getDay(), hour.getStartTime().toString(),
 							hour.getEndTime().toString()))
 						.collect(Collectors.toList()),
 					cafe.isOpen(openChecker),
 					cafe.getSnsDetails().stream()
-						.map(s -> new SnsDto(s.getName(), s.getUrl()))
+						.map(s -> new SnsResponse(s.getName(), s.getUrl()))
 						.collect(Collectors.toList()),
 					cafe.getPhone(),
 					cafe.getMinBeveragePrice(),
