@@ -32,6 +32,17 @@ public class JwtCafegoryTokenManager implements CafegoryTokenManager {
 		return Long.parseLong(claims.get("memberId", String.class));
 	}
 
+	@Override
+	public boolean canRefresh(String refreshToken) {
+		try {
+			Claims claims = jwtManager.decode(refreshToken);
+			String accessToken = claims.get("accessToken", String.class);
+			return jwtManager.isExpired(accessToken);
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	private String makeAccessToken(Map<String, String> memberInformation, Date issuedAt) {
 		jwtManager.setLife(issuedAt, accessTokenLifeAsSeconds);
 		for (String key : memberInformation.keySet()) {

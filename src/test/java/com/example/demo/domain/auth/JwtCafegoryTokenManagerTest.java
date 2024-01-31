@@ -1,5 +1,7 @@
 package com.example.demo.domain.auth;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,5 +83,62 @@ class JwtCafegoryTokenManagerTest {
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
 		Map<String, String> memberInfo = Map.of("memberId", id, "key1", "value1", "key2", "value2");
 		return jwtCafegoryTokenManager.createToken(memberInfo);
+	}
+
+	@Test
+	@DisplayName("정상적인 리프레쉬 토큰이 주어지면, 재발행이 가능하다고 하는지 확인")
+	void canRefresh() {
+		String refreshToken = makeRefreshAbleToken();
+		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
+		boolean canRefresh = jwtCafegoryTokenManager.canRefresh(refreshToken);
+		Assertions.assertThat(canRefresh).isEqualTo(true);
+	}
+
+	private String makeRefreshAbleToken() {
+		jwtManager.claim("memberId", "1");
+		jwtManager.setLife(Date.from(Instant.now()), 0);
+		String accessToken = jwtManager.make();
+		jwtManager.claim("memberId", "1");
+		jwtManager.claim("accessToken", accessToken);
+		jwtManager.setLife(Date.from(Instant.now()), 100000);
+		return jwtManager.make();
+	}
+
+	@Test
+	@DisplayName("엑세스 토큰이 만료되지 않은 리프레쉬 토큰이 주어지면, 재발행이 불가능하다고 하는지 확인")
+	void canRefreshFalseCauseAccessTokenNotExpired() {
+		String refreshToken = makeAccessTokenNotExpiredRefreshToken();
+		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
+		boolean canRefresh = jwtCafegoryTokenManager.canRefresh(refreshToken);
+		Assertions.assertThat(canRefresh).isEqualTo(false);
+	}
+
+	private String makeAccessTokenNotExpiredRefreshToken() {
+		jwtManager.claim("memberId", "1");
+		jwtManager.setLife(Date.from(Instant.now()), 10000);
+		String accessToken = jwtManager.make();
+		jwtManager.claim("memberId", "1");
+		jwtManager.claim("accessToken", accessToken);
+		jwtManager.setLife(Date.from(Instant.now()), 100000);
+		return jwtManager.make();
+	}
+
+	@Test
+	@DisplayName("만료된 리프레쉬 토큰이 주어지면, 재발행이 불가능하다고 하는지 확인")
+	void canRefreshFalseCauseRefreshTokenExpired() {
+		String refreshToken = makeExpiredRefreshToken();
+		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
+		boolean canRefresh = jwtCafegoryTokenManager.canRefresh(refreshToken);
+		Assertions.assertThat(canRefresh).isEqualTo(false);
+	}
+
+	private String makeExpiredRefreshToken() {
+		jwtManager.claim("memberId", "1");
+		jwtManager.setLife(Date.from(Instant.now()), 0);
+		String accessToken = jwtManager.make();
+		jwtManager.claim("memberId", "1");
+		jwtManager.claim("accessToken", accessToken);
+		jwtManager.setLife(Date.from(Instant.now()), 0);
+		return jwtManager.make();
 	}
 }

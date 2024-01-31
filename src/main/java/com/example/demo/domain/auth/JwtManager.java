@@ -59,4 +59,14 @@ class JwtManager {
 			throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
 		}
 	}
+
+	public boolean isExpired(String jwtString) {
+		String errMessage = "";
+		try {
+			decode(jwtString);
+		} catch (IllegalArgumentException e) {
+			errMessage = e.getMessage();
+		}
+		return errMessage.equals("JWT 토큰이 만료되었습니다.");
+	}
 }

@@ -8,4 +8,6 @@ public interface CafegoryTokenManager {
 	CafegoryToken createToken(Map<String, String> memberInformation);
 
 	long getIdentityId(String accessToken);
+
+	boolean canRefresh(String refreshToken);
 }

@@ -97,4 +97,30 @@ class JwtManagerTest {
 		Assertions.assertThatThrownBy(() -> jwtManager.decode(finalToken))
 			.isInstanceOf(IllegalArgumentException.class);
 	}
+
+	@Test
+	@DisplayName("만료된 토큰 확인 테스트")
+	void isExpired() {
+		Map<String, Object> claims = makeClaims();
+		for (String key : claims.keySet()) {
+			jwtManager.claim(key, claims.get(key));
+		}
+		jwtManager.setLife(Date.from(Instant.now()), 0);
+		String jwt = jwtManager.make();
+		boolean expired = jwtManager.isExpired(jwt);
+		Assertions.assertThat(expired).isEqualTo(true);
+	}
+
+	@Test
+	@DisplayName("만료되지 않은 토큰이 만료되지 않았다고 하는지 테스트")
+	void isNotExpired() {
+		Map<String, Object> claims = makeClaims();
+		for (String key : claims.keySet()) {
+			jwtManager.claim(key, claims.get(key));
+		}
+		jwtManager.setLife(Date.from(Instant.now()), 100000);
+		String jwt = jwtManager.make();
+		boolean expired = jwtManager.isExpired(jwt);
+		Assertions.assertThat(expired).isEqualTo(false);
+	}
 }

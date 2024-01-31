@@ -33,13 +33,22 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 		Optional<MemberImpl> byEmail = memberRepository.findByEmail(oAuth2Profile.getEmailAddress());
 		if (byEmail.isEmpty()) {
 			MemberImpl save = memberRepository.save(makeNewMember(oAuth2Profile));
-			return makeCafegoryToken(save);
+			return makeCafegoryToken(save.getId());
 		}
-		return makeCafegoryToken(byEmail.get());
+		return makeCafegoryToken(byEmail.get().getId());
 	}
 
-	private CafegoryToken makeCafegoryToken(MemberImpl member) {
-		Long memberId = member.getId();
+	@Override
+	public CafegoryToken refresh(String refreshToken) {
+		boolean canRefresh = cafegoryTokenManager.canRefresh(refreshToken);
+		if (canRefresh) {
+			long identityId = cafegoryTokenManager.getIdentityId(refreshToken);
+			return makeCafegoryToken(identityId);
+		}
+		throw new IllegalArgumentException("토큰을 재발행할 수 없습니다.");
+	}
+
+	private CafegoryToken makeCafegoryToken(long memberId) {
 		Map<String, String> claims = Map.of("memberId", String.valueOf(memberId));
 		return cafegoryTokenManager.createToken(claims);
 	}
