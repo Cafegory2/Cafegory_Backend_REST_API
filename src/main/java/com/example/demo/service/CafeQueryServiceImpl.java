@@ -59,11 +59,12 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 				)
 			)
 			.collect(Collectors.toList());
-		return new PagedResponse<>(
+		return PagedResponse.createWithFirstPageAsOne(
 			pagedCafes.getNumber(),
 			pagedCafes.getTotalPages(),
 			pagedCafes.getNumberOfElements(),
-			cafeSearchResponses);
+			cafeSearchResponses
+		);
 	}
 
 }
