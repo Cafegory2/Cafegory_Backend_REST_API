@@ -33,8 +33,4 @@ public class SnsDetail {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 
-	public void setCafe(CafeImpl cafe) {
-		this.cafe = cafe;
-	}
-	
 }

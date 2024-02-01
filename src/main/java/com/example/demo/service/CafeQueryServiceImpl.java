@@ -35,20 +35,17 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 
-		//변환코드
 		CafeSearchCondition newSearchCondition = new CafeSearchCondition.Builder(request.isCanStudy(),
 			request.getArea())
 			.maxTime(request.getMaxTime())
 			.minMenuPrice(request.getMinBeveragePrice())
 			.build();
-		//변환코드 끝
 
 		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(newSearchCondition,
 			pageable);
 
 		OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
 
-		System.out.println("pagedCafes = " + pagedCafes.getContent());
 		List<CafeSearchResponse> cafeSearchResponses = pagedCafes.getContent().stream()
 			.map(cafe ->
 				new CafeSearchResponse(

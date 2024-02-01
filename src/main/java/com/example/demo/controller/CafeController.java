@@ -22,11 +22,6 @@ public class CafeController {
 	@GetMapping("/cafe/list")
 	public ResponseEntity<PagedResponse<CafeSearchResponse>> cafeList(
 		@ModelAttribute CafeSearchRequest cafeSearchRequest) {
-
-		System.out.println("cafeSearchRequest = " + cafeSearchRequest);
-		// PagedResponse<CafeSearchResponse> response = cafeQueryService.searchWithPagingByDynamicFilter(
-		// 	new ControllerCafeMapper().convertToServiceCafeSearchRequest(cafeSearchRequest)
-		// );
 		PagedResponse<CafeSearchResponse> response = cafeQueryService.searchWithPagingByDynamicFilter(
 			cafeSearchRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);

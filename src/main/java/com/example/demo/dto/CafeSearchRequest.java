@@ -8,9 +8,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CafeSearchRequest extends PagedRequest {
-
-	// private int page;
-	// private int sizePerPage = 10;
+	
 	private int startTime = 0;
 	private int endTime = 24;
 	private boolean canStudy;

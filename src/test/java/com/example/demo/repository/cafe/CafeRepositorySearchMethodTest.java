@@ -24,7 +24,7 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.Menu;
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.SnsDetail;
-import com.example.demo.service.dto.CafeSearchCondition;
+import com.example.demo.dto.CafeSearchCondition;
 import com.example.demo.util.PageRequestCustom;
 
 // @DataJpaTest
@@ -587,7 +587,7 @@ class CafeRepositorySearchMethodTest {
 		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
-		
+
 		//given
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
 		//when
