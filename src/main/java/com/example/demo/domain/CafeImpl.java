@@ -1,16 +1,18 @@
 package com.example.demo.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -35,13 +37,14 @@ public class CafeImpl implements Cafe {
 
 	@Embedded
 	private Address address;
-
-	@Transient
-	private boolean isOpen;
 	private String phone;
 
-	private int maxAllowableStay;
+	@Enumerated(EnumType.STRING)
+	private MaxAllowableStay maxAllowableStay;
+
 	private double avgReviewRate;
+	private boolean isAbleToStudy;
+	private int minBeveragePrice;
 
 	@OneToMany(mappedBy = "cafe")
 	@Builder.Default
@@ -51,9 +54,21 @@ public class CafeImpl implements Cafe {
 	@Builder.Default
 	private List<SnsDetail> snsDetails = new ArrayList<>();
 
+	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
+	private List<ReviewImpl> reviews = new ArrayList<>();
+
+	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
+	private List<Menu> menus = new ArrayList<>();
+
 	@Override
 	public String showFullAddress() {
-		return null;
+		return address.showFullAddress();
+	}
+
+	public boolean isOpen(OpenChecker<BusinessHour> openChecker) {
+		return openChecker.checkWithBusinessHours(this.businessHours, LocalDateTime.now());
 	}
 
 }

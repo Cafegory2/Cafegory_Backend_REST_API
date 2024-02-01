@@ -1,0 +1,14 @@
+package com.example.demo.domain;
+
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+public interface OpenChecker<T> {
+
+	boolean check(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, LocalDateTime now);
+
+	boolean checkWithBusinessHours(List<T> hours, LocalDateTime now);
+
+}

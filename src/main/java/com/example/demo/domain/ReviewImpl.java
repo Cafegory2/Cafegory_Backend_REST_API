@@ -49,4 +49,8 @@ public class ReviewImpl implements Review {
 	public void updateRate(double rate) {
 
 	}
+
+	public void setCafe(CafeImpl cafe) {
+		this.cafe = cafe;
+	}
 }

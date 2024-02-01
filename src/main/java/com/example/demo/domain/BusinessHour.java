@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -15,11 +17,13 @@ import javax.persistence.Table;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@AllArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "business_hour")
@@ -40,4 +44,11 @@ public class BusinessHour {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeImpl cafe;
 
+	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
+		try {
+			return now.getDayOfWeek().equals(DayOfWeek.valueOf(day));
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
 }
