@@ -6,11 +6,14 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
+
 	@Override
-	public boolean check(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, LocalDateTime now) {
+	public boolean check(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
+		LocalDateTime now) {
 		LocalTime currentTime = now.toLocalTime();
 		if (dayOfWeek.equals(now.getDayOfWeek())) {
-			if ((currentTime.equals(startTime) || currentTime.isAfter(startTime)) && currentTime.isBefore(endTime)) {
+			if ((currentTime.equals(businessStartTime) || currentTime.isAfter(businessStartTime))
+				&& currentTime.isBefore(businessEndTime)) {
 				return true;
 			}
 		}
@@ -24,6 +27,16 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 		}
 		return businessHours.stream()
 			.anyMatch(hour -> check(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
+	}
+
+	@Override
+	public boolean checkBetweenHours(LocalTime businessStartTime, LocalTime businessEndTime,
+		LocalTime chosenStartTime, LocalTime chosenEndTime) {
+		if ((chosenStartTime.equals(businessStartTime) || chosenStartTime.isBefore(businessStartTime))
+			&& (chosenEndTime.equals(businessEndTime) || chosenEndTime.isAfter(businessEndTime))) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean hasMatchingDayOfWeek(List<BusinessHour> businessHours, LocalDateTime now) {

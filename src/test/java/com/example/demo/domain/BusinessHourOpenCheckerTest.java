@@ -131,4 +131,86 @@ public class BusinessHourOpenCheckerTest {
 			.isInstanceOf(IllegalStateException.class);
 	}
 
+	@Test
+	@DisplayName("선택된 시간사이에 영업시간이 포함한다.")
+	void when_check_businessHours_between_chosen_hours_then_contains() {
+		//given
+		LocalTime businessStartTime = LocalTime.of(9, 0);
+		LocalTime businessEndTime = LocalTime.of(21, 0);
+
+		//when
+		LocalTime chosenStartTime1 = LocalTime.of(8, 0);
+		LocalTime chosenEndTime2 = LocalTime.of(22, 0);
+		boolean isBetween1 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime1, chosenEndTime2);
+		//then
+		assertThat(isBetween1).isTrue();
+
+		//when
+		LocalTime chosenStartTime = LocalTime.of(9, 0);
+		LocalTime chosenEndTime = LocalTime.of(21, 0);
+		boolean isBetween2 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime, chosenEndTime);
+		//then
+		assertThat(isBetween2).isTrue();
+
+		//when
+		LocalTime chosenStartTime3 = LocalTime.of(8, 59, 59);
+		LocalTime chosenEndTime3 = LocalTime.of(21, 0);
+		boolean isBetween3 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime3, chosenEndTime3);
+		//then
+		assertThat(isBetween3).isTrue();
+
+		//when
+		LocalTime chosenStartTime4 = LocalTime.of(8, 59, 59);
+		LocalTime chosenEndTime4 = LocalTime.of(21, 0, 1);
+		boolean isBetween4 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime4, chosenEndTime4);
+		//then
+		assertThat(isBetween4).isTrue();
+
+		//when
+		LocalTime chosenStartTime5 = LocalTime.of(0, 0, 0);
+		LocalTime chosenEndTime5 = LocalTime.of(23, 59, 59);
+		boolean isBetween5 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime5, chosenEndTime5);
+		//then
+		assertThat(isBetween5).isTrue();
+
+	}
+
+	@Test
+	@DisplayName("선택된 시간사이에 영업시간이 포함되지 않는다.")
+	void when_check_businessHours_between_chosen_hours_then_not_contains() {
+		//given
+		LocalTime businessStartTime = LocalTime.of(9, 0);
+		LocalTime businessEndTime = LocalTime.of(21, 0);
+
+		//when
+		LocalTime chosenStartTime1 = LocalTime.of(9, 0);
+		LocalTime chosenEndTime1 = LocalTime.of(20, 59, 59);
+		boolean isBetween1 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime1, chosenEndTime1);
+		//then
+		assertThat(isBetween1).isFalse();
+
+		//when
+		LocalTime chosenStartTime = LocalTime.of(9, 0, 1);
+		LocalTime chosenEndTime = LocalTime.of(21, 0);
+		boolean isBetween2 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime, chosenEndTime);
+		//then
+		assertThat(isBetween2).isFalse();
+
+		//when
+		LocalTime chosenStartTime3 = LocalTime.of(8, 59, 59);
+		LocalTime chosenEndTime3 = LocalTime.of(20, 59, 59);
+		boolean isBetween3 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime3, chosenEndTime3);
+		//then
+		assertThat(isBetween3).isFalse();
+		
+	}
+
 }
