@@ -1,14 +1,11 @@
 package com.example.demo.service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.Address;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
@@ -16,28 +13,16 @@ import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceResponse;
-import com.example.demo.repository.CafeRepositoryWrapper;
 import com.example.demo.repository.StudyOnceRepository;
+import com.example.demo.repository.cafe.CafeRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class StudyOnceServiceImpl implements StudyOnceService {
-	private final CafeRepositoryWrapper cafeRepositoryWrapper = id -> {
-		CafeImpl cafe = CafeImpl.builder()
-			.id(id)
-			.address(new Address())
-			.isOpen(true)
-			.phone("010-1234-5678")
-			.name("테스트 카페")
-			.snsDetails(Collections.emptyList())
-			.businessHours(Collections.emptyList())
-			.avgReviewRate(4.5)
-			.maxAllowableStay(1)
-			.build();
-		return Optional.of(cafe);
-	};
+
+	private final CafeRepository cafeRepository;
 	private final StudyOnceRepository studyOnceRepository;
 
 	@Override
@@ -90,7 +75,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
-		CafeImpl cafe = cafeRepositoryWrapper.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
+		CafeImpl cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
 		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
