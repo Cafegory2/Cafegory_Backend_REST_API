@@ -38,7 +38,6 @@ class CafeRepositorySearchMethodTest {
 	private EntityManager em;
 	@Autowired
 	private CafeQueryRepository cafeRepository;
-	// private CafeRepository cafeRepository;
 
 	void setUp(String region, MaxAllowableStay maxAllowableStay, boolean isAbleToStudy,
 		int minBeveragePrice, LocalTime startTime, LocalTime endTime) {
@@ -50,45 +49,32 @@ class CafeRepositorySearchMethodTest {
 				.phone("010-1234-5678")
 				.maxAllowableStay(maxAllowableStay)
 				.isAbleToStudy(isAbleToStudy)
-				// .minMenuPrice(searchCondition.getMinMenuPrice())
 				.minBeveragePrice(minBeveragePrice)
 				.build();
 			em.persist(cafe);
 
-			// BusinessHour monday = new BusinessHour("월", LocalTime.of(9, 0), LocalTime.of(21, 0));
 			BusinessHour monday = BusinessHour.builder()
 				.day("월")
-				// .startTime(LocalTime.of(9, 0))
 				.startTime(startTime)
-				// .endTime(LocalTime.of(21, 0))
 				.endTime(endTime)
 				.cafe(cafe)
 				.build();
 			BusinessHour tuesday = BusinessHour.builder()
 				.day("화")
-				// .startTime(LocalTime.of(9, 0))
 				.startTime(startTime)
-				// .endTime(LocalTime.of(21, 0))
 				.endTime(endTime)
 				.cafe(cafe)
 				.build();
-
-			// cafe.addBusinessHour(monday);
-			// BusinessHour tuesday = new BusinessHour("화", LocalTime.of(9, 0), LocalTime.of(21, 0));
-			// cafe.addBusinessHour(tuesday);
 			em.persist(monday);
 			em.persist(tuesday);
 
-			// SnsDetail instagram = new SnsDetail("인스타그램", "https://www.instagram.com/cafegory/" + i);
 			SnsDetail instagram = SnsDetail.builder()
 				.name("인스타그램")
 				.url("https://www.instagram.com/cafegory/" + i)
 				.cafe(cafe)
 				.build();
-			// cafe.addSnsDetail(instagram);
 			em.persist(instagram);
 
-			// MemberImpl member1 = new MemberImpl("김동현");
 			MemberImpl member1 = MemberImpl.builder()
 				.name("김동현")
 				.build();
@@ -96,10 +82,8 @@ class CafeRepositorySearchMethodTest {
 				.name("임수빈")
 				.build();
 			em.persist(member1);
-			// MemberImpl member2 = new MemberImpl("임수빈");
 			em.persist(member2);
 
-			// ReviewImpl review1 = new ReviewImpl("카페가 너무 이뻐요", 5, cafe, member1);
 			ReviewImpl review1 = ReviewImpl.builder()
 				.content("카페가 너무 이뻐요")
 				.rate(5)
@@ -107,32 +91,25 @@ class CafeRepositorySearchMethodTest {
 				.member(member1)
 				.build();
 
-			// cafe.addReview(review1);
-			// ReviewImpl review2 = new ReviewImpl("콘센트가 있어서 좋아요", 4.5, cafe, member2);
 			ReviewImpl review2 = ReviewImpl.builder()
 				.content("콘센트가 있어서 좋아요")
 				.rate(4.5)
 				.cafe(cafe)
 				.member(member2)
 				.build();
-			// cafe.addReview(review2);
 			em.persist(review1);
 			em.persist(review2);
 
-			// Menu menu1 = new Menu("아메리카노", 2000);
 			Menu menu1 = Menu.builder()
 				.name("아메리카노")
 				.price(2000)
 				.cafe(cafe)
 				.build();
-			// cafe.addMenu(menu1);
-			// Menu menu2 = new Menu("카페라떼", 2500);
 			Menu menu2 = Menu.builder()
 				.name("카페라떼")
 				.price(2500)
 				.cafe(cafe)
 				.build();
-			// cafe.addMenu(menu2);
 			em.persist(menu1);
 			em.persist(menu2);
 
@@ -149,12 +126,10 @@ class CafeRepositorySearchMethodTest {
 				.phone("010-1234-5678")
 				.maxAllowableStay(searchCondition.getMaxAllowableStay())
 				.isAbleToStudy(searchCondition.isAbleToStudy())
-				// .minMenuPrice(searchCondition.getMinMenuPrice())
 				.minBeveragePrice(minBeveragePrice)
 				.build();
 			em.persist(cafe);
 
-			// BusinessHour monday = new BusinessHour("월", LocalTime.of(9, 0), LocalTime.of(21, 0));
 			BusinessHour monday = BusinessHour.builder()
 				.day("월")
 				.startTime(LocalTime.of(9, 0))
@@ -167,22 +142,16 @@ class CafeRepositorySearchMethodTest {
 				.endTime(LocalTime.of(21, 0))
 				.cafe(cafe)
 				.build();
-			// cafe.addBusinessHour(monday);
-			// BusinessHour tuesday = new BusinessHour("화", LocalTime.of(9, 0), LocalTime.of(21, 0));
-			// cafe.addBusinessHour(tuesday);
 			em.persist(monday);
 			em.persist(tuesday);
 
-			// SnsDetail instagram = new SnsDetail("인스타그램", "https://www.instagram.com/cafegory/" + i);
 			SnsDetail instagram = SnsDetail.builder()
 				.name("인스타그램")
 				.url("https://www.instagram.com/cafegory/" + i)
 				.cafe(cafe)
 				.build();
-			// cafe.addSnsDetail(instagram);
 			em.persist(instagram);
 
-			// MemberImpl member1 = new MemberImpl("김동현");
 			MemberImpl member1 = MemberImpl.builder()
 				.name("김동현")
 				.build();
@@ -190,25 +159,20 @@ class CafeRepositorySearchMethodTest {
 				.name("임수빈")
 				.build();
 			em.persist(member1);
-			// MemberImpl member2 = new MemberImpl("임수빈");
 			em.persist(member2);
 
-			// ReviewImpl review1 = new ReviewImpl("카페가 너무 이뻐요", 5, cafe, member1);
 			ReviewImpl review1 = ReviewImpl.builder()
 				.content("카페가 너무 이뻐요")
 				.rate(5)
 				.cafe(cafe)
 				.member(member1)
 				.build();
-			// cafe.addReview(review1);
-			// ReviewImpl review2 = new ReviewImpl("콘센트가 있어서 좋아요", 4.5, cafe, member2);
 			ReviewImpl review2 = ReviewImpl.builder()
 				.content("콘센트가 있어서 좋아요")
 				.rate(4.5)
 				.cafe(cafe)
 				.member(member2)
 				.build();
-			// cafe.addReview(review2);
 			em.persist(review1);
 			em.persist(review2);
 
@@ -217,17 +181,11 @@ class CafeRepositorySearchMethodTest {
 				.price(2000)
 				.cafe(cafe)
 				.build();
-			// cafe.addMenu(menu1);
-			// Menu menu2 = new Menu("카페라떼", 2500);
 			Menu menu2 = Menu.builder()
 				.name("카페라떼")
 				.price(2500)
 				.cafe(cafe)
 				.build();
-			// Menu menu1 = new Menu("아메리카노", 2000);
-			// cafe.addMenu(menu1);
-			// Menu menu2 = new Menu("카페라떼", 2500);
-			// cafe.addMenu(menu2);
 			em.persist(menu1);
 			em.persist(menu2);
 
@@ -265,7 +223,6 @@ class CafeRepositorySearchMethodTest {
 	void search_Cafes_Filtering_With_CanStudy_When_Exists_CanStudyCafe() {
 		//given
 
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
 		//when
@@ -278,7 +235,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("공부가 가능한 카페가 존재할때, 공부가 불가능한 카페로 필터링 조회")
 	void search_Cafes_Filtering_With_CanNotStudy_When_Exists_CanStudyCafe() {
 		//given
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(false, "상수동");
 		//when
@@ -291,7 +247,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 가능한 카페로 필터링 조회")
 	void search_Cafes_Filtering_With_CanStudy_When_Not_Exists_CanStudyCafe() {
 		//given
-		// setUp(createSearchConditionByRequirements(false, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, false, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
 		//when
@@ -304,7 +259,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("공부가 가능한 카페가 존재하지 않을때, 공부가 불가능한 카페로 필터링 조회")
 	void search_Cafes_Filtering_With_CanNotStudy_When_Not_Exists_CanStudyCafe() {
 		//given
-		// setUp(createSearchConditionByRequirements(false, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, false, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(false, "상수동");
 		//when
@@ -317,8 +271,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("공부가 가능한 카페와 불가능한 카페가 존재할때, 공부가 불가능한 카페로 필터링 조회")
 	void search_Cafes_Filtering_With_CanNotStudy_When_Exists_Both() {
 		//given
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(false, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, false, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
@@ -333,8 +285,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("공부가 가능한 카페와 불가능한 카페가 존재할때, 공부가 가능한 카페로 필터링 조회")
 	void search_Cafes_Filtering_With_CanStudy_When_Exists_Both() {
 		//given
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(false, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, false, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
@@ -349,8 +299,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("행정동으로 필터링, 조건에 맞는 데이터가 존재.")
 	void search_Cafes_Filtering_With_Region() {
 		//given
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(true, "합정동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("합정동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
@@ -365,8 +313,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("일부 문자열만 입력된 행정동으로 필터링, 조건에 맞는 데이터가 존재.")
 	void search_Cafes_Filtering_With_Like_Region() {
 		//given
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(true, "합정동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("합정동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수");
@@ -380,7 +326,6 @@ class CafeRepositorySearchMethodTest {
 	@DisplayName("존재하지 않는 행정동으로 필터링, 데이터가 존재하지 않음")
 	void search_Cafes_Filtering_With_Invalid_Region_Then_NO_Data() {
 		//given
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "쌍수100동");
 		//when
@@ -392,8 +337,6 @@ class CafeRepositorySearchMethodTest {
 	@Test
 	@DisplayName("whiteSpace, 공백문자, null인 행정동으로 필터링하면 필터링이 되지 않는다.")
 	void search_Cafes_Filtering_With_Blank_Region_Then_No_Filtering() {
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(true, "합정동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("합정동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
@@ -428,9 +371,6 @@ class CafeRepositorySearchMethodTest {
 	@Test
 	@DisplayName("최대 이용 가능시간으로 필터링")
 	void search_Cafes_Filtering_With_maxAllowableStay() {
-		// setUp(createSearchConditionByMaxTime(true, "상수동", 1));
-		// setUp(createSearchConditionByMaxTime(true, "상수동", 2));
-		// setUp(createSearchConditionByMaxTime(true, "상수동", 7));
 		setUp("상수동", MaxAllowableStay.ONE_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.OVER_SIX_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
@@ -481,10 +421,6 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	void 최소음료필터링() {
-		// setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 2_500);
-		// setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 3_000);
-		// setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 11_000);
-		// setUpWithMinBeveragePrice(createSearchConditionByRequirements(true, "상수동"), 12_000);
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 11_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
@@ -519,7 +455,6 @@ class CafeRepositorySearchMethodTest {
 	@Test
 	@DisplayName("페이징 기본값")
 	void search_Cafes_With_Default_Paging() {
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
 		//given
@@ -528,9 +463,6 @@ class CafeRepositorySearchMethodTest {
 		Page<CafeImpl> pagedCafes = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.createByDefault());
 
-		// for (CafeImpl cafe : cafes) {
-		// 	System.out.println("cafe = " + cafe);
-		// }
 		//then
 		assertThat(pagedCafes.getContent().size()).isEqualTo(10);
 		assertThat(pagedCafes.getTotalPages()).isEqualTo(2);
@@ -542,8 +474,6 @@ class CafeRepositorySearchMethodTest {
 	@Test
 	@DisplayName("페이징")
 	void search_Cafes_With_Paging() {
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
@@ -583,8 +513,6 @@ class CafeRepositorySearchMethodTest {
 
 	@Test
 	void countQuery() {
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
-		// setUp(createSearchConditionByRequirements(true, "상수동"));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
