@@ -420,7 +420,8 @@ class CafeRepositorySearchMethodTest {
 	}
 
 	@Test
-	void 최소음료필터링() {
+	@DisplayName("최소 음료 금액으로 필터링")
+	void search_Cafes_Filtering_With_MinMenuPrice() {
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 11_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
