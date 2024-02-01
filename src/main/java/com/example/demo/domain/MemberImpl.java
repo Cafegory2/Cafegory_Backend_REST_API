@@ -34,5 +34,4 @@ public class MemberImpl implements Member {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "thumbnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private ThumbnailImage thumbnailImage;
-	
 }

@@ -8,7 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CafeSearchRequest extends PagedRequest {
-	
 	private int startTime = 0;
 	private int endTime = 24;
 	private boolean canStudy;
