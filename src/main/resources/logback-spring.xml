@@ -25,7 +25,7 @@
     <springProfile name="product">
         <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${logPath}//${fileName}.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <fileNamePattern>${logPath}//LOG_%d{yyyy-MM-dd}_${fileName}.log.%i.zip</fileNamePattern>
                 <maxHistory>${maxHistory}</maxHistory>
                 <maxFileSize>${maxFileSize}</maxFileSize>
