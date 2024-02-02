@@ -24,6 +24,11 @@ public class AuthenticationManager implements HandlerInterceptor {
 		try {
 			String accessToken = request.getHeader("Authorization");
 			accessToken = accessToken.replaceFirst("Bearer ", "");
+			boolean isAccessToken = cafegoryTokenManager.isAccessToken(accessToken);
+			if (!isAccessToken) {
+				sendErrorResponse(response, "엑세스 토큰이 아닙니다.");
+				return false;
+			}
 			cafegoryTokenManager.getIdentityId(accessToken);
 		} catch (NullPointerException e) {
 			sendErrorResponse(response, "토큰이 없습니다.");

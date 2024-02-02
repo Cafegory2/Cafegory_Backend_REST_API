@@ -20,20 +20,20 @@ class JwtCafegoryTokenManagerTest {
 	void refreshToken() {
 		//given
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
-		Map<String, String> memberInfo = Map.of("key1", "value1", "key2", "value2");
+		Map<String, Object> memberInfo = Map.of("key1", "value1", "key2", "value2");
 		CafegoryToken cafegoryToken = jwtCafegoryTokenManager.createToken(memberInfo);
 		String accessToken = cafegoryToken.getAccessToken();
 		String refreshToken = cafegoryToken.getRefreshToken();
 		//when
 		Map<String, Object> decodedRefreshTokenClaims = new HashMap<>(jwtManager.decode(refreshToken));
-		Long exp = (Long)decodedRefreshTokenClaims.remove("exp");
-		Long iat = (Long)decodedRefreshTokenClaims.remove("iat");
+		Long exp = (Long)decodedRefreshTokenClaims.get("exp");
+		Long iat = (Long)decodedRefreshTokenClaims.get("iat");
 		String accessToken1 = (String)decodedRefreshTokenClaims.remove("accessToken");
 		//then
 		Assertions.assertThat(exp - iat)
 			.isEqualTo(3600 * 24 * 7);
-		Assertions.assertThat(decodedRefreshTokenClaims)
-			.isEqualTo(memberInfo);
+		Assertions.assertThat(decodedRefreshTokenClaims.entrySet())
+			.containsAll(memberInfo.entrySet());
 		Assertions.assertThat(accessToken1)
 			.isEqualTo(accessToken);
 	}
@@ -43,7 +43,7 @@ class JwtCafegoryTokenManagerTest {
 	void accessToken() {
 		//given
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
-		Map<String, String> memberInfo = Map.of("key1", "value1", "key2", "value2");
+		Map<String, Object> memberInfo = Map.of("key1", "value1", "key2", "value2");
 		CafegoryToken cafegoryToken = jwtCafegoryTokenManager.createToken(memberInfo);
 		String accessToken = cafegoryToken.getAccessToken();
 		//when
@@ -53,8 +53,8 @@ class JwtCafegoryTokenManagerTest {
 		//then
 		Assertions.assertThat(exp - iat)
 			.isEqualTo(3600);
-		Assertions.assertThat(decodedAccessTokenClaims)
-			.isEqualTo(memberInfo);
+		Assertions.assertThat(decodedAccessTokenClaims.entrySet())
+			.containsAll(memberInfo.entrySet());
 	}
 
 	@Test
@@ -69,7 +69,7 @@ class JwtCafegoryTokenManagerTest {
 
 	private CafegoryToken createToken(String id) {
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
-		Map<String, String> memberInfo = Map.of("memberId", id, "key1", "value1", "key2", "value2");
+		Map<String, Object> memberInfo = Map.of("memberId", id, "key1", "value1", "key2", "value2");
 		return jwtCafegoryTokenManager.createToken(memberInfo);
 	}
 
@@ -84,11 +84,29 @@ class JwtCafegoryTokenManagerTest {
 
 	private String makeRefreshAbleToken() {
 		jwtManager.claim("memberId", "1");
+		jwtManager.claim("tokenType", "access");
 		jwtManager.setLife(Date.from(Instant.now()), 0);
 		String accessToken = jwtManager.make();
 		jwtManager.claim("memberId", "1");
 		jwtManager.claim("accessToken", accessToken);
+		jwtManager.claim("tokenType", "refresh");
 		jwtManager.setLife(Date.from(Instant.now()), 100000);
+		return jwtManager.make();
+	}
+
+	@Test
+	@DisplayName("엑세스 토큰을 리프레쉬 토큰으로 사용하면, 재발행 불가능하다고 하는지 확인")
+	void canRefreshFalseCauseTokenIsAccessToken() {
+		String refreshToken = makeAccessToken();
+		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
+		boolean canRefresh = jwtCafegoryTokenManager.canRefresh(refreshToken);
+		Assertions.assertThat(canRefresh).isEqualTo(false);
+	}
+
+	private String makeAccessToken() {
+		jwtManager.claim("memberId", "1");
+		jwtManager.claim("tokenType", "access");
+		jwtManager.setLife(Date.from(Instant.now()), 0);
 		return jwtManager.make();
 	}
 
@@ -103,10 +121,12 @@ class JwtCafegoryTokenManagerTest {
 
 	private String makeAccessTokenNotExpiredRefreshToken() {
 		jwtManager.claim("memberId", "1");
+		jwtManager.claim("tokenType", "access");
 		jwtManager.setLife(Date.from(Instant.now()), 10000);
 		String accessToken = jwtManager.make();
 		jwtManager.claim("memberId", "1");
 		jwtManager.claim("accessToken", accessToken);
+		jwtManager.claim("tokenType", "refresh");
 		jwtManager.setLife(Date.from(Instant.now()), 100000);
 		return jwtManager.make();
 	}
@@ -122,10 +142,12 @@ class JwtCafegoryTokenManagerTest {
 
 	private String makeExpiredRefreshToken() {
 		jwtManager.claim("memberId", "1");
+		jwtManager.claim("tokenType", "access");
 		jwtManager.setLife(Date.from(Instant.now()), 0);
 		String accessToken = jwtManager.make();
 		jwtManager.claim("memberId", "1");
 		jwtManager.claim("accessToken", accessToken);
+		jwtManager.claim("tokenType", "refresh");
 		jwtManager.setLife(Date.from(Instant.now()), 0);
 		return jwtManager.make();
 	}

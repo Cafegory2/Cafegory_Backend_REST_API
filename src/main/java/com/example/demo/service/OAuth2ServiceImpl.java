@@ -49,7 +49,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 	}
 
 	private CafegoryToken makeCafegoryToken(long memberId) {
-		Map<String, String> claims = Map.of("memberId", String.valueOf(memberId));
+		Map<String, Object> claims = Map.of("memberId", memberId);
 		return cafegoryTokenManager.createToken(claims);
 	}
 
