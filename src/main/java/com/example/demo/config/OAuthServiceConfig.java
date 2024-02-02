@@ -1,9 +1,13 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.demo.domain.auth.CafegoryTokenManager;
+import com.example.demo.domain.auth.JwtCafegoryTokenManager;
+import com.example.demo.domain.auth.JwtManager;
 import com.example.demo.domain.oauth2.KakaoOAuth2ProfileRequester;
 import com.example.demo.domain.oauth2.KakaoOAuth2TokenRequester;
 import com.example.demo.domain.oauth2.NaverOAuth2ProfileRequester;
@@ -12,6 +16,10 @@ import com.example.demo.service.OAuth2ServiceImpl;
 
 @Configuration
 public class OAuthServiceConfig {
+
+	@Value("${jwt.secret}")
+	private String jwtSecret;
+
 	@Bean
 	public RestTemplate restTemplate() {
 		return new RestTemplate();
@@ -45,5 +53,15 @@ public class OAuthServiceConfig {
 	@Bean
 	public OAuth2ServiceImpl naverOAuth2Service() {
 		return new OAuth2ServiceImpl(naverOAuth2ProfileRequester(), naverOAuth2TokenRequester());
+	}
+
+	@Bean
+	public JwtManager jwtManager() {
+		return new JwtManager(jwtSecret);
+	}
+
+	@Bean
+	public CafegoryTokenManager cafegoryTokenManager() {
+		return new JwtCafegoryTokenManager(jwtManager());
 	}
 }

@@ -6,26 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.example.demo.dto.auth.CafegoryToken;
 
-@ExtendWith(MockitoExtension.class)
 class JwtCafegoryTokenManagerTest {
-	@InjectMocks
-	JwtManager jwtManager;
-
-	@BeforeEach
-	public void setUp() {
-		ReflectionTestUtils.setField(jwtManager, "secret", "01234567890123456789012345678901234567890123456789");
-		ReflectionTestUtils.setField(jwtManager, "type", "JWT");
-	}
+	private final String testSecret = "01234567890123456789012345678901234567890123456789";
+	JwtManager jwtManager = new JwtManager(testSecret);
 
 	@Test
 	@DisplayName("리프레쉬 토큰 제대로 생성되는지 테스트")

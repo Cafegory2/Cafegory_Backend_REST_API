@@ -2,9 +2,6 @@ package com.example.demo.domain.auth;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -14,17 +11,14 @@ import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
-@Component
-class JwtManager {
-	@Value("${jwt.secret}")
-	private String secret;
-	@Value("${jwt.type}")
-	private String type;
+public class JwtManager {
+	private final String secret;
 	private JwtBuilder jwtBuilder;
 
-	JwtManager() {
+	public JwtManager(String secret) {
+		this.secret = secret;
 		this.jwtBuilder = Jwts.builder();
-		jwtBuilder.header().type(type);
+		jwtBuilder.header().type("JWT");
 	}
 
 	void claim(String key, Object value) {
