@@ -12,6 +12,9 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 		LocalDateTime now) {
 		LocalTime currentTime = now.toLocalTime();
 		if (dayOfWeek.equals(now.getDayOfWeek())) {
+			if (businessStartTime.equals(LocalTime.MIN) && businessEndTime.equals(LocalTime.MAX)) {
+				return true;
+			}
 			if ((currentTime.equals(businessStartTime) || currentTime.isAfter(businessStartTime))
 				&& currentTime.isBefore(businessEndTime)) {
 				return true;

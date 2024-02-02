@@ -113,6 +113,56 @@ public class BusinessHourOpenCheckerTest {
 	}
 
 	@Test
+	@DisplayName("카페가 24시간 운영한다.")
+	void check_businessHours_when_cafe_is_always_open() {
+		List<BusinessHour> businessHours = new ArrayList<>();
+
+		BusinessHour monday = BusinessHour.builder()
+			.day("MONDAY")
+			.startTime(LocalTime.of(0, 0))
+			.endTime(LocalTime.MAX)
+			.build();
+		BusinessHour tuesday = BusinessHour.builder()
+			.day("TUESDAY")
+			.startTime(LocalTime.of(0, 0))
+			.endTime(LocalTime.MAX)
+			.build();
+		BusinessHour wednesday = BusinessHour.builder()
+			.day("WEDNESDAY")
+			.startTime(LocalTime.of(0, 0))
+			.endTime(LocalTime.MAX)
+			.build();
+
+		businessHours.add(monday);
+		businessHours.add(tuesday);
+		businessHours.add(wednesday);
+
+		//when
+		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
+		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		//then
+		assertThat(isOpen1).isTrue();
+
+		//when
+		LocalDateTime now2 = LocalDateTime.of(2024, 1, 29, 23, 59, 59);
+		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
+		//then
+		assertThat(isOpen2).isTrue();
+
+		//when
+		LocalDateTime now3 = LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_998);
+		boolean isOpen3 = openChecker.checkWithBusinessHours(businessHours, now3);
+		//then
+		assertThat(isOpen3).isTrue();
+
+		//when
+		LocalDateTime now4 = LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_999);
+		boolean isOpen4 = openChecker.checkWithBusinessHours(businessHours, now4);
+		//then
+		assertThat(isOpen4).isTrue();
+	}
+
+	@Test
 	@DisplayName("DayOfWeek Enum상수가 가지고 있는 요일이 BusinessHours에 존재하지 않으면 예외가 터진다.")
 	void checkDayOfWeekWithBusinessHours() {
 		List<BusinessHour> businessHours = new ArrayList<>();
