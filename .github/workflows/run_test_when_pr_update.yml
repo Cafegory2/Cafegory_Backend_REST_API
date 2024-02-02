@@ -1,7 +1,7 @@
 name: Test And Build And Deploy
 on:
   pull_request:
-    types: [ opened, reopened, edited, synchronize ]
+    types: [ opened, reopened, synchronize ]
     branches: [ 'main' ]
 
 jobs:
@@ -39,9 +39,7 @@ jobs:
           ./gradlew clean build --stacktrace
       - name: If build fail
         continue-on-error: true
-        # 이전 step이 실패한 경우에만 이 step을 실행시키는 syntax
         if: ${{ steps.build_and_test.outcome == 'failure'}}
-        id: close_pr
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -53,14 +51,37 @@ jobs:
               repo: context.repo.repo,
               pull_number: pull_number,
               body: '빌드에 실패했습니다.',
-              event: 'REQUEST_CHANGES'
+              event: 'COMMENT'
             })
             await github.rest.pulls.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: pull_number,
               title: updated_title,
-              state: 'closed'
+              state: 'open'
+            })
+      - name: If build success
+        continue-on-error: true
+        if: ${{ steps.build_and_test.outcome == 'success'}}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pull_number = ${{ github.event.pull_request.number }}
+            const updated_title = `[BUILD SUCCESS] ${{ github.event.pull_request.title }}`
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              body: '빌드에 성공했습니다.',
+              event: 'COMMENT'
+            })
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              title: updated_title,
+              state: 'open'
             })
       - name: Send Build Fail Message to Discord
         continue-on-error: true

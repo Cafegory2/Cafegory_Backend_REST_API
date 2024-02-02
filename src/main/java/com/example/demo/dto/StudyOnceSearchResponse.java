@@ -1,0 +1,22 @@
+package com.example.demo.dto;
+
+import java.time.LocalDateTime;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Builder
+@Data
+public class StudyOnceSearchResponse {
+	private long cafeId;
+	private long id;
+	private String name;
+	private LocalDateTime startDateTime;
+	private LocalDateTime endDateTime;
+	private int maxMemberCount;
+	private int nowMemberCount;
+	private boolean canTalk;
+	private boolean canJoin;
+	private boolean isEnd;
+}
+
