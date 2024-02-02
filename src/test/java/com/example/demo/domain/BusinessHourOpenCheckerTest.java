@@ -24,7 +24,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
+		boolean isOpen = openChecker.checkByNowTime(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
 	}
@@ -38,7 +38,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
+		boolean isOpen = openChecker.checkByNowTime(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
 	}
@@ -52,7 +52,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
+		boolean isOpen = openChecker.checkByNowTime(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isFalse();
 	}
@@ -66,7 +66,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime startTime = LocalTime.of(9, 0);
 		LocalTime endTime = LocalTime.of(21, 0);
 		//when
-		boolean isOpen = openChecker.check(dayOfWeek, startTime, endTime, now);
+		boolean isOpen = openChecker.checkByNowTime(dayOfWeek, startTime, endTime, now);
 		//then
 		assertThat(isOpen).isTrue();
 	}

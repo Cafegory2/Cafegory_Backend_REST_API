@@ -8,7 +8,7 @@ import java.util.List;
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 
 	@Override
-	public boolean check(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
+	public boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalDateTime now) {
 		LocalTime currentTime = now.toLocalTime();
 
@@ -53,7 +53,8 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 			throw new IllegalStateException("현재 요일과 일치하는 요일을 찾을 수 없습니다.");
 		}
 		return businessHours.stream()
-			.anyMatch(hour -> check(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
+			.anyMatch(
+				hour -> checkByNowTime(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
 	}
 
 	@Override

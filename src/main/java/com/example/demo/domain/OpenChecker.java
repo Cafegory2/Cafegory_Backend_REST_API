@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface OpenChecker<T> {
 
-	boolean check(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime, LocalDateTime now);
+	boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
+		LocalDateTime now);
 
 	boolean checkWithBusinessHours(List<T> hours, LocalDateTime now);
 
