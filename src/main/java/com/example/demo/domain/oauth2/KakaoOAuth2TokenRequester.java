@@ -18,8 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class KakaoOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
 	private final RestTemplate restTemplate;
-	@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
-	private final String GRANT_TYPE = "authorization_code";
+	private static final String GRANT_TYPE = "authorization_code";
 	@Value("${oauth.kakao.url.auth}")
 	private String authUrl;
 	@Value("${oauth.kakao.client-id}")
