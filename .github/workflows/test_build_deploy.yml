@@ -35,10 +35,9 @@ jobs:
         run:
           ./gradlew clean build --stacktrace
       - name: Deploy file
-        continue-on-error: true
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         id: deploy_file
-        if: ${{ steps.build_and_test.outcome == 'success'}}
+        if: success()
         with:
           username: ${{ secrets.SSH_USERNAME }}
           server: ${{ secrets.SSH_HOST }}
@@ -48,7 +47,7 @@ jobs:
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Send Deploy Fail Message to Discord
         continue-on-error: true
-        if: ${{ steps.deploy_file.outcome == 'failure'}}
+        if: failure()
         run: |
           curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
           --header 'Content-Type: application/json' \
@@ -64,7 +63,7 @@ jobs:
           ]}'
       - name: Send Deploy Success Message to Discord
         continue-on-error: true
-        if: ${{ steps.deploy_file.outcome == 'success'}}
+        if: success()
         run: |
           curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
           --header 'Content-Type: application/json' \
@@ -78,3 +77,9 @@ jobs:
             "url": "${{ secrets.HTTP_API_SERVER_URL}}"
           }
           ]}'
+      - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록합니다
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ github.token }}
