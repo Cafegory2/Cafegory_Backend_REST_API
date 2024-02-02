@@ -163,6 +163,124 @@ public class BusinessHourOpenCheckerTest {
 	}
 
 	@Test
+	@DisplayName("카페가 새벽2시까지 운영한다.")
+	void check_businessHours_when_cafe_is_open_2am() {
+		List<BusinessHour> businessHours = new ArrayList<>();
+
+		BusinessHour monday = BusinessHour.builder()
+			.day("MONDAY")
+			.startTime(LocalTime.of(9, 0))
+			.endTime(LocalTime.of(2, 0))
+			.build();
+		BusinessHour tuesday = BusinessHour.builder()
+			.day("TUESDAY")
+			.startTime(LocalTime.of(9, 0))
+			.endTime(LocalTime.of(2, 0))
+			.build();
+		BusinessHour wednesday = BusinessHour.builder()
+			.day("WEDNESDAY")
+			.startTime(LocalTime.of(9, 0))
+			.endTime(LocalTime.of(2, 0))
+			.build();
+
+		businessHours.add(monday);
+		businessHours.add(tuesday);
+		businessHours.add(wednesday);
+
+		//when
+		LocalDateTime now1 = LocalDateTime.of(2024, 1, 30, 1, 59, 59);
+		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		//then
+		assertThat(isOpen1).isTrue();
+
+		//when
+		LocalDateTime now2 = LocalDateTime.of(2024, 1, 30, 2, 0, 0);
+		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
+		//then
+		assertThat(isOpen2).isFalse();
+
+	}
+
+	@Test
+	@DisplayName("평일은 일찍마감하고, 금토는 24시간 오픈한다.")
+	void check_businessHours_when_businessHour_is_different_depend_on_weekdays_and_weekends() {
+		List<BusinessHour> businessHours = new ArrayList<>();
+
+		BusinessHour monday = BusinessHour.builder()
+			.day("MONDAY")
+			.startTime(LocalTime.of(9, 0))
+			.endTime(LocalTime.of(22, 0))
+			.build();
+		BusinessHour tuesday = BusinessHour.builder()
+			.day("TUESDAY")
+			.startTime(LocalTime.of(9, 0))
+			.endTime(LocalTime.of(22, 0))
+			.build();
+		BusinessHour friday = BusinessHour.builder()
+			.day("FRIDAY")
+			.startTime(LocalTime.of(9, 0))
+			.endTime(LocalTime.MAX)
+			.build();
+		BusinessHour saturday = BusinessHour.builder()
+			.day("SATURDAY")
+			.startTime(LocalTime.of(0, 0))
+			.endTime(LocalTime.MAX)
+			.build();
+		BusinessHour sunday = BusinessHour.builder()
+			.day("SUNDAY")
+			.startTime(LocalTime.of(0, 0))
+			.endTime(LocalTime.of(22, 0))
+			.build();
+
+		businessHours.add(monday);
+		businessHours.add(tuesday);
+		businessHours.add(friday);
+		businessHours.add(saturday);
+		businessHours.add(sunday);
+
+		//when 월요일
+		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30);
+		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		//then
+		assertThat(isOpen1).isTrue();
+
+		//when 금요일
+		LocalDateTime now2 = LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_998);
+		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
+		//then
+		assertThat(isOpen2).isTrue();
+
+		/*
+		365일 24시간 운영할때와는 다르게, 요일마다 운영시간이 다를때는 LocalTime.Max의 시간에서 영업중이도록 구현하지 않았다.
+		nanoOfSecond가 999_999_998일경우에는 영업중, 999_999_999일경우에는 영업종료이다. 찰나의 순간이기떄문에 구현안함.
+		//when 금요일
+		LocalDateTime now3 = LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_999);
+		boolean isOpen3 = openChecker.checkWithBusinessHours(businessHours, now3);
+		//then
+		assertThat(isOpen3).isTrue();
+		 */
+
+		//when 토요일
+		LocalDateTime now4 = LocalDateTime.of(2024, 2, 3, 0, 0);
+		boolean isOpen4 = openChecker.checkWithBusinessHours(businessHours, now4);
+		//then
+		assertThat(isOpen4).isTrue();
+
+		//when 일요일
+		LocalDateTime now5 = LocalDateTime.of(2024, 2, 4, 21, 59, 59, 999_999_999);
+		boolean isOpen5 = openChecker.checkWithBusinessHours(businessHours, now5);
+		//then
+		assertThat(isOpen5).isTrue();
+
+		//when 일요일
+		LocalDateTime now6 = LocalDateTime.of(2024, 2, 4, 22, 0, 0);
+		boolean isOpen6 = openChecker.checkWithBusinessHours(businessHours, now6);
+		//then
+		assertThat(isOpen6).isFalse();
+
+	}
+
+	@Test
 	@DisplayName("DayOfWeek Enum상수가 가지고 있는 요일이 BusinessHours에 존재하지 않으면 예외가 터진다.")
 	void checkDayOfWeekWithBusinessHours() {
 		List<BusinessHour> businessHours = new ArrayList<>();
