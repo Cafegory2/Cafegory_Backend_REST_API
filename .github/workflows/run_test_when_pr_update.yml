@@ -1,4 +1,4 @@
-name: Test And Build And Deploy
+name: Test And Build
 on:
   pull_request:
     types: [ opened, reopened, synchronize ]
@@ -8,6 +8,7 @@ jobs:
   build_and_test:
     runs-on: ubuntu-latest
     permissions:
+      checks: write
       contents: read
       packages: write
       pull-requests: write
@@ -33,36 +34,11 @@ jobs:
           echo -e "${{ secrets.APPLICATION_INFO_LOGGING}}" >> ./src/main/resources/application-info-logging.yml
           echo -e "${{ secrets.APPLICATION_DEBUG_LOGGING}}" >> ./src/main/resources/application-debug-logging.yml
       - name: Build with Gradle
-        continue-on-error: true
         id: build_and_test
         run:
           ./gradlew clean build --stacktrace
-      - name: If build fail
-        continue-on-error: true
-        if: ${{ steps.build_and_test.outcome == 'failure'}}
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pull_number = ${{ github.event.pull_request.number }}
-            const updated_title = `[BUILD FAIL] ${{ github.event.pull_request.title }}`
-            await github.rest.pulls.createReview({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pull_number,
-              body: '빌드에 실패했습니다.',
-              event: 'COMMENT'
-            })
-            await github.rest.pulls.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pull_number,
-              title: updated_title,
-              state: 'open'
-            })
       - name: If build success
-        continue-on-error: true
-        if: ${{ steps.build_and_test.outcome == 'success'}}
+        if: success()
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,9 +59,30 @@ jobs:
               title: updated_title,
               state: 'open'
             })
+      - name: If build fail
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pull_number = ${{ github.event.pull_request.number }}
+            const updated_title = `[BUILD FAIL] ${{ github.event.pull_request.title }}`
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              body: '빌드에 실패했습니다.',
+              event: 'COMMENT'
+            })
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              title: updated_title,
+              state: 'open'
+            })
       - name: Send Build Fail Message to Discord
-        continue-on-error: true
-        if: ${{ steps.build_and_test.outcome == 'failure'}}
+        if: failure()
         run: |
           curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
           --header 'Content-Type: application/json' \
@@ -99,20 +96,9 @@ jobs:
             "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
           }
           ]}'
-
-      - name: Send Build Success Message to Discord
-        continue-on-error: true
-        if: ${{ steps.build_and_test.outcome == 'success'}}
-        run: |
-          curl --location ${{secrets.DISCORD_WEBHOOK_URL}} \
-          --header 'Content-Type: application/json' \
-          --data '{
-          "avatar_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png",
-          "embeds": [
-          {
-            "title": "${{ github.event.pull_request.title }}",
-            "type": "rich",
-            "description": "빌드가 성공했습니다! 아싸!",
-            "url": "https://github.com/Cafegory/Cafegory_Backend_REST_API/pull/${{github.event.number}}"
-          }
-          ]}'
+      - name: 테스트 실패 시, 실패한 코드 라인에 Check 코멘트를 등록합니다
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+          token: ${{ secrets.GITHUB_TOKEN }}

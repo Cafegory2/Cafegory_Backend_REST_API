@@ -16,3 +16,20 @@ logging:
   level:
     org.hibernate.SQL: trace #콘솔에 남기는게 아니라 로그로 남음.
     org.hibernate.type: trace #바인딩된 파라미터까지 볼 수 있음
+
+oauth:
+  kakao:
+    client-id: test-kakao-client-id
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
+  naver:
+    client-id: test-naver-client-id
+    client-secret: test-naver-client-secret
+    url:
+      auth: https://nid.naver.com
+      api: https://openapi.naver.com
+
+
+jwt:
+  secret: 01234567890123456789012345678901234567890123456789

@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -31,7 +32,9 @@ public class MemberImpl implements Member {
 	private Long id;
 	private String name;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	private String email;
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "thumbnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private ThumbnailImage thumbnailImage;
 }
