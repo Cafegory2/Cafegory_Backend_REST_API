@@ -1,8 +1,11 @@
 package com.example.demo.repository.cafe;
 
+import static com.example.demo.domain.QBusinessHour.*;
 import static com.example.demo.domain.QCafeImpl.*;
 import static io.hypersistence.utils.hibernate.util.StringUtils.*;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -18,6 +21,7 @@ import com.example.demo.domain.MaxAllowableStay;
 import com.example.demo.domain.MinMenuPrice;
 import com.example.demo.dto.CafeSearchCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -40,7 +44,9 @@ public class CafeQueryRepository {
 				isAbleToStudy(searchCondition.isAbleToStudy()),
 				regionContains(searchCondition.getRegion()),
 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-				minBeveragePriceLoe(searchCondition.getMinMenuPrice())
+				minBeveragePriceLoe(searchCondition.getMinMenuPrice()),
+				businessHourBetween(searchCondition.getStartTime(), searchCondition.getEndTime(),
+					searchCondition.getNow())
 			)
 			.fetch();
 
@@ -71,6 +77,25 @@ public class CafeQueryRepository {
 			);
 		System.out.println(content);
 		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+	}
+
+	private BooleanExpression businessHourBetween(LocalTime filteringStartTime, LocalTime filteringEndTime,
+		LocalDateTime now) {
+		if (filteringStartTime == null || filteringEndTime == null) {
+			return null;
+		}
+		String nowDayOfWeek = now.getDayOfWeek().toString();
+		// String nowDayOfWeek = LocalDateTime.now().getDayOfWeek().toString();
+		return cafeImpl.id.in(
+			JPAExpressions
+				.select(businessHour.cafe.id)
+				.from(businessHour)
+				.where(
+					businessHour.day.eq(nowDayOfWeek),
+					businessHour.startTime.eq(filteringStartTime).or(businessHour.startTime.after(filteringStartTime)),
+					businessHour.endTime.eq(filteringEndTime).or(businessHour.endTime.before(filteringEndTime))
+				)
+		);
 	}
 
 	private BooleanExpression minBeveragePriceLoe(MinMenuPrice minMenuPrice) {

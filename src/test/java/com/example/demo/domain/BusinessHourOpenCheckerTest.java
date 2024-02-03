@@ -340,7 +340,7 @@ public class BusinessHourOpenCheckerTest {
 
 		//when
 		LocalTime chosenStartTime5 = LocalTime.of(0, 0, 0);
-		LocalTime chosenEndTime5 = LocalTime.of(23, 59, 59);
+		LocalTime chosenEndTime5 = LocalTime.of(23, 59, 59, 999_999_999);
 		boolean isBetween5 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
 			chosenStartTime5, chosenEndTime5);
 		//then

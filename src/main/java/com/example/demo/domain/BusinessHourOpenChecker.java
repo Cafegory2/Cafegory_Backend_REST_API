@@ -56,7 +56,7 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 			.anyMatch(
 				hour -> checkByNowTime(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
 	}
-
+	
 	@Override
 	public boolean checkBetweenHours(LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalTime chosenStartTime, LocalTime chosenEndTime) {

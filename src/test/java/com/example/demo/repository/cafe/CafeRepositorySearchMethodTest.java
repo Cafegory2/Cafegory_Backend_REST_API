@@ -2,6 +2,7 @@ package com.example.demo.repository.cafe;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
@@ -54,13 +55,13 @@ class CafeRepositorySearchMethodTest {
 			em.persist(cafe);
 
 			BusinessHour monday = BusinessHour.builder()
-				.day("월")
+				.day("MONDAY")
 				.startTime(startTime)
 				.endTime(endTime)
 				.cafe(cafe)
 				.build();
 			BusinessHour tuesday = BusinessHour.builder()
-				.day("화")
+				.day("TUESDAY")
 				.startTime(startTime)
 				.endTime(endTime)
 				.cafe(cafe)
@@ -451,6 +452,92 @@ class CafeRepositorySearchMethodTest {
 		//then
 		assertThat(cafes4.size()).isEqualTo(80);
 
+	}
+
+	private CafeSearchCondition createSearchConditionByFilteringTime(boolean isAbleToStudy, String region,
+		int filteringStartTime, int filteringEndTime, LocalDateTime now) {
+		return new CafeSearchCondition.Builder(isAbleToStudy, region)
+			.startTime(filteringStartTime)
+			.endTime(filteringEndTime)
+			.now(now)
+			.build();
+	}
+
+	@Test
+	@DisplayName("영업시간으로 필터링")
+	void search_cafes_with_businessHours() {
+		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(21, 0));
+		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(10, 0), LocalTime.of(21, 0));
+
+		//given
+		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(true, "상수동", 9, 21,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition1);
+		//then
+		assertThat(cafes1.size()).isEqualTo(40);
+
+		//given
+		CafeSearchCondition cafeSearchCondition2 = createSearchConditionByFilteringTime(true, "상수동", 0, 24,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition2);
+		//then
+		assertThat(cafes2.size()).isEqualTo(40);
+	}
+
+	@Test
+	@DisplayName("영업시간이 24시간인 경우, 영업시간으로 필터링")
+	void search_cafes_with_24hours_businessHours_() {
+		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(0, 0), LocalTime.MAX);
+		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(0, 0), LocalTime.MAX);
+
+		//given
+		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(true, "상수동", 0, 24,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition1);
+		//then
+		assertThat(cafes1.size()).isEqualTo(40);
+	}
+
+	@Test
+	@DisplayName("영업종료시간이 새벽인 경우, 영업시간으로 필터링")
+	void search_cafes_with_Overnight_businessHours_() {
+		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(2, 0));
+		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(2, 0));
+
+		//given
+		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(true, "상수동", 9, 2,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition1);
+		//then
+		assertThat(cafes1.size()).isEqualTo(40);
+
+		//given
+		CafeSearchCondition cafeSearchCondition2 = createSearchConditionByFilteringTime(true, "상수동", 9, 1,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes2 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition2);
+		//then
+		assertThat(cafes2.size()).isEqualTo(0);
+
+		//given
+		CafeSearchCondition cafeSearchCondition3 = createSearchConditionByFilteringTime(true, "상수동", 10, 2,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes3 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition3);
+		//then
+		assertThat(cafes3.size()).isEqualTo(0);
+
+		//given
+		CafeSearchCondition cafeSearchCondition4 = createSearchConditionByFilteringTime(true, "상수동", 0, 24,
+			LocalDateTime.of(2024, 1, 29, 8, 0));
+		//when
+		List<CafeImpl> cafes4 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition4);
+		//then
+		assertThat(cafes4.size()).isEqualTo(40);
 	}
 
 	@Test
