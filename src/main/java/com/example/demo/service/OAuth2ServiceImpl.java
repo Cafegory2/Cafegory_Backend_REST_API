@@ -57,7 +57,11 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 		ThumbnailImage thumbnailImage = new ThumbnailImage(null, oAuth2Profile.getProfileImgUrl());
 		String nickName = oAuth2Profile.getNickName();
 		String emailAddress = oAuth2Profile.getEmailAddress();
-		return new MemberImpl(null, nickName, emailAddress, thumbnailImage);
+		return MemberImpl.builder()
+			.name(nickName)
+			.thumbnailImage(thumbnailImage)
+			.email(emailAddress)
+			.build();
 	}
 
 	private OAuth2Profile callOAuth2Api(OAuth2TokenRequest oAuth2TokenRequest) {
