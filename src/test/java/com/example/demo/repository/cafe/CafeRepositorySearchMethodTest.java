@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.domain.Address;
 import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.CafeSearchCondition;
 import com.example.demo.domain.MaxAllowableStay;
 import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.Menu;
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.SnsDetail;
-import com.example.demo.dto.CafeSearchCondition;
 import com.example.demo.util.PageRequestCustom;
 
 // @DataJpaTest
