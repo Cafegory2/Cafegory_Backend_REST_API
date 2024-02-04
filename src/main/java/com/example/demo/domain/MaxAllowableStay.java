@@ -20,7 +20,7 @@ public enum MaxAllowableStay {
 	OVER_SIX_HOUR(7, maxHour -> equals(7, maxHour) || isZero(maxHour));
 
 	private final int value;
-	private Predicate<Integer> predicate;
+	private final Predicate<Integer> predicate;
 
 	MaxAllowableStay(int value, Predicate<Integer> predicate) {
 		this.value = value;
@@ -43,7 +43,7 @@ public enum MaxAllowableStay {
 	private static boolean isLoeOrZeroByMaxHour(int value, Integer maxHour) {
 		return isLoeHour(value, maxHour) || isZero(maxHour);
 	}
-	
+
 	private static boolean isZero(int hour) {
 		return hour == 0;
 	}
