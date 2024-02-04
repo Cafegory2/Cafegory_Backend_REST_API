@@ -153,4 +153,53 @@ class StudyOnceServiceImplTest {
 			.isEnd(isEnd)
 			.build();
 	}
+
+	@Test
+	@DisplayName("이미 해당 시간에 카공장으로 참여중인 카공이 있는 경우 카공 생성 실패")
+	void createFailByAlreadyStudyLeader() {
+		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
+		long cafeId = initCafe();
+		long leaderId = initMember();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		// 오른쪽 끝에서 겹침
+		LocalDateTime rightLimitStart = end;
+		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
+			rightLimitEnd, cafeId);
+		Assertions.assertThrows(IllegalArgumentException.class,
+			() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest));
+		// 왼쪽에서 겹침
+		LocalDateTime leftLimitEnd = start;
+		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
+			leftLimitEnd, cafeId);
+		Assertions.assertThrows(IllegalArgumentException.class,
+			() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest2));
+	}
+
+	@Test
+	@DisplayName("1초 차이의 시간을 둔 카공은 생성 성공")
+	void createTwo() {
+		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
+		long cafeId = initCafe();
+		long leaderId = initMember();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		// 오른쪽 끝에서 1초 차이로 안 겹침
+		LocalDateTime rightLimitStart = end.plusSeconds(1);
+		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
+			rightLimitEnd, cafeId);
+		studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest);
+
+		// 왼쪽 끝에서 1초 차이로 안 겹침
+		LocalDateTime leftLimitEnd = start.minusSeconds(1);
+		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
+		needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(leftLimitStart,
+			leftLimitEnd, cafeId);
+		studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest);
+	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private final CafeRepository cafeRepository;
@@ -79,11 +81,23 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		CafeImpl cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
+		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
 		MemberImpl leader = memberRepository.findById(leaderId).orElseThrow();
+		validateAlreadyStudyLeader(leaderId, studyOnceCreateRequest);
 		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe, leader);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
 		return makeStudyOnceSearchResponse(saved, canJoin);
+	}
+
+	private void validateAlreadyStudyLeader(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
+		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
+		LocalDateTime endDateTime = studyOnceCreateRequest.getEndDateTime();
+		boolean existsByLeaderIdAndStudyTime = studyOnceRepository.existsByLeaderIdAndStudyTime(leaderId, startDateTime,
+			endDateTime);
+		if (existsByLeaderIdAndStudyTime) {
+			throw new IllegalArgumentException("해당 시간에 이미 카공장으로 참여중인 스터디가 있습니다.");
+		}
 	}
 
 	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,

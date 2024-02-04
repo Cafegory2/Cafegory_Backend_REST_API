@@ -53,6 +53,16 @@ public class StudyOnceRepositoryImpl implements StudyOnceRepositoryCustom {
 		return count;
 	}
 
+	@Override
+	public boolean existsByLeaderIdAndStudyTime(long leaderId, LocalDateTime start, LocalDateTime end) {
+		Integer fetchFirst = queryFactory.selectOne()
+			.from(qStudyOnce)
+			.where(qStudyOnce.leader.id.eq(leaderId)
+				.and((qStudyOnce.startDateTime.loe(end).and(qStudyOnce.endDateTime.goe(start)))))
+			.fetchFirst();
+		return fetchFirst != null;
+	}
+
 	private BooleanExpression studyJoinAbleFilter(boolean onlyJoinAble) {
 		LocalDateTime base = LocalDateTime.now().plusHours(3);
 		if (onlyJoinAble) {
