@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import com.example.demo.domain.LocalTimeConverter;
 import com.example.demo.domain.MaxAllowableStay;
 import com.example.demo.domain.MinMenuPrice;
 
@@ -13,11 +14,11 @@ public class CafeSearchCondition {
 
 	private final boolean isAbleToStudy;
 	private final String region;
-	private MaxAllowableStay maxAllowableStay;
-	private MinMenuPrice minMenuPrice;
-	private LocalTime startTime;
-	private LocalTime endTime;
-	private LocalDateTime now;
+	private final MaxAllowableStay maxAllowableStay;
+	private final MinMenuPrice minMenuPrice;
+	private final LocalTime startTime;
+	private final LocalTime endTime;
+	private final LocalDateTime now;
 
 	private CafeSearchCondition(Builder builder) {
 		this.isAbleToStudy = builder.isAbleToStudy;
@@ -30,8 +31,9 @@ public class CafeSearchCondition {
 	}
 
 	public static class Builder {
-		private boolean isAbleToStudy;
-		private String region;
+
+		private final boolean isAbleToStudy;
+		private final String region;
 		private MaxAllowableStay maxAllowableStay;
 		private MinMenuPrice minMenuPrice;
 		private LocalTime startTime;
@@ -54,24 +56,12 @@ public class CafeSearchCondition {
 		}
 
 		public Builder startTime(int startTime) {
-			//검증을 여기서 해도 되는가?
-			if (startTime == 24) {
-				throw new IllegalArgumentException("startTime의 값이 24이면 안된다.");
-			}
-			this.startTime = LocalTime.of(startTime, 0);
+			this.startTime = LocalTimeConverter.find(startTime).toLocalTime();
 			return this;
 		}
 
 		public Builder endTime(int endTime) {
-			//검증을 여기서 해도 되는가?
-			// if (endTime == 0) {
-			// 	this.startTime = LocalTime.MAX;
-			// }
-			if (endTime == 24) {
-				this.endTime = LocalTime.MAX;
-				return this;
-			}
-			this.endTime = LocalTime.of(endTime, 0);
+			this.endTime = LocalTimeConverter.find(endTime).toLocalTime();
 			return this;
 		}
 
