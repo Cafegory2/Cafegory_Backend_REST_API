@@ -60,7 +60,9 @@ public class CafeQueryRepository {
 				isAbleToStudy(searchCondition.isAbleToStudy()),
 				regionContains(searchCondition.getRegion()),
 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-				minBeveragePriceLoe(searchCondition.getMinMenuPrice())
+				minBeveragePriceLoe(searchCondition.getMinMenuPrice()),
+				businessHourBetween(searchCondition.getStartTime(), searchCondition.getEndTime(),
+					searchCondition.getNow())
 			)
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -73,7 +75,9 @@ public class CafeQueryRepository {
 				isAbleToStudy(searchCondition.isAbleToStudy()),
 				regionContains(searchCondition.getRegion()),
 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-				minBeveragePriceLoe(searchCondition.getMinMenuPrice())
+				minBeveragePriceLoe(searchCondition.getMinMenuPrice()),
+				businessHourBetween(searchCondition.getStartTime(), searchCondition.getEndTime(),
+					searchCondition.getNow())
 			);
 		System.out.println(content);
 		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);

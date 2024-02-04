@@ -39,6 +39,8 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			request.getArea())
 			.maxTime(request.getMaxTime())
 			.minMenuPrice(request.getMinBeveragePrice())
+			.startTime(request.getStartTime())
+			.endTime(request.getEndTime())
 			.build();
 
 		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(newSearchCondition,
