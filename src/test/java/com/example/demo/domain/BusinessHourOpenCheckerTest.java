@@ -75,9 +75,6 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("BusinessHours를 가지고 영업시간을 체크한다.")
 	void checkWithBusinessHours() {
 		List<BusinessHour> businessHours = new ArrayList<>();
-		// BusinessHour monday = new BusinessHour("MONDAY", LocalTime.of(9, 0), LocalTime.of(21, 0));
-		// BusinessHour tuesday = new BusinessHour("TUESDAY", LocalTime.of(9, 0), LocalTime.of(21, 0));
-		// BusinessHour wednesday = new BusinessHour("WEDNESDAY", LocalTime.of(9, 0), LocalTime.of(21, 0));
 
 		BusinessHour monday = BusinessHour.builder()
 			.day("MONDAY")
@@ -284,7 +281,6 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("DayOfWeek Enum상수가 가지고 있는 요일이 BusinessHours에 존재하지 않으면 예외가 터진다.")
 	void checkDayOfWeekWithBusinessHours() {
 		List<BusinessHour> businessHours = new ArrayList<>();
-		// BusinessHour weekends = new BusinessHour("WEEKENDS", LocalTime.of(9, 0), LocalTime.of(21, 0));
 		BusinessHour weekends = BusinessHour.builder()
 			.day("WEEKENDS")
 			.startTime(LocalTime.of(9, 0))

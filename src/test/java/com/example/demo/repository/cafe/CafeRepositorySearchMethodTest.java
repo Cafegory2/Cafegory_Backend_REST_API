@@ -13,7 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +27,8 @@ import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.SnsDetail;
 import com.example.demo.util.PageRequestCustom;
 
-// @DataJpaTest
 @SpringBootTest
-@Profile("test")
 @Transactional
-	// @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CafeRepositorySearchMethodTest {
 
 	@Autowired
@@ -118,82 +114,6 @@ class CafeRepositorySearchMethodTest {
 
 	}
 
-	void setUpWithMinBeveragePrice(CafeSearchCondition searchCondition, int minBeveragePrice) {
-
-		for (int i = 0; i < 20; i++) {
-			CafeImpl cafe = CafeImpl.builder()
-				.name("카페고리" + i)
-				.address(new Address("서울 마포구 " + searchCondition.getRegion(), searchCondition.getRegion()))
-				.phone("010-1234-5678")
-				.maxAllowableStay(searchCondition.getMaxAllowableStay())
-				.isAbleToStudy(searchCondition.isAbleToStudy())
-				.minBeveragePrice(minBeveragePrice)
-				.build();
-			em.persist(cafe);
-
-			BusinessHour monday = BusinessHour.builder()
-				.day("월")
-				.startTime(LocalTime.of(9, 0))
-				.endTime(LocalTime.of(21, 0))
-				.cafe(cafe)
-				.build();
-			BusinessHour tuesday = BusinessHour.builder()
-				.day("화")
-				.startTime(LocalTime.of(9, 0))
-				.endTime(LocalTime.of(21, 0))
-				.cafe(cafe)
-				.build();
-			em.persist(monday);
-			em.persist(tuesday);
-
-			SnsDetail instagram = SnsDetail.builder()
-				.name("인스타그램")
-				.url("https://www.instagram.com/cafegory/" + i)
-				.cafe(cafe)
-				.build();
-			em.persist(instagram);
-
-			MemberImpl member1 = MemberImpl.builder()
-				.name("김동현")
-				.build();
-			MemberImpl member2 = MemberImpl.builder()
-				.name("임수빈")
-				.build();
-			em.persist(member1);
-			em.persist(member2);
-
-			ReviewImpl review1 = ReviewImpl.builder()
-				.content("카페가 너무 이뻐요")
-				.rate(5)
-				.cafe(cafe)
-				.member(member1)
-				.build();
-			ReviewImpl review2 = ReviewImpl.builder()
-				.content("콘센트가 있어서 좋아요")
-				.rate(4.5)
-				.cafe(cafe)
-				.member(member2)
-				.build();
-			em.persist(review1);
-			em.persist(review2);
-
-			Menu menu1 = Menu.builder()
-				.name("아메리카노")
-				.price(2000)
-				.cafe(cafe)
-				.build();
-			Menu menu2 = Menu.builder()
-				.name("카페라떼")
-				.price(2500)
-				.cafe(cafe)
-				.build();
-			em.persist(menu1);
-			em.persist(menu2);
-
-		}
-
-	}
-
 	private CafeSearchCondition createSearchConditionByRequirements(boolean isAbleToStudy, String region) {
 		return new CafeSearchCondition.Builder(isAbleToStudy, region)
 			.build();
@@ -206,18 +126,6 @@ class CafeRepositorySearchMethodTest {
 			createSearchConditionByRequirements(true, "상수동"));
 		assertThat(cafes).isEqualTo(Collections.emptyList());
 	}
-
-	// @Test
-	// @DisplayName("데이터가 존재, 필터링 없는 카페를 조회")
-	// void search_Cafes_No_Filtering_When_Exists_Data_Then_Success() {
-	// 	//given
-	// 	CafeSearchCondition searchCondition = new CafeSearchCondition(true);
-	// 	setUp(searchCondition);
-	// 	//when
-	// 	List<CafeImpl> cafes = cafeRepository.findWithDynamicFilter(searchCondition);
-	// 	//then
-	// 	assertThat(cafes.size()).isEqualTo(20);
-	// }
 
 	@Test
 	@DisplayName("공부가 가능한 카페가 존재할때, 공부가 가능한 카페로 필터링 조회")
