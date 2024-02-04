@@ -2,7 +2,10 @@ package com.example.demo.domain;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -12,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -20,7 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "study_once")
@@ -46,7 +49,10 @@ public class StudyOnceImpl implements StudyOnce {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "leader_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private MemberImpl leader;
+	@OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
+	private List<StudyMember> studyMembers;
 
+	@Builder
 	private StudyOnceImpl(Long id, String name, CafeImpl cafe, LocalDateTime startDateTime, LocalDateTime endDateTime,
 		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, MemberImpl leader) {
 		validateStartDateTime(startDateTime);
@@ -61,6 +67,8 @@ public class StudyOnceImpl implements StudyOnce {
 		this.isEnd = isEnd;
 		this.ableToTalk = ableToTalk;
 		this.leader = leader;
+		studyMembers = new ArrayList<>();
+		studyMembers.add(new StudyMember(leader, this));
 	}
 
 	private static void validateStartDateTime(LocalDateTime startDateTime) {
