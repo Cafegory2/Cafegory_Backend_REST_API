@@ -43,9 +43,12 @@ public class StudyOnceImpl implements StudyOnce {
 	private int nowMemberCount;
 	private boolean isEnd;
 	private boolean ableToTalk;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "leader_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private MemberImpl leader;
 
 	private StudyOnceImpl(Long id, String name, CafeImpl cafe, LocalDateTime startDateTime, LocalDateTime endDateTime,
-		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk) {
+		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, MemberImpl leader) {
 		validateStartDateTime(startDateTime);
 		validateStudyOnceTime(startDateTime, endDateTime);
 		this.id = id;
@@ -57,6 +60,7 @@ public class StudyOnceImpl implements StudyOnce {
 		this.nowMemberCount = nowMemberCount;
 		this.isEnd = isEnd;
 		this.ableToTalk = ableToTalk;
+		this.leader = leader;
 	}
 
 	private static void validateStartDateTime(LocalDateTime startDateTime) {

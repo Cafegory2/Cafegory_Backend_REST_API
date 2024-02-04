@@ -7,12 +7,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceResponse;
+import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyOnceRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 
@@ -24,6 +26,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private final CafeRepository cafeRepository;
 	private final StudyOnceRepository studyOnceRepository;
+	private final MemberRepository memberRepository;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -76,13 +79,15 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		CafeImpl cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
-		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe);
+		MemberImpl leader = memberRepository.findById(leaderId).orElseThrow();
+		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe, leader);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
 		return makeStudyOnceSearchResponse(saved, canJoin);
 	}
 
-	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe) {
+	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,
+		MemberImpl leader) {
 		return StudyOnceImpl.builder()
 			.name(studyOnceCreateRequest.getName())
 			.startDateTime(studyOnceCreateRequest.getStartDateTime())
@@ -92,6 +97,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			.isEnd(false)
 			.ableToTalk(studyOnceCreateRequest.isCanTalk())
 			.cafe(cafe)
+			.leader(leader)
 			.build();
 
 	}

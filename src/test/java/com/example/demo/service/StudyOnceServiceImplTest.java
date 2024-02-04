@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.Address;
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
@@ -35,6 +37,16 @@ class StudyOnceServiceImplTest {
 		return cafe.getId();
 	}
 
+	private long initMember() {
+		MemberImpl member = MemberImpl.builder()
+			.name("테스트")
+			.email("test@test.com")
+			.thumbnailImage(ThumbnailImage.builder().thumbnailImage("testUrl").build())
+			.build();
+		em.persist(member);
+		return member.getId();
+	}
+
 	@Test
 	@DisplayName("정상 목록 조회 테스트")
 	void searchStudyByDto() {
@@ -42,7 +54,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime start = LocalDateTime.now().plusHours(4).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = initCafe();
-		long leaderId = 1L;
+		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		//when
@@ -62,7 +74,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = initCafe();
-		long leaderId = 1L;
+		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getId());
@@ -75,7 +87,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = initCafe();
-		long leaderId = 1L;
+		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
@@ -93,7 +105,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).minusSeconds(1);
 		LocalDateTime end = start.plusHours(3);
 		long cafeId = initCafe();
-		long leaderId = 1L;
+		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		Assertions.assertThrows(IllegalArgumentException.class,
 			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
@@ -105,7 +117,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime start = LocalDateTime.now().minusSeconds(1);
 		LocalDateTime end = start.plusMinutes(59);
 		long cafeId = initCafe();
-		long leaderId = 1L;
+		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		Assertions.assertThrows(IllegalArgumentException.class,
 			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
@@ -117,7 +129,7 @@ class StudyOnceServiceImplTest {
 		LocalDateTime start = LocalDateTime.now().minusSeconds(1);
 		LocalDateTime end = start.plusHours(5).plusSeconds(1);
 		long cafeId = initCafe();
-		long leaderId = 1L;
+		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		Assertions.assertThrows(IllegalArgumentException.class,
 			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
