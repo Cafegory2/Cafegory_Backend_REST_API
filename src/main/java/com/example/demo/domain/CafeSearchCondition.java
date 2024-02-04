@@ -28,6 +28,8 @@ public class CafeSearchCondition {
 
 	public static class Builder {
 
+		private static final int START_TIME = 0;
+		private static final int END_TIME = 24;
 		private final boolean isAbleToStudy;
 		private final String region;
 		private MaxAllowableStay maxAllowableStay;
@@ -52,12 +54,14 @@ public class CafeSearchCondition {
 		}
 
 		public Builder startTime(int startTime) {
-			this.startTime = LocalTimeConverter.find(startTime).toLocalTime();
+			validateTimeRange(startTime);
+			this.startTime = calcLocalTime(startTime);
 			return this;
 		}
 
 		public Builder endTime(int endTime) {
-			this.endTime = LocalTimeConverter.find(endTime).toLocalTime();
+			validateTimeRange(endTime);
+			this.endTime = calcLocalTime(endTime);
 			return this;
 		}
 
@@ -70,6 +74,18 @@ public class CafeSearchCondition {
 			return new CafeSearchCondition(this);
 		}
 
+		private LocalTime calcLocalTime(int time) {
+			if (time == END_TIME) {
+				return LocalTime.MAX;
+			}
+			return LocalTime.of(time, 0);
+		}
+
+		private void validateTimeRange(int time) {
+			if (!(time >= START_TIME && time <= END_TIME)) {
+				throw new IllegalArgumentException("maxTime에 맞는 숫자를 입력 해 주세요.");
+			}
+		}
 	}
 
 }
