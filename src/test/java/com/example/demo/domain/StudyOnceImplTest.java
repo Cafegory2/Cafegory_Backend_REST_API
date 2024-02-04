@@ -18,6 +18,7 @@ class StudyOnceImplTest {
 		StudyOnceImpl studyOnce = StudyOnceImpl.builder()
 			.startDateTime(start)
 			.endDateTime(start.plusHours(4))
+			.leader(MemberImpl.builder().build())
 			.build();
 		boolean canJoin = studyOnce.canJoin(base);
 		Assertions.assertEquals(expected, canJoin);
