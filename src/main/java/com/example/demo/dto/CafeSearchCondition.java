@@ -73,6 +73,7 @@ public class CafeSearchCondition {
 		public CafeSearchCondition build() {
 			return new CafeSearchCondition(this);
 		}
+
 	}
 
 }
