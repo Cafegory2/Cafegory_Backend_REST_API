@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -25,17 +24,14 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
+import lombok.RequiredArgsConstructor;
+
 @Repository
+@RequiredArgsConstructor
 public class CafeQueryRepository {
 
 	private final EntityManager em;
 	private final JPAQueryFactory queryFactory;
-
-	@Autowired
-	public CafeQueryRepository(EntityManager em) {
-		this.em = em;
-		this.queryFactory = new JPAQueryFactory(em);
-	}
 
 	public List<CafeImpl> findWithDynamicFilterAndNoPaging(CafeSearchCondition searchCondition) {
 		return queryFactory
@@ -49,11 +45,9 @@ public class CafeQueryRepository {
 					searchCondition.getNow())
 			)
 			.fetch();
-
 	}
 
 	public Page<CafeImpl> findWithDynamicFilter(CafeSearchCondition searchCondition, Pageable pageable) {
-
 		List<CafeImpl> content = queryFactory
 			.selectFrom(cafeImpl)
 			.where(
@@ -79,17 +73,15 @@ public class CafeQueryRepository {
 				businessHourBetween(searchCondition.getStartTime(), searchCondition.getEndTime(),
 					searchCondition.getNow())
 			);
-		System.out.println(content);
 		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
 	}
 
 	private BooleanExpression businessHourBetween(LocalTime filteringStartTime, LocalTime filteringEndTime,
 		LocalDateTime now) {
-		if (filteringStartTime == null || filteringEndTime == null) {
+		if (filteringStartTime == null || filteringEndTime == null || now == null) {
 			return null;
 		}
 		String nowDayOfWeek = now.getDayOfWeek().toString();
-		// String nowDayOfWeek = LocalDateTime.now().getDayOfWeek().toString();
 		return cafeImpl.id.in(
 			JPAExpressions
 				.select(businessHour.cafe.id)

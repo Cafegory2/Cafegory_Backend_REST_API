@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 public class BusinessHourOpenCheckerTest {
 
-	private OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
+	private BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 
 	@Test
 	@DisplayName("현재시간이 요일에 맞는 영업시간에 포함하면 open이다")

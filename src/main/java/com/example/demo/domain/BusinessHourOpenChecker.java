@@ -12,39 +12,45 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 		LocalDateTime now) {
 		LocalTime currentTime = now.toLocalTime();
 
-		//새벽까지 영업을 하는가?
-		boolean isOpenOvernight = businessEndTime.isBefore(businessStartTime);
+		boolean isOpenOvernight = isOpenOvernight(businessStartTime, businessEndTime);
 
-		if (dayOfWeek.equals(now.getDayOfWeek()) || (isOpenOvernight && dayOfWeek.equals(
-			now.minusDays(1).getDayOfWeek()))) {
-			if (isOpenOvernight) {
-				// 폐점 시간이 다음 날인 경우: 현재 시간이 오픈 시간 이후거나 자정 이후이면서 폐점 시간 이전이면 오픈
-				if ((currentTime.isAfter(businessStartTime) || currentTime.equals(businessStartTime))
-					|| (currentTime.isBefore(businessEndTime) && currentTime.isAfter(LocalTime.MIDNIGHT))) {
-					return true;
-				}
-			}
-			// 폐점 시간이 같은 날인 경우: 현재 시간이 오픈 시간과 폐점 시간 사이이면 오픈
-			if ((currentTime.isAfter(businessStartTime) || currentTime.equals(businessStartTime))
-				&& currentTime.isBefore(businessEndTime)) {
-				return true;
-			}
-			// 영업시간이 24시간인 경우
-			if (businessStartTime.equals(LocalTime.MIN) && businessEndTime.equals(LocalTime.MAX)) {
-				return true;
-			}
+		if (!isTodayBusinessDay(dayOfWeek, now, isOpenOvernight)) {
+			return false;
 		}
+		// 24시간 영업인 경우 항상 참
+		if (is24HourBusiness(businessStartTime, businessEndTime)) {
+			return true;
+		}
+		// 새벽까지 영업하는 경우
+		if (isOpenOvernight) {
+			return isOpenOvernightNow(businessStartTime, businessEndTime, currentTime);
+		}
+		// 같은 날에 영업을 시작하고 종료하는 경우
+		return isOpenDuringDay(businessStartTime, businessEndTime, currentTime);
+	}
 
-		// if (dayOfWeek.equals(now.getDayOfWeek())) {
-		// 	if (businessStartTime.equals(LocalTime.MIN) && businessEndTime.equals(LocalTime.MAX)) {
-		// 		return true;
-		// 	}
-		// 	if ((currentTime.equals(businessStartTime) || currentTime.isAfter(businessStartTime))
-		// 		&& currentTime.isBefore(businessEndTime)) {
-		// 		return true;
-		// 	}
-		// }
-		return false;
+	private boolean isTodayBusinessDay(DayOfWeek businessDay, LocalDateTime now, boolean isOpenOvernight) {
+		if (isOpenOvernight) {
+			return businessDay.equals(now.getDayOfWeek()) || businessDay.equals(now.minusDays(1).getDayOfWeek());
+		}
+		return businessDay.equals(now.getDayOfWeek());
+	}
+
+	private boolean is24HourBusiness(LocalTime startTime, LocalTime endTime) {
+		return startTime.equals(LocalTime.MIN) && endTime.equals(LocalTime.MAX);
+	}
+
+	private boolean isOpenOvernight(LocalTime startTime, LocalTime endTime) {
+		return endTime.isBefore(startTime);
+	}
+
+	private boolean isOpenOvernightNow(LocalTime startTime, LocalTime endTime, LocalTime currentTime) {
+		return currentTime.isAfter(startTime) || (currentTime.isBefore(endTime) && currentTime.isAfter(
+			LocalTime.MIDNIGHT));
+	}
+
+	private boolean isOpenDuringDay(LocalTime startTime, LocalTime endTime, LocalTime currentTime) {
+		return (currentTime.isAfter(startTime) || currentTime.equals(startTime)) && currentTime.isBefore(endTime);
 	}
 
 	@Override
@@ -56,8 +62,7 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 			.anyMatch(
 				hour -> checkByNowTime(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
 	}
-	
-	@Override
+
 	public boolean checkBetweenHours(LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalTime chosenStartTime, LocalTime chosenEndTime) {
 		if ((chosenStartTime.equals(businessStartTime) || chosenStartTime.isBefore(businessStartTime))

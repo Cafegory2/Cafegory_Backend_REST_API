@@ -12,6 +12,4 @@ public interface OpenChecker<T> {
 
 	boolean checkWithBusinessHours(List<T> hours, LocalDateTime now);
 
-	boolean checkBetweenHours(LocalTime businessStartTime, LocalTime businessEndTime,
-		LocalTime chosenStartTime, LocalTime chosenEndTime);
 }

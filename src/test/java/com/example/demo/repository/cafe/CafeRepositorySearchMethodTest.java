@@ -491,7 +491,6 @@ class CafeRepositorySearchMethodTest {
 	void search_cafes_with_24hours_businessHours_() {
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(0, 0), LocalTime.MAX);
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(0, 0), LocalTime.MAX);
-
 		//given
 		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(true, "상수동", 0, 24,
 			LocalDateTime.of(2024, 1, 29, 8, 0));
