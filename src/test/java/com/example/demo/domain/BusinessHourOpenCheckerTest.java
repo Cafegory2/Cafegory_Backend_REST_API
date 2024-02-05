@@ -7,9 +7,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 public class BusinessHourOpenCheckerTest {
 
@@ -71,9 +75,10 @@ public class BusinessHourOpenCheckerTest {
 		assertThat(isOpen).isTrue();
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("provideLocalDateTime")
 	@DisplayName("BusinessHours를 가지고 영업시간을 체크한다.")
-	void checkWithBusinessHours() {
+	void checkWithBusinessHours(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
 
 		BusinessHour monday = BusinessHour.builder()
@@ -97,21 +102,23 @@ public class BusinessHourOpenCheckerTest {
 		businessHours.add(wednesday);
 
 		//when
-		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
-		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
-		assertThat(isOpen1).isTrue();
-
-		//when
-		LocalDateTime now2 = LocalDateTime.of(2024, 1, 31, 8, 30, 0);
-		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
-		//then
-		assertThat(isOpen2).isFalse();
+		assertThat(isOpen).isEqualTo(expected);
 	}
 
-	@Test
+	private static Stream<Arguments> provideLocalDateTime() {
+		return Stream.of(
+			// LocalDateTime now, boolean expected
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 12, 30, 0), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 31, 8, 30, 0), false)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideLocalDateTime2")
 	@DisplayName("카페가 24시간 운영한다.")
-	void check_businessHours_when_cafe_is_always_open() {
+	void check_businessHours_when_cafe_is_always_open(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
 
 		BusinessHour monday = BusinessHour.builder()
@@ -135,33 +142,25 @@ public class BusinessHourOpenCheckerTest {
 		businessHours.add(wednesday);
 
 		//when
-		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
-		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
-		assertThat(isOpen1).isTrue();
-
-		//when
-		LocalDateTime now2 = LocalDateTime.of(2024, 1, 29, 23, 59, 59);
-		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
-		//then
-		assertThat(isOpen2).isTrue();
-
-		//when
-		LocalDateTime now3 = LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_998);
-		boolean isOpen3 = openChecker.checkWithBusinessHours(businessHours, now3);
-		//then
-		assertThat(isOpen3).isTrue();
-
-		//when
-		LocalDateTime now4 = LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_999);
-		boolean isOpen4 = openChecker.checkWithBusinessHours(businessHours, now4);
-		//then
-		assertThat(isOpen4).isTrue();
+		assertThat(isOpen).isEqualTo(expected);
 	}
 
-	@Test
+	private static Stream<Arguments> provideLocalDateTime2() {
+		return Stream.of(
+			// LocalDateTime now, boolean expected
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 12, 30, 0), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_998), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_999), true)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideLocalDateTime3")
 	@DisplayName("카페가 새벽2시까지 운영한다.")
-	void check_businessHours_when_cafe_is_open_2am() {
+	void check_businessHours_when_cafe_is_open_2am(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
 
 		BusinessHour monday = BusinessHour.builder()
@@ -185,22 +184,24 @@ public class BusinessHourOpenCheckerTest {
 		businessHours.add(wednesday);
 
 		//when
-		LocalDateTime now1 = LocalDateTime.of(2024, 1, 30, 1, 59, 59);
-		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
-		assertThat(isOpen1).isTrue();
-
-		//when
-		LocalDateTime now2 = LocalDateTime.of(2024, 1, 30, 2, 0, 0);
-		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
-		//then
-		assertThat(isOpen2).isFalse();
-
+		assertThat(isOpen).isEqualTo(expected);
 	}
 
-	@Test
+	private static Stream<Arguments> provideLocalDateTime3() {
+		return Stream.of(
+			// LocalDateTime now, boolean expected
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 1, 59, 59), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 2, 0, 0), false)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideLocalDateTime4")
 	@DisplayName("평일은 일찍마감하고, 금토는 24시간 오픈한다.")
-	void check_businessHours_when_businessHour_is_different_depend_on_weekdays_and_weekends() {
+	void check_businessHours_when_businessHour_is_different_depend_on_weekdays_and_weekends(LocalDateTime now,
+		boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
 
 		BusinessHour monday = BusinessHour.builder()
@@ -235,17 +236,10 @@ public class BusinessHourOpenCheckerTest {
 		businessHours.add(saturday);
 		businessHours.add(sunday);
 
-		//when 월요일
-		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30);
-		boolean isOpen1 = openChecker.checkWithBusinessHours(businessHours, now1);
+		//when
+		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
-		assertThat(isOpen1).isTrue();
-
-		//when 금요일
-		LocalDateTime now2 = LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_998);
-		boolean isOpen2 = openChecker.checkWithBusinessHours(businessHours, now2);
-		//then
-		assertThat(isOpen2).isTrue();
+		assertThat(isOpen).isEqualTo(expected);
 
 		/*
 		365일 24시간 운영할때와는 다르게, 요일마다 운영시간이 다를때는 LocalTime.Max의 시간에서 영업중이도록 구현하지 않았다.
@@ -256,25 +250,17 @@ public class BusinessHourOpenCheckerTest {
 		//then
 		assertThat(isOpen3).isTrue();
 		 */
+	}
 
-		//when 토요일
-		LocalDateTime now4 = LocalDateTime.of(2024, 2, 3, 0, 0);
-		boolean isOpen4 = openChecker.checkWithBusinessHours(businessHours, now4);
-		//then
-		assertThat(isOpen4).isTrue();
-
-		//when 일요일
-		LocalDateTime now5 = LocalDateTime.of(2024, 2, 4, 21, 59, 59, 999_999_999);
-		boolean isOpen5 = openChecker.checkWithBusinessHours(businessHours, now5);
-		//then
-		assertThat(isOpen5).isTrue();
-
-		//when 일요일
-		LocalDateTime now6 = LocalDateTime.of(2024, 2, 4, 22, 0, 0);
-		boolean isOpen6 = openChecker.checkWithBusinessHours(businessHours, now6);
-		//then
-		assertThat(isOpen6).isFalse();
-
+	private static Stream<Arguments> provideLocalDateTime4() {
+		return Stream.of(
+			// LocalDateTime now, boolean expected
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 12, 30), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_998), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 3, 0, 0), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 4, 21, 59, 59, 999_999_999), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 4, 22, 0, 0), false)
+		);
 	}
 
 	@Test
@@ -289,92 +275,99 @@ public class BusinessHourOpenCheckerTest {
 		businessHours.add(weekends);
 
 		//when
-		LocalDateTime now1 = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
+		LocalDateTime now = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
 		//then
-		assertThatThrownBy(() -> openChecker.checkWithBusinessHours(businessHours, now1))
+		assertThatThrownBy(() -> openChecker.checkWithBusinessHours(businessHours, now))
 			.isInstanceOf(IllegalStateException.class);
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("provideChosenTimeAndExpected")
 	@DisplayName("선택된 시간사이에 영업시간이 포함한다.")
-	void when_check_businessHours_between_chosen_hours_then_contains() {
+	void when_check_businessHours_between_chosen_hours_then_contains(LocalTime chosenStartTime, LocalTime chosenEndTime,
+		boolean expected) {
 		//given
 		LocalTime businessStartTime = LocalTime.of(9, 0);
 		LocalTime businessEndTime = LocalTime.of(21, 0);
 
 		//when
-		LocalTime chosenStartTime1 = LocalTime.of(8, 0);
-		LocalTime chosenEndTime1 = LocalTime.of(22, 0);
-		boolean isBetween1 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime1, chosenEndTime1);
+		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime, chosenEndTime);
 		//then
-		assertThat(isBetween1).isTrue();
-
-		//when
-		LocalTime chosenStartTime2 = LocalTime.of(9, 0);
-		LocalTime chosenEndTime2 = LocalTime.of(21, 0);
-		boolean isBetween2 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime2, chosenEndTime2);
-		//then
-		assertThat(isBetween2).isTrue();
-
-		//when
-		LocalTime chosenStartTime3 = LocalTime.of(8, 59, 59);
-		LocalTime chosenEndTime3 = LocalTime.of(21, 0);
-		boolean isBetween3 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime3, chosenEndTime3);
-		//then
-		assertThat(isBetween3).isTrue();
-
-		//when
-		LocalTime chosenStartTime4 = LocalTime.of(8, 59, 59);
-		LocalTime chosenEndTime4 = LocalTime.of(21, 0, 1);
-		boolean isBetween4 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime4, chosenEndTime4);
-		//then
-		assertThat(isBetween4).isTrue();
-
-		//when
-		LocalTime chosenStartTime5 = LocalTime.of(0, 0, 0);
-		LocalTime chosenEndTime5 = LocalTime.of(23, 59, 59, 999_999_999);
-		boolean isBetween5 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime5, chosenEndTime5);
-		//then
-		assertThat(isBetween5).isTrue();
-
+		assertThat(isBetween).isEqualTo(expected);
 	}
 
-	@Test
+	private static Stream<Arguments> provideChosenTimeAndExpected() {
+		return Stream.of(
+			// LocalTime chosenStartTime
+			// LocalTime chosenEndTime,
+			// boolean expected
+			Arguments.of(
+				LocalTime.of(8, 0),
+				LocalTime.of(22, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(9, 0),
+				LocalTime.of(21, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(8, 59, 59),
+				LocalTime.of(21, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(8, 59, 59),
+				LocalTime.of(21, 0, 1),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(0, 0, 0),
+				LocalTime.of(23, 59, 59, 999_999_999),
+				true
+			)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("provideChosenTimeAndExpected2")
 	@DisplayName("선택된 시간사이에 영업시간이 포함되지 않는다.")
-	void when_check_businessHours_between_chosen_hours_then_not_contains() {
+	void when_check_businessHours_between_chosen_hours_then_not_contains(LocalTime chosenStartTime,
+		LocalTime chosenEndTime,
+		boolean expected) {
 		//given
 		LocalTime businessStartTime = LocalTime.of(9, 0);
 		LocalTime businessEndTime = LocalTime.of(21, 0);
 
 		//when
-		LocalTime chosenStartTime1 = LocalTime.of(9, 0);
-		LocalTime chosenEndTime1 = LocalTime.of(20, 59, 59);
-		boolean isBetween1 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime1, chosenEndTime1);
+		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime, chosenEndTime);
 		//then
-		assertThat(isBetween1).isFalse();
+		assertThat(isBetween).isEqualTo(expected);
+	}
 
-		//when
-		LocalTime chosenStartTime2 = LocalTime.of(9, 0, 1);
-		LocalTime chosenEndTime2 = LocalTime.of(21, 0);
-		boolean isBetween2 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime2, chosenEndTime2);
-		//then
-		assertThat(isBetween2).isFalse();
-
-		//when
-		LocalTime chosenStartTime3 = LocalTime.of(8, 59, 59);
-		LocalTime chosenEndTime3 = LocalTime.of(20, 59, 59);
-		boolean isBetween3 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime3, chosenEndTime3);
-		//then
-		assertThat(isBetween3).isFalse();
-
+	private static Stream<Arguments> provideChosenTimeAndExpected2() {
+		return Stream.of(
+			// LocalTime chosenStartTime
+			// LocalTime chosenEndTime,
+			// boolean expected
+			Arguments.of(
+				LocalTime.of(9, 0),
+				LocalTime.of(20, 59, 59),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(9, 0, 1),
+				LocalTime.of(21, 0),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(8, 59, 59),
+				LocalTime.of(20, 59, 59),
+				false
+			)
+		);
 	}
 
 	@Test
@@ -386,61 +379,61 @@ public class BusinessHourOpenCheckerTest {
 
 		//when
 		LocalTime chosenStartTime1 = LocalTime.of(0, 0);
-		LocalTime chosenEndTime1 = LocalTime.MAX;
-		boolean isBetween1 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime1, chosenEndTime1);
+		LocalTime chosenEndTime = LocalTime.MAX;
+		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime1, chosenEndTime);
 		//then
-		assertThat(isBetween1).isTrue();
+		assertThat(isBetween).isTrue();
 
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("provideChosenTimeAndExpected3")
 	@DisplayName("영업시간이 밤22시부터 새벽2시까지일 경우")
-	void when_businessHour_is_22_to_2() {
+	void when_businessHour_is_22_to_2(LocalTime chosenStartTime, LocalTime chosenEndTime,
+		boolean expected) {
 		//given
 		LocalTime businessStartTime = LocalTime.of(22, 0);
 		LocalTime businessEndTime = LocalTime.of(2, 0);
 
 		//when
-		LocalTime chosenStartTime1 = LocalTime.of(22, 0);
-		LocalTime chosenEndTime1 = LocalTime.of(2, 0);
-		boolean isBetween1 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime1, chosenEndTime1);
+		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+			chosenStartTime, chosenEndTime);
 		//then
-		assertThat(isBetween1).isTrue();
+		assertThat(isBetween).isEqualTo(expected);
+	}
 
-		//when
-		LocalTime chosenStartTime2 = LocalTime.of(21, 0);
-		LocalTime chosenEndTime2 = LocalTime.of(2, 0);
-		boolean isBetween2 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime2, chosenEndTime2);
-		//then
-		assertThat(isBetween2).isTrue();
-
-		//when
-		LocalTime chosenStartTime3 = LocalTime.of(22, 0, 1);
-		LocalTime chosenEndTime3 = LocalTime.of(2, 0);
-		boolean isBetween3 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime3, chosenEndTime3);
-		//then
-		assertThat(isBetween3).isFalse();
-
-		//when
-		LocalTime chosenStartTime4 = LocalTime.of(22, 0, 0);
-		LocalTime chosenEndTime4 = LocalTime.of(1, 59, 59);
-		boolean isBetween4 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime4, chosenEndTime4);
-		//then
-		assertThat(isBetween4).isFalse();
-
-		//when
-		LocalTime chosenStartTime5 = LocalTime.of(0, 0);
-		LocalTime chosenEndTime5 = LocalTime.MAX;
-		boolean isBetween5 = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
-			chosenStartTime5, chosenEndTime5);
-		//then
-		assertThat(isBetween5).isTrue();
-
+	private static Stream<Arguments> provideChosenTimeAndExpected3() {
+		return Stream.of(
+			// LocalTime chosenStartTime
+			// LocalTime chosenEndTime,
+			// boolean expected
+			Arguments.of(
+				LocalTime.of(22, 0),
+				LocalTime.of(2, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(21, 0),
+				LocalTime.of(2, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(22, 0, 1),
+				LocalTime.of(2, 0),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(22, 0, 0),
+				LocalTime.of(1, 59, 59),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(0, 0),
+				LocalTime.MAX,
+				true
+			)
+		);
 	}
 
 }
