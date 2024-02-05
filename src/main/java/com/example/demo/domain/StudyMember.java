@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +36,7 @@ public class StudyMember {
 	@MapsId("studyId")
 	private StudyOnceImpl study;
 	@Enumerated(EnumType.STRING)
+	@Setter
 	private Attendance attendance;
 
 	public StudyMember(MemberImpl member, StudyOnceImpl study) {

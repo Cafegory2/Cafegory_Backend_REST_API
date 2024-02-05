@@ -17,7 +17,7 @@ import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.repository.MemberRepository;
-import com.example.demo.repository.StudyMemberRepositoryCustom;
+import com.example.demo.repository.StudyMemberRepository;
 import com.example.demo.repository.StudyOnceRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 
@@ -31,7 +31,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final CafeRepository cafeRepository;
 	private final StudyOnceRepository studyOnceRepository;
 	private final MemberRepository memberRepository;
-	private final StudyMemberRepositoryCustom studyMemberRepository;
+	private final StudyMemberRepository studyMemberRepository;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -48,12 +48,22 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public void tryQuit(long memberIdThatExpectedToQuit, long studyId) {
-
+		MemberImpl member = memberRepository.findById(memberIdThatExpectedToQuit)
+			.orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
+		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
+		if (studyOnce.getLeader().equals(member)) {
+			deleteStudy(studyOnce);
+		}
+		StudyMember needToRemoveStudyMember = studyOnce.tryQuit(member, LocalDateTime.now());
+		studyMemberRepository.delete(needToRemoveStudyMember);
 	}
 
-	@Override
-	public void tryCancel(long memberIdThatExpectedToCancel, long studyId) {
-
+	private void deleteStudy(StudyOnceImpl studyOnce) {
+		if (studyOnce.getStudyMembers().size() > 1) {
+			throw new IllegalStateException("카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다.");
+		}
+		studyOnceRepository.delete(studyOnce);
 	}
 
 	@Override

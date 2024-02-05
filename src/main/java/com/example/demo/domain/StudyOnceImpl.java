@@ -49,7 +49,7 @@ public class StudyOnceImpl implements StudyOnce {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "leader_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private MemberImpl leader;
-	@OneToMany(mappedBy = "study", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "study", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
 	private List<StudyMember> studyMembers;
 
 	@Builder
@@ -116,13 +116,21 @@ public class StudyOnceImpl implements StudyOnce {
 	}
 
 	@Override
-	public void tryQuit(Member memberThatExpectedToQuit) {
-
+	public StudyMember tryQuit(Member memberThatExpectedToQuit, LocalDateTime requestTime) {
+		validateQuitRequestTime(requestTime);
+		StudyMember studyMember = studyMembers.stream()
+			.filter(s -> s.getMember().getId().equals(memberThatExpectedToQuit.getId()))
+			.findFirst()
+			.orElseThrow(() -> new IllegalStateException("참여중인 카공이 아닙니다."));
+		studyMembers.remove(studyMember);
+		return studyMember;
 	}
 
-	@Override
-	public void tryCancel(Member memberThatExpectedToCancel) {
-
+	private void validateQuitRequestTime(LocalDateTime requestTime) {
+		Duration between = Duration.between(requestTime, startDateTime);
+		if (between.toSeconds() < 3600) {
+			throw new IllegalStateException("카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다.");
+		}
 	}
 
 	@Override

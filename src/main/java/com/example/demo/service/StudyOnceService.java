@@ -13,8 +13,6 @@ public interface StudyOnceService {
 
 	void tryQuit(long memberIdThatExpectedToQuit, long studyId);
 
-	void tryCancel(long memberIdThatExpectedToCancel, long studyId);
-
 	PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest);
 
 	StudyOnceSearchResponse searchByStudyId(long studyId);

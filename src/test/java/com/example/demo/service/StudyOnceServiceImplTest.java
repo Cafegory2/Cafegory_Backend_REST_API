@@ -268,4 +268,51 @@ class StudyOnceServiceImplTest {
 		return Stream.of(Arguments.of(start, end, end.minusSeconds(1), end.minusSeconds(1).plusHours(4)),
 			Arguments.of(start, end, start.plusSeconds(1), start.plusSeconds(1).plusHours(4)));
 	}
+
+	@Test
+	@DisplayName("카공 참여 취소 테스트")
+	void tryQuit() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long firstMemberId = initMember();
+		long secondMemberId = initMember();
+		long cafeId = initCafe();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		studyOnceService.tryJoin(secondMemberId, study.getId());
+		studyOnceService.tryQuit(secondMemberId, study.getId());
+	}
+
+	@Test
+	@DisplayName("참여중인 카공이 아니라 참여 취소 실패")
+	void tryQuitFailCauseNotJoin() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long firstMemberId = initMember();
+		long secondMemberId = initMember();
+		long cafeId = initCafe();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnceService.tryQuit(secondMemberId, study.getId()))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("참여중인 카공이 아닙니다.");
+	}
+
+	@Test
+	@DisplayName("다른 참여자가 있어서 카공장이 참여 취소 실패")
+	void tryQuitFailCauseNotOnlyLeader() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long firstMemberId = initMember();
+		long secondMemberId = initMember();
+		long cafeId = initCafe();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		studyOnceService.tryJoin(secondMemberId, study.getId());
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnceService.tryQuit(firstMemberId, study.getId()))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다.");
+	}
 }

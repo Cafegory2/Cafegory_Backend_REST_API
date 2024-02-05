@@ -101,4 +101,39 @@ class StudyOnceImplTest {
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage("이미 참여중인 카공입니다.");
 	}
+
+	@Test
+	@DisplayName("카공 참여 취소 테스트")
+	void tryQuit() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = MemberImpl.builder().id(2L).build();
+		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
+		studyOnce.tryJoin(member);
+		studyOnce.tryQuit(member, LocalDateTime.now().plusHours(3).minusSeconds(1));
+	}
+
+	@Test
+	@DisplayName("이미 카공 참여 인원이 확정되어 카공 참여 취소가 실패하는 테스트")
+	void tryQuitFailByTimeOver() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = MemberImpl.builder().id(2L).build();
+		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
+		studyOnce.tryJoin(member);
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnce.tryQuit(member, LocalDateTime.now().plusHours(3)))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다.");
+	}
+
+	@Test
+	@DisplayName("참여중인 카공이 아니라서 카공 참여 취소가 실패하는 테스트")
+	void tryQuitFailByNotJoin() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = MemberImpl.builder().id(2L).build();
+		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnce.tryQuit(member, LocalDateTime.now()))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("참여중인 카공이 아닙니다.");
+	}
 }

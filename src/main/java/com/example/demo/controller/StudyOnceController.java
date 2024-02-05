@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,15 @@ public class StudyOnceController {
 		long identityId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
 		studyOnceService.tryJoin(identityId, studyId);
+		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
+	}
+
+	@DeleteMapping("/{studyId:[0-9]+}")
+	public ResponseEntity<StudyOnceJoinResult> tryQuit(@PathVariable Long studyId,
+		@RequestHeader("Authorization") String authorization) {
+		long identityId = cafegoryTokenManager.getIdentityId(authorization);
+		LocalDateTime requestTime = LocalDateTime.now();
+		studyOnceService.tryQuit(identityId, studyId);
 		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
 }
