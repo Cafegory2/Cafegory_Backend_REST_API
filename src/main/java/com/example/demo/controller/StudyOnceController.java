@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
+import com.example.demo.dto.StudyOnceJoinResult;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.service.StudyOnceService;
@@ -45,5 +48,14 @@ public class StudyOnceController {
 		long identityId = cafegoryTokenManager.getIdentityId(authorization);
 		StudyOnceSearchResponse response = studyOnceService.createStudy(identityId, studyOnceCreateRequest);
 		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/{studyId:[0-9]+}")
+	public ResponseEntity<StudyOnceJoinResult> tryJoin(@PathVariable Long studyId,
+		@RequestHeader("Authorization") String authorization) {
+		long identityId = cafegoryTokenManager.getIdentityId(authorization);
+		LocalDateTime requestTime = LocalDateTime.now();
+		studyOnceService.tryJoin(identityId, studyId);
+		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
 }

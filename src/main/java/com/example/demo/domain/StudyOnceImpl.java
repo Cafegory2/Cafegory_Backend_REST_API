@@ -91,7 +91,28 @@ public class StudyOnceImpl implements StudyOnce {
 
 	@Override
 	public void tryJoin(Member memberThatExpectedToJoin) {
+		validateDuplicateJoin(memberThatExpectedToJoin);
+		validateConflictJoin(memberThatExpectedToJoin);
+		StudyMember studyMember = new StudyMember((MemberImpl)memberThatExpectedToJoin, this);
+		studyMembers.add(studyMember);
+		memberThatExpectedToJoin.addStudyMember(studyMember);
+	}
 
+	private void validateConflictJoin(Member memberThatExpectedToJoin) {
+		boolean joinFail = memberThatExpectedToJoin.getStudyMembers()
+			.stream()
+			.anyMatch(studyMember -> studyMember.isConflictWith(startDateTime, endDateTime));
+		if (joinFail) {
+			throw new IllegalStateException("해당 시간에 참여중인 카공이 이미 있습니다.");
+		}
+	}
+
+	private void validateDuplicateJoin(Member memberThatExpectedToJoin) {
+		boolean isAlreadyJoin = studyMembers.stream()
+			.anyMatch(studyMember -> studyMember.getMember().equals(memberThatExpectedToJoin));
+		if (isAlreadyJoin) {
+			throw new IllegalStateException("이미 참여중인 카공입니다.");
+		}
 	}
 
 	@Override

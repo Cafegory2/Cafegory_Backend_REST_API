@@ -2,12 +2,16 @@ package com.example.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -201,5 +205,67 @@ class StudyOnceServiceImplTest {
 		needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(leftLimitStart,
 			leftLimitEnd, cafeId);
 		studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest);
+	}
+
+	@Test
+	@DisplayName("카공 참여 테스트")
+	void tryJoin() {
+		long firstMemberId = initMember();
+		long secondMemberId = initMember();
+		long cafeId = initCafe();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
+			LocalDateTime.now().plusHours(7), cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		studyOnceService.tryJoin(secondMemberId, study.getId());
+	}
+
+	@Test
+	@DisplayName("이미 참여중인 카공이라 참여 실패")
+	void tryJoinFailCauseDuplicate() {
+		long firstMemberId = initMember();
+		long secondMemberId = initMember();
+		long cafeId = initCafe();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
+			LocalDateTime.now().plusHours(7), cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		//when
+		studyOnceService.tryJoin(secondMemberId, study.getId());
+		//then
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnceService.tryJoin(secondMemberId, study.getId()))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("이미 참여중인 카공입니다.");
+	}
+
+	@ParameterizedTest
+	@MethodSource("tryJoinFailCauseConflictParameters")
+	@DisplayName("해당 시간에 이미 참여중인 카공이 있어서 참여 실패")
+	void tryJoinFailCauseConflict(LocalDateTime start, LocalDateTime end, LocalDateTime conflictStart,
+		LocalDateTime conflictEnd) {
+		//given
+		long firstMemberId = initMember();
+		long secondMemberId = initMember();
+		long thirdMemberId = initMember();
+		long cafeId = initCafe();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		studyOnceService.tryJoin(secondMemberId, study.getId());
+		//when
+		StudyOnceCreateRequest conflictStudyOnceCreateRequest = makeStudyOnceCreateRequest(conflictStart, conflictEnd,
+			cafeId);
+		StudyOnceSearchResponse conflictStudy = studyOnceService.createStudy(thirdMemberId,
+			conflictStudyOnceCreateRequest);
+		//then
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getId()))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("해당 시간에 참여중인 카공이 이미 있습니다.");
+	}
+
+	static Stream<Arguments> tryJoinFailCauseConflictParameters() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		return Stream.of(Arguments.of(start, end, end.minusSeconds(1), end.minusSeconds(1).plusHours(4)),
+			Arguments.of(start, end, start.plusSeconds(1), start.plusSeconds(1).plusHours(4)));
 	}
 }

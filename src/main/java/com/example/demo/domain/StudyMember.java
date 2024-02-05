@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.ConstraintMode;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -40,5 +42,11 @@ public class StudyMember {
 		this.study = study;
 		id = new StudyMemberId(member.getId(), study.getId());
 		attendance = Attendance.YES;
+	}
+
+	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
+		LocalDateTime studyStartDateTime = study.getStartDateTime();
+		LocalDateTime studyEndDateTime = study.getEndDateTime();
+		return start.isBefore(studyEndDateTime) && studyStartDateTime.isBefore(end);
 	}
 }

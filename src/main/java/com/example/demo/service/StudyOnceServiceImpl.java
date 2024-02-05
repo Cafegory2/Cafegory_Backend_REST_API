@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
@@ -16,6 +17,7 @@ import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.StudyMemberRepositoryCustom;
 import com.example.demo.repository.StudyOnceRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 
@@ -29,10 +31,19 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final CafeRepository cafeRepository;
 	private final StudyOnceRepository studyOnceRepository;
 	private final MemberRepository memberRepository;
+	private final StudyMemberRepositoryCustom studyMemberRepository;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
-
+		MemberImpl member = memberRepository.findById(memberIdThatExpectedToJoin)
+			.orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
+		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
+		LocalDateTime startDateTime = studyOnce.getStartDateTime();
+		List<StudyMember> studyMembers = studyMemberRepository.findByMemberAndStudyDate(member,
+			startDateTime.toLocalDate());
+		member.setStudyMembers(studyMembers);
+		studyOnce.tryJoin(member);
 	}
 
 	@Override

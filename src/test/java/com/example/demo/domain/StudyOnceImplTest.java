@@ -1,6 +1,9 @@
 package com.example.demo.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Assertions;
@@ -45,5 +48,57 @@ class StudyOnceImplTest {
 			Arguments.of(start.minusHours(1), start, true),
 			Arguments.of(start.minusHours(1).plusSeconds(1), start, false)
 		);
+	}
+
+	@Test
+	@DisplayName("정상 동작 테스트")
+	void tryJoin() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = makeMember(2, LocalDateTime.now().plusHours(9), LocalDateTime.now().plusHours(13));
+		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
+		studyOnce.tryJoin(member);
+		List<MemberImpl> collect = studyOnce.getStudyMembers()
+			.stream()
+			.map(StudyMember::getMember)
+			.collect(Collectors.toList());
+		org.assertj.core.api.Assertions.assertThat(collect).contains(member);
+	}
+
+	private static StudyOnceImpl makeStudy(MemberImpl leader, LocalDateTime start, LocalDateTime end) {
+		return StudyOnceImpl.builder()
+			.startDateTime(start)
+			.endDateTime(end)
+			.leader(leader)
+			.build();
+	}
+
+	private static MemberImpl makeMember(long memberId, LocalDateTime start, LocalDateTime end) {
+		MemberImpl member = MemberImpl.builder().id(memberId).build();
+		StudyMember studyMember = new StudyMember(member, makeStudy(member, start, end));
+		member.setStudyMembers(new ArrayList<>(List.of(studyMember)));
+		return member;
+	}
+
+	@Test
+	@DisplayName("이미 참여중인 카공이 있어서 실패하는 테스트")
+	void tryJoinFailByConflict() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = makeMember(2, LocalDateTime.now().plusHours(9), LocalDateTime.now().plusHours(13));
+		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(5), LocalDateTime.now().plusHours(9));
+		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("해당 시간에 참여중인 카공이 이미 있습니다.");
+	}
+
+	@Test
+	@DisplayName("이미 참여중인 카공이라 실패하는 테스트")
+	void tryJoinFailByDuplicate() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = makeMember(2, LocalDateTime.now().plusHours(9), LocalDateTime.now().plusHours(13));
+		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
+		studyOnce.tryJoin(member);
+		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("이미 참여중인 카공입니다.");
 	}
 }
