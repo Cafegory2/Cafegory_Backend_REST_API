@@ -263,9 +263,9 @@ class CafeRepositorySearchMethodTest {
 		//given
 		CafeSearchCondition searchCondition1 = createSearchConditionByRequirements(isAbleToStudy, region);
 		//when
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition1);
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition1);
 		//then
-		assertThat(cafes1.size()).isEqualTo(expected);
+		assertThat(cafes.size()).isEqualTo(expected);
 	}
 
 	private static Stream<Arguments> provideConditionAndExpected() {
@@ -292,11 +292,11 @@ class CafeRepositorySearchMethodTest {
 		setUp("상수동", MaxAllowableStay.OVER_SIX_HOUR, true, 3_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
 		//given
-		CafeSearchCondition searchCondition1 = createSearchConditionByMaxTime(isAbleToStudy, region, maxTime);
+		CafeSearchCondition searchCondition = createSearchConditionByMaxTime(isAbleToStudy, region, maxTime);
 		//when
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition1);
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition);
 		//then
-		assertThat(cafes1.size()).isEqualTo(expected);
+		assertThat(cafes.size()).isEqualTo(expected);
 	}
 
 	private static Stream<Arguments> provideConditionByMaxTimeAndExpected() {
@@ -328,10 +328,10 @@ class CafeRepositorySearchMethodTest {
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 12_000, LocalTime.of(9, 0), LocalTime.of(21, 0));
 
 		//when
-		CafeSearchCondition searchCondition1 = createSearchConditionByMinMenuPrice(isAbleToStudy, region, minMenuPrice);
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition1);
+		CafeSearchCondition searchCondition = createSearchConditionByMinMenuPrice(isAbleToStudy, region, minMenuPrice);
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilterAndNoPaging(searchCondition);
 		//then
-		assertThat(cafes1.size()).isEqualTo(expected);
+		assertThat(cafes.size()).isEqualTo(expected);
 	}
 
 	private static Stream<Arguments> provideConditionByMinMenuPriceAndExpected() {
@@ -362,12 +362,12 @@ class CafeRepositorySearchMethodTest {
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(10, 0), LocalTime.of(21, 0));
 
 		//given
-		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(isAbleToStudy, region,
+		CafeSearchCondition cafeSearchCondition = createSearchConditionByFilteringTime(isAbleToStudy, region,
 			filteringStartTime, filteringEndTime, now);
 		//when
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition1);
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition);
 		//then
-		assertThat(cafes1.size()).isEqualTo(expected);
+		assertThat(cafes.size()).isEqualTo(expected);
 	}
 
 	private static Stream<Arguments> provideConditionByFilteringTimeAndExpected() {
@@ -393,12 +393,12 @@ class CafeRepositorySearchMethodTest {
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(0, 0), LocalTime.MAX);
 
 		//given
-		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(true, "상수동", 0, 24,
+		CafeSearchCondition cafeSearchCondition = createSearchConditionByFilteringTime(true, "상수동", 0, 24,
 			LocalDateTime.of(2024, 1, 29, 8, 0));
 		//when
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition1);
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition);
 		//then
-		assertThat(cafes1.size()).isEqualTo(40);
+		assertThat(cafes.size()).isEqualTo(40);
 	}
 
 	@ParameterizedTest
@@ -410,12 +410,12 @@ class CafeRepositorySearchMethodTest {
 		setUp("상수동", MaxAllowableStay.TWO_HOUR, true, 2_500, LocalTime.of(9, 0), LocalTime.of(2, 0));
 
 		//given
-		CafeSearchCondition cafeSearchCondition1 = createSearchConditionByFilteringTime(isAbleToStudy, region,
+		CafeSearchCondition cafeSearchCondition = createSearchConditionByFilteringTime(isAbleToStudy, region,
 			filteringStartTime, filteringEndTime, now);
 		//when
-		List<CafeImpl> cafes1 = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition1);
+		List<CafeImpl> cafes = cafeRepository.findWithDynamicFilterAndNoPaging(cafeSearchCondition);
 		//then
-		assertThat(cafes1.size()).isEqualTo(expected);
+		assertThat(cafes.size()).isEqualTo(expected);
 	}
 
 	private static Stream<Arguments> provideConditionByFilteringTimeAndExpected2() {
@@ -470,10 +470,10 @@ class CafeRepositorySearchMethodTest {
 		//given
 		CafeSearchCondition searchCondition = createSearchConditionByRequirements(true, "상수동");
 		//when
-		Page<CafeImpl> pagedCafes1 = cafeRepository.findWithDynamicFilter(searchCondition,
+		Page<CafeImpl> pagedCafes = cafeRepository.findWithDynamicFilter(searchCondition,
 			PageRequestCustom.of(page, size));
 		//then
-		assertThat(pagedCafes1.getContent().size()).isEqualTo(expected);
+		assertThat(pagedCafes.getContent().size()).isEqualTo(expected);
 	}
 
 	private static Stream<Arguments> providePagingAndExpected() {
