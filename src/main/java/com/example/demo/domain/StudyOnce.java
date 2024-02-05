@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public interface StudyOnce {
 
-	void tryJoin(Member memberThatExpectedToJoin);
+	void tryJoin(Member memberThatExpectedToJoin, LocalDateTime requestTime);
 
 	/**
 	 * 스터디 참여를 취소하는 로직이 구현된 메서드

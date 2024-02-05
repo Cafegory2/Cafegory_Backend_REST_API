@@ -90,7 +90,8 @@ public class StudyOnceImpl implements StudyOnce {
 	}
 
 	@Override
-	public void tryJoin(Member memberThatExpectedToJoin) {
+	public void tryJoin(Member memberThatExpectedToJoin, LocalDateTime requestTime) {
+		validateJoinRequestTime(requestTime);
 		validateDuplicateJoin(memberThatExpectedToJoin);
 		validateConflictJoin(memberThatExpectedToJoin);
 		StudyMember studyMember = new StudyMember((MemberImpl)memberThatExpectedToJoin, this);
@@ -112,6 +113,13 @@ public class StudyOnceImpl implements StudyOnce {
 			.anyMatch(studyMember -> studyMember.getMember().equals(memberThatExpectedToJoin));
 		if (isAlreadyJoin) {
 			throw new IllegalStateException("이미 참여중인 카공입니다.");
+		}
+	}
+
+	private void validateJoinRequestTime(LocalDateTime requestTime) {
+		Duration between = Duration.between(requestTime, startDateTime);
+		if (between.toSeconds() < 3600) {
+			throw new IllegalStateException("카공 인원 모집이 확정된 이후 참여 신청을 할 수 없습니다.");
 		}
 	}
 

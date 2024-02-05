@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class StudyOnceImplTest {
+	static final LocalDateTime NOW = LocalDateTime.now();
 
 	@ParameterizedTest
 	@MethodSource("canJoinParameter")
@@ -31,7 +32,7 @@ class StudyOnceImplTest {
 	@Test
 	@DisplayName("정상적으로 생성되었을 때 의존성 제대로 설정되었는지 확인하는 테스트")
 	void create() {
-		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
+		LocalDateTime start = NOW.plusHours(3).plusMinutes(1);
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
 		StudyOnceImpl studyOnce = StudyOnceImpl.builder()
 			.startDateTime(start)
@@ -43,7 +44,7 @@ class StudyOnceImplTest {
 	}
 
 	static Stream<Arguments> canJoinParameter() {
-		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime start = NOW.plusHours(4);
 		return Stream.of(
 			Arguments.of(start.minusHours(1), start, true),
 			Arguments.of(start.minusHours(1).plusSeconds(1), start, false)
@@ -51,12 +52,12 @@ class StudyOnceImplTest {
 	}
 
 	@Test
-	@DisplayName("정상 동작 테스트")
+	@DisplayName("카공 참여 테스트")
 	void tryJoin() {
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
-		MemberImpl member = makeMember(2, LocalDateTime.now().plusHours(9), LocalDateTime.now().plusHours(13));
-		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
-		studyOnce.tryJoin(member);
+		MemberImpl member = makeMember(2, NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
 		List<MemberImpl> collect = studyOnce.getStudyMembers()
 			.stream()
 			.map(StudyMember::getMember)
@@ -80,12 +81,24 @@ class StudyOnceImplTest {
 	}
 
 	@Test
+	@DisplayName("이미 카공 참여 인원이 확정되어 카공 참여 실패하는 테스트")
+	void tryJoinFailByTimeOver() {
+		MemberImpl leader = MemberImpl.builder().id(1L).build();
+		MemberImpl member = MemberImpl.builder().id(2L).build();
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		org.assertj.core.api.Assertions.assertThatThrownBy(
+				() -> studyOnce.tryJoin(member, NOW.plusHours(3).plusSeconds(1)))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessage("카공 인원 모집이 확정된 이후 참여 신청을 할 수 없습니다.");
+	}
+
+	@Test
 	@DisplayName("이미 참여중인 카공이 있어서 실패하는 테스트")
 	void tryJoinFailByConflict() {
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
-		MemberImpl member = makeMember(2, LocalDateTime.now().plusHours(9), LocalDateTime.now().plusHours(13));
-		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(5), LocalDateTime.now().plusHours(9));
-		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member))
+		MemberImpl member = makeMember(2, NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(5), NOW.plusHours(9));
+		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member, NOW))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage("해당 시간에 참여중인 카공이 이미 있습니다.");
 	}
@@ -94,10 +107,10 @@ class StudyOnceImplTest {
 	@DisplayName("이미 참여중인 카공이라 실패하는 테스트")
 	void tryJoinFailByDuplicate() {
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
-		MemberImpl member = makeMember(2, LocalDateTime.now().plusHours(9), LocalDateTime.now().plusHours(13));
-		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
-		studyOnce.tryJoin(member);
-		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member))
+		MemberImpl member = makeMember(2, NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		studyOnce.tryJoin(member, NOW);
+		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member, NOW))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage("이미 참여중인 카공입니다.");
 	}
@@ -107,9 +120,9 @@ class StudyOnceImplTest {
 	void tryQuit() {
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
 		MemberImpl member = MemberImpl.builder().id(2L).build();
-		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
-		studyOnce.tryJoin(member);
-		studyOnce.tryQuit(member, LocalDateTime.now().plusHours(3).minusSeconds(1));
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		studyOnce.tryJoin(member, NOW);
+		studyOnce.tryQuit(member, NOW.plusHours(3).minusSeconds(1));
 	}
 
 	@Test
@@ -117,10 +130,10 @@ class StudyOnceImplTest {
 	void tryQuitFailByTimeOver() {
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
 		MemberImpl member = MemberImpl.builder().id(2L).build();
-		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
-		studyOnce.tryJoin(member);
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		studyOnce.tryJoin(member, NOW);
 		org.assertj.core.api.Assertions.assertThatThrownBy(
-				() -> studyOnce.tryQuit(member, LocalDateTime.now().plusHours(3)))
+				() -> studyOnce.tryQuit(member, NOW.plusHours(3).plusSeconds(1)))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage("카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다.");
 	}
@@ -130,9 +143,9 @@ class StudyOnceImplTest {
 	void tryQuitFailByNotJoin() {
 		MemberImpl leader = MemberImpl.builder().id(1L).build();
 		MemberImpl member = MemberImpl.builder().id(2L).build();
-		StudyOnceImpl studyOnce = makeStudy(leader, LocalDateTime.now().plusHours(4), LocalDateTime.now().plusHours(8));
+		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
 		org.assertj.core.api.Assertions.assertThatThrownBy(
-				() -> studyOnce.tryQuit(member, LocalDateTime.now()))
+				() -> studyOnce.tryQuit(member, NOW))
 			.isInstanceOf(IllegalStateException.class)
 			.hasMessage("참여중인 카공이 아닙니다.");
 	}

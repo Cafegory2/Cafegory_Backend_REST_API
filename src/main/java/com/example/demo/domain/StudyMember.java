@@ -49,6 +49,7 @@ public class StudyMember {
 	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
 		LocalDateTime studyStartDateTime = study.getStartDateTime();
 		LocalDateTime studyEndDateTime = study.getEndDateTime();
-		return start.isBefore(studyEndDateTime) && studyStartDateTime.isBefore(end);
+		return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (studyStartDateTime.isBefore(
+			end) || studyStartDateTime.isEqual(end));
 	}
 }

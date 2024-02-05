@@ -43,7 +43,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		List<StudyMember> studyMembers = studyMemberRepository.findByMemberAndStudyDate(member,
 			startDateTime.toLocalDate());
 		member.setStudyMembers(studyMembers);
-		studyOnce.tryJoin(member);
+		studyOnce.tryJoin(member, LocalDateTime.now());
 	}
 
 	@Override
