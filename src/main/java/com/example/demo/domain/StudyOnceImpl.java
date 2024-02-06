@@ -67,6 +67,7 @@ public class StudyOnceImpl implements StudyOnce {
 		this.isEnd = isEnd;
 		this.ableToTalk = ableToTalk;
 		this.leader = leader;
+		validateConflictJoin(leader);
 		studyMembers = new ArrayList<>();
 		studyMembers.add(new StudyMember(leader, this));
 	}

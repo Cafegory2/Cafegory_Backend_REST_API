@@ -103,22 +103,19 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		CafeImpl cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
 		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
-		MemberImpl leader = memberRepository.findById(leaderId).orElseThrow();
-		validateAlreadyStudyLeader(leaderId, studyOnceCreateRequest);
+		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
+		MemberImpl leader = getMember(leaderId, startDateTime);
 		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe, leader);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
 		return makeStudyOnceSearchResponse(saved, canJoin);
 	}
 
-	private void validateAlreadyStudyLeader(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
-		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
-		LocalDateTime endDateTime = studyOnceCreateRequest.getEndDateTime();
-		boolean existsByLeaderIdAndStudyTime = studyOnceRepository.existsByLeaderIdAndStudyTime(leaderId, startDateTime,
-			endDateTime);
-		if (existsByLeaderIdAndStudyTime) {
-			throw new IllegalArgumentException("해당 시간에 이미 카공장으로 참여중인 스터디가 있습니다.");
-		}
+	private MemberImpl getMember(long leaderId, LocalDateTime startDateTime) {
+		MemberImpl leader = memberRepository.findById(leaderId).orElseThrow();
+		var studyMembers = studyMemberRepository.findByMemberAndStudyDate(leader, startDateTime.toLocalDate());
+		leader.setStudyMembers(studyMembers);
+		return leader;
 	}
 
 	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,

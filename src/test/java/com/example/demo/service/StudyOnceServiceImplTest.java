@@ -172,15 +172,42 @@ class StudyOnceServiceImplTest {
 		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
 		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
 			rightLimitEnd, cafeId);
-		Assertions.assertThrows(IllegalArgumentException.class,
+		Assertions.assertThrows(IllegalStateException.class,
 			() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest));
 		// 왼쪽에서 겹침
 		LocalDateTime leftLimitEnd = start;
 		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
 		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
 			leftLimitEnd, cafeId);
-		Assertions.assertThrows(IllegalArgumentException.class,
+		Assertions.assertThrows(IllegalStateException.class,
 			() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest2));
+	}
+
+	@Test
+	@DisplayName("이미 해당 시간에 참여중인 카공이 있는 경우 카공 생성 실패")
+	void createFailByAlreadyStudyMember() {
+		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
+		long cafeId = initCafe();
+		long leaderId = initMember();
+		long memberId = initMember();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceSearchResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		studyOnceService.tryJoin(memberId, study.getId());
+		// 오른쪽 끝에서 겹침
+		LocalDateTime rightLimitStart = end;
+		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
+			rightLimitEnd, cafeId);
+		Assertions.assertThrows(IllegalStateException.class,
+			() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest));
+		// 왼쪽에서 겹침
+		LocalDateTime leftLimitEnd = start;
+		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
+			leftLimitEnd, cafeId);
+		Assertions.assertThrows(IllegalStateException.class,
+			() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest2));
 	}
 
 	@Test
