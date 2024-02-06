@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.BusinessHourOpenChecker;
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.CafeSearchCondition;
 import com.example.demo.domain.OpenChecker;
 import com.example.demo.dto.BusinessHourResponse;
-import com.example.demo.dto.CafeSearchCondition;
 import com.example.demo.dto.CafeSearchRequest;
 import com.example.demo.dto.CafeSearchResponse;
 import com.example.demo.dto.PagedResponse;
@@ -29,24 +29,30 @@ import lombok.RequiredArgsConstructor;
 public class CafeQueryServiceImpl implements CafeQueryService {
 
 	private final CafeQueryRepository cafeQueryRepository;
+	private OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
 
 	@Override
 	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
-
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
+		CafeSearchCondition cafeSearchCondition = createCafeSearchCondition(request);
 
-		CafeSearchCondition newSearchCondition = new CafeSearchCondition.Builder(request.isCanStudy(),
-			request.getArea())
-			.maxTime(request.getMaxTime())
-			.minMenuPrice(request.getMinBeveragePrice())
-			.build();
-
-		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(newSearchCondition,
+		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(cafeSearchCondition,
 			pageable);
+		return createPagedResponse(pagedCafes, mapToResponseList(pagedCafes));
+	}
 
-		OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
+	private PagedResponse<CafeSearchResponse> createPagedResponse(Page<CafeImpl> pagedCafes,
+		List<CafeSearchResponse> cafeSearchResponses) {
+		return PagedResponse.createWithFirstPageAsOne(
+			pagedCafes.getNumber(),
+			pagedCafes.getTotalPages(),
+			pagedCafes.getNumberOfElements(),
+			cafeSearchResponses
+		);
+	}
 
-		List<CafeSearchResponse> cafeSearchResponses = pagedCafes.getContent().stream()
+	private List<CafeSearchResponse> mapToResponseList(Page<CafeImpl> pagedCafes) {
+		return pagedCafes.getContent().stream()
 			.map(cafe ->
 				new CafeSearchResponse(
 					cafe.getId(),
@@ -67,12 +73,16 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 				)
 			)
 			.collect(Collectors.toList());
-		return PagedResponse.createWithFirstPageAsOne(
-			pagedCafes.getNumber(),
-			pagedCafes.getTotalPages(),
-			pagedCafes.getNumberOfElements(),
-			cafeSearchResponses
-		);
+	}
+
+	private CafeSearchCondition createCafeSearchCondition(CafeSearchRequest request) {
+		return new CafeSearchCondition.Builder(request.isCanStudy(),
+			request.getArea())
+			.maxTime(request.getMaxTime())
+			.minMenuPrice(request.getMinBeveragePrice())
+			.startTime(request.getStartTime())
+			.endTime(request.getEndTime())
+			.build();
 	}
 
 }
