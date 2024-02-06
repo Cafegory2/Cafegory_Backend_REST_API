@@ -35,14 +35,10 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
-		MemberImpl member = memberRepository.findById(memberIdThatExpectedToJoin)
-			.orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
 		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
 			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
 		LocalDateTime startDateTime = studyOnce.getStartDateTime();
-		List<StudyMember> studyMembers = studyMemberRepository.findByMemberAndStudyDate(member,
-			startDateTime.toLocalDate());
-		member.setStudyMembers(studyMembers);
+		MemberImpl member = getMember(memberIdThatExpectedToJoin, startDateTime);
 		studyOnce.tryJoin(member, LocalDateTime.now());
 	}
 
