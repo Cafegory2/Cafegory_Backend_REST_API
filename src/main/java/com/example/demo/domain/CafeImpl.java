@@ -62,6 +62,10 @@ public class CafeImpl implements Cafe {
 	@Builder.Default
 	private List<Menu> menus = new ArrayList<>();
 
+	@OneToMany(mappedBy = "cafe")
+	@Builder.Default
+	private List<StudyOnceImpl> studyOnceGroup = new ArrayList<>();
+
 	@Override
 	public String showFullAddress() {
 		return address.showFullAddress();
