@@ -5,14 +5,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceResponse;
+import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.StudyMemberRepository;
 import com.example.demo.repository.StudyOnceRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 
@@ -20,24 +25,41 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private final CafeRepository cafeRepository;
 	private final StudyOnceRepository studyOnceRepository;
+	private final MemberRepository memberRepository;
+	private final StudyMemberRepository studyMemberRepository;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
-
+		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
+		LocalDateTime startDateTime = studyOnce.getStartDateTime();
+		MemberImpl member = getMember(memberIdThatExpectedToJoin, startDateTime);
+		studyOnce.tryJoin(member, LocalDateTime.now());
 	}
 
 	@Override
 	public void tryQuit(long memberIdThatExpectedToQuit, long studyId) {
-
+		MemberImpl member = memberRepository.findById(memberIdThatExpectedToQuit)
+			.orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
+		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
+		if (studyOnce.getLeader().equals(member)) {
+			deleteStudy(studyOnce);
+		}
+		StudyMember needToRemoveStudyMember = studyOnce.tryQuit(member, LocalDateTime.now());
+		studyMemberRepository.delete(needToRemoveStudyMember);
 	}
 
-	@Override
-	public void tryCancel(long memberIdThatExpectedToCancel, long studyId) {
-
+	private void deleteStudy(StudyOnceImpl studyOnce) {
+		if (studyOnce.getStudyMembers().size() > 1) {
+			throw new IllegalStateException("카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다.");
+		}
+		studyOnceRepository.delete(studyOnce);
 	}
 
 	@Override
@@ -76,13 +98,24 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		CafeImpl cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId()).orElseThrow();
-		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe);
+		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
+		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
+		MemberImpl leader = getMember(leaderId, startDateTime);
+		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe, leader);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
 		return makeStudyOnceSearchResponse(saved, canJoin);
 	}
 
-	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe) {
+	private MemberImpl getMember(long leaderId, LocalDateTime startDateTime) {
+		MemberImpl leader = memberRepository.findById(leaderId).orElseThrow();
+		var studyMembers = studyMemberRepository.findByMemberAndStudyDate(leader, startDateTime.toLocalDate());
+		leader.setStudyMembers(studyMembers);
+		return leader;
+	}
+
+	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,
+		MemberImpl leader) {
 		return StudyOnceImpl.builder()
 			.name(studyOnceCreateRequest.getName())
 			.startDateTime(studyOnceCreateRequest.getStartDateTime())
@@ -92,6 +125,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			.isEnd(false)
 			.ableToTalk(studyOnceCreateRequest.isCanTalk())
 			.cafe(cafe)
+			.leader(leader)
 			.build();
 
 	}

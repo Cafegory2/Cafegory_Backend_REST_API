@@ -1,5 +1,8 @@
 package com.example.demo.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -11,12 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Builder
@@ -37,4 +42,15 @@ public class MemberImpl implements Member {
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "thumbnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private ThumbnailImage thumbnailImage;
+	@Transient
+	@Builder.Default
+	// 회원은 오래 활동한 경우 매우 많은 스터디에 참여했을 수 있다. 따라서 이를 무작정 모두 조회하면 메모리 오버플로우가 발생할 수 있다.
+	// 별도의 레퍼지토리를 통해 적절한 범위의 StudyMember 엔티티를 조회한 뒤 주입해야 한다.
+	@Setter
+	private List<StudyMember> studyMembers = new ArrayList<>();
+
+	@Override
+	public void addStudyMember(StudyMember studyMember) {
+		studyMembers.add(studyMember);
+	}
 }
