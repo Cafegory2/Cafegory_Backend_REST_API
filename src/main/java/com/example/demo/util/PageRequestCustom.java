@@ -11,14 +11,14 @@ public class PageRequestCustom {
 
 	public static org.springframework.data.domain.Pageable createByDefault() {
 		return org.springframework.data.domain.PageRequest.of(DEFAULT_PAGE - 1, DEFAULT_SIZE, DEFAULT_DIRECTION,
-			"create");
+			"id");
 	}
 
 	public static org.springframework.data.domain.Pageable of(int page, int size) {
 		int validatedPage = (page <= 0) ? 1 : page;
 		int validateSize = (size > MAX_SIZE ? DEFAULT_SIZE : size);
 		return org.springframework.data.domain.PageRequest.of(validatedPage - 1, validateSize, DEFAULT_DIRECTION,
-			"create");
+			"id");
 	}
 
 }
