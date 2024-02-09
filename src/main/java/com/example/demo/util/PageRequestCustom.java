@@ -6,7 +6,7 @@ public class PageRequestCustom {
 
 	private static final int DEFAULT_PAGE = 1;
 	private static final int DEFAULT_SIZE = 10;
-	private static final int MAX_SIZE = 50;
+	private static final int MAX_SIZE = 30;
 	private static final Sort.Direction DEFAULT_DIRECTION = Sort.Direction.DESC;
 
 	public static org.springframework.data.domain.Pageable createByDefault() {
