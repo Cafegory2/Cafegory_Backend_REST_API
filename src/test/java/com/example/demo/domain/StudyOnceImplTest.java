@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import com.example.demo.exception.CafegoryException;
 
 class StudyOnceImplTest {
 	static final LocalDateTime NOW = LocalDateTime.now();
@@ -88,8 +92,8 @@ class StudyOnceImplTest {
 		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
 		org.assertj.core.api.Assertions.assertThatThrownBy(
 				() -> studyOnce.tryJoin(member, NOW.plusHours(3).plusSeconds(1)))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("카공 인원 모집이 확정된 이후 참여 신청을 할 수 없습니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_TOO_LATE_JOIN.getErrorMessage());
 	}
 
 	@Test
@@ -99,8 +103,8 @@ class StudyOnceImplTest {
 		MemberImpl member = makeMember(2, NOW.plusHours(9), NOW.plusHours(13));
 		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(5), NOW.plusHours(9));
 		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member, NOW))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("해당 시간에 참여중인 카공이 이미 있습니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
 
 	@Test
@@ -111,8 +115,8 @@ class StudyOnceImplTest {
 		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
 		studyOnce.tryJoin(member, NOW);
 		org.assertj.core.api.Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member, NOW))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("이미 참여중인 카공입니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_DUPLICATE.getErrorMessage());
 	}
 
 	@Test
@@ -134,8 +138,8 @@ class StudyOnceImplTest {
 		studyOnce.tryJoin(member, NOW);
 		org.assertj.core.api.Assertions.assertThatThrownBy(
 				() -> studyOnce.tryQuit(member, NOW.plusHours(3).plusSeconds(1)))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_TOO_LATE_QUIT.getErrorMessage());
 	}
 
 	@Test
@@ -146,7 +150,7 @@ class StudyOnceImplTest {
 		StudyOnceImpl studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
 		org.assertj.core.api.Assertions.assertThatThrownBy(
 				() -> studyOnce.tryQuit(member, NOW))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("참여중인 카공이 아닙니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_TRY_QUIT_NOT_JOIN.getErrorMessage());
 	}
 }

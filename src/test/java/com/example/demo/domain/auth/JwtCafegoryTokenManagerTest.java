@@ -1,5 +1,7 @@
 package com.example.demo.domain.auth;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.exception.CafegoryException;
 
 class JwtCafegoryTokenManagerTest {
 	private final String testSecret = "01234567890123456789012345678901234567890123456789";
@@ -106,7 +109,7 @@ class JwtCafegoryTokenManagerTest {
 	private String makeAccessToken() {
 		jwtManager.claim("memberId", "1");
 		jwtManager.claim("tokenType", "access");
-		jwtManager.setLife(Date.from(Instant.now()), 0);
+		jwtManager.setLife(Date.from(Instant.now()), 10000);
 		return jwtManager.make();
 	}
 
@@ -136,8 +139,9 @@ class JwtCafegoryTokenManagerTest {
 	void canRefreshFalseCauseRefreshTokenExpired() {
 		String refreshToken = makeExpiredRefreshToken();
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
-		boolean canRefresh = jwtCafegoryTokenManager.canRefresh(refreshToken);
-		Assertions.assertThat(canRefresh).isEqualTo(false);
+		Assertions.assertThatThrownBy(() -> jwtCafegoryTokenManager.canRefresh(refreshToken))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(JWT_EXPIRED.getErrorMessage());
 	}
 
 	private String makeExpiredRefreshToken() {

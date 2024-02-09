@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +19,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -76,17 +81,17 @@ public class StudyOnceImpl implements StudyOnce {
 		LocalDateTime now = LocalDateTime.now();
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < 3 * 60 * 60) {
-			throw new IllegalArgumentException("카공 시작 시간은 현재 시간보다 최소 3시간 이후여야 합니다.");
+			throw new CafegoryException(ExceptionType.STUDY_ONCE_WRONG_START_TIME);
 		}
 	}
 
 	private static void validateStudyOnceTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		Duration between = Duration.between(startDateTime, endDateTime);
 		if (between.toSeconds() < 60 * 60) {
-			throw new IllegalArgumentException("카공 시간은 1시간 이상이어야 합니다.");
+			throw new CafegoryException(STUDY_ONCE_SHORT_DURATION);
 		}
 		if (between.toSeconds() > 5 * 60 * 60) {
-			throw new IllegalArgumentException("카공 시간은 5시간 미만이어야 합니다.");
+			throw new CafegoryException(STUDY_ONCE_LONG_DURATION);
 		}
 	}
 
@@ -105,7 +110,7 @@ public class StudyOnceImpl implements StudyOnce {
 			.stream()
 			.anyMatch(studyMember -> studyMember.isConflictWith(startDateTime, endDateTime));
 		if (joinFail) {
-			throw new IllegalStateException("해당 시간에 참여중인 카공이 이미 있습니다.");
+			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
 		}
 	}
 
@@ -113,14 +118,14 @@ public class StudyOnceImpl implements StudyOnce {
 		boolean isAlreadyJoin = studyMembers.stream()
 			.anyMatch(studyMember -> studyMember.getMember().equals(memberThatExpectedToJoin));
 		if (isAlreadyJoin) {
-			throw new IllegalStateException("이미 참여중인 카공입니다.");
+			throw new CafegoryException(STUDY_ONCE_DUPLICATE);
 		}
 	}
 
 	private void validateJoinRequestTime(LocalDateTime requestTime) {
 		Duration between = Duration.between(requestTime, startDateTime);
 		if (between.toSeconds() < 3600) {
-			throw new IllegalStateException("카공 인원 모집이 확정된 이후 참여 신청을 할 수 없습니다.");
+			throw new CafegoryException(STUDY_ONCE_TOO_LATE_JOIN);
 		}
 	}
 
@@ -130,7 +135,7 @@ public class StudyOnceImpl implements StudyOnce {
 		StudyMember studyMember = studyMembers.stream()
 			.filter(s -> s.getMember().getId().equals(memberThatExpectedToQuit.getId()))
 			.findFirst()
-			.orElseThrow(() -> new IllegalStateException("참여중인 카공이 아닙니다."));
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_TRY_QUIT_NOT_JOIN));
 		studyMembers.remove(studyMember);
 		return studyMember;
 	}
@@ -138,7 +143,7 @@ public class StudyOnceImpl implements StudyOnce {
 	private void validateQuitRequestTime(LocalDateTime requestTime) {
 		Duration between = Duration.between(requestTime, startDateTime);
 		if (between.toSeconds() < 3600) {
-			throw new IllegalStateException("카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다.");
+			throw new CafegoryException(STUDY_ONCE_TOO_LATE_QUIT);
 		}
 	}
 

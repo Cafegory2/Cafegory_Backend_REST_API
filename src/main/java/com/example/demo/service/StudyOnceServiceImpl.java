@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceResponse;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyMemberRepository;
 import com.example.demo.repository.StudyOnceRepository;
@@ -36,7 +39,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
 		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		LocalDateTime startDateTime = studyOnce.getStartDateTime();
 		MemberImpl member = getMember(memberIdThatExpectedToJoin, startDateTime);
 		studyOnce.tryJoin(member, LocalDateTime.now());
@@ -45,9 +48,9 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public void tryQuit(long memberIdThatExpectedToQuit, long studyId) {
 		MemberImpl member = memberRepository.findById(memberIdThatExpectedToQuit)
-			.orElseThrow(() -> new IllegalArgumentException("없는 회원입니다."));
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 카공입니다."));
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		if (studyOnce.getLeader().equals(member)) {
 			deleteStudy(studyOnce);
 		}
@@ -57,7 +60,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private void deleteStudy(StudyOnceImpl studyOnce) {
 		if (studyOnce.getStudyMembers().size() > 1) {
-			throw new IllegalStateException("카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다.");
+			throw new CafegoryException(STUDY_ONCE_LEADER_QUIT_FAIL);
 		}
 		studyOnceRepository.delete(studyOnce);
 	}
@@ -85,7 +88,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyOnceSearchResponse searchByStudyId(long studyId) {
 		StudyOnceImpl searched = studyOnceRepository.findById(studyId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 카공을 찾을 수 없습니다."));
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		boolean canJoin = searched.canJoin(LocalDateTime.now());
 		return makeStudyOnceSearchResponse(searched, canJoin);
 	}
