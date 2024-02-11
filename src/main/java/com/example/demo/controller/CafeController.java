@@ -33,7 +33,7 @@ public class CafeController {
 
 	@GetMapping("/cafe/{cafeId}")
 	public ResponseEntity<CafeResponse> cafe(@PathVariable Long cafeId) {
-		CafeResponse response = cafeQueryService.findCafeById(cafeId);
+		CafeResponse response = cafeQueryService.searchCafeById(cafeId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

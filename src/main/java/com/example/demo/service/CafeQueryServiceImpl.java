@@ -50,7 +50,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	}
 
 	@Override
-	public CafeResponse findCafeById(Long cafeId) {
+	public CafeResponse searchCafeById(Long cafeId) {
 		CafeImpl findCafe = cafeRepository.findById(cafeId)
 			.orElseThrow(() -> new IllegalArgumentException("없는 카페입니다."));
 
