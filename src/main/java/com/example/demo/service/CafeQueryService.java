@@ -6,6 +6,6 @@ import com.example.demo.dto.PagedResponse;
 
 public interface CafeQueryService {
 
-	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request);
+	PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request);
 
 }
