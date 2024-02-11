@@ -164,38 +164,34 @@ class StudyOnceServiceImplTest {
 			.build();
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("createFailByAlreadyStudyLeaderParameters")
 	@DisplayName("이미 해당 시간에 카공장으로 참여중인 카공이 있는 경우 카공 생성 실패")
-	void createFailByAlreadyStudyLeader() {
-		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
-		LocalDateTime end = start.plusHours(1);
+	void createFailByAlreadyStudyLeader(LocalDateTime start, LocalDateTime end, LocalDateTime left,
+		LocalDateTime right) {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
-		// 오른쪽 끝에서 겹침
-		LocalDateTime rightLimitStart = end;
-		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
-			rightLimitEnd, cafeId);
+
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
 		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest))
-			.isInstanceOf(CafegoryException.class)
-			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
-		// 왼쪽에서 겹침
-		LocalDateTime leftLimitEnd = start;
-		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
-			leftLimitEnd, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest2))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
 
-	@Test
+	static Stream<Arguments> createFailByAlreadyStudyLeaderParameters() {
+		LocalDateTime start = LocalDateTime.now().plusYears(1);
+		LocalDateTime end = start.plusHours(4);
+		return Stream.of(Arguments.of(start, end, end, end.plusHours(4)),
+			Arguments.of(start, end, start.minusHours(4), start));
+	}
+
+	@ParameterizedTest
+	@MethodSource("createFailByAlreadyStudyLeaderParameters")
 	@DisplayName("이미 해당 시간에 참여중인 카공이 있는 경우 카공 생성 실패")
-	void createFailByAlreadyStudyMember() {
-		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
-		LocalDateTime end = start.plusHours(1);
+	void createFailByAlreadyStudyMember(LocalDateTime start, LocalDateTime end, LocalDateTime left,
+		LocalDateTime right) {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		long memberId = initMember();
@@ -203,19 +199,8 @@ class StudyOnceServiceImplTest {
 		StudyOnceSearchResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(memberId, study.getId());
 		// 오른쪽 끝에서 겹침
-		LocalDateTime rightLimitStart = end;
-		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
-			rightLimitEnd, cafeId);
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
 		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest))
-			.isInstanceOf(CafegoryException.class)
-			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
-		// 왼쪽에서 겹침
-		LocalDateTime leftLimitEnd = start;
-		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
-			leftLimitEnd, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest2))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
