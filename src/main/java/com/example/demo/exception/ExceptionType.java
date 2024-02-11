@@ -26,7 +26,8 @@ public enum ExceptionType {
 	STUDY_ONCE_TOO_LATE_QUIT(CONFLICT, "카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다."),
 	STUDY_ONCE_TRY_QUIT_NOT_JOIN(CONFLICT, "참여중인 카공이 아닙니다."),
 	STUDY_ONCE_LEADER_QUIT_FAIL(CONFLICT, "카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다."),
-	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다.");
+	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
+	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다.");
 	private final HttpStatus errStatus;
 	private final String errorMessage;
 }
