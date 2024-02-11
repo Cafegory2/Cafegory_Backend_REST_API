@@ -1,10 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.ReviewSearchRequest;
-import com.example.demo.dto.ReviewSearchResponse;
+import com.example.demo.dto.ReviewSaveRequest;
 
 public interface ReviewService {
 
-	PagedResponse<ReviewSearchResponse> searchWithPagingByCafeId(ReviewSearchRequest request);
+	void saveReview(Long memberId, Long cafeId, ReviewSaveRequest request);
 }
