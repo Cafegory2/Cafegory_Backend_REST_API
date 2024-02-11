@@ -10,4 +10,6 @@ public interface CafeQueryService {
 	PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request);
 
 	CafeResponse searchCafeById(Long cafeId);
+
+	CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId);
 }

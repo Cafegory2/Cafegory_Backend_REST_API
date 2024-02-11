@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.SnsResponse;
 import com.example.demo.dto.StudyOnceForCafeResponse;
 import com.example.demo.dto.WriterResponse;
+import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.cafe.CafeQueryRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.util.PageRequestCustom;
@@ -37,6 +39,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 
 	private final CafeQueryRepository cafeQueryRepository;
 	private final CafeRepository cafeRepository;
+	private final MemberRepository memberRepository;
 	private OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
 
 	@Override
@@ -51,9 +54,43 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 
 	@Override
 	public CafeResponse searchCafeById(Long cafeId) {
-		CafeImpl findCafe = cafeRepository.findById(cafeId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 카페입니다."));
+		CafeImpl findCafe = findCafeById(cafeId);
+		return produceCafeResponse(findCafe);
+	}
 
+	private CafeImpl findCafeById(Long cafeId) {
+		return cafeRepository.findById(cafeId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 카페입니다."));
+	}
+
+	@Override
+	public CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId) {
+		CafeImpl findCafe = findCafeById(cafeId);
+
+		if (memberRepository.existsById(memberId)) {
+			return produceCafeResponse(findCafe);
+		}
+		return produceCafeResponseWithEmptyInfo(findCafe);
+	}
+
+	private CafeResponse produceCafeResponseWithEmptyInfo(CafeImpl findCafe) {
+		return CafeResponse.builder()
+			.basicInfo(
+				produceCafeBasicInfoResponse(findCafe)
+			)
+			.review(
+				mapToReviewResponseList(findCafe)
+			)
+			.meetings(
+				Collections.emptyList()
+			)
+			.canMakeMeeting(
+				Collections.emptyList()
+			)
+			.build();
+	}
+
+	private CafeResponse produceCafeResponse(CafeImpl findCafe) {
 		return CafeResponse.builder()
 			.basicInfo(
 				produceCafeBasicInfoResponse(findCafe)
@@ -151,7 +188,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			.collect(Collectors.toList());
 	}
 
-	private static List<StudyOnceForCafeResponse> mapToStudyOnceForCafeResponse(CafeImpl findCafe) {
+	private List<StudyOnceForCafeResponse> mapToStudyOnceForCafeResponse(CafeImpl findCafe) {
 		return findCafe.getStudyOnceGroup().stream()
 			.map(studyOnce ->
 				StudyOnceForCafeResponse.builder()
