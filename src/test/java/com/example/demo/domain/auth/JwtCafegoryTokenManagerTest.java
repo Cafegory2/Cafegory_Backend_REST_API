@@ -63,11 +63,12 @@ class JwtCafegoryTokenManagerTest {
 	@Test
 	@DisplayName("토큰에서 인증 식별자 추출 테스트")
 	void getIdentityId() {
-		CafegoryToken token = createToken(1);
+		long id = 1L;
+		CafegoryToken token = createToken(id);
 		String accessToken = token.getAccessToken();
 		JwtCafegoryTokenManager jwtCafegoryTokenManager = new JwtCafegoryTokenManager(jwtManager);
 		long identityId = jwtCafegoryTokenManager.getIdentityId(accessToken);
-		Assertions.assertThat(identityId).isEqualTo(1);
+		Assertions.assertThat(identityId).isEqualTo(id);
 	}
 
 	private CafegoryToken createToken(long id) {
