@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.ReviewSearchRequest;
 import com.example.demo.dto.ReviewSearchResponse;
 import com.example.demo.dto.WriterResponse;
@@ -34,6 +35,29 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(request.getCafeId(),
 			pageable);
 		return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
+	}
+
+	@Override
+	public ReviewResponse searchOne(Long reviewId) {
+		return mapToReviewResponse(findReviewById(reviewId));
+	}
+
+	private ReviewImpl findReviewById(Long reviewId) {
+		return reviewRepository.findById(reviewId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 리뷰입니다."));
+	}
+
+	private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
+		return ReviewResponse.builder()
+			.id(findReview.getId())
+			.writer(
+				new WriterResponse(findReview.getMember().getId(),
+					findReview.getMember().getName(),
+					findReview.getMember().getThumbnailImage().getThumbnailImage()
+				))
+			.rate(findReview.getRate())
+			.content(findReview.getContent())
+			.build();
 	}
 
 	private void validateExistCafe(Long cafeId) {

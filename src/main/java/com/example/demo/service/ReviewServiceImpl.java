@@ -24,7 +24,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private final MemberRepository memberRepository;
 
 	@Override
-	public void saveReview(Long memberId, Long cafeId, ReviewSaveRequest request) {
+	public Long saveReview(Long memberId, Long cafeId, ReviewSaveRequest request) {
 		ReviewImpl review = ReviewImpl.builder()
 			.content(request.getContent())
 			.rate(request.getRate())
@@ -32,6 +32,7 @@ public class ReviewServiceImpl implements ReviewService {
 			.member(findMemberById(memberId))
 			.build();
 		em.persist(review);
+		return review.getId();
 	}
 
 	private MemberImpl findMemberById(Long memberId) {

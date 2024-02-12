@@ -4,5 +4,5 @@ import com.example.demo.dto.ReviewSaveRequest;
 
 public interface ReviewService {
 
-	void saveReview(Long memberId, Long cafeId, ReviewSaveRequest request);
+	Long saveReview(Long memberId, Long cafeId, ReviewSaveRequest request);
 }
