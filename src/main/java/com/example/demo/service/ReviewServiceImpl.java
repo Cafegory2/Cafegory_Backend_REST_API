@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +8,7 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.dto.ReviewSaveRequest;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,9 +18,9 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class ReviewServiceImpl implements ReviewService {
 
-	private final EntityManager em;
 	private final CafeRepository cafeRepository;
 	private final MemberRepository memberRepository;
+	private final ReviewRepository reviewRepository;
 
 	@Override
 	public Long saveReview(Long memberId, Long cafeId, ReviewSaveRequest request) {
@@ -31,8 +30,8 @@ public class ReviewServiceImpl implements ReviewService {
 			.cafe(findCafeById(cafeId))
 			.member(findMemberById(memberId))
 			.build();
-		em.persist(review);
-		return review.getId();
+		ReviewImpl savedReview = reviewRepository.save(review);
+		return savedReview.getId();
 	}
 
 	private MemberImpl findMemberById(Long memberId) {

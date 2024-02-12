@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +39,7 @@ public class ReviewController {
 	@PostMapping("/cafe/{cafeId}/review")
 	public ResponseEntity<ReviewResponse> saveReview(@PathVariable Long cafeId,
 		@RequestHeader("Authorization") String authorization,
-		@RequestBody ReviewSaveRequest reviewSaveRequest) {
+		@RequestBody @Validated ReviewSaveRequest reviewSaveRequest) {
 
 		long identityId = cafegoryTokenManager.getIdentityId(authorization);
 		Long savedReviewId = reviewService.saveReview(identityId, cafeId, reviewSaveRequest);
