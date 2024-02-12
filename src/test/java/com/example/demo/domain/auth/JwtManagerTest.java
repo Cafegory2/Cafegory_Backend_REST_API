@@ -1,5 +1,7 @@
 package com.example.demo.domain.auth;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.example.demo.exception.CafegoryException;
 
 @ExtendWith(MockitoExtension.class)
 class JwtManagerTest {
@@ -59,8 +63,8 @@ class JwtManagerTest {
 		jwtManager.setLife(Date.from(Instant.now()), 0);
 		String jwt = jwtManager.make();
 		Assertions.assertThatThrownBy(() -> jwtManager.decode(jwt))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("JWT 토큰이 만료되었습니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(JWT_EXPIRED.getErrorMessage());
 	}
 
 	@Test
@@ -73,8 +77,8 @@ class JwtManagerTest {
 		jwtManager.setLife(Date.from(Instant.now()), 0);
 		String jwt = jwtManager.make() + "34gvagafdga";
 		Assertions.assertThatThrownBy(() -> jwtManager.decode(jwt))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("JWT 토큰이 잘못되었습니다.");
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(JWT_DESTROYED.getErrorMessage());
 	}
 
 	@ParameterizedTest

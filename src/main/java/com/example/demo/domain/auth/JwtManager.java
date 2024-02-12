@@ -1,6 +1,10 @@
 package com.example.demo.domain.auth;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.util.Date;
+
+import com.example.demo.exception.CafegoryException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -48,9 +52,9 @@ public class JwtManager {
 			return claimsJws.getPayload();
 
 		} catch (ExpiredJwtException e) {
-			throw new IllegalArgumentException("JWT 토큰이 만료되었습니다.");
+			throw new CafegoryException(JWT_EXPIRED);
 		} catch (JwtException e) {
-			throw new IllegalArgumentException("JWT 토큰이 잘못되었습니다.");
+			throw new CafegoryException(JWT_DESTROYED);
 		}
 	}
 
@@ -58,9 +62,9 @@ public class JwtManager {
 		String errMessage = "";
 		try {
 			decode(jwtString);
-		} catch (IllegalArgumentException e) {
+		} catch (CafegoryException e) {
 			errMessage = e.getMessage();
 		}
-		return errMessage.equals("JWT 토큰이 만료되었습니다.");
+		return errMessage.equals(JWT_EXPIRED.getErrorMessage());
 	}
 }

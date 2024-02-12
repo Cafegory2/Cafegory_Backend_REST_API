@@ -1,12 +1,14 @@
 package com.example.demo.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
-import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,6 +26,7 @@ import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.exception.CafegoryException;
 
 @SpringBootTest
 @Transactional
@@ -69,7 +72,7 @@ class StudyOnceServiceImplTest {
 
 		//then
 		List<StudyOnceSearchResponse> results = pagedResponse.getList();
-		org.assertj.core.api.Assertions.assertThat(results).contains(expectedStudyOnceSearchResponse);
+		Assertions.assertThat(results).contains(expectedStudyOnceSearchResponse);
 	}
 
 	@Test
@@ -82,7 +85,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getId());
-		Assertions.assertEquals(result.getId(), studyOnceSearchResponse.getId());
+		Assertions.assertThat(studyOnceSearchResponse.getId()).isEqualTo(result.getId());
 	}
 
 	@Test
@@ -95,7 +98,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
-		Assertions.assertEquals(expected, result);
+		Assertions.assertThat(result).isEqualTo(expected);
 	}
 
 	private static StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
@@ -111,32 +114,35 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		Assertions.assertThrows(IllegalArgumentException.class,
-			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
+		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
 	}
 
 	@Test
 	@DisplayName("카공 시작 시간과 종료시간 차이가 1시간 미만일 경우 실패")
 	void createFailByStartTimeAndEndTimePeriodIsTooShort() {
-		LocalDateTime start = LocalDateTime.now().minusSeconds(1);
-		LocalDateTime end = start.plusMinutes(59);
+		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusMinutes(59).plusSeconds(59);
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		Assertions.assertThrows(IllegalArgumentException.class,
-			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
+		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_SHORT_DURATION.getErrorMessage());
 	}
 
 	@Test
 	@DisplayName("카공 시작 시간과 종료시간 차이가 5시간 초과일 경우 실패")
 	void createFailByStartTimeAndEndTimePeriodIsTooLong() {
-		LocalDateTime start = LocalDateTime.now().minusSeconds(1);
+		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(5).plusSeconds(1);
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		Assertions.assertThrows(IllegalArgumentException.class,
-			() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest));
+		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LONG_DURATION.getErrorMessage());
 	}
 
 	private static StudyOnceSearchResponse makeExpectedStudyOnceCreateResult(long cafeId,
@@ -158,36 +164,34 @@ class StudyOnceServiceImplTest {
 			.build();
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("createFailByAlreadyStudyLeaderParameters")
 	@DisplayName("이미 해당 시간에 카공장으로 참여중인 카공이 있는 경우 카공 생성 실패")
-	void createFailByAlreadyStudyLeader() {
-		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
-		LocalDateTime end = start.plusHours(1);
+	void createFailByAlreadyStudyLeader(LocalDateTime start, LocalDateTime end, LocalDateTime left,
+		LocalDateTime right) {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
-		// 오른쪽 끝에서 겹침
-		LocalDateTime rightLimitStart = end;
-		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
-			rightLimitEnd, cafeId);
-		Assertions.assertThrows(IllegalStateException.class,
-			() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest));
-		// 왼쪽에서 겹침
-		LocalDateTime leftLimitEnd = start;
-		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
-			leftLimitEnd, cafeId);
-		Assertions.assertThrows(IllegalStateException.class,
-			() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest2));
+
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
+		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
 
-	@Test
+	static Stream<Arguments> createFailByAlreadyStudyLeaderParameters() {
+		LocalDateTime start = LocalDateTime.now().plusYears(1);
+		LocalDateTime end = start.plusHours(4);
+		return Stream.of(Arguments.of(start, end, end, end.plusHours(4)),
+			Arguments.of(start, end, start.minusHours(4), start));
+	}
+
+	@ParameterizedTest
+	@MethodSource("createFailByAlreadyStudyLeaderParameters")
 	@DisplayName("이미 해당 시간에 참여중인 카공이 있는 경우 카공 생성 실패")
-	void createFailByAlreadyStudyMember() {
-		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
-		LocalDateTime end = start.plusHours(1);
+	void createFailByAlreadyStudyMember(LocalDateTime start, LocalDateTime end, LocalDateTime left,
+		LocalDateTime right) {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		long memberId = initMember();
@@ -195,19 +199,10 @@ class StudyOnceServiceImplTest {
 		StudyOnceSearchResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(memberId, study.getId());
 		// 오른쪽 끝에서 겹침
-		LocalDateTime rightLimitStart = end;
-		LocalDateTime rightLimitEnd = rightLimitStart.plusHours(1);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(rightLimitStart,
-			rightLimitEnd, cafeId);
-		Assertions.assertThrows(IllegalStateException.class,
-			() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest));
-		// 왼쪽에서 겹침
-		LocalDateTime leftLimitEnd = start;
-		LocalDateTime leftLimitStart = leftLimitEnd.minusHours(3);
-		StudyOnceCreateRequest needToFailStudyOnceCreateRequest2 = makeStudyOnceCreateRequest(leftLimitStart,
-			leftLimitEnd, cafeId);
-		Assertions.assertThrows(IllegalStateException.class,
-			() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest2));
+		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
+		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
 
 	@Test
@@ -258,10 +253,9 @@ class StudyOnceServiceImplTest {
 		//when
 		studyOnceService.tryJoin(secondMemberId, study.getId());
 		//then
-		org.assertj.core.api.Assertions.assertThatThrownBy(
-				() -> studyOnceService.tryJoin(secondMemberId, study.getId()))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("이미 참여중인 카공입니다.");
+		Assertions.assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, study.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_DUPLICATE.getErrorMessage());
 	}
 
 	@ParameterizedTest
@@ -283,10 +277,9 @@ class StudyOnceServiceImplTest {
 		StudyOnceSearchResponse conflictStudy = studyOnceService.createStudy(thirdMemberId,
 			conflictStudyOnceCreateRequest);
 		//then
-		org.assertj.core.api.Assertions.assertThatThrownBy(
-				() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getId()))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("해당 시간에 참여중인 카공이 이미 있습니다.");
+		Assertions.assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
 
 	static Stream<Arguments> tryJoinFailCauseConflictParameters() {
@@ -320,10 +313,9 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		org.assertj.core.api.Assertions.assertThatThrownBy(
-				() -> studyOnceService.tryQuit(secondMemberId, study.getId()))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("참여중인 카공이 아닙니다.");
+		Assertions.assertThatThrownBy(() -> studyOnceService.tryQuit(secondMemberId, study.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_TRY_QUIT_NOT_JOIN.getErrorMessage());
 	}
 
 	@Test
@@ -337,9 +329,8 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(secondMemberId, study.getId());
-		org.assertj.core.api.Assertions.assertThatThrownBy(
-				() -> studyOnceService.tryQuit(firstMemberId, study.getId()))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessage("카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다.");
+		Assertions.assertThatThrownBy(() -> studyOnceService.tryQuit(firstMemberId, study.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LEADER_QUIT_FAIL.getErrorMessage());
 	}
 }

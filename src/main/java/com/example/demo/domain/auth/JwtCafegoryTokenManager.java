@@ -49,13 +49,9 @@ public class JwtCafegoryTokenManager implements CafegoryTokenManager {
 
 	@Override
 	public boolean isAccessToken(String token) {
-		try {
-			Claims claims = jwtManager.decode(token);
-			String tokenType = claims.get("tokenType", String.class);
-			return tokenType.equals("access");
-		} catch (Exception e) {
-			return false;
-		}
+		Claims claims = jwtManager.decode(token);
+		String tokenType = claims.get("tokenType", String.class);
+		return tokenType.equals("access");
 	}
 
 	private String makeAccessToken(Map<String, Object> memberInformation, Date issuedAt) {
