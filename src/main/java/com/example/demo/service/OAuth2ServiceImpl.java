@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,6 +16,7 @@ import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2Token;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +48,7 @@ public class OAuth2ServiceImpl implements OAuth2Service {
 			long identityId = cafegoryTokenManager.getIdentityId(refreshToken);
 			return makeCafegoryToken(identityId);
 		}
-		throw new IllegalArgumentException("토큰을 재발행할 수 없습니다.");
+		throw new CafegoryException(TOKEN_REFRESH_REJECT);
 	}
 
 	private CafegoryToken makeCafegoryToken(long memberId) {
