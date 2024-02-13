@@ -42,4 +42,34 @@ class ReviewTest {
 			.isInstanceOf(CafegoryException.class);
 	}
 
+	@Test
+	@DisplayName("리뷰 업데이트시, 리뷰 최대 글자수 검증")
+	void validate_update_content_size() {
+		ReviewImpl review = ReviewImpl.builder()
+			.content("리뷰")
+			.rate(5)
+			.build();
+
+		//글자수 200자
+		assertDoesNotThrow(() -> {
+			review.updateContent(
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		});
+	}
+
+	@Test
+	@DisplayName("리뷰 업데이트시, 리뷰 최대 글자수 예외 검증")
+	void validate_update_content_size_exception() {
+		ReviewImpl review = ReviewImpl.builder()
+			.content("리뷰")
+			.rate(5)
+			.build();
+
+		//글자수 201자
+		assertThatThrownBy(() -> {
+			review.updateContent(
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+		}).isInstanceOf(CafegoryException.class);
+	}
+
 }
