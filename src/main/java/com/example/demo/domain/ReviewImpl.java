@@ -31,6 +31,7 @@ public class ReviewImpl implements Review {
 
 	private static final int MIN_RATE = 0;
 	private static final int MAX_RATE = 5;
+	private static final int MAX_CONTENT_SIZE = 200;
 
 	@Id
 	@GeneratedValue
@@ -73,11 +74,24 @@ public class ReviewImpl implements Review {
 
 	@Override
 	public void updateContent(String content) {
+		validateContentSize(content);
+		this.content = content;
+	}
+
+	private void validateContentSize(String content) {
+		if (content.length() > MAX_CONTENT_SIZE) {
+			throw new CafegoryException(REVIEW_OVER_CONTENT_SIZE);
+		}
 	}
 
 	@Override
 	public void updateRate(double rate) {
+		validateRateRange(rate);
+		this.rate = rate;
+	}
 
+	public boolean isValidMember(MemberImpl member) {
+		return this.member.equals(member);
 	}
 
 }
