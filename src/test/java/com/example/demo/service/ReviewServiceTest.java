@@ -224,4 +224,35 @@ class ReviewServiceTest {
 		}).isInstanceOf(IllegalArgumentException.class);
 	}
 
+	@Test
+	@DisplayName("리뷰 삭제")
+	void delete_review() {
+		ThumbnailImage thumbnailImage1 = ThumbnailImage.builder()
+			.thumbnailImage("썸네일 경로")
+			.build();
+		em.persist(thumbnailImage1);
+
+		MemberImpl member1 = MemberImpl.builder()
+			.name("김동현")
+			.thumbnailImage(thumbnailImage1)
+			.build();
+		em.persist(member1);
+
+		CafeImpl cafe = CafeImpl.builder()
+			.name("카페고리")
+			.address(new Address("서울 마포구 합정동", "합정동"))
+			.phone("010-1234-5678")
+			.maxAllowableStay(MaxAllowableStay.FIVE_HOUR)
+			.isAbleToStudy(true)
+			.minBeveragePrice(3_000)
+			.build();
+		em.persist(cafe);
+
+		Long savedReviewId = reviewService.saveReview(member1.getId(), cafe.getId(),
+			new ReviewSaveRequest("커피가 맛있어요", 4.5));
+		reviewService.deleteReview(member1.getId(), savedReviewId);
+		ReviewImpl review = reviewRepository.findById(savedReviewId).orElse(null);
+		assertThat(review).isNull();
+	}
+
 }

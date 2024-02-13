@@ -37,15 +37,32 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public void updateReview(Long memberId, Long reviewId, ReviewUpdateRequest request) {
-		ReviewImpl findReview = reviewRepository.findById(reviewId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 리뷰입니다."));
+		ReviewImpl findReview = findReviewById(reviewId);
 		MemberImpl findMember = findMemberById(memberId);
-		boolean isValidMember = findReview.isValidMember(findMember);
-		if (!isValidMember) {
-			throw new IllegalArgumentException("자신이 작성한 리뷰만 수정할 수 있습니다.");
-		}
+		validateReviewer(findReview, findMember);
+
 		findReview.updateContent(request.getContent());
 		findReview.updateRate(request.getRate());
+	}
+
+	private static void validateReviewer(ReviewImpl findReview, MemberImpl findMember) {
+		if (!findReview.isValidMember(findMember)) {
+			throw new IllegalArgumentException("자신이 작성한 리뷰만 수정할 수 있습니다.");
+		}
+	}
+
+	private ReviewImpl findReviewById(Long reviewId) {
+		return reviewRepository.findById(reviewId)
+			.orElseThrow(() -> new IllegalArgumentException("없는 리뷰입니다."));
+	}
+
+	@Override
+	public void deleteReview(Long memberId, Long reviewId) {
+		ReviewImpl findReview = findReviewById(reviewId);
+		MemberImpl findMember = findMemberById(memberId);
+		validateReviewer(findReview, findMember);
+		
+		reviewRepository.delete(findReview);
 	}
 
 	private MemberImpl findMemberById(Long memberId) {
