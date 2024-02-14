@@ -16,10 +16,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.config.QueryDslConfig;
 import com.example.demo.domain.Address;
 import com.example.demo.domain.BusinessHour;
 import com.example.demo.domain.CafeImpl;
@@ -31,7 +33,9 @@ import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.SnsDetail;
 import com.example.demo.util.PageRequestCustom;
 
-@SpringBootTest
+// @SpringBootTest
+@DataJpaTest
+@Import({QueryDslConfig.class, CafeQueryRepository.class})
 @Transactional
 class CafeRepositorySearchMethodTest {
 
