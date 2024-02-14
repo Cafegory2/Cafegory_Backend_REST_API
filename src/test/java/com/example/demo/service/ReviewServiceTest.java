@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +29,6 @@ import com.example.demo.repository.ReviewRepository;
 class ReviewServiceTest {
 
 	@Autowired
-	private EntityManager em;
-	@Autowired
 	private ReviewService reviewService;
 	@Autowired
 	private ReviewRepository reviewRepository;
@@ -44,59 +40,62 @@ class ReviewServiceTest {
 	private CafePersistHelper cafePersistHelper;
 
 	@Test
+	@DisplayName("리뷰 저장")
 	void saveReview() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-
+		//when
 		reviewService.saveReview(member1.getId(), cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
 		List<ReviewImpl> findReviews = reviewRepository.findAllByCafeId(cafe.getId());
+		//then
 		assertThat(findReviews.size()).isEqualTo(1);
 	}
 
 	@Test
 	@DisplayName("카페 아이디가 존재하지 않으면 예외가 터진다.")
 	void saveReview_cafe_exception() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-
-		em.flush();
-		em.clear();
-
+		//when
 		reviewService.saveReview(member1.getId(), cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
-		assertThatThrownBy(() -> {
-			reviewService.saveReview(member1.getId(), 10L, new ReviewSaveRequest("커피가 맛있어요", 4.5));
-		}).isInstanceOf(IllegalArgumentException.class);
+		//then
+		assertThatThrownBy(() ->
+			reviewService.saveReview(member1.getId(), 10L, new ReviewSaveRequest("커피가 맛있어요", 4.5))
+		).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	@DisplayName("멤버 아이디가 존재하지 않으면 예외가 터진다.")
 	void saveReview_member_exception() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-
-		em.flush();
-		em.clear();
-
+		//when
 		reviewService.saveReview(member1.getId(), cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
-		assertThatThrownBy(() -> {
-			reviewService.saveReview(10L, cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
-		}).isInstanceOf(IllegalArgumentException.class);
+		//then
+		assertThatThrownBy(() ->
+			reviewService.saveReview(10L, cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5))
+		).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	@DisplayName("리뷰 수정")
 	void update_content() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-
 		Long savedReviewId = reviewService.saveReview(member1.getId(), cafe.getId(),
 			new ReviewSaveRequest("커피가 맛있어요", 4.5));
+		//when
 		reviewService.updateReview(member1.getId(), savedReviewId, new ReviewUpdateRequest("주차하기 편해요!", 5));
 		ReviewImpl findReview = reviewRepository.findById(savedReviewId).get();
+		//then
 		assertThat(findReview.getContent()).isEqualTo("주차하기 편해요!");
 		assertThat(findReview.getRate()).isEqualTo(5);
 	}
@@ -104,17 +103,19 @@ class ReviewServiceTest {
 	@Test
 	@DisplayName("없는 리뷰일경우 예외가 터진다.")
 	void update_content_review_exception() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
-
-		assertThatThrownBy(() -> {
-			reviewService.updateReview(member1.getId(), 100L, new ReviewUpdateRequest("주차하기 편해요!", 5));
-		}).isInstanceOf(IllegalArgumentException.class);
+		//then
+		assertThatThrownBy(() ->
+			reviewService.updateReview(member1.getId(), 100L, new ReviewUpdateRequest("주차하기 편해요!", 5))
+		).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	@DisplayName("자신의 리뷰가 아닐경우 예외가 터진다.")
 	void update_content_member_exception() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		ThumbnailImage thumbnailImage2 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
@@ -123,22 +124,26 @@ class ReviewServiceTest {
 
 		Long savedReviewId = reviewService.saveReview(member2.getId(), cafe.getId(),
 			new ReviewSaveRequest("커피가 맛있어요", 4.5));
-		assertThatThrownBy(() -> {
-			reviewService.updateReview(member1.getId(), savedReviewId, new ReviewUpdateRequest("주차하기 편해요!", 5));
-		}).isInstanceOf(IllegalArgumentException.class);
+		//then
+		assertThatThrownBy(() ->
+			reviewService.updateReview(member1.getId(), savedReviewId, new ReviewUpdateRequest("주차하기 편해요!", 5))
+		).isInstanceOf(IllegalArgumentException.class);
 	}
 
 	@Test
 	@DisplayName("리뷰 삭제")
 	void delete_review() {
+		//given
 		ThumbnailImage thumbnailImage1 = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl member1 = memberPersistHelper.persistDefaultMember(thumbnailImage1);
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 
 		Long savedReviewId = reviewService.saveReview(member1.getId(), cafe.getId(),
 			new ReviewSaveRequest("커피가 맛있어요", 4.5));
+		//when
 		reviewService.deleteReview(member1.getId(), savedReviewId);
 		ReviewImpl review = reviewRepository.findById(savedReviewId).orElse(null);
+		//then
 		assertThat(review).isNull();
 	}
 

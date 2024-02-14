@@ -15,16 +15,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.QueryDslConfig;
-import com.example.demo.domain.Address;
+import com.example.demo.config.TestConfig;
 import com.example.demo.domain.CafeImpl;
-import com.example.demo.domain.MaxAllowableStay;
 import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.ThumbnailImage;
+import com.example.demo.helper.CafePersistHelper;
+import com.example.demo.helper.MemberPersistHelper;
+import com.example.demo.helper.ReviewPersistHelper;
+import com.example.demo.helper.ThumbnailImagePersistHelper;
 import com.example.demo.util.PageRequestCustom;
 
 @DataJpaTest
-@Import({QueryDslConfig.class})
+@Import({QueryDslConfig.class, TestConfig.class})
 @Transactional
 class ReviewRepositoryTest {
 
@@ -32,98 +35,45 @@ class ReviewRepositoryTest {
 	private EntityManager em;
 	@Autowired
 	private ReviewRepository reviewRepository;
+	@Autowired
+	private CafePersistHelper cafePersistHelper;
+	@Autowired
+	private ThumbnailImagePersistHelper thumbnailImagePersistHelper;
+	@Autowired
+	private MemberPersistHelper memberPersistHelper;
+	@Autowired
+	private ReviewPersistHelper reviewPersistHelper;
 
 	@Test
 	void findAllByCafeId() {
-		CafeImpl cafe = CafeImpl.builder()
-			.name("카페고리")
-			.address(new Address("서울 마포구 합정동", "합정동"))
-			.phone("010-1234-5678")
-			.maxAllowableStay(MaxAllowableStay.FIVE_HOUR)
-			.isAbleToStudy(true)
-			.minBeveragePrice(3_000)
-			.build();
-		em.persist(cafe);
-
-		ThumbnailImage thumb = ThumbnailImage.builder()
-			.thumbnailImage("썸네일")
-			.build();
-		em.persist(thumb);
-
-		MemberImpl member = MemberImpl.builder()
-			.name("김동현")
-			.email("aaaa@naver.com")
-			.thumbnailImage(thumb)
-			.build();
-		em.persist(member);
-
-		ReviewImpl review1 = ReviewImpl.builder()
-			.content("커피가 맛있어요")
-			.rate(4.9)
-			.cafe(cafe)
-			.member(member)
-			.build();
-		ReviewImpl review2 = ReviewImpl.builder()
-			.content("주차장이 없어서 불편했어요")
-			.rate(2)
-			.cafe(cafe)
-			.member(member)
-			.build();
-		em.persist(review1);
-		em.persist(review2);
-
+		//given
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl member = memberPersistHelper.persistDefaultMember(thumb);
+		reviewPersistHelper.persistDefaultReview(cafe, member);
+		reviewPersistHelper.persistDefaultReview(cafe, member);
 		em.flush();
 		em.clear();
-
+		//when
 		List<ReviewImpl> findCafes = reviewRepository.findAllByCafeId(cafe.getId());
+		//then
 		assertThat(findCafes.size()).isEqualTo(2);
 	}
 
 	@Test
 	@DisplayName("페이징 기본값")
 	void findAllWithPagingByCafeId() {
-		CafeImpl cafe = CafeImpl.builder()
-			.name("카페고리")
-			.address(new Address("서울 마포구 합정동", "합정동"))
-			.phone("010-1234-5678")
-			.maxAllowableStay(MaxAllowableStay.FIVE_HOUR)
-			.isAbleToStudy(true)
-			.minBeveragePrice(3_000)
-			.build();
-		em.persist(cafe);
-
-		ThumbnailImage thumb = ThumbnailImage.builder()
-			.thumbnailImage("썸네일")
-			.build();
-		em.persist(thumb);
-
-		MemberImpl member = MemberImpl.builder()
-			.name("김동현")
-			.email("aaaa@naver.com")
-			.thumbnailImage(thumb)
-			.build();
-		em.persist(member);
+		//given
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl member = memberPersistHelper.persistDefaultMember(thumb);
 
 		for (int i = 0; i < 20; i++) {
-			ReviewImpl review1 = ReviewImpl.builder()
-				.content("커피가 맛있어요")
-				.rate(4.9)
-				.cafe(cafe)
-				.member(member)
-				.build();
-			ReviewImpl review2 = ReviewImpl.builder()
-				.content("주차장이 없어서 불편했어요")
-				.rate(2)
-				.cafe(cafe)
-				.member(member)
-				.build();
-			em.persist(review1);
-			em.persist(review2);
+			reviewPersistHelper.persistDefaultReview(cafe, member);
+			reviewPersistHelper.persistDefaultReview(cafe, member);
 		}
-
 		em.flush();
 		em.clear();
-
 		//when
 		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(cafe.getId(),
 			PageRequestCustom.createByDefault());

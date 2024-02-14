@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
+import com.example.demo.helper.ReviewPersistHelper;
 import com.example.demo.helper.ThumbnailImagePersistHelper;
 
 @TestConfiguration
@@ -23,5 +24,10 @@ public class TestConfig {
 	@Bean
 	public CafePersistHelper cafePersistHelper() {
 		return new CafePersistHelper();
+	}
+
+	@Bean
+	public ReviewPersistHelper reviewPersistHelper() {
+		return new ReviewPersistHelper();
 	}
 }
