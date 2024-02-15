@@ -62,13 +62,13 @@ public class ReviewImpl implements Review {
 
 	private void validateRateRange(double rate) {
 		if (!(rate >= MIN_RATE && rate <= MAX_RATE)) {
-			throw new CafegoryException(INVALID_NUMBER_RANGE);
+			throw new CafegoryException(REVIEW_INVALID_RATE_RANGE);
 		}
 	}
 
 	private void validateEmptyOrWhitespace(String content) {
 		if (StringUtils.isEmptyOrWhitespace(content)) {
-			throw new CafegoryException(EMPTY_OR_WHITESPACE);
+			throw new CafegoryException(REVIEW_CONTENT_EMPTY_OR_WHITESPACE);
 		}
 	}
 

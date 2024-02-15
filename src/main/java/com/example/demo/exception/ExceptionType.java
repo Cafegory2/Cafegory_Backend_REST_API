@@ -29,11 +29,11 @@ public enum ExceptionType {
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
 	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
 	REVIEW_NOT_FOUND(NOT_FOUND, "없는 리뷰입니다."),
-	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 200글자 이하여야 합니다."),
+	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 최대 글자수 이하여야 합니다."),
 	REVIEW_INVALID_MEMBER(FORBIDDEN, "자신이 작성한 리뷰만 수정할 수 있습니다."),
-	EMPTY_OR_WHITESPACE(BAD_REQUEST, "null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
-	INVALID_NUMBER_RANGE(BAD_REQUEST, "숫자가 허용된 범위를 벗어났습니다."),
-	INVALID_TIME_RANGE(BAD_REQUEST, "시간이 허용된 범위를 벗어났습니다."),
+	REVIEW_CONTENT_EMPTY_OR_WHITESPACE(BAD_REQUEST, "리뷰 내용은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
+	REVIEW_INVALID_RATE_RANGE(BAD_REQUEST, "평점이 허용된 범위를 벗어났습니다."),
+	CAFE_INVALID_BUSINESS_TIME_RANGE(BAD_REQUEST, "영업시간이 허용된 범위를 벗어났습니다."),
 	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다.");
 
 	private final HttpStatus errStatus;

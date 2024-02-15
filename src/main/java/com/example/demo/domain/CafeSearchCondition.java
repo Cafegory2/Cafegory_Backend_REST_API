@@ -87,7 +87,7 @@ public class CafeSearchCondition {
 
 		private void validateTimeRange(int time) {
 			if (!(time >= START_TIME && time <= END_TIME)) {
-				throw new CafegoryException(INVALID_TIME_RANGE);
+				throw new CafegoryException(CAFE_INVALID_BUSINESS_TIME_RANGE);
 			}
 		}
 	}
