@@ -4,7 +4,7 @@ import com.example.demo.domain.ThumbnailImage;
 
 public class TestThumbnailImageBuilder {
 	private Long id;
-	private String thumbnailImage = "http://k.kakaocdn.net/dn/1G9kp/btsAot8liOn/8CWudi3uy07rvFNUkk3ER0/img_640x640.jpg";
+	private String thumbnailImage = "k.kakaocdn.net/dn/1G9kp/btsAot8liOn/8CWudi3uy07rvFNUkk3ER0/img_640x640.jpg";
 
 	public TestThumbnailImageBuilder id(Long id) {
 		this.id = id;

@@ -53,7 +53,10 @@ class ReviewTest {
 		//글자수 200자
 		assertDoesNotThrow(() -> {
 			review.updateContent(
-				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		});
 	}
 
@@ -68,7 +71,13 @@ class ReviewTest {
 		//글자수 201자
 		assertThatThrownBy(() -> {
 			review.updateContent(
-				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+					+ "aaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		}).isInstanceOf(CafegoryException.class);
 	}
 
