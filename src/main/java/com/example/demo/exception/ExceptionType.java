@@ -33,7 +33,8 @@ public enum ExceptionType {
 	REVIEW_INVALID_MEMBER(FORBIDDEN, "자신이 작성한 리뷰만 수정할 수 있습니다."),
 	EMPTY_OR_WHITESPACE(BAD_REQUEST, "null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	INVALID_NUMBER_RANGE(BAD_REQUEST, "숫자가 허용된 범위를 벗어났습니다."),
-	INVALID_TIME_RANGE(BAD_REQUEST, "시간이 허용된 범위를 벗어났습니다.");
+	INVALID_TIME_RANGE(BAD_REQUEST, "시간이 허용된 범위를 벗어났습니다."),
+	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다.");
 
 	private final HttpStatus errStatus;
 	private final String errorMessage;
