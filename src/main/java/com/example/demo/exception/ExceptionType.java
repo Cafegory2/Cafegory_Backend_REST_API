@@ -28,9 +28,11 @@ public enum ExceptionType {
 	STUDY_ONCE_LEADER_QUIT_FAIL(CONFLICT, "카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다."),
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
 	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
+	REVIEW_NOT_FOUND(NOT_FOUND, "없는 리뷰입니다."),
 	EMPTY_OR_WHITESPACE(BAD_REQUEST, "null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	INVALID_NUMBER_RANGE(BAD_REQUEST, "숫자가 허용된 범위를 벗어났습니다."),
-	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 200글자 이하여야 합니다.");
+	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 200글자 이하여야 합니다."),
+	REVIEW_INVALID_MEMBER(FORBIDDEN, "자신이 작성한 리뷰만 수정할 수 있습니다.");
 	private final HttpStatus errStatus;
 	private final String errorMessage;
 }

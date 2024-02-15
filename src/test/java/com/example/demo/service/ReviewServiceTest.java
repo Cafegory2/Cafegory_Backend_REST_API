@@ -18,6 +18,7 @@ import com.example.demo.domain.ReviewImpl;
 import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.dto.ReviewSaveRequest;
 import com.example.demo.dto.ReviewUpdateRequest;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
 import com.example.demo.helper.ThumbnailImagePersistHelper;
@@ -65,7 +66,7 @@ class ReviewServiceTest {
 		//then
 		assertThatThrownBy(() ->
 			reviewService.saveReview(member1.getId(), 10L, new ReviewSaveRequest("커피가 맛있어요", 4.5))
-		).isInstanceOf(IllegalArgumentException.class);
+		).isInstanceOf(CafegoryException.class);
 	}
 
 	@Test
@@ -80,7 +81,7 @@ class ReviewServiceTest {
 		//then
 		assertThatThrownBy(() ->
 			reviewService.saveReview(10L, cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5))
-		).isInstanceOf(IllegalArgumentException.class);
+		).isInstanceOf(CafegoryException.class);
 	}
 
 	@Test
@@ -109,7 +110,7 @@ class ReviewServiceTest {
 		//then
 		assertThatThrownBy(() ->
 			reviewService.updateReview(member1.getId(), 100L, new ReviewUpdateRequest("주차하기 편해요!", 5))
-		).isInstanceOf(IllegalArgumentException.class);
+		).isInstanceOf(CafegoryException.class);
 	}
 
 	@Test
@@ -127,7 +128,7 @@ class ReviewServiceTest {
 		//then
 		assertThatThrownBy(() ->
 			reviewService.updateReview(member1.getId(), savedReviewId, new ReviewUpdateRequest("주차하기 편해요!", 5))
-		).isInstanceOf(IllegalArgumentException.class);
+		).isInstanceOf(CafegoryException.class);
 	}
 
 	@Test

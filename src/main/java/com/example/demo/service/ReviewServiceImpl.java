@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +10,8 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.ReviewImpl;
 import com.example.demo.dto.ReviewSaveRequest;
 import com.example.demo.dto.ReviewUpdateRequest;
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.cafe.CafeRepository;
@@ -47,13 +51,13 @@ public class ReviewServiceImpl implements ReviewService {
 
 	private static void validateReviewer(ReviewImpl findReview, MemberImpl findMember) {
 		if (!findReview.isValidMember(findMember)) {
-			throw new IllegalArgumentException("자신이 작성한 리뷰만 수정할 수 있습니다.");
+			throw new CafegoryException(ExceptionType.REVIEW_INVALID_MEMBER);
 		}
 	}
 
 	private ReviewImpl findReviewById(Long reviewId) {
 		return reviewRepository.findById(reviewId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 리뷰입니다."));
+			.orElseThrow(() -> new CafegoryException(REVIEW_NOT_FOUND));
 	}
 
 	@Override
@@ -61,18 +65,18 @@ public class ReviewServiceImpl implements ReviewService {
 		ReviewImpl findReview = findReviewById(reviewId);
 		MemberImpl findMember = findMemberById(memberId);
 		validateReviewer(findReview, findMember);
-		
+
 		reviewRepository.delete(findReview);
 	}
 
 	private MemberImpl findMemberById(Long memberId) {
 		return memberRepository.findById(memberId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 멤버입니다."));
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
 
 	private CafeImpl findCafeById(Long cafeId) {
 		return cafeRepository.findById(cafeId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 카페입니다."));
+			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +16,7 @@ import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.ReviewSearchRequest;
 import com.example.demo.dto.ReviewSearchResponse;
 import com.example.demo.dto.WriterResponse;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.util.PageRequestCustom;
@@ -44,7 +47,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 	private ReviewImpl findReviewById(Long reviewId) {
 		return reviewRepository.findById(reviewId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 리뷰입니다."));
+			.orElseThrow(() -> new CafegoryException(REVIEW_NOT_FOUND));
 	}
 
 	private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
@@ -62,7 +65,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 	private void validateExistCafe(Long cafeId) {
 		if (!cafeRepository.existsById(cafeId)) {
-			throw new IllegalArgumentException("없는 카페입니다.");
+			throw new CafegoryException(CAFE_NOT_FOUND);
 		}
 	}
 
