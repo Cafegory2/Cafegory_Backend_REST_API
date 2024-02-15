@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.util.StringUtils;
 
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.CafeResponse;
@@ -34,9 +35,13 @@ public class CafeController {
 
 	@GetMapping("/cafe/{cafeId}")
 	public ResponseEntity<CafeResponse> searchCafe(@PathVariable Long cafeId,
-		@RequestHeader("Authorization") String authorization) {
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
-		CafeResponse response = cafeQueryService.searchCafeForMemberByCafeId(cafeId, identityId);
+		@RequestHeader(value = "Authorization", required = false) String authorization) {
+		if (!StringUtils.isEmpty(authorization)) {
+			long identityId = cafegoryTokenManager.getIdentityId(authorization);
+			CafeResponse response = cafeQueryService.searchCafeForMemberByCafeId(cafeId, identityId);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		CafeResponse response = cafeQueryService.searchCafeForNotMemberByCafeId(cafeId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

@@ -69,10 +69,15 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	@Override
 	public CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId) {
 		CafeImpl findCafe = findCafeById(cafeId);
-
-		if (memberRepository.existsById(memberId)) {
-			return produceCafeResponse(findCafe);
+		if (!memberRepository.existsById(memberId)) {
+			throw new CafegoryException(MEMBER_NOT_FOUND);
 		}
+		return produceCafeResponse(findCafe);
+	}
+
+	@Override
+	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
+		CafeImpl findCafe = findCafeById(cafeId);
 		return produceCafeResponseWithEmptyInfo(findCafe);
 	}
 
