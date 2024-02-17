@@ -102,7 +102,11 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance) {
+	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
+		LocalDateTime studyStartDateTime, LocalDateTime now) {
+		if (now.minusMinutes(10).isBefore(studyStartDateTime)) {
+			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
+		}
 		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
 			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
 		}

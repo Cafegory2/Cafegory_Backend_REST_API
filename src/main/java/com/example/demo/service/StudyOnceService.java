@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.demo.domain.Attendance;
@@ -21,7 +22,8 @@ public interface StudyOnceService {
 	List<UpdateAttendanceResponse> updateAttendances(long leaderId, long studyOnceId, long studyMemberId,
 		boolean attendance);
 
-	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance);
+	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
+		LocalDateTime studyStartDateTime, LocalDateTime now);
 
 	StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
 }
