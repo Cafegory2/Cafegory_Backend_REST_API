@@ -9,9 +9,11 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.Attendance;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyMember;
+import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
@@ -94,8 +96,19 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public List<UpdateAttendanceResponse> updateAttendance(long leaderId, long memberId, boolean attendance) {
+	public List<UpdateAttendanceResponse> updateAttendances(long leaderId, long studyOnceId, long studyMemberId,
+		boolean attendance) {
 		return null;
+	}
+
+	@Override
+	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance) {
+		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
+			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
+		}
+		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
+			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
+		findStudyMember.setAttendance(attendance);
 	}
 
 	@Override

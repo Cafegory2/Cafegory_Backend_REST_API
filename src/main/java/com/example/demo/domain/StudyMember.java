@@ -15,6 +15,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,6 +40,7 @@ public class StudyMember {
 	@Setter
 	private Attendance attendance;
 
+	@Builder
 	public StudyMember(MemberImpl member, StudyOnceImpl study) {
 		this.member = member;
 		this.study = study;

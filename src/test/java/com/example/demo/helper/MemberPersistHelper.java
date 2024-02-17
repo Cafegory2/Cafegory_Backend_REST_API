@@ -17,4 +17,10 @@ public class MemberPersistHelper {
 		em.persist(member);
 		return member;
 	}
+
+	public MemberImpl persistMemberWithName(ThumbnailImage thumbnailImage, String name) {
+		MemberImpl member = new TestMemberBuilder().name(name).thumbnailImage(thumbnailImage).build();
+		em.persist(member);
+		return member;
+	}
 }
