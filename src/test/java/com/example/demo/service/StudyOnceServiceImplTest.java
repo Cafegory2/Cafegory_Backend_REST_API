@@ -401,7 +401,7 @@ class StudyOnceServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("참석여부를 업데이트 할때, memberId가 틀리다면 예외가 터진다.")
+	@DisplayName("참석여부를 업데이트 할때, memberId 또는 studyId가 틀리다면 예외가 터진다.")
 	void take_attendance_memberId_exception() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
@@ -465,7 +465,11 @@ class StudyOnceServiceImplTest {
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		// StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+
 		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
 		//then
