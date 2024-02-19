@@ -390,7 +390,6 @@ class StudyOnceServiceImplTest {
 			LocalDateTime startDateTime
 			LocalDateTime endDateTime
 			LocalDateTime now
-			Attendance expected
 			*/
 			Arguments.of(
 				LocalDateTime.of(2999, 2, 17, 18, 0),
