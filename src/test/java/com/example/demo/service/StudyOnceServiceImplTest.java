@@ -383,8 +383,8 @@ class StudyOnceServiceImplTest {
 	}
 
 	@Test
-	@DisplayName("참석여부를 업데이트 할때, cafeId가 틀리다면 예외가 터진다.")
-	void take_attendance_cafeId_exception() {
+	@DisplayName("참석여부를 업데이트 할때, 스터디가 존재하지 않으면 예외가 터진다.")
+	void take_attendance_study_exception() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
@@ -397,7 +397,7 @@ class StudyOnceServiceImplTest {
 			studyOnceService.updateAttendance(leader.getId(), 10L, member.getId(), Attendance.NO,
 				LocalDateTime.of(2999, 2, 17, 18, 0), LocalDateTime.of(2999, 2, 17, 18, 10))
 		).isInstanceOf(CafegoryException.class)
-			.hasMessage(STUDY_MEMBER_NOT_FOUND.getErrorMessage());
+			.hasMessage(STUDY_ONCE_NOT_FOUND.getErrorMessage());
 	}
 
 	@Test
@@ -475,5 +475,21 @@ class StudyOnceServiceImplTest {
 		).isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_EARLY_TAKE_ATTENDANCE.getErrorMessage());
 	}
+
+	// @Test
+	// @DisplayName("출석 체크는 스터디 진행시간이 절반이 지나기전에만 변경할 수 있다.")
+	// void can_take_attendance_until_half_whole_study_time() {
+	// 	//given
+	// 	ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+	// 	MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+	// 	CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+	// 	StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader, LocalDateTime.of());
+	// 	MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+	// 	studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+	// 	//then
+	// 	studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+	// 		LocalDateTime.of(2999, 2, 17, 18, 0), LocalDateTime.of(2999, 2, 17, 18, 10));
+	//
+	// }
 
 }
