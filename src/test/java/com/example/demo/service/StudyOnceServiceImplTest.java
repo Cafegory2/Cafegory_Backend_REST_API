@@ -366,7 +366,9 @@ class StudyOnceServiceImplTest {
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
 
 		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
@@ -407,7 +409,9 @@ class StudyOnceServiceImplTest {
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
 		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
 		//then
@@ -481,20 +485,49 @@ class StudyOnceServiceImplTest {
 			.hasMessage(STUDY_ONCE_EARLY_TAKE_ATTENDANCE.getErrorMessage());
 	}
 
-	// @Test
-	// @DisplayName("출석 체크는 스터디 진행시간이 절반이 지나기전에만 변경할 수 있다.")
-	// void can_take_attendance_until_half_whole_study_time() {
-	// 	//given
-	// 	ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-	// 	MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
-	// 	CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-	// 	StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader, LocalDateTime.of());
-	// 	MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
-	// 	studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
-	// 	//then
-	// 	studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
-	// 		LocalDateTime.of(2999, 2, 17, 18, 0), LocalDateTime.of(2999, 2, 17, 18, 10));
-	//
-	// }
+	@Test
+	@DisplayName("출석 체크는 스터디 진행시간이 절반이 지나기전에만 변경할 수 있다.")
+	void can_take_attendance_until_half_whole_study_time() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//when
+		studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+			LocalDateTime.of(2999, 2, 17, 19, 30));
+		em.flush();
+		em.clear();
+		StudyMember findMember = studyMemberRepository.findById(
+			new StudyMemberId(member.getId(), studyOnce.getId())
+		).get();
+		//then
+		assertThat(findMember.getAttendance()).isEqualTo(Attendance.NO);
+	}
 
+	@Test
+	@DisplayName("출석체크시 스터디 진행시간이 절반이 지난 후라면 예외가 터진다. ")
+	void can_take_attendance_until_half_whole_study_time_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		assertThatThrownBy(() ->
+			studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+				LocalDateTime.of(2999, 2, 17, 19, 30, 0, 1))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LATE_TAKE_ATTENDANCE.getErrorMessage());
+	}
+
+	//예외 상황 날짜가 변경될경우
 }

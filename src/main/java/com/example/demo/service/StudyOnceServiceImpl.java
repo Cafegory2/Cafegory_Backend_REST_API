@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,10 +108,17 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
 			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
 		}
-		
+
 		StudyOnceImpl searched = findStudyOnceById(studyOnceId);
-		if (now.minusMinutes(10).isBefore(searched.getStartDateTime())) {
+		LocalDateTime startDateTime = searched.getStartDateTime();
+		LocalDateTime endDateTime = searched.getEndDateTime();
+		if (now.minusMinutes(10).isBefore(startDateTime)) {
 			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
+		}
+		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
+		LocalDateTime midTime = startDateTime.plus(halfDuration);
+		if (now.isAfter(midTime)) {
+			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
 		}
 
 		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
