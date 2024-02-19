@@ -359,22 +359,22 @@ class StudyOnceServiceImplTest {
 			.hasMessage(STUDY_ONCE_LEADER_QUIT_FAIL.getErrorMessage());
 	}
 
-	@Test
+	@ParameterizedTest
+	@MethodSource("provideDateTime1")
 	@DisplayName("결석 업데이트")
-	void take_attendance() {
+	void take_attendance(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime now) {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
-			LocalDateTime.of(2999, 2, 17, 18, 0),
-			LocalDateTime.of(2999, 2, 17, 21, 0));
+			startDateTime, endDateTime);
 
 		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
 		//when
 		studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
-			LocalDateTime.of(2999, 2, 17, 18, 10));
+			now);
 		em.flush();
 		em.clear();
 		StudyMember findMember = studyMemberRepository.findById(
@@ -382,6 +382,32 @@ class StudyOnceServiceImplTest {
 		).get();
 		//then
 		assertThat(findMember.getAttendance()).isEqualTo(Attendance.NO);
+	}
+
+	private static Stream<Arguments> provideDateTime1() {
+		return Stream.of(
+			/*
+			LocalDateTime startDateTime
+			LocalDateTime endDateTime
+			LocalDateTime now
+			Attendance expected
+			*/
+			Arguments.of(
+				LocalDateTime.of(2999, 2, 17, 18, 0),
+				LocalDateTime.of(2999, 2, 17, 21, 0),
+				LocalDateTime.of(2999, 2, 17, 18, 10)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 2, 17, 22, 0),
+				LocalDateTime.of(2999, 2, 18, 3, 0),
+				LocalDateTime.of(2999, 2, 17, 23, 59, 59, 999_999_999)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 2, 17, 22, 0),
+				LocalDateTime.of(2999, 2, 18, 3, 0),
+				LocalDateTime.of(2999, 2, 18, 0, 0)
+			)
+		);
 	}
 
 	@Test
@@ -494,7 +520,8 @@ class StudyOnceServiceImplTest {
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
 			LocalDateTime.of(2999, 2, 17, 18, 0),
-			LocalDateTime.of(2999, 2, 17, 21, 0));
+			LocalDateTime.of(2999, 2, 17, 21, 0)
+		);
 		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
 		//when
@@ -529,5 +556,4 @@ class StudyOnceServiceImplTest {
 			.hasMessage(STUDY_ONCE_LATE_TAKE_ATTENDANCE.getErrorMessage());
 	}
 
-	//예외 상황 날짜가 변경될경우
 }
