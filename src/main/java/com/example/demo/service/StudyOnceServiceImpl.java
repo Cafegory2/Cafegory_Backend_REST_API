@@ -103,15 +103,16 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
-		LocalDateTime studyStartDateTime, LocalDateTime now) {
-		StudyOnceImpl searched = findStudyOnceById(studyOnceId);
-		if (now.minusMinutes(10).isBefore(searched.getStartDateTime())) {
-			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
-		}
+		LocalDateTime now) {
 		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
 			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
 		}
 		
+		StudyOnceImpl searched = findStudyOnceById(studyOnceId);
+		if (now.minusMinutes(10).isBefore(searched.getStartDateTime())) {
+			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
+		}
+
 		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
 			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
 		findStudyMember.setAttendance(attendance);
