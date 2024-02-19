@@ -110,20 +110,28 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		}
 
 		StudyOnceImpl searched = findStudyOnceById(studyOnceId);
-		LocalDateTime startDateTime = searched.getStartDateTime();
-		LocalDateTime endDateTime = searched.getEndDateTime();
-		if (now.minusMinutes(10).isBefore(startDateTime)) {
-			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
-		}
-		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
-		LocalDateTime midTime = startDateTime.plus(halfDuration);
-		if (now.isAfter(midTime)) {
-			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
-		}
+		validateEarlyToTakeAttendance(now, searched.getStartDateTime());
+		validateLateToTakeAttendance(now, searched.getStartDateTime(), searched.getEndDateTime());
 
 		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
 			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
 		findStudyMember.setAttendance(attendance);
+	}
+
+	private void validateLateToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime,
+		LocalDateTime endDateTime) {
+		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
+		LocalDateTime midTime = startDateTime.plus(halfDuration);
+
+		if (now.isAfter(midTime)) {
+			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
+		}
+	}
+
+	private void validateEarlyToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime) {
+		if (now.minusMinutes(10).isBefore(startDateTime)) {
+			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
+		}
 	}
 
 	private StudyOnceImpl findStudyOnceById(long studyOnceId) {
