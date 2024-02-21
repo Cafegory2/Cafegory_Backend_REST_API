@@ -44,8 +44,8 @@ public class ReviewController {
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody @Validated ReviewSaveRequest reviewSaveRequest) {
 
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
-		Long savedReviewId = reviewService.saveReview(identityId, cafeId, reviewSaveRequest);
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		Long savedReviewId = reviewService.saveReview(memberId, cafeId, reviewSaveRequest);
 		ReviewResponse response = reviewQueryService.searchOne(savedReviewId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -55,8 +55,8 @@ public class ReviewController {
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody @Validated ReviewUpdateRequest reviewUpdateRequest) {
 
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
-		reviewService.updateReview(identityId, reviewId, reviewUpdateRequest);
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		reviewService.updateReview(memberId, reviewId, reviewUpdateRequest);
 		ReviewResponse response = reviewQueryService.searchOne(reviewId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
@@ -65,9 +65,9 @@ public class ReviewController {
 	public ResponseEntity<ReviewResponse> deleteReview(@PathVariable Long reviewId,
 		@RequestHeader("Authorization") String authorization) {
 
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		ReviewResponse response = reviewQueryService.searchOne(reviewId);
-		reviewService.deleteReview(identityId, reviewId);
+		reviewService.deleteReview(memberId, reviewId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
