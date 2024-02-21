@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMemberStateResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
@@ -97,9 +99,18 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public List<UpdateAttendanceResponse> updateAttendances(long leaderId, long studyOnceId, long studyMemberId,
-		boolean attendance) {
-		return null;
+	public UpdateAttendanceResponse updateAttendances(long leaderId, long studyOnceId,
+		Map<Long, Attendance> memberAttendances, LocalDateTime now) {
+		for (Map.Entry<Long, Attendance> entry : memberAttendances.entrySet()) {
+			updateAttendance(leaderId, studyOnceId, entry.getKey(), entry.getValue(), now);
+		}
+		List<StudyMemberId> studyMemberIds = memberAttendances.keySet().stream()
+			.map(memberId -> new StudyMemberId(memberId, studyOnceId))
+			.collect(Collectors.toList());
+		return new UpdateAttendanceResponse(studyMemberRepository.findAllById(studyMemberIds).stream()
+			.map(studyMember -> new StudyMemberStateResponse(studyMember.getId().getMemberId(),
+				studyMember.getAttendance().isPresent(), LocalDateTime.of(2999, 12, 31, 12, 0)))
+			.collect(Collectors.toList()));
 	}
 
 	@Override

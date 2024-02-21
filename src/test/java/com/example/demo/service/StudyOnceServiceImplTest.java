@@ -4,7 +4,10 @@ import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
@@ -361,7 +364,7 @@ class StudyOnceServiceImplTest {
 
 	@ParameterizedTest
 	@MethodSource("provideDateTime1")
-	@DisplayName("결석 업데이트")
+	@DisplayName("출석 업데이트")
 	void take_attendance(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime now) {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
@@ -369,7 +372,6 @@ class StudyOnceServiceImplTest {
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
 			startDateTime, endDateTime);
-
 		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
 		//when
@@ -553,6 +555,39 @@ class StudyOnceServiceImplTest {
 				LocalDateTime.of(2999, 2, 17, 19, 30, 0, 1))
 		).isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LATE_TAKE_ATTENDANCE.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("출석 업데이트, 여러건")
+	void can_take_attendances() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+
+		Map<Long, Attendance> memberAttendances = new HashMap<>();
+		for (int i = 0; i < 5; i++) {
+			MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버" + i);
+			studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+			memberAttendances.put(member.getId(), Attendance.NO);
+		}
+		//when
+		studyOnceService.updateAttendances(leader.getId(), studyOnce.getId(), memberAttendances,
+			LocalDateTime.of(2999, 2, 17, 18, 10));
+		em.flush();
+		em.clear();
+		//then
+		List<StudyMemberId> studyMemberIds = memberAttendances.keySet().stream()
+			.map(memberId -> new StudyMemberId(memberId, studyOnce.getId()))
+			.collect(Collectors.toList());
+		List<StudyMember> searchedStudyMembers = studyMemberRepository.findAllById(studyMemberIds);
+		
+		assertThat(searchedStudyMembers)
+			.extracting(StudyMember::getAttendance)
+			.contains(Attendance.NO);
 	}
 
 }

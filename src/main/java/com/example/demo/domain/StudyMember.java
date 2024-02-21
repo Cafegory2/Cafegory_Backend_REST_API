@@ -54,4 +54,5 @@ public class StudyMember {
 		return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (studyStartDateTime.isBefore(
 			end) || studyStartDateTime.isEqual(end));
 	}
+
 }

@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 import com.example.demo.domain.Attendance;
 import com.example.demo.dto.PagedResponse;
@@ -19,8 +19,8 @@ public interface StudyOnceService {
 
 	StudyOnceSearchResponse searchByStudyId(long studyId);
 
-	List<UpdateAttendanceResponse> updateAttendances(long leaderId, long studyOnceId, long studyMemberId,
-		boolean attendance);
+	UpdateAttendanceResponse updateAttendances(long leaderId, long studyOnceId,
+		Map<Long, Attendance> memberAttendances, LocalDateTime now);
 
 	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance, LocalDateTime now);
 
