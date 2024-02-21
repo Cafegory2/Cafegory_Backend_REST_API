@@ -5,7 +5,6 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -18,10 +17,12 @@ import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMemberStateRequest;
 import com.example.demo.dto.StudyMemberStateResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
@@ -100,17 +101,33 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public UpdateAttendanceResponse updateAttendances(long leaderId, long studyOnceId,
-		Map<Long, Attendance> memberAttendances, LocalDateTime now) {
-		for (Map.Entry<Long, Attendance> entry : memberAttendances.entrySet()) {
-			updateAttendance(leaderId, studyOnceId, entry.getKey(), entry.getValue(), now);
-		}
-		List<StudyMemberId> studyMemberIds = memberAttendances.keySet().stream()
-			.map(memberId -> new StudyMemberId(memberId, studyOnceId))
-			.collect(Collectors.toList());
-		return new UpdateAttendanceResponse(studyMemberRepository.findAllById(studyMemberIds).stream()
+		UpdateAttendanceRequest request, LocalDateTime now) {
+		processAttendanceUpdates(leaderId, studyOnceId, request, now);
+
+		List<StudyMemberId> studyMemberIds = generateStudyMemberIdsFromRequest(studyOnceId, request);
+		List<StudyMember> studyMembers = studyMemberRepository.findAllById(studyMemberIds);
+		return new UpdateAttendanceResponse(mapToStateResponses(studyMembers));
+	}
+
+	private List<StudyMemberStateResponse> mapToStateResponses(List<StudyMember> studyMembers) {
+		return studyMembers.stream()
 			.map(studyMember -> new StudyMemberStateResponse(studyMember.getId().getMemberId(),
 				studyMember.getAttendance().isPresent(), LocalDateTime.of(2999, 12, 31, 12, 0)))
-			.collect(Collectors.toList()));
+			.collect(Collectors.toList());
+	}
+
+	private List<StudyMemberId> generateStudyMemberIdsFromRequest(long studyOnceId, UpdateAttendanceRequest request) {
+		return request.getStates().stream()
+			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnceId))
+			.collect(Collectors.toList());
+	}
+
+	private void processAttendanceUpdates(long leaderId, long studyOnceId, UpdateAttendanceRequest request,
+		LocalDateTime now) {
+		for (StudyMemberStateRequest memberStateRequest : request.getStates()) {
+			Attendance attendance = memberStateRequest.isAttendance() ? Attendance.YES : Attendance.NO;
+			updateAttendance(leaderId, studyOnceId, memberStateRequest.getUserId(), attendance, now);
+		}
 	}
 
 	@Override

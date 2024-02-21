@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.Attendance;
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.StudyMemberStateRequest;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
 import com.example.demo.dto.StudyOnceSearchRequest;
@@ -80,17 +76,10 @@ public class StudyOnceController {
 	public ResponseEntity<UpdateAttendanceResponse> takeAttendance(@PathVariable Long studyId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody UpdateAttendanceRequest request) {
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
-		Map<Long, Attendance> memberAttendances = request.getStates().stream()
-			.collect(Collectors.toMap(
-				StudyMemberStateRequest::getUserId,
-				(req) -> req.isAttendance() ? Attendance.YES : Attendance.NO
-			));
-
-		UpdateAttendanceResponse response = studyOnceService.updateAttendances(identityId, studyId,
-			memberAttendances, LocalDateTime.now());
+		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
+		UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyId,
+			request, LocalDateTime.now());
 		return ResponseEntity.ok(response);
-
 	}
 
 }

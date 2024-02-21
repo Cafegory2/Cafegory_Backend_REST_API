@@ -4,9 +4,8 @@ import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,9 +31,11 @@ import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMemberStateRequest;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
@@ -568,23 +569,25 @@ class StudyOnceServiceImplTest {
 			LocalDateTime.of(2999, 2, 17, 18, 0),
 			LocalDateTime.of(2999, 2, 17, 21, 0));
 
-		Map<Long, Attendance> memberAttendances = new HashMap<>();
+		List<StudyMemberStateRequest> memberStateRequests = new ArrayList<>();
 		for (int i = 0; i < 5; i++) {
 			MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버" + i);
 			studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
-			memberAttendances.put(member.getId(), Attendance.NO);
+			memberStateRequests.add(
+				new StudyMemberStateRequest(member.getId(), false, LocalDateTime.of(2999, 2, 17, 12, 0)));
 		}
+		UpdateAttendanceRequest request = new UpdateAttendanceRequest(memberStateRequests);
 		//when
-		studyOnceService.updateAttendances(leader.getId(), studyOnce.getId(), memberAttendances,
+		studyOnceService.updateAttendances(leader.getId(), studyOnce.getId(), request,
 			LocalDateTime.of(2999, 2, 17, 18, 10));
 		em.flush();
 		em.clear();
 		//then
-		List<StudyMemberId> studyMemberIds = memberAttendances.keySet().stream()
-			.map(memberId -> new StudyMemberId(memberId, studyOnce.getId()))
+		List<StudyMemberId> studyMemberIds = memberStateRequests.stream()
+			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnce.getId()))
 			.collect(Collectors.toList());
 		List<StudyMember> searchedStudyMembers = studyMemberRepository.findAllById(studyMemberIds);
-		
+
 		assertThat(searchedStudyMembers)
 			.extracting(StudyMember::getAttendance)
 			.contains(Attendance.NO);

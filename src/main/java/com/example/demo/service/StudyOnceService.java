@@ -1,13 +1,13 @@
 package com.example.demo.service;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import com.example.demo.domain.Attendance;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 
 public interface StudyOnceService {
@@ -20,7 +20,7 @@ public interface StudyOnceService {
 	StudyOnceSearchResponse searchByStudyId(long studyId);
 
 	UpdateAttendanceResponse updateAttendances(long leaderId, long studyOnceId,
-		Map<Long, Attendance> memberAttendances, LocalDateTime now);
+		UpdateAttendanceRequest request, LocalDateTime now);
 
 	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance, LocalDateTime now);
 
