@@ -7,15 +7,9 @@ import com.example.demo.domain.StudyOnceImpl;
 
 public class TestStudyMemberBuilder {
 
-	// private StudyMemberId id;
 	private MemberImpl member;
 	private StudyOnceImpl study;
 	private Attendance attendance = Attendance.YES;
-
-	// public TestStudyMemberBuilder id(StudyMemberId id) {
-	// 	this.id = id;
-	// 	return this;
-	// }
 
 	public TestStudyMemberBuilder member(MemberImpl member) {
 		this.member = member;
