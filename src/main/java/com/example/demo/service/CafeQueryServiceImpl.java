@@ -74,7 +74,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		}
 		return produceCafeResponse(findCafe);
 	}
- 	
+	
 	@Override
 	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
