@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,9 +35,13 @@ public class CafeController {
 
 	@GetMapping("/cafe/{cafeId}")
 	public ResponseEntity<CafeResponse> searchCafe(@PathVariable Long cafeId,
-		@RequestHeader("Authorization") String authorization) {
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
-		CafeResponse response = cafeQueryService.searchCafeForMemberByCafeId(cafeId, identityId);
+		@RequestHeader(value = "Authorization", required = false) String authorization) {
+		if (!StringUtils.hasText(authorization)) {
+			long memberId = cafegoryTokenManager.getIdentityId(authorization);
+			CafeResponse response = cafeQueryService.searchCafeForMemberByCafeId(cafeId, memberId);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
+		CafeResponse response = cafeQueryService.searchCafeForNotMemberByCafeId(cafeId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

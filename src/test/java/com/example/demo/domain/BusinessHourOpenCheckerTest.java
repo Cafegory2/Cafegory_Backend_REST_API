@@ -15,6 +15,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.example.demo.exception.CafegoryException;
+
 public class BusinessHourOpenCheckerTest {
 
 	private BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
@@ -278,7 +280,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalDateTime now = LocalDateTime.of(2024, 1, 29, 12, 30, 0);
 		//then
 		assertThatThrownBy(() -> openChecker.checkWithBusinessHours(businessHours, now))
-			.isInstanceOf(IllegalStateException.class);
+			.isInstanceOf(CafegoryException.class);
 	}
 
 	@ParameterizedTest

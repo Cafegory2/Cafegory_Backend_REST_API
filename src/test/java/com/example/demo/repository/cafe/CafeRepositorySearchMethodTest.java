@@ -487,7 +487,7 @@ class CafeRepositorySearchMethodTest {
 			Arguments.of(1, 5, 5),
 			Arguments.of(2, 20, 20),
 			Arguments.of(3, 20, 0),
-			Arguments.of(1, 50, 40)
+			Arguments.of(1, 40, 10)
 		);
 	}
 

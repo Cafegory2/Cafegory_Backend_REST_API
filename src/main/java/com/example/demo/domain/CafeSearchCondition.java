@@ -1,7 +1,11 @@
 package com.example.demo.domain;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import com.example.demo.exception.CafegoryException;
 
 import lombok.Getter;
 
@@ -83,7 +87,7 @@ public class CafeSearchCondition {
 
 		private void validateTimeRange(int time) {
 			if (!(time >= START_TIME && time <= END_TIME)) {
-				throw new IllegalArgumentException("maxTime에 맞는 숫자를 입력 해 주세요.");
+				throw new CafegoryException(CAFE_INVALID_BUSINESS_TIME_RANGE);
 			}
 		}
 	}

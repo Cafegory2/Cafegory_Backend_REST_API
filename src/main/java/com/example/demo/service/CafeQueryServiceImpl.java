@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +27,7 @@ import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.SnsResponse;
 import com.example.demo.dto.StudyOnceForCafeResponse;
 import com.example.demo.dto.WriterResponse;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.cafe.CafeQueryRepository;
 import com.example.demo.repository.cafe.CafeRepository;
@@ -60,16 +63,21 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 
 	private CafeImpl findCafeById(Long cafeId) {
 		return cafeRepository.findById(cafeId)
-			.orElseThrow(() -> new IllegalArgumentException("없는 카페입니다."));
+			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
 
 	@Override
 	public CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId) {
 		CafeImpl findCafe = findCafeById(cafeId);
-
-		if (memberRepository.existsById(memberId)) {
-			return produceCafeResponse(findCafe);
+		if (!memberRepository.existsById(memberId)) {
+			throw new CafegoryException(MEMBER_NOT_FOUND);
 		}
+		return produceCafeResponse(findCafe);
+	}
+
+	@Override
+	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
+		CafeImpl findCafe = findCafeById(cafeId);
 		return produceCafeResponseWithEmptyInfo(findCafe);
 	}
 

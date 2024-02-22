@@ -46,26 +46,26 @@ public class StudyOnceController {
 	@PostMapping("")
 	public ResponseEntity<StudyOnceSearchResponse> create(@RequestBody StudyOnceCreateRequest studyOnceCreateRequest,
 		@RequestHeader("Authorization") String authorization) {
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
-		StudyOnceSearchResponse response = studyOnceService.createStudy(identityId, studyOnceCreateRequest);
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		StudyOnceSearchResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
 		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/{studyId:[0-9]+}")
 	public ResponseEntity<StudyOnceJoinResult> tryJoin(@PathVariable Long studyId,
 		@RequestHeader("Authorization") String authorization) {
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
-		studyOnceService.tryJoin(identityId, studyId);
+		studyOnceService.tryJoin(memberId, studyId);
 		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
 
 	@DeleteMapping("/{studyId:[0-9]+}")
 	public ResponseEntity<StudyOnceJoinResult> tryQuit(@PathVariable Long studyId,
 		@RequestHeader("Authorization") String authorization) {
-		long identityId = cafegoryTokenManager.getIdentityId(authorization);
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
-		studyOnceService.tryQuit(identityId, studyId);
+		studyOnceService.tryQuit(memberId, studyId);
 		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
 }

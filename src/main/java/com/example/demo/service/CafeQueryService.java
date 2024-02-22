@@ -12,4 +12,7 @@ public interface CafeQueryService {
 	CafeResponse searchCafeById(Long cafeId);
 
 	CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId);
+
+	CafeResponse searchCafeForNotMemberByCafeId(Long cafeId);
+
 }

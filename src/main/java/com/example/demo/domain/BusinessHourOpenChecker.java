@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
+
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 
 	@Override
@@ -56,7 +59,7 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 	@Override
 	public boolean checkWithBusinessHours(List<BusinessHour> businessHours, LocalDateTime now) {
 		if (!hasMatchingDayOfWeek(businessHours, now)) {
-			throw new IllegalStateException("현재 요일과 일치하는 요일을 찾을 수 없습니다.");
+			throw new CafegoryException(ExceptionType.CAFE_NOT_FOUND_DAY_OF_WEEK);
 		}
 		return businessHours.stream()
 			.anyMatch(
