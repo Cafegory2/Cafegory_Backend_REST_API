@@ -55,9 +55,9 @@ class ReviewRepositoryTest {
 		em.flush();
 		em.clear();
 		//when
-		List<ReviewImpl> findCafes = reviewRepository.findAllByCafeId(cafe.getId());
+		List<ReviewImpl> reviews = reviewRepository.findAllByCafeId(cafe.getId());
 		//then
-		assertThat(findCafes.size()).isEqualTo(2);
+		assertThat(reviews.size()).isEqualTo(2);
 	}
 
 	@Test
