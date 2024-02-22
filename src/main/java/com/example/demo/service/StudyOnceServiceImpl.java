@@ -112,7 +112,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private List<StudyMemberStateResponse> mapToStateResponses(List<StudyMember> studyMembers) {
 		return studyMembers.stream()
 			.map(studyMember -> new StudyMemberStateResponse(studyMember.getId().getMemberId(),
-				studyMember.getAttendance().isPresent(), LocalDateTime.of(2999, 12, 31, 12, 0)))
+				studyMember.getAttendance().isPresent(), studyMember.getLastModifiedDate()))
 			.collect(Collectors.toList());
 	}
 
@@ -144,6 +144,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
 			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
 		findStudyMember.setAttendance(attendance);
+		findStudyMember.setLastModifiedDate(now);
 	}
 
 	private void validateLateToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime,
