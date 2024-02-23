@@ -1,14 +1,16 @@
 package com.example.demo.service;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,25 +18,52 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.config.TestConfig;
 import com.example.demo.domain.Address;
+import com.example.demo.domain.Attendance;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyMember;
+import com.example.demo.domain.StudyMemberId;
+import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMemberStateRequest;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.helper.CafePersistHelper;
+import com.example.demo.helper.MemberPersistHelper;
+import com.example.demo.helper.StudyMemberPersistHelper;
+import com.example.demo.helper.StudyOncePersistHelper;
+import com.example.demo.helper.ThumbnailImagePersistHelper;
+import com.example.demo.repository.StudyMemberRepository;
 
 @SpringBootTest
+@Import(TestConfig.class)
 @Transactional
 class StudyOnceServiceImplTest {
 	@Autowired
 	StudyOnceServiceImpl studyOnceService;
 	@Autowired
+	StudyMemberRepository studyMemberRepository;
+	@Autowired
 	private EntityManager em;
+	@Autowired
+	private StudyMemberPersistHelper studyMemberPersistHelper;
+	@Autowired
+	private MemberPersistHelper memberPersistHelper;
+	@Autowired
+	private ThumbnailImagePersistHelper thumbnailImagePersistHelper;
+	@Autowired
+	private StudyOncePersistHelper studyOncePersistHelper;
+	@Autowired
+	private CafePersistHelper cafePersistHelper;
 
 	private long initCafe() {
 		Address address = new Address("테스트도 테스트시 테스트구 테스트동 ...", "테스트동");
@@ -72,7 +101,7 @@ class StudyOnceServiceImplTest {
 
 		//then
 		List<StudyOnceSearchResponse> results = pagedResponse.getList();
-		Assertions.assertThat(results).contains(expectedStudyOnceSearchResponse);
+		assertThat(results).contains(expectedStudyOnceSearchResponse);
 	}
 
 	@Test
@@ -85,7 +114,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getId());
-		Assertions.assertThat(studyOnceSearchResponse.getId()).isEqualTo(result.getId());
+		assertThat(studyOnceSearchResponse.getId()).isEqualTo(result.getId());
 	}
 
 	@Test
@@ -98,7 +127,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
-		Assertions.assertThat(result).isEqualTo(expected);
+		assertThat(result).isEqualTo(expected);
 	}
 
 	private static StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
@@ -114,7 +143,7 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
+		assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
 	}
@@ -127,7 +156,7 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
+		assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_SHORT_DURATION.getErrorMessage());
 	}
@@ -140,7 +169,7 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
+		assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LONG_DURATION.getErrorMessage());
 	}
@@ -175,7 +204,7 @@ class StudyOnceServiceImplTest {
 		studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 
 		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest))
+		assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, needToFailStudyOnceCreateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
@@ -200,7 +229,7 @@ class StudyOnceServiceImplTest {
 		studyOnceService.tryJoin(memberId, study.getId());
 		// 오른쪽 끝에서 겹침
 		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
-		Assertions.assertThatThrownBy(() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest))
+		assertThatThrownBy(() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
@@ -253,7 +282,7 @@ class StudyOnceServiceImplTest {
 		//when
 		studyOnceService.tryJoin(secondMemberId, study.getId());
 		//then
-		Assertions.assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, study.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, study.getId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_DUPLICATE.getErrorMessage());
 	}
@@ -277,7 +306,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceSearchResponse conflictStudy = studyOnceService.createStudy(thirdMemberId,
 			conflictStudyOnceCreateRequest);
 		//then
-		Assertions.assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
@@ -313,7 +342,7 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		Assertions.assertThatThrownBy(() -> studyOnceService.tryQuit(secondMemberId, study.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryQuit(secondMemberId, study.getId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_TRY_QUIT_NOT_JOIN.getErrorMessage());
 	}
@@ -329,8 +358,239 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(secondMemberId, study.getId());
-		Assertions.assertThatThrownBy(() -> studyOnceService.tryQuit(firstMemberId, study.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryQuit(firstMemberId, study.getId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LEADER_QUIT_FAIL.getErrorMessage());
 	}
+
+	@ParameterizedTest
+	@MethodSource("provideDateTime1")
+	@DisplayName("출석 업데이트")
+	void take_attendance(LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime now) {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			startDateTime, endDateTime);
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//when
+		studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+			now);
+		em.flush();
+		em.clear();
+		StudyMember findMember = studyMemberRepository.findById(
+			new StudyMemberId(member.getId(), studyOnce.getId())
+		).get();
+		//then
+		assertThat(findMember.getAttendance()).isEqualTo(Attendance.NO);
+	}
+
+	private static Stream<Arguments> provideDateTime1() {
+		return Stream.of(
+			/*
+			LocalDateTime startDateTime
+			LocalDateTime endDateTime
+			LocalDateTime now
+			*/
+			Arguments.of(
+				LocalDateTime.of(2999, 2, 17, 18, 0),
+				LocalDateTime.of(2999, 2, 17, 21, 0),
+				LocalDateTime.of(2999, 2, 17, 18, 10)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 2, 17, 22, 0),
+				LocalDateTime.of(2999, 2, 18, 3, 0),
+				LocalDateTime.of(2999, 2, 17, 23, 59, 59, 999_999_999)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 2, 17, 22, 0),
+				LocalDateTime.of(2999, 2, 18, 3, 0),
+				LocalDateTime.of(2999, 2, 18, 0, 0)
+			)
+		);
+	}
+
+	@Test
+	@DisplayName("참석여부를 업데이트 할때, 스터디가 존재하지 않으면 예외가 터진다.")
+	void take_attendance_study_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		assertThatThrownBy(() ->
+			studyOnceService.updateAttendance(leader.getId(), 10L, member.getId(), Attendance.NO,
+				LocalDateTime.of(2999, 2, 17, 18, 10))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_NOT_FOUND.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("참석여부를 업데이트 할때, memberId가 틀리다면 예외가 터진다.")
+	void take_attendance_memberId_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		assertThatThrownBy(() ->
+			studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), 10L, Attendance.NO,
+				LocalDateTime.of(2999, 2, 17, 18, 10))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_MEMBER_NOT_FOUND.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("참석여부를 업데이트 할때, 리더가 아니라면 예외가 터진다.")
+	void take_attendance_leaderId_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		assertThatThrownBy(() ->
+			studyOnceService.updateAttendance(10L, studyOnce.getId(), member.getId(), Attendance.NO,
+				LocalDateTime.of(2999, 2, 17, 18, 10))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_INVALID_LEADER.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("카공이 시작된지 10분뒤 출석 체크를 할 수 있다.")
+	void can_take_attendance_from_start_time_in_10min() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+			LocalDateTime.of(2999, 2, 17, 18, 10));
+		em.flush();
+		em.clear();
+		StudyMember findMember = studyMemberRepository.findById(
+			new StudyMemberId(member.getId(), studyOnce.getId())
+		).get();
+		//then
+		assertThat(findMember.getAttendance()).isEqualTo(Attendance.NO);
+	}
+
+	@Test
+	@DisplayName("카공이 시작된지 10분전이라면 예외가 터진다.")
+	void can_take_attendance_from_start_time_in_10min_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		assertThatThrownBy(() ->
+			studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+				LocalDateTime.of(2999, 2, 17, 18, 9, 59, 999_999_999))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_EARLY_TAKE_ATTENDANCE.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("출석 체크는 스터디 진행시간이 절반이 지나기전에만 변경할 수 있다.")
+	void can_take_attendance_until_half_whole_study_time() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0)
+		);
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//when
+		studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+			LocalDateTime.of(2999, 2, 17, 19, 30));
+		em.flush();
+		em.clear();
+		StudyMember findMember = studyMemberRepository.findById(
+			new StudyMemberId(member.getId(), studyOnce.getId())
+		).get();
+		//then
+		assertThat(findMember.getAttendance()).isEqualTo(Attendance.NO);
+	}
+
+	@Test
+	@DisplayName("출석체크시 스터디 진행시간이 절반이 지난 후라면 예외가 터진다. ")
+	void can_take_attendance_until_half_whole_study_time_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+		MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버");
+		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+		//then
+		assertThatThrownBy(() ->
+			studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), Attendance.NO,
+				LocalDateTime.of(2999, 2, 17, 19, 30, 0, 1))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LATE_TAKE_ATTENDANCE.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("출석 업데이트, 여러건")
+	void can_take_attendances() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistStudyOnceWithTime(cafe, leader,
+			LocalDateTime.of(2999, 2, 17, 18, 0),
+			LocalDateTime.of(2999, 2, 17, 21, 0));
+
+		List<StudyMemberStateRequest> memberStateRequests = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			MemberImpl member = memberPersistHelper.persistMemberWithName(thumb, "멤버" + i);
+			studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
+			memberStateRequests.add(
+				new StudyMemberStateRequest(member.getId(), false, LocalDateTime.of(2999, 2, 17, 12, 0)));
+		}
+		UpdateAttendanceRequest request = new UpdateAttendanceRequest(memberStateRequests);
+		//when
+		studyOnceService.updateAttendances(leader.getId(), studyOnce.getId(), request,
+			LocalDateTime.of(2999, 2, 17, 18, 10));
+		em.flush();
+		em.clear();
+		//then
+		List<StudyMemberId> studyMemberIds = memberStateRequests.stream()
+			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnce.getId()))
+			.collect(Collectors.toList());
+		List<StudyMember> searchedStudyMembers = studyMemberRepository.findAllById(studyMemberIds);
+
+		assertThat(searchedStudyMembers)
+			.extracting(StudyMember::getAttendance)
+			.contains(Attendance.NO);
+	}
+
 }

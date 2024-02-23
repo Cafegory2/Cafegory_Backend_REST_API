@@ -26,15 +26,19 @@ public enum ExceptionType {
 	STUDY_ONCE_TOO_LATE_QUIT(CONFLICT, "카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다."),
 	STUDY_ONCE_TRY_QUIT_NOT_JOIN(CONFLICT, "참여중인 카공이 아닙니다."),
 	STUDY_ONCE_LEADER_QUIT_FAIL(CONFLICT, "카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다."),
+	STUDY_ONCE_INVALID_LEADER(BAD_REQUEST, "스터디 리더가 아닙니다."),
+	STUDY_ONCE_EARLY_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 시작 10분 이후여야 합니다."),
+	STUDY_ONCE_LATE_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 진행시간 절반이 지나기전에만 변경할 수 있습니다. "),
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
-	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
 	REVIEW_NOT_FOUND(NOT_FOUND, "없는 리뷰입니다."),
 	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 최대 글자수 이하여야 합니다."),
 	REVIEW_INVALID_MEMBER(FORBIDDEN, "자신이 작성한 리뷰만 수정할 수 있습니다."),
 	REVIEW_CONTENT_EMPTY_OR_WHITESPACE(BAD_REQUEST, "리뷰 내용은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	REVIEW_INVALID_RATE_RANGE(BAD_REQUEST, "평점이 허용된 범위를 벗어났습니다."),
+	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
 	CAFE_INVALID_BUSINESS_TIME_RANGE(BAD_REQUEST, "영업시간이 허용된 범위를 벗어났습니다."),
-	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다.");
+	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다."),
+	STUDY_MEMBER_NOT_FOUND(NOT_FOUND, "없는 스터디멤버입니다.");
 
 	private final HttpStatus errStatus;
 	private final String errorMessage;

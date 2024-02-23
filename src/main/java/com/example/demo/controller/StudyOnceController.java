@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,8 @@ import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.UpdateAttendanceRequest;
+import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.service.StudyOnceService;
 
 import lombok.RequiredArgsConstructor;
@@ -68,4 +71,15 @@ public class StudyOnceController {
 		studyOnceService.tryQuit(memberId, studyId);
 		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
+
+	@PatchMapping("/{studyId:[0-9]+}/attendance")
+	public ResponseEntity<UpdateAttendanceResponse> takeAttendance(@PathVariable Long studyId,
+		@RequestHeader("Authorization") String authorization,
+		@RequestBody UpdateAttendanceRequest request) {
+		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
+		UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyId,
+			request, LocalDateTime.now());
+		return ResponseEntity.ok(response);
+	}
+
 }

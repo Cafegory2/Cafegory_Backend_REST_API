@@ -1,5 +1,15 @@
 package com.example.demo.domain;
 
 public enum Attendance {
-	YES, NO;
+	YES(true), NO(false);
+
+	private final boolean isPresent;
+
+	Attendance(boolean isPresent) {
+		this.isPresent = isPresent;
+	}
+
+	public boolean isPresent() {
+		return isPresent;
+	}
 }

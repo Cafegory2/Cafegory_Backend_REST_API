@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,14 +10,19 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.Attendance;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyMember;
+import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMemberStateRequest;
+import com.example.demo.dto.StudyMemberStateResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
@@ -94,8 +100,72 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public List<UpdateAttendanceResponse> updateAttendance(long leaderId, long memberId, boolean attendance) {
-		return null;
+	public UpdateAttendanceResponse updateAttendances(long leaderId, long studyOnceId,
+		UpdateAttendanceRequest request, LocalDateTime now) {
+		processAttendanceUpdates(leaderId, studyOnceId, request, now);
+
+		List<StudyMemberId> studyMemberIds = generateStudyMemberIdsFromRequest(studyOnceId, request);
+		List<StudyMember> studyMembers = studyMemberRepository.findAllById(studyMemberIds);
+		return new UpdateAttendanceResponse(mapToStateResponses(studyMembers));
+	}
+
+	private List<StudyMemberStateResponse> mapToStateResponses(List<StudyMember> studyMembers) {
+		return studyMembers.stream()
+			.map(studyMember -> new StudyMemberStateResponse(studyMember.getId().getMemberId(),
+				studyMember.getAttendance().isPresent(), studyMember.getLastModifiedDate()))
+			.collect(Collectors.toList());
+	}
+
+	private List<StudyMemberId> generateStudyMemberIdsFromRequest(long studyOnceId, UpdateAttendanceRequest request) {
+		return request.getStates().stream()
+			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnceId))
+			.collect(Collectors.toList());
+	}
+
+	private void processAttendanceUpdates(long leaderId, long studyOnceId, UpdateAttendanceRequest request,
+		LocalDateTime now) {
+		for (StudyMemberStateRequest memberStateRequest : request.getStates()) {
+			Attendance attendance = memberStateRequest.isAttendance() ? Attendance.YES : Attendance.NO;
+			updateAttendance(leaderId, studyOnceId, memberStateRequest.getUserId(), attendance, now);
+		}
+	}
+
+	@Override
+	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
+		LocalDateTime now) {
+		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
+			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
+		}
+
+		StudyOnceImpl searched = findStudyOnceById(studyOnceId);
+		validateEarlyToTakeAttendance(now, searched.getStartDateTime());
+		validateLateToTakeAttendance(now, searched.getStartDateTime(), searched.getEndDateTime());
+
+		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
+			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
+		findStudyMember.setAttendance(attendance);
+		findStudyMember.setLastModifiedDate(now);
+	}
+
+	private void validateLateToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime,
+		LocalDateTime endDateTime) {
+		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
+		LocalDateTime midTime = startDateTime.plus(halfDuration);
+
+		if (now.isAfter(midTime)) {
+			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
+		}
+	}
+
+	private void validateEarlyToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime) {
+		if (now.minusMinutes(10).isBefore(startDateTime)) {
+			throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
+		}
+	}
+
+	private StudyOnceImpl findStudyOnceById(long studyOnceId) {
+		return studyOnceRepository.findById(studyOnceId)
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 	}
 
 	@Override
