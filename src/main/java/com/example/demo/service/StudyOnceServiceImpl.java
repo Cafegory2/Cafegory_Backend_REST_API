@@ -208,7 +208,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private static StudyOnceSearchResponse makeStudyOnceSearchResponse(StudyOnceImpl saved, boolean canJoin) {
 		return StudyOnceSearchResponse.builder()
 			.cafeId(saved.getCafe().getId())
-			.id(saved.getId())
+			.studyOnceId(saved.getId())
 			.name(saved.getName())
 			.startDateTime(saved.getStartDateTime())
 			.endDateTime(saved.getEndDateTime())

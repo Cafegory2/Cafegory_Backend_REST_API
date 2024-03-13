@@ -113,8 +113,8 @@ class StudyOnceServiceImplTest {
 		long leaderId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
-		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getId());
-		assertThat(studyOnceSearchResponse.getId()).isEqualTo(result.getId());
+		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getStudyOnceId());
+		assertThat(studyOnceSearchResponse.getStudyOnceId()).isEqualTo(result.getStudyOnceId());
 	}
 
 	@Test
@@ -181,7 +181,7 @@ class StudyOnceServiceImplTest {
 		boolean isEnd = false;
 		return StudyOnceSearchResponse.builder()
 			.cafeId(cafeId)
-			.id(result.getId())
+			.studyOnceId(result.getStudyOnceId())
 			.name(studyOnceCreateRequest.getName())
 			.startDateTime(studyOnceCreateRequest.getStartDateTime())
 			.endDateTime(studyOnceCreateRequest.getEndDateTime())
@@ -226,7 +226,7 @@ class StudyOnceServiceImplTest {
 		long memberId = initMember();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
-		studyOnceService.tryJoin(memberId, study.getId());
+		studyOnceService.tryJoin(memberId, study.getStudyOnceId());
 		// 오른쪽 끝에서 겹침
 		StudyOnceCreateRequest needToFailStudyOnceCreateRequest = makeStudyOnceCreateRequest(left, right, cafeId);
 		assertThatThrownBy(() -> studyOnceService.createStudy(memberId, needToFailStudyOnceCreateRequest))
@@ -267,7 +267,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
 			LocalDateTime.now().plusHours(7), cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		studyOnceService.tryJoin(secondMemberId, study.getId());
+		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 	}
 
 	@Test
@@ -280,9 +280,9 @@ class StudyOnceServiceImplTest {
 			LocalDateTime.now().plusHours(7), cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 		//when
-		studyOnceService.tryJoin(secondMemberId, study.getId());
+		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 		//then
-		assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, study.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_DUPLICATE.getErrorMessage());
 	}
@@ -299,14 +299,14 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		studyOnceService.tryJoin(secondMemberId, study.getId());
+		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 		//when
 		StudyOnceCreateRequest conflictStudyOnceCreateRequest = makeStudyOnceCreateRequest(conflictStart, conflictEnd,
 			cafeId);
 		StudyOnceSearchResponse conflictStudy = studyOnceService.createStudy(thirdMemberId,
 			conflictStudyOnceCreateRequest);
 		//then
-		assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryJoin(secondMemberId, conflictStudy.getStudyOnceId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
@@ -328,8 +328,8 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		studyOnceService.tryJoin(secondMemberId, study.getId());
-		studyOnceService.tryQuit(secondMemberId, study.getId());
+		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
+		studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId());
 	}
 
 	@Test
@@ -342,7 +342,7 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		assertThatThrownBy(() -> studyOnceService.tryQuit(secondMemberId, study.getId()))
+		assertThatThrownBy(() -> studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_TRY_QUIT_NOT_JOIN.getErrorMessage());
 	}
@@ -357,8 +357,8 @@ class StudyOnceServiceImplTest {
 		long cafeId = initCafe();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
-		studyOnceService.tryJoin(secondMemberId, study.getId());
-		assertThatThrownBy(() -> studyOnceService.tryQuit(firstMemberId, study.getId()))
+		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
+		assertThatThrownBy(() -> studyOnceService.tryQuit(firstMemberId, study.getStudyOnceId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LEADER_QUIT_FAIL.getErrorMessage());
 	}
