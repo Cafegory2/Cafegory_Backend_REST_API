@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudyMemberStateResponse {
 
-	private final Long userId;
+	private final Long memberId;
 	private final boolean attendance;
 	private final LocalDateTime lastUpdateTime;
 
