@@ -118,7 +118,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private List<StudyMemberId> generateStudyMemberIdsFromRequest(long studyOnceId, UpdateAttendanceRequest request) {
 		return request.getStates().stream()
-			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnceId))
+			.map(memberReq -> new StudyMemberId(memberReq.getMemberId(), studyOnceId))
 			.collect(Collectors.toList());
 	}
 
@@ -126,7 +126,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		LocalDateTime now) {
 		for (StudyMemberStateRequest memberStateRequest : request.getStates()) {
 			Attendance attendance = memberStateRequest.isAttendance() ? Attendance.YES : Attendance.NO;
-			updateAttendance(leaderId, studyOnceId, memberStateRequest.getUserId(), attendance, now);
+			updateAttendance(leaderId, studyOnceId, memberStateRequest.getMemberId(), attendance, now);
 		}
 	}
 
