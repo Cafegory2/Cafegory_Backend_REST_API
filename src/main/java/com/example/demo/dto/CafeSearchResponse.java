@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CafeSearchResponse {
 
-	private final long id;
+	private final long cafeId;
 	private final String name;
 	private final String address;
 	private final List<BusinessHourResponse> businessHours;

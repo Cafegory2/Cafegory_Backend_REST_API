@@ -183,7 +183,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		return findCafe.getReviews().stream()
 			.map(review ->
 				ReviewResponse.builder()
-					.id(review.getId())
+					.reviewId(review.getId())
 					.writer(
 						new WriterResponse(review.getMember().getId(),
 							review.getMember().getName(),
@@ -201,7 +201,7 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			.map(studyOnce ->
 				StudyOnceForCafeResponse.builder()
 					.cafeId(findCafe.getId())
-					.id(studyOnce.getId())
+					.studyOnceId(studyOnce.getId())
 					.name(studyOnce.getName())
 					.startDateTime(studyOnce.getStartDateTime())
 					.endDateTime(studyOnce.getEndDateTime())

@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class StudyOnceForCafeResponse {
 	private long cafeId;
-	private long id;
+	private long studyOnceId;
 	private String name;
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;

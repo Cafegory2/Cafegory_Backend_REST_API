@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class ReviewResponse {
 
-	private final long id;
+	private final long reviewId;
 	private final WriterResponse writer;
 	private final double rate;
 	private final String content;

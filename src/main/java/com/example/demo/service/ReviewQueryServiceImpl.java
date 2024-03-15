@@ -52,7 +52,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 	private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
 		return ReviewResponse.builder()
-			.id(findReview.getId())
+			.reviewId(findReview.getId())
 			.writer(
 				new WriterResponse(findReview.getMember().getId(),
 					findReview.getMember().getName(),

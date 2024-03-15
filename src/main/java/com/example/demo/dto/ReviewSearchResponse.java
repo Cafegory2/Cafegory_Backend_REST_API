@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewSearchResponse {
 
-	private final long id;
+	private final long reviewId;
 	private final WriterResponse writer;
 	private final double rate;
 	private final String content;

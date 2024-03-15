@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WriterResponse {
 
-	private final long id;
+	private final long memberId;
 	private final String name;
 	private final String thumbnailImg;
 
