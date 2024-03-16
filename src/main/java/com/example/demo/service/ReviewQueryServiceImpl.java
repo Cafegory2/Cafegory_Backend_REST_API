@@ -17,6 +17,7 @@ import com.example.demo.dto.ReviewSearchRequest;
 import com.example.demo.dto.ReviewSearchResponse;
 import com.example.demo.dto.WriterResponse;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.mapper.ReviewMapper;
 import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.util.PageRequestCustom;
@@ -30,6 +31,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 	private final ReviewRepository reviewRepository;
 	private final CafeRepository cafeRepository;
+	private final ReviewMapper reviewMapper = new ReviewMapper();
 
 	@Override
 	public PagedResponse<ReviewSearchResponse> searchWithPagingByCafeId(ReviewSearchRequest request) {
@@ -37,12 +39,14 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(request.getCafeId(),
 			pageable);
-		return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
+		// return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
+		return createPagedResponse(pagedReviews, reviewMapper.pagedReviewsToReviewSearchResponses(pagedReviews));
+
 	}
 
 	@Override
 	public ReviewResponse searchOne(Long reviewId) {
-		return mapToReviewResponse(findReviewById(reviewId));
+		return reviewMapper.reviewToReviewResponse(findReviewById(reviewId));
 	}
 
 	private ReviewImpl findReviewById(Long reviewId) {
