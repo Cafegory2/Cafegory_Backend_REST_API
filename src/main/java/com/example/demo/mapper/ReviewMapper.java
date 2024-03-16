@@ -12,7 +12,22 @@ import com.example.demo.dto.WriterResponse;
 
 public class ReviewMapper {
 
-	public List<ReviewSearchResponse> pagedReviewsToReviewSearchResponses(Page<ReviewImpl> pagedReviews) {
+	public List<ReviewSearchResponse> entitiesToReviewSearchResponses(List<ReviewImpl> reviews) {
+		return reviews.stream()
+			.map(review ->
+				new ReviewSearchResponse(
+					review.getId(),
+					produceWriterResponse(
+						review.getMember().getId(), review.getMember().getName(),
+						review.getMember().getThumbnailImage().getThumbnailImage()
+					),
+					review.getRate(),
+					review.getContent()
+				))
+			.collect(Collectors.toList());
+	}
+
+	public List<ReviewSearchResponse> pagedEntityToReviewSearchResponses(Page<ReviewImpl> pagedReviews) {
 		return pagedReviews.getContent().stream()
 			.map(review ->
 				new ReviewSearchResponse(
@@ -32,7 +47,7 @@ public class ReviewMapper {
 		return new WriterResponse(memberId, name, thumbnailImg);
 	}
 
-	public ReviewResponse reviewToReviewResponse(ReviewImpl findReview) {
+	public ReviewResponse entityToReviewResponse(ReviewImpl findReview) {
 		return ReviewResponse.builder()
 			.reviewId(findReview.getId())
 			.writer(

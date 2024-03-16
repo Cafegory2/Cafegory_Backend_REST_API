@@ -40,13 +40,13 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(request.getCafeId(),
 			pageable);
 		// return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
-		return createPagedResponse(pagedReviews, reviewMapper.pagedReviewsToReviewSearchResponses(pagedReviews));
-
+		return createPagedResponse(pagedReviews,
+			reviewMapper.entitiesToReviewSearchResponses(pagedReviews.getContent()));
 	}
 
 	@Override
 	public ReviewResponse searchOne(Long reviewId) {
-		return reviewMapper.reviewToReviewResponse(findReviewById(reviewId));
+		return reviewMapper.entityToReviewResponse(findReviewById(reviewId));
 	}
 
 	private ReviewImpl findReviewById(Long reviewId) {
