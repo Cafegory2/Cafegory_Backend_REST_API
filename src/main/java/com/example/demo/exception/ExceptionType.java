@@ -38,7 +38,8 @@ public enum ExceptionType {
 	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
 	CAFE_INVALID_BUSINESS_TIME_RANGE(BAD_REQUEST, "영업시간이 허용된 범위를 벗어났습니다."),
 	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다."),
-	STUDY_MEMBER_NOT_FOUND(NOT_FOUND, "없는 스터디멤버입니다.");
+	STUDY_MEMBER_NOT_FOUND(NOT_FOUND, "없는 스터디멤버입니다."),
+	PROFILE_GET_PERMISSION_DENIED(FORBIDDEN, "프로필을 조회할 권한이 없는 상대입니다.");
 
 	private final HttpStatus errStatus;
 	private final String errorMessage;
