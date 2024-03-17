@@ -28,7 +28,7 @@ public class CafeMapper {
 	// 	this.snsDetailMapper = snsDetailMapper;
 	// }
 
-	public List<CafeSearchResponse> entitiesToCafeSearchResponses(List<CafeImpl> cafes,
+	public List<CafeSearchResponse> toCafeSearchResponses(List<CafeImpl> cafes,
 		OpenChecker<BusinessHour> openChecker) {
 		return cafes.stream()
 			.map(cafe ->
@@ -53,7 +53,7 @@ public class CafeMapper {
 			.collect(Collectors.toList());
 	}
 
-	public CafeBasicInfoResponse entityToCafeBasicInfoResponse(CafeImpl cafe,
+	public CafeBasicInfoResponse toCafeBasicInfoResponse(CafeImpl cafe,
 		List<BusinessHourResponse> businessHourResponses,
 		List<SnsResponse> snsResponses,
 		OpenChecker<BusinessHour> openChecker) {
@@ -74,7 +74,7 @@ public class CafeMapper {
 		);
 	}
 
-	public CafeSearchCondition cafeSearchRequestToCafeSearchCondition(CafeSearchRequest request) {
+	public CafeSearchCondition toCafeSearchCondition(CafeSearchRequest request) {
 		return new CafeSearchCondition.Builder(request.isCanStudy(),
 			request.getArea())
 			.maxTime(request.getMaxTime())
@@ -84,7 +84,7 @@ public class CafeMapper {
 			.build();
 	}
 
-	public CafeResponse entityToCafeResponse(
+	public CafeResponse toCafeResponse(
 		CafeImpl findCafe,
 		List<BusinessHourResponse> businessHourResponses,
 		List<SnsResponse> snsResponses,
@@ -93,7 +93,7 @@ public class CafeMapper {
 		OpenChecker<BusinessHour> openChecker) {
 		return CafeResponse.builder()
 			.basicInfo(
-				entityToCafeBasicInfoResponse(
+				toCafeBasicInfoResponse(
 					findCafe,
 					businessHourResponses,
 					snsResponses,
@@ -111,7 +111,7 @@ public class CafeMapper {
 			.build();
 	}
 
-	public CafeResponse entityToCafeResponseWithEmptyInfo(
+	public CafeResponse toCafeResponseWithEmptyInfo(
 		CafeImpl findCafe,
 		List<BusinessHourResponse> businessHourResponses,
 		List<SnsResponse> snsResponses,
@@ -120,7 +120,7 @@ public class CafeMapper {
 	) {
 		return CafeResponse.builder()
 			.basicInfo(
-				entityToCafeBasicInfoResponse(
+				toCafeBasicInfoResponse(
 					findCafe,
 					businessHourResponses,
 					snsResponses,

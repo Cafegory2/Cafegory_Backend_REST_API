@@ -8,7 +8,7 @@ import com.example.demo.dto.SnsResponse;
 
 public class SnsDetailMapper {
 
-	public List<SnsResponse> entitiesToSnsResponses(List<SnsDetail> snsDetails) {
+	public List<SnsResponse> toSnsResponses(List<SnsDetail> snsDetails) {
 		return snsDetails.stream()
 			.map(snsDetail -> new SnsResponse(snsDetail.getName(), snsDetail.getUrl()))
 			.collect(Collectors.toList());

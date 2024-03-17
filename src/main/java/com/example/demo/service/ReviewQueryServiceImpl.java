@@ -3,7 +3,6 @@ package com.example.demo.service;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.ReviewSearchRequest;
 import com.example.demo.dto.ReviewSearchResponse;
-import com.example.demo.dto.WriterResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.ReviewMapper;
 import com.example.demo.repository.ReviewRepository;
@@ -41,12 +39,12 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 			pageable);
 		// return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
 		return createPagedResponse(pagedReviews,
-			reviewMapper.entitiesToReviewSearchResponses(pagedReviews.getContent()));
+			reviewMapper.toReviewSearchResponses(pagedReviews.getContent()));
 	}
 
 	@Override
 	public ReviewResponse searchOne(Long reviewId) {
-		return reviewMapper.entityToReviewResponse(findReviewById(reviewId));
+		return reviewMapper.toReviewResponse(findReviewById(reviewId));
 	}
 
 	private ReviewImpl findReviewById(Long reviewId) {
@@ -54,18 +52,18 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 			.orElseThrow(() -> new CafegoryException(REVIEW_NOT_FOUND));
 	}
 
-	private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
-		return ReviewResponse.builder()
-			.reviewId(findReview.getId())
-			.writer(
-				new WriterResponse(findReview.getMember().getId(),
-					findReview.getMember().getName(),
-					findReview.getMember().getThumbnailImage().getThumbnailImage()
-				))
-			.rate(findReview.getRate())
-			.content(findReview.getContent())
-			.build();
-	}
+	// private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
+	// 	return ReviewResponse.builder()
+	// 		.reviewId(findReview.getId())
+	// 		.writer(
+	// 			new WriterResponse(findReview.getMember().getId(),
+	// 				findReview.getMember().getName(),
+	// 				findReview.getMember().getThumbnailImage().getThumbnailImage()
+	// 			))
+	// 		.rate(findReview.getRate())
+	// 		.content(findReview.getContent())
+	// 		.build();
+	// }
 
 	private void validateExistCafe(Long cafeId) {
 		if (!cafeRepository.existsById(cafeId)) {
@@ -83,17 +81,17 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		);
 	}
 
-	private List<ReviewSearchResponse> mapToResponseList(Page<ReviewImpl> pagedReviews) {
-		return pagedReviews.getContent().stream()
-			.map(review ->
-				new ReviewSearchResponse(
-					review.getId(),
-					new WriterResponse(review.getMember().getId(), review.getMember().getName(),
-						review.getMember().getThumbnailImage().getThumbnailImage()),
-					review.getRate(),
-					review.getContent()
-				)
-			)
-			.collect(Collectors.toList());
-	}
+	// private List<ReviewSearchResponse> mapToResponseList(Page<ReviewImpl> pagedReviews) {
+	// 	return pagedReviews.getContent().stream()
+	// 		.map(review ->
+	// 			new ReviewSearchResponse(
+	// 				review.getId(),
+	// 				new WriterResponse(review.getMember().getId(), review.getMember().getName(),
+	// 					review.getMember().getThumbnailImage().getThumbnailImage()),
+	// 				review.getRate(),
+	// 				review.getContent()
+	// 			)
+	// 		)
+	// 		.collect(Collectors.toList());
+	// }
 }

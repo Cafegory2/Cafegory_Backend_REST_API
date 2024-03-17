@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.demo.domain.CafeImpl;
+import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyOnceImpl;
+import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceForCafeResponse;
+import com.example.demo.dto.StudyOnceSearchResponse;
 
 public class StudyOnceMapper {
-	public List<StudyOnceForCafeResponse> cafeToStudyOnceForCafeResponse(CafeImpl findCafe) {
+	public List<StudyOnceForCafeResponse> toStudyOnceForCafeResponse(CafeImpl findCafe) {
 		return findCafe.getStudyOnceGroup().stream()
 			.map(studyOnce ->
 				StudyOnceForCafeResponse.builder()
@@ -22,6 +26,36 @@ public class StudyOnceMapper {
 					.build()
 			)
 			.collect(Collectors.toList());
+	}
+
+	public StudyOnceImpl toNewEntity(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,
+		MemberImpl leader) {
+		return StudyOnceImpl.builder()
+			.name(studyOnceCreateRequest.getName())
+			.startDateTime(studyOnceCreateRequest.getStartDateTime())
+			.endDateTime(studyOnceCreateRequest.getEndDateTime())
+			.maxMemberCount(studyOnceCreateRequest.getMaxMemberCount())
+			.nowMemberCount(0)
+			.isEnd(false)
+			.ableToTalk(studyOnceCreateRequest.isCanTalk())
+			.cafe(cafe)
+			.leader(leader)
+			.build();
+	}
+
+	public StudyOnceSearchResponse toStudyOnceSearchResponse(StudyOnceImpl saved, boolean canJoin) {
+		return StudyOnceSearchResponse.builder()
+			.cafeId(saved.getCafe().getId())
+			.studyOnceId(saved.getId())
+			.name(saved.getName())
+			.startDateTime(saved.getStartDateTime())
+			.endDateTime(saved.getEndDateTime())
+			.maxMemberCount(saved.getMaxMemberCount())
+			.nowMemberCount(saved.getNowMemberCount())
+			.canTalk(saved.isAbleToTalk())
+			.canJoin(canJoin)
+			.isEnd(saved.isEnd())
+			.build();
 	}
 
 }

@@ -11,7 +11,7 @@ import com.example.demo.dto.WriterResponse;
 
 public class ReviewMapper {
 
-	public List<ReviewSearchResponse> entitiesToReviewSearchResponses(List<ReviewImpl> reviews) {
+	public List<ReviewSearchResponse> toReviewSearchResponses(List<ReviewImpl> reviews) {
 		return reviews.stream()
 			.map(review ->
 				new ReviewSearchResponse(
@@ -46,7 +46,7 @@ public class ReviewMapper {
 		return new WriterResponse(memberId, name, thumbnailImg);
 	}
 
-	public ReviewResponse entityToReviewResponse(ReviewImpl findReview) {
+	public ReviewResponse toReviewResponse(ReviewImpl findReview) {
 		return ReviewResponse.builder()
 			.reviewId(findReview.getId())
 			.writer(
@@ -60,12 +60,12 @@ public class ReviewMapper {
 			.build();
 	}
 
-	public List<ReviewResponse> entitiesToReviewResponses(List<ReviewImpl> reviews) {
+	public List<ReviewResponse> toReviewResponses(List<ReviewImpl> reviews) {
 		return reviews.stream()
 			.map(review ->
 					produceReviewResponse(
 						review.getId(),
-						memberEntityToWriterResponse(review.getMember()),
+						productWriterResponse(review.getMember()),
 						review.getRate(),
 						review.getContent()
 					)
@@ -93,7 +93,7 @@ public class ReviewMapper {
 			.build();
 	}
 
-	private WriterResponse memberEntityToWriterResponse(MemberImpl member) {
+	private WriterResponse productWriterResponse(MemberImpl member) {
 		return new WriterResponse(member.getId(),
 			member.getName(),
 			member.getThumbnailImage().getThumbnailImage()

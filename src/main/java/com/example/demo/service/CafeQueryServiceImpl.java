@@ -50,25 +50,25 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		// CafeSearchCondition cafeSearchCondition = createCafeSearchCondition(request);
-		CafeSearchCondition cafeSearchCondition = cafeMapper.cafeSearchRequestToCafeSearchCondition(request);
+		CafeSearchCondition cafeSearchCondition = cafeMapper.toCafeSearchCondition(request);
 
 		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(cafeSearchCondition,
 			pageable);
 		// return createPagedResponse(pagedCafes, mapToResponseList(pagedCafes));
 		return createPagedResponse(pagedCafes,
-			cafeMapper.entitiesToCafeSearchResponses(pagedCafes.getContent(), openChecker));
+			cafeMapper.toCafeSearchResponses(pagedCafes.getContent(), openChecker));
 	}
 
 	@Override
 	public CafeResponse searchCafeById(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
 		// return produceCafeResponse(findCafe);
-		return cafeMapper.entityToCafeResponse(
+		return cafeMapper.toCafeResponse(
 			findCafe,
-			businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-			snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-			reviewMapper.entitiesToReviewResponses(findCafe.getReviews()),
-			studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe),
+			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.toReviewResponses(findCafe.getReviews()),
+			studyOnceMapper.toStudyOnceForCafeResponse(findCafe),
 			openChecker
 		);
 	}
@@ -85,12 +85,12 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			throw new CafegoryException(MEMBER_NOT_FOUND);
 		}
 		// return produceCafeResponse(findCafe);
-		return cafeMapper.entityToCafeResponse(
+		return cafeMapper.toCafeResponse(
 			findCafe,
-			businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-			snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-			reviewMapper.entitiesToReviewResponses(findCafe.getReviews()),
-			studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe),
+			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.toReviewResponses(findCafe.getReviews()),
+			studyOnceMapper.toStudyOnceForCafeResponse(findCafe),
 			openChecker
 		);
 	}
@@ -99,11 +99,11 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
 		// return produceCafeResponseWithEmptyInfo(findCafe);
-		return cafeMapper.entityToCafeResponseWithEmptyInfo(
+		return cafeMapper.toCafeResponseWithEmptyInfo(
 			findCafe,
-			businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-			snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-			reviewMapper.entitiesToReviewResponses(findCafe.getReviews()),
+			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.toReviewResponses(findCafe.getReviews()),
 			openChecker
 		);
 	}
