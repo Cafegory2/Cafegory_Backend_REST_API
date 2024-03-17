@@ -37,7 +37,6 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(request.getCafeId(),
 			pageable);
-		// return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
 		return createPagedResponse(pagedReviews,
 			reviewMapper.toReviewSearchResponses(pagedReviews.getContent()));
 	}
@@ -51,19 +50,6 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		return reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new CafegoryException(REVIEW_NOT_FOUND));
 	}
-
-	// private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
-	// 	return ReviewResponse.builder()
-	// 		.reviewId(findReview.getId())
-	// 		.writer(
-	// 			new WriterResponse(findReview.getMember().getId(),
-	// 				findReview.getMember().getName(),
-	// 				findReview.getMember().getThumbnailImage().getThumbnailImage()
-	// 			))
-	// 		.rate(findReview.getRate())
-	// 		.content(findReview.getContent())
-	// 		.build();
-	// }
 
 	private void validateExistCafe(Long cafeId) {
 		if (!cafeRepository.existsById(cafeId)) {
@@ -80,18 +66,5 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 			reviewSearchResponse
 		);
 	}
-
-	// private List<ReviewSearchResponse> mapToResponseList(Page<ReviewImpl> pagedReviews) {
-	// 	return pagedReviews.getContent().stream()
-	// 		.map(review ->
-	// 			new ReviewSearchResponse(
-	// 				review.getId(),
-	// 				new WriterResponse(review.getMember().getId(), review.getMember().getName(),
-	// 					review.getMember().getThumbnailImage().getThumbnailImage()),
-	// 				review.getRate(),
-	// 				review.getContent()
-	// 			)
-	// 		)
-	// 		.collect(Collectors.toList());
-	// }
+	
 }

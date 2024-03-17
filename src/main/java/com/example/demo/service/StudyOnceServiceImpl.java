@@ -191,35 +191,5 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		leader.setStudyMembers(studyMembers);
 		return leader;
 	}
-
-	// private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,
-	// 	MemberImpl leader) {
-	// 	return StudyOnceImpl.builder()
-	// 		.name(studyOnceCreateRequest.getName())
-	// 		.startDateTime(studyOnceCreateRequest.getStartDateTime())
-	// 		.endDateTime(studyOnceCreateRequest.getEndDateTime())
-	// 		.maxMemberCount(studyOnceCreateRequest.getMaxMemberCount())
-	// 		.nowMemberCount(0)
-	// 		.isEnd(false)
-	// 		.ableToTalk(studyOnceCreateRequest.isCanTalk())
-	// 		.cafe(cafe)
-	// 		.leader(leader)
-	// 		.build();
-	//
-	// }
-
-	// private static StudyOnceSearchResponse makeStudyOnceSearchResponse(StudyOnceImpl saved, boolean canJoin) {
-	// 	return StudyOnceSearchResponse.builder()
-	// 		.cafeId(saved.getCafe().getId())
-	// 		.studyOnceId(saved.getId())
-	// 		.name(saved.getName())
-	// 		.startDateTime(saved.getStartDateTime())
-	// 		.endDateTime(saved.getEndDateTime())
-	// 		.maxMemberCount(saved.getMaxMemberCount())
-	// 		.nowMemberCount(saved.getNowMemberCount())
-	// 		.canTalk(saved.isAbleToTalk())
-	// 		.canJoin(canJoin)
-	// 		.isEnd(saved.isEnd())
-	// 		.build();
-	// }
+	
 }

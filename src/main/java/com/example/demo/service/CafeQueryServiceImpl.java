@@ -49,12 +49,10 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	@Override
 	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
-		// CafeSearchCondition cafeSearchCondition = createCafeSearchCondition(request);
 		CafeSearchCondition cafeSearchCondition = cafeMapper.toCafeSearchCondition(request);
 
 		Page<CafeImpl> pagedCafes = cafeQueryRepository.findWithDynamicFilter(cafeSearchCondition,
 			pageable);
-		// return createPagedResponse(pagedCafes, mapToResponseList(pagedCafes));
 		return createPagedResponse(pagedCafes,
 			cafeMapper.toCafeSearchResponses(pagedCafes.getContent(), openChecker));
 	}
@@ -62,7 +60,6 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	@Override
 	public CafeResponse searchCafeById(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
-		// return produceCafeResponse(findCafe);
 		return cafeMapper.toCafeResponse(
 			findCafe,
 			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
@@ -84,7 +81,6 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		if (!memberRepository.existsById(memberId)) {
 			throw new CafegoryException(MEMBER_NOT_FOUND);
 		}
-		// return produceCafeResponse(findCafe);
 		return cafeMapper.toCafeResponse(
 			findCafe,
 			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
@@ -98,7 +94,6 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	@Override
 	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
-		// return produceCafeResponseWithEmptyInfo(findCafe);
 		return cafeMapper.toCafeResponseWithEmptyInfo(
 			findCafe,
 			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
@@ -107,50 +102,6 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			openChecker
 		);
 	}
-
-	// private CafeResponse produceCafeResponseWithEmptyInfo(CafeImpl findCafe) {
-	// 	return CafeResponse.builder()
-	// 		.basicInfo(
-	// 			cafeMapper.entityToCafeBasicInfoResponse(
-	// 				findCafe,
-	// 				businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-	// 				snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-	// 				openChecker
-	// 			)
-	// 		)
-	// 		.review(
-	// 			reviewMapper.entitiesToReviewResponses(findCafe.getReviews())
-	// 			// mapToReviewResponseList(findCafe)
-	// 		)
-	// 		.meetings(
-	// 			Collections.emptyList()
-	// 		)
-	// 		.canMakeMeeting(
-	// 			Collections.emptyList()
-	// 		)
-	// 		.build();
-	// }
-
-	// private CafeResponse produceCafeResponse(CafeImpl findCafe) {
-	// 	return CafeResponse.builder()
-	// 		.basicInfo(
-	// 			cafeMapper.entityToCafeBasicInfoResponse(
-	// 				findCafe,
-	// 				businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-	// 				snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-	// 				openChecker)
-	// 		)
-	// 		.review(
-	// 			reviewMapper.entitiesToReviewResponses(findCafe.getReviews())
-	// 		)
-	// 		.meetings(
-	// 			studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe)
-	// 		)
-	// 		.canMakeMeeting(
-	// 			List.of(new CanMakeStudyOnceResponse(), new CanMakeStudyOnceResponse())
-	// 		)
-	// 		.build();
-	// }
 
 	private PagedResponse<CafeSearchResponse> createPagedResponse(Page<CafeImpl> pagedCafes,
 		List<CafeSearchResponse> cafeSearchResponses) {
@@ -161,94 +112,5 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			cafeSearchResponses
 		);
 	}
-
-	// private List<CafeSearchResponse> mapToResponseList(Page<CafeImpl> pagedCafes) {
-	// 	return pagedCafes.getContent().stream()
-	// 		.map(cafe ->
-	// 			new CafeSearchResponse(
-	// 				cafe.getId(),
-	// 				cafe.getName(),
-	// 				cafe.showFullAddress(),
-	// 				businessHourMapper.entitiesToBusinessHourResponses(cafe.getBusinessHours()),
-	// 				// cafe.getBusinessHours().stream()
-	// 				// 	.map(hour -> new BusinessHourResponse(hour.getDay(), hour.getStartTime().toString(),
-	// 				// 		hour.getEndTime().toString()))
-	// 				// 	.collect(Collectors.toList()),
-	// 				cafe.isOpen(openChecker),
-	// 				snsDetailMapper.entitiesToSnsResponses(cafe.getSnsDetails()),
-	// 				// cafe.getSnsDetails().stream()
-	// 				// 	.map(s -> new SnsResponse(s.getName(), s.getUrl()))
-	// 				// 	.collect(Collectors.toList()),
-	// 				cafe.getPhone(),
-	// 				cafe.getMinBeveragePrice(),
-	// 				cafe.getMaxAllowableStay().getValue(),
-	// 				cafe.getAvgReviewRate()
-	// 			)
-	// 		)
-	// 		.collect(Collectors.toList());
-	// }
-
-	// private CafeSearchCondition createCafeSearchCondition(CafeSearchRequest request) {
-	// 	return new CafeSearchCondition.Builder(request.isCanStudy(),
-	// 		request.getArea())
-	// 		.maxTime(request.getMaxTime())
-	// 		.minMenuPrice(request.getMinBeveragePrice())
-	// 		.startTime(request.getStartTime())
-	// 		.endTime(request.getEndTime())
-	// 		.build();
-	// }
-
-	// private CafeBasicInfoResponse produceCafeBasicInfoResponse(CafeImpl findCafe) {
-	// 	return new CafeBasicInfoResponse(
-	// 		findCafe.getId(),
-	// 		findCafe.getName(),
-	// 		findCafe.showFullAddress(),
-	// 		findCafe.getBusinessHours().stream()
-	// 			.map(hour -> new BusinessHourResponse(hour.getDay(), hour.getStartTime().toString(),
-	// 				hour.getEndTime().toString()))
-	// 			.collect(Collectors.toList()),
-	// 		findCafe.isOpen(openChecker),
-	// 		findCafe.getSnsDetails().stream()
-	// 			.map(s -> new SnsResponse(s.getName(), s.getUrl()))
-	// 			.collect(Collectors.toList()),
-	// 		findCafe.getPhone(),
-	// 		findCafe.getMinBeveragePrice(),
-	// 		findCafe.getMaxAllowableStay().getValue(),
-	// 		findCafe.getAvgReviewRate()
-	// 	);
-	// }
-
-	// private List<ReviewResponse> mapToReviewResponseList(CafeImpl findCafe) {
-	// 	return findCafe.getReviews().stream()
-	// 		.map(review ->
-	// 			ReviewResponse.builder()
-	// 				.reviewId(review.getId())
-	// 				.writer(
-	// 					new WriterResponse(review.getMember().getId(),
-	// 						review.getMember().getName(),
-	// 						review.getMember().getThumbnailImage().getThumbnailImage()
-	// 					))
-	// 				.rate(review.getRate())
-	// 				.content(review.getContent())
-	// 				.build()
-	// 		)
-	// 		.collect(Collectors.toList());
-	// }
-
-	// private List<StudyOnceForCafeResponse> mapToStudyOnceForCafeResponse(CafeImpl findCafe) {
-	// 	return findCafe.getStudyOnceGroup().stream()
-	// 		.map(studyOnce ->
-	// 			StudyOnceForCafeResponse.builder()
-	// 				.cafeId(findCafe.getId())
-	// 				.studyOnceId(studyOnce.getId())
-	// 				.name(studyOnce.getName())
-	// 				.startDateTime(studyOnce.getStartDateTime())
-	// 				.endDateTime(studyOnce.getEndDateTime())
-	// 				.maxMemberCount(studyOnce.getMaxMemberCount())
-	// 				.nowMemberCount(studyOnce.getNowMemberCount())
-	// 				.isEnd(studyOnce.isAbleToTalk())
-	// 				.build()
-	// 		)
-	// 		.collect(Collectors.toList());
-	// }
+	
 }

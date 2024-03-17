@@ -20,14 +20,6 @@ import com.example.demo.dto.StudyOnceForCafeResponse;
 
 public class CafeMapper {
 
-	// private BusinessHourMapper businessHourMapper;
-	// private SnsDetailMapper snsDetailMapper;
-
-	// public CafeMapper(BusinessHourMapper businessHourMapper, SnsDetailMapper snsDetailMapper) {
-	// 	this.businessHourMapper = businessHourMapper;
-	// 	this.snsDetailMapper = snsDetailMapper;
-	// }
-
 	public List<CafeSearchResponse> toCafeSearchResponses(List<CafeImpl> cafes,
 		OpenChecker<BusinessHour> openChecker) {
 		return cafes.stream()
@@ -64,9 +56,6 @@ public class CafeMapper {
 			businessHourResponses,
 			cafe.isOpen(openChecker),
 			snsResponses,
-			// cafe.getSnsDetails().stream()
-			// 	.map(s -> new SnsResponse(s.getName(), s.getUrl()))
-			// 	.collect(Collectors.toList()),
 			cafe.getPhone(),
 			cafe.getMinBeveragePrice(),
 			cafe.getMaxAllowableStay().getValue(),

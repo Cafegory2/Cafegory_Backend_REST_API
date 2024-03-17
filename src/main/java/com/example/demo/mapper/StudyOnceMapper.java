@@ -11,6 +11,7 @@ import com.example.demo.dto.StudyOnceForCafeResponse;
 import com.example.demo.dto.StudyOnceSearchResponse;
 
 public class StudyOnceMapper {
+
 	public List<StudyOnceForCafeResponse> toStudyOnceForCafeResponse(CafeImpl findCafe) {
 		return findCafe.getStudyOnceGroup().stream()
 			.map(studyOnce ->
