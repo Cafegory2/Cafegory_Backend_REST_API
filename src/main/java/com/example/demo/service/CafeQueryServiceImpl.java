@@ -40,11 +40,11 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	private final CafeRepository cafeRepository;
 	private final MemberRepository memberRepository;
 	private OpenChecker<BusinessHour> openChecker = new BusinessHourOpenChecker();
-	private BusinessHourMapper businessHourMapper = new BusinessHourMapper();
-	private SnsDetailMapper snsDetailMapper = new SnsDetailMapper();
-	private CafeMapper cafeMapper = new CafeMapper();
-	private ReviewMapper reviewMapper = new ReviewMapper();
-	private StudyOnceMapper studyOnceMapper = new StudyOnceMapper();
+	private final BusinessHourMapper businessHourMapper;
+	private final SnsDetailMapper snsDetailMapper;
+	private final CafeMapper cafeMapper;
+	private final ReviewMapper reviewMapper;
+	private final StudyOnceMapper studyOnceMapper;
 
 	@Override
 	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
@@ -112,5 +112,5 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 			cafeSearchResponses
 		);
 	}
-	
+
 }

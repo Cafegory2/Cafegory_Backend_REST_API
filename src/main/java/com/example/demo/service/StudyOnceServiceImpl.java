@@ -42,7 +42,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final StudyOnceRepository studyOnceRepository;
 	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
-	private StudyOnceMapper studyOnceMapper = new StudyOnceMapper();
+	private final StudyOnceMapper studyOnceMapper;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -191,5 +191,5 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		leader.setStudyMembers(studyMembers);
 		return leader;
 	}
-	
+
 }

@@ -29,7 +29,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 	private final ReviewRepository reviewRepository;
 	private final CafeRepository cafeRepository;
-	private final ReviewMapper reviewMapper = new ReviewMapper();
+	private final ReviewMapper reviewMapper;
 
 	@Override
 	public PagedResponse<ReviewSearchResponse> searchWithPagingByCafeId(ReviewSearchRequest request) {
@@ -66,5 +66,5 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 			reviewSearchResponse
 		);
 	}
-	
+
 }
