@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import static com.example.demo.exception.ExceptionType.*;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -18,7 +17,6 @@ import com.example.demo.domain.OpenChecker;
 import com.example.demo.dto.CafeResponse;
 import com.example.demo.dto.CafeSearchRequest;
 import com.example.demo.dto.CafeSearchResponse;
-import com.example.demo.dto.CanMakeStudyOnceResponse;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.BusinessHourMapper;
@@ -64,7 +62,15 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 	@Override
 	public CafeResponse searchCafeById(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
-		return produceCafeResponse(findCafe);
+		// return produceCafeResponse(findCafe);
+		return cafeMapper.entityToCafeResponse(
+			findCafe,
+			businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.entitiesToReviewResponses(findCafe.getReviews()),
+			studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe),
+			openChecker
+		);
 	}
 
 	private CafeImpl findCafeById(Long cafeId) {
@@ -78,57 +84,73 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		if (!memberRepository.existsById(memberId)) {
 			throw new CafegoryException(MEMBER_NOT_FOUND);
 		}
-		return produceCafeResponse(findCafe);
+		// return produceCafeResponse(findCafe);
+		return cafeMapper.entityToCafeResponse(
+			findCafe,
+			businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.entitiesToReviewResponses(findCafe.getReviews()),
+			studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe),
+			openChecker
+		);
 	}
 
 	@Override
 	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
 		CafeImpl findCafe = findCafeById(cafeId);
-		return produceCafeResponseWithEmptyInfo(findCafe);
+		// return produceCafeResponseWithEmptyInfo(findCafe);
+		return cafeMapper.entityToCafeResponseWithEmptyInfo(
+			findCafe,
+			businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.entitiesToReviewResponses(findCafe.getReviews()),
+			openChecker
+		);
 	}
 
-	private CafeResponse produceCafeResponseWithEmptyInfo(CafeImpl findCafe) {
-		return CafeResponse.builder()
-			.basicInfo(
-				cafeMapper.entityToCafeBasicInfoResponse(
-					findCafe,
-					businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-					snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-					openChecker)
-			)
-			.review(
-				reviewMapper.entitiesToReviewResponses(findCafe.getReviews())
-				// mapToReviewResponseList(findCafe)
-			)
-			.meetings(
-				Collections.emptyList()
-			)
-			.canMakeMeeting(
-				Collections.emptyList()
-			)
-			.build();
-	}
+	// private CafeResponse produceCafeResponseWithEmptyInfo(CafeImpl findCafe) {
+	// 	return CafeResponse.builder()
+	// 		.basicInfo(
+	// 			cafeMapper.entityToCafeBasicInfoResponse(
+	// 				findCafe,
+	// 				businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
+	// 				snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
+	// 				openChecker
+	// 			)
+	// 		)
+	// 		.review(
+	// 			reviewMapper.entitiesToReviewResponses(findCafe.getReviews())
+	// 			// mapToReviewResponseList(findCafe)
+	// 		)
+	// 		.meetings(
+	// 			Collections.emptyList()
+	// 		)
+	// 		.canMakeMeeting(
+	// 			Collections.emptyList()
+	// 		)
+	// 		.build();
+	// }
 
-	private CafeResponse produceCafeResponse(CafeImpl findCafe) {
-		return CafeResponse.builder()
-			.basicInfo(
-				cafeMapper.entityToCafeBasicInfoResponse(
-					findCafe,
-					businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
-					snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
-					openChecker)
-			)
-			.review(
-				reviewMapper.entitiesToReviewResponses(findCafe.getReviews())
-			)
-			.meetings(
-				studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe)
-			)
-			.canMakeMeeting(
-				List.of(new CanMakeStudyOnceResponse(), new CanMakeStudyOnceResponse())
-			)
-			.build();
-	}
+	// private CafeResponse produceCafeResponse(CafeImpl findCafe) {
+	// 	return CafeResponse.builder()
+	// 		.basicInfo(
+	// 			cafeMapper.entityToCafeBasicInfoResponse(
+	// 				findCafe,
+	// 				businessHourMapper.entitiesToBusinessHourResponses(findCafe.getBusinessHours()),
+	// 				snsDetailMapper.entitiesToSnsResponses(findCafe.getSnsDetails()),
+	// 				openChecker)
+	// 		)
+	// 		.review(
+	// 			reviewMapper.entitiesToReviewResponses(findCafe.getReviews())
+	// 		)
+	// 		.meetings(
+	// 			studyOnceMapper.cafeToStudyOnceForCafeResponse(findCafe)
+	// 		)
+	// 		.canMakeMeeting(
+	// 			List.of(new CanMakeStudyOnceResponse(), new CanMakeStudyOnceResponse())
+	// 		)
+	// 		.build();
+	// }
 
 	private PagedResponse<CafeSearchResponse> createPagedResponse(Page<CafeImpl> pagedCafes,
 		List<CafeSearchResponse> cafeSearchResponses) {

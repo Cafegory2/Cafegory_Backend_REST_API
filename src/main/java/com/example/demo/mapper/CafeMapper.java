@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,9 +10,13 @@ import com.example.demo.domain.CafeSearchCondition;
 import com.example.demo.domain.OpenChecker;
 import com.example.demo.dto.BusinessHourResponse;
 import com.example.demo.dto.CafeBasicInfoResponse;
+import com.example.demo.dto.CafeResponse;
 import com.example.demo.dto.CafeSearchRequest;
 import com.example.demo.dto.CafeSearchResponse;
+import com.example.demo.dto.CanMakeStudyOnceResponse;
+import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.SnsResponse;
+import com.example.demo.dto.StudyOnceForCafeResponse;
 
 public class CafeMapper {
 
@@ -76,6 +81,60 @@ public class CafeMapper {
 			.minMenuPrice(request.getMinBeveragePrice())
 			.startTime(request.getStartTime())
 			.endTime(request.getEndTime())
+			.build();
+	}
+
+	public CafeResponse entityToCafeResponse(
+		CafeImpl findCafe,
+		List<BusinessHourResponse> businessHourResponses,
+		List<SnsResponse> snsResponses,
+		List<ReviewResponse> reviewResponses,
+		List<StudyOnceForCafeResponse> studyOnceForCafeResponses,
+		OpenChecker<BusinessHour> openChecker) {
+		return CafeResponse.builder()
+			.basicInfo(
+				entityToCafeBasicInfoResponse(
+					findCafe,
+					businessHourResponses,
+					snsResponses,
+					openChecker)
+			)
+			.review(
+				reviewResponses
+			)
+			.meetings(
+				studyOnceForCafeResponses
+			)
+			.canMakeMeeting(
+				List.of(new CanMakeStudyOnceResponse(), new CanMakeStudyOnceResponse())
+			)
+			.build();
+	}
+
+	public CafeResponse entityToCafeResponseWithEmptyInfo(
+		CafeImpl findCafe,
+		List<BusinessHourResponse> businessHourResponses,
+		List<SnsResponse> snsResponses,
+		List<ReviewResponse> reviewResponses,
+		OpenChecker<BusinessHour> openChecker
+	) {
+		return CafeResponse.builder()
+			.basicInfo(
+				entityToCafeBasicInfoResponse(
+					findCafe,
+					businessHourResponses,
+					snsResponses,
+					openChecker)
+			)
+			.review(
+				reviewResponses
+			)
+			.meetings(
+				Collections.emptyList()
+			)
+			.canMakeMeeting(
+				Collections.emptyList()
+			)
 			.build();
 	}
 
