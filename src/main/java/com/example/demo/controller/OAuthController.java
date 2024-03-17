@@ -11,6 +11,7 @@ import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.dto.auth.RefreshRequest;
 import com.example.demo.dto.oauth2.KakaoOAuth2TokenRequest;
 import com.example.demo.dto.oauth2.NaverOAuth2TokenRequest;
+import com.example.demo.service.AuthService;
 import com.example.demo.service.OAuth2Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuthController {
 	private final OAuth2Service kakaoOAuth2Service;
 	private final OAuth2Service naverOAuth2Service;
+	private final AuthService authService;
 
 	@GetMapping("/kakao")
 	public CafegoryToken kakao(@RequestParam String code) {
@@ -36,6 +38,6 @@ public class OAuthController {
 
 	@PostMapping("/refresh")
 	public CafegoryToken refresh(@RequestBody RefreshRequest refreshRequest) {
-		return kakaoOAuth2Service.refresh(refreshRequest.getRefreshToken());
+		return authService.refresh(refreshRequest.getRefreshToken());
 	}
 }
