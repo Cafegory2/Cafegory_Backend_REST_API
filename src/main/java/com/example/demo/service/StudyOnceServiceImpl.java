@@ -25,6 +25,7 @@ import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.mapper.StudyOnceMapper;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyMemberRepository;
 import com.example.demo.repository.StudyOnceRepository;
@@ -41,6 +42,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final StudyOnceRepository studyOnceRepository;
 	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
+	private final StudyOnceMapper studyOnceMapper;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -79,7 +81,8 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		List<StudyOnceSearchResponse> searchResults = studyOnceRepository.findAllByStudyOnceSearchRequest(
 				studyOnceSearchRequest)
 			.stream()
-			.map(studyOnce -> makeStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(LocalDateTime.now())))
+			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchResponse(studyOnce,
+				studyOnce.canJoin(LocalDateTime.now())))
 			.collect(Collectors.toList());
 		return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), searchResults);
 	}
@@ -96,7 +99,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		StudyOnceImpl searched = studyOnceRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		boolean canJoin = searched.canJoin(LocalDateTime.now());
-		return makeStudyOnceSearchResponse(searched, canJoin);
+		return studyOnceMapper.toStudyOnceSearchResponse(searched, canJoin);
 	}
 
 	@Override
@@ -118,7 +121,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private List<StudyMemberId> generateStudyMemberIdsFromRequest(long studyOnceId, UpdateAttendanceRequest request) {
 		return request.getStates().stream()
-			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnceId))
+			.map(memberReq -> new StudyMemberId(memberReq.getMemberId(), studyOnceId))
 			.collect(Collectors.toList());
 	}
 
@@ -126,7 +129,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		LocalDateTime now) {
 		for (StudyMemberStateRequest memberStateRequest : request.getStates()) {
 			Attendance attendance = memberStateRequest.isAttendance() ? Attendance.YES : Attendance.NO;
-			updateAttendance(leaderId, studyOnceId, memberStateRequest.getUserId(), attendance, now);
+			updateAttendance(leaderId, studyOnceId, memberStateRequest.getMemberId(), attendance, now);
 		}
 	}
 
@@ -175,10 +178,10 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
 		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
 		MemberImpl leader = getMember(leaderId, startDateTime);
-		StudyOnceImpl studyOnce = makeNewStudyOnce(studyOnceCreateRequest, cafe, leader);
+		StudyOnceImpl studyOnce = studyOnceMapper.toNewEntity(studyOnceCreateRequest, cafe, leader);
 		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
-		return makeStudyOnceSearchResponse(saved, canJoin);
+		return studyOnceMapper.toStudyOnceSearchResponse(saved, canJoin);
 	}
 
 	private MemberImpl getMember(long leaderId, LocalDateTime startDateTime) {
@@ -189,34 +192,4 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		return leader;
 	}
 
-	private static StudyOnceImpl makeNewStudyOnce(StudyOnceCreateRequest studyOnceCreateRequest, CafeImpl cafe,
-		MemberImpl leader) {
-		return StudyOnceImpl.builder()
-			.name(studyOnceCreateRequest.getName())
-			.startDateTime(studyOnceCreateRequest.getStartDateTime())
-			.endDateTime(studyOnceCreateRequest.getEndDateTime())
-			.maxMemberCount(studyOnceCreateRequest.getMaxMemberCount())
-			.nowMemberCount(0)
-			.isEnd(false)
-			.ableToTalk(studyOnceCreateRequest.isCanTalk())
-			.cafe(cafe)
-			.leader(leader)
-			.build();
-
-	}
-
-	private static StudyOnceSearchResponse makeStudyOnceSearchResponse(StudyOnceImpl saved, boolean canJoin) {
-		return StudyOnceSearchResponse.builder()
-			.cafeId(saved.getCafe().getId())
-			.studyOnceId(saved.getId())
-			.name(saved.getName())
-			.startDateTime(saved.getStartDateTime())
-			.endDateTime(saved.getEndDateTime())
-			.maxMemberCount(saved.getMaxMemberCount())
-			.nowMemberCount(saved.getNowMemberCount())
-			.canTalk(saved.isAbleToTalk())
-			.canJoin(canJoin)
-			.isEnd(saved.isEnd())
-			.build();
-	}
 }

@@ -584,7 +584,7 @@ class StudyOnceServiceImplTest {
 		em.clear();
 		//then
 		List<StudyMemberId> studyMemberIds = memberStateRequests.stream()
-			.map(memberReq -> new StudyMemberId(memberReq.getUserId(), studyOnce.getId()))
+			.map(memberReq -> new StudyMemberId(memberReq.getMemberId(), studyOnce.getId()))
 			.collect(Collectors.toList());
 		List<StudyMember> searchedStudyMembers = studyMemberRepository.findAllById(studyMemberIds);
 

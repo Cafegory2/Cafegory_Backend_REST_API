@@ -3,7 +3,6 @@ package com.example.demo.service;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +14,8 @@ import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.ReviewResponse;
 import com.example.demo.dto.ReviewSearchRequest;
 import com.example.demo.dto.ReviewSearchResponse;
-import com.example.demo.dto.WriterResponse;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.mapper.ReviewMapper;
 import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.util.PageRequestCustom;
@@ -30,6 +29,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
 	private final ReviewRepository reviewRepository;
 	private final CafeRepository cafeRepository;
+	private final ReviewMapper reviewMapper;
 
 	@Override
 	public PagedResponse<ReviewSearchResponse> searchWithPagingByCafeId(ReviewSearchRequest request) {
@@ -37,30 +37,18 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(request.getCafeId(),
 			pageable);
-		return createPagedResponse(pagedReviews, mapToResponseList(pagedReviews));
+		return createPagedResponse(pagedReviews,
+			reviewMapper.toReviewSearchResponses(pagedReviews.getContent()));
 	}
 
 	@Override
 	public ReviewResponse searchOne(Long reviewId) {
-		return mapToReviewResponse(findReviewById(reviewId));
+		return reviewMapper.toReviewResponse(findReviewById(reviewId));
 	}
 
 	private ReviewImpl findReviewById(Long reviewId) {
 		return reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new CafegoryException(REVIEW_NOT_FOUND));
-	}
-
-	private ReviewResponse mapToReviewResponse(ReviewImpl findReview) {
-		return ReviewResponse.builder()
-			.reviewId(findReview.getId())
-			.writer(
-				new WriterResponse(findReview.getMember().getId(),
-					findReview.getMember().getName(),
-					findReview.getMember().getThumbnailImage().getThumbnailImage()
-				))
-			.rate(findReview.getRate())
-			.content(findReview.getContent())
-			.build();
 	}
 
 	private void validateExistCafe(Long cafeId) {
@@ -79,17 +67,4 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		);
 	}
 
-	private List<ReviewSearchResponse> mapToResponseList(Page<ReviewImpl> pagedReviews) {
-		return pagedReviews.getContent().stream()
-			.map(review ->
-				new ReviewSearchResponse(
-					review.getId(),
-					new WriterResponse(review.getMember().getId(), review.getMember().getName(),
-						review.getMember().getThumbnailImage().getThumbnailImage()),
-					review.getRate(),
-					review.getContent()
-				)
-			)
-			.collect(Collectors.toList());
-	}
 }

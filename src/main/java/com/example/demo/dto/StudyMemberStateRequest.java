@@ -7,15 +7,15 @@ import lombok.Getter;
 @Getter
 public class StudyMemberStateRequest {
 
-	private Long userId;
+	private Long memberId;
 	private boolean attendance;
 	private LocalDateTime lastUpdateTime;
 
 	public StudyMemberStateRequest() {
 	}
 
-	public StudyMemberStateRequest(Long userId, boolean attendance, LocalDateTime lastUpdateTime) {
-		this.userId = userId;
+	public StudyMemberStateRequest(Long memberId, boolean attendance, LocalDateTime lastUpdateTime) {
+		this.memberId = memberId;
 		this.attendance = attendance;
 		this.lastUpdateTime = lastUpdateTime;
 	}

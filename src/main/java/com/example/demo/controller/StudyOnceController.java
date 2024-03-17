@@ -33,9 +33,9 @@ public class StudyOnceController {
 	private final StudyOnceService studyOnceService;
 	private final CafegoryTokenManager cafegoryTokenManager;
 
-	@GetMapping("/{studyId:[0-9]+}")
-	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyId) {
-		StudyOnceSearchResponse response = studyOnceService.searchByStudyId(studyId);
+	@GetMapping("/{studyOnceId:[0-9]+}")
+	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId) {
+		StudyOnceSearchResponse response = studyOnceService.searchByStudyId(studyOnceId);
 		return ResponseEntity.ok(response);
 	}
 
@@ -54,30 +54,30 @@ public class StudyOnceController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/{studyId:[0-9]+}")
-	public ResponseEntity<StudyOnceJoinResult> tryJoin(@PathVariable Long studyId,
+	@PostMapping("/{studyOnceId:[0-9]+}")
+	public ResponseEntity<StudyOnceJoinResult> tryJoin(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
-		studyOnceService.tryJoin(memberId, studyId);
+		studyOnceService.tryJoin(memberId, studyOnceId);
 		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
 
-	@DeleteMapping("/{studyId:[0-9]+}")
-	public ResponseEntity<StudyOnceJoinResult> tryQuit(@PathVariable Long studyId,
+	@DeleteMapping("/{studyOnceId:[0-9]+}")
+	public ResponseEntity<StudyOnceJoinResult> tryQuit(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
-		studyOnceService.tryQuit(memberId, studyId);
+		studyOnceService.tryQuit(memberId, studyOnceId);
 		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
 	}
 
-	@PatchMapping("/{studyId:[0-9]+}/attendance")
-	public ResponseEntity<UpdateAttendanceResponse> takeAttendance(@PathVariable Long studyId,
+	@PatchMapping("/{studyOnceId:[0-9]+}/attendance")
+	public ResponseEntity<UpdateAttendanceResponse> takeAttendance(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody UpdateAttendanceRequest request) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
-		UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyId,
+		UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyOnceId,
 			request, LocalDateTime.now());
 		return ResponseEntity.ok(response);
 	}
