@@ -33,46 +33,63 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public ProfileResponse get(Long requestMemberID, Long targetMemberID, LocalDateTime baseDateTime) {
-		if (Objects.equals(requestMemberID, targetMemberID)) {
+		if (isOwnerOfProfile(requestMemberID, targetMemberID)) {
 			MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
 			return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
 		}
-		List<StudyOnceImpl> studyOnceByLeaderID = findStudyOnceByLeaderID(requestMemberID);
-		Set<Long> memberIdInStudyOnce = getMemberIdInStudyOnce(studyOnceByLeaderID);
-		if (memberIdInStudyOnce.contains(targetMemberID)) {
+		if (isAllowedCauseStudyLeader(requestMemberID, targetMemberID)) {
 			MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
 			return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
 		}
-		MemberImpl requestMember = memberRepository.findById(requestMemberID).orElseThrow();
-		List<StudyMember> studyMembers = studyMemberRepository.findByMemberAndStudyDate(requestMember,
-				LocalDate.from(baseDateTime))
-			.stream()
-			.map(StudyMember::getStudy)
-			.flatMap(studyOnce -> studyOnce.getStudyMembers().stream())
-			.collect(Collectors.toList());
-		Set<Long> memberIdsThatJoinWithRequestMember = studyMembers.stream()
-			.map(StudyMember::getStudy)
-			.filter(studyOnce -> !studyOnce.canJoin(baseDateTime))
-			.filter(studyOnce -> !studyOnce.isEnd())
-			.flatMap(studyOnce -> studyOnce.getStudyMembers().stream())
-			.map(StudyMember::getMember)
-			.map(MemberImpl::getId)
-			.collect(Collectors.toSet());
-		if (memberIdsThatJoinWithRequestMember.contains(targetMemberID)) {
+		if (isAllowedCauseSameStudyOnceMember(requestMemberID, targetMemberID, baseDateTime)) {
 			MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
 			return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
 		}
 		throw new CafegoryException(PROFILE_GET_PERMISSION_DENIED);
 	}
 
+	private boolean isOwnerOfProfile(Long requestMemberID, Long targetMemberID) {
+		return Objects.equals(requestMemberID, targetMemberID);
+	}
+
+	private boolean isAllowedCauseStudyLeader(Long requestMemberID, Long targetMemberID) {
+		List<StudyOnceImpl> studyOnceByLeaderID = findStudyOnceByLeaderID(requestMemberID);
+		Set<Long> memberIdInStudyOnce = getMemberIdInStudyOnce(studyOnceByLeaderID);
+		return memberIdInStudyOnce.contains(targetMemberID);
+	}
+
 	private List<StudyOnceImpl> findStudyOnceByLeaderID(Long requestMemberID) {
 		return studyOnceRepository.findByLeaderId(requestMemberID);
 	}
 
-	private static Set<Long> getMemberIdInStudyOnce(List<StudyOnceImpl> byLeaderId) {
-		return byLeaderId.stream()
-			.flatMap(
-				studyOnce -> studyOnce.getStudyMembers().stream().map(studyMember -> studyMember.getMember().getId()))
+	private Set<Long> getMemberIdInStudyOnce(List<StudyOnceImpl> byLeaderId) {
+		return mapToMemberId(byLeaderId.stream()
+			.flatMap(studyOnce -> studyOnce.getStudyMembers().stream())
+			.collect(Collectors.toList()));
+	}
+
+	private static Set<Long> mapToMemberId(List<StudyMember> studyMembers) {
+		return studyMembers.stream()
+			.map(StudyMember::getMember)
+			.map(MemberImpl::getId)
 			.collect(Collectors.toSet());
+	}
+
+	private boolean isAllowedCauseSameStudyOnceMember(Long requestMemberID, Long targetMemberID, LocalDateTime base) {
+		MemberImpl requestMember = memberRepository.findById(requestMemberID).orElseThrow();
+		List<StudyMember> studyMembers = findAllSameStudyOnceStudyMembersWith(requestMember, base);
+		Set<Long> memberIdsThatJoinWithRequestMember = mapToMemberId(studyMembers);
+		return memberIdsThatJoinWithRequestMember.contains(targetMemberID);
+	}
+
+	private List<StudyMember> findAllSameStudyOnceStudyMembersWith(MemberImpl requestMember, LocalDateTime base) {
+		LocalDate baseDate = LocalDate.from(base);
+		return studyMemberRepository.findByMemberAndStudyDate(requestMember, baseDate)
+			.stream()
+			.map(StudyMember::getStudy)
+			.filter(studyOnce -> !studyOnce.canJoin(base))
+			.filter(studyOnce -> !studyOnce.isEnd())
+			.flatMap(studyOnce -> studyOnce.getStudyMembers().stream())
+			.collect(Collectors.toList());
 	}
 }
