@@ -593,4 +593,23 @@ class StudyOnceServiceImplTest {
 			.contains(Attendance.NO);
 	}
 
+	@Test
+	@DisplayName("카공 카페 장소를 변경할 수 있다.")
+	void changeCafe() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		CafeImpl changingCafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		//when
+		studyOnceService.changeCafe(studyOnce.getId(), changingCafe.getId());
+		//then
+		assertThat(studyOnce.getCafe().getId()).isEqualTo(changingCafe.getId());
+	}
+
+	//카공장만이 카페 장소를 변경할 수 있다.
+
+	//카공장이 아니라면 예외가 터진다.
+
 }

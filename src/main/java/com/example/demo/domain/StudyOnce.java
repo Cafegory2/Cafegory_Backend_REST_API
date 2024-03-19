@@ -14,4 +14,6 @@ public interface StudyOnce {
 	StudyMember tryQuit(Member memberThatExpectedToQuit, LocalDateTime requestTime);
 
 	void updateAttendance(Member leader, Member member, boolean attendance);
+
+	void changeCafe(CafeImpl cafe);
 }
