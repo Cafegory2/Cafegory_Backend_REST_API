@@ -25,4 +25,6 @@ public interface StudyOnceService {
 	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance, LocalDateTime now);
 
 	StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
+
+	Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId);
 }

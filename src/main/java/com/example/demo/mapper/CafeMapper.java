@@ -24,25 +24,33 @@ public class CafeMapper {
 		OpenChecker<BusinessHour> openChecker) {
 		return cafes.stream()
 			.map(cafe ->
-				new CafeSearchResponse(
-					cafe.getId(),
-					cafe.getName(),
-					cafe.showFullAddress(),
-					cafe.getBusinessHours().stream()
-						.map(hour -> new BusinessHourResponse(hour.getDay(), hour.getStartTime().toString(),
-							hour.getEndTime().toString()))
-						.collect(Collectors.toList()),
-					cafe.isOpen(openChecker),
-					cafe.getSnsDetails().stream()
-						.map(s -> new SnsResponse(s.getName(), s.getUrl()))
-						.collect(Collectors.toList()),
-					cafe.getPhone(),
-					cafe.getMinBeveragePrice(),
-					cafe.getMaxAllowableStay().getValue(),
-					cafe.getAvgReviewRate()
-				)
+				produceCafeSearchResponse(cafe, openChecker)
 			)
 			.collect(Collectors.toList());
+	}
+
+	private CafeSearchResponse produceCafeSearchResponse(CafeImpl cafe, OpenChecker<BusinessHour> openChecker) {
+		return new CafeSearchResponse(
+			cafe.getId(),
+			cafe.getName(),
+			cafe.showFullAddress(),
+			cafe.getBusinessHours().stream()
+				.map(hour -> new BusinessHourResponse(hour.getDay(), hour.getStartTime().toString(),
+					hour.getEndTime().toString()))
+				.collect(Collectors.toList()),
+			cafe.isOpen(openChecker),
+			cafe.getSnsDetails().stream()
+				.map(s -> new SnsResponse(s.getName(), s.getUrl()))
+				.collect(Collectors.toList()),
+			cafe.getPhone(),
+			cafe.getMinBeveragePrice(),
+			cafe.getMaxAllowableStay().getValue(),
+			cafe.getAvgReviewRate()
+		);
+	}
+
+	public CafeSearchResponse toCafeSearchResponse(CafeImpl cafe, OpenChecker<BusinessHour> openChecker) {
+		return produceCafeSearchResponse(cafe, openChecker);
 	}
 
 	public CafeBasicInfoResponse toCafeBasicInfoResponse(CafeImpl cafe,

@@ -192,6 +192,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		return leader;
 	}
 
+	@Override
 	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
 		final StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
 		if (!studyOnce.isLeader(findMemberById(requestMemberId))) {
