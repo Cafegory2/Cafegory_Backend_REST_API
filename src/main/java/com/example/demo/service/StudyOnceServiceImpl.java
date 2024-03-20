@@ -192,10 +192,18 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		return leader;
 	}
 
-	public Long changeCafe(Long studyOnceId, final Long changingCafeId) {
+	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
 		final StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		if (!studyOnce.isLeader(findMemberById(requestMemberId))) {
+			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
+		}
 		studyOnce.changeCafe(findCafeById(changingCafeId));
 		return changingCafeId;
+	}
+
+	private MemberImpl findMemberById(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
 
 	private CafeImpl findCafeById(Long cafeId) {

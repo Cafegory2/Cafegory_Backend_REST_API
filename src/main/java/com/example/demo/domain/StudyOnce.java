@@ -16,4 +16,7 @@ public interface StudyOnce {
 	void updateAttendance(Member leader, Member member, boolean attendance);
 
 	void changeCafe(CafeImpl cafe);
+
+	boolean isLeader(MemberImpl member);
+
 }

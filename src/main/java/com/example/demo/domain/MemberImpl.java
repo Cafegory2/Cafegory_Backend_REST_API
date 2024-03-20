@@ -53,4 +53,5 @@ public class MemberImpl implements Member {
 	public void addStudyMember(StudyMember studyMember) {
 		studyMembers.add(studyMember);
 	}
+
 }
