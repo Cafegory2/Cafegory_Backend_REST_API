@@ -1,13 +1,17 @@
 package com.example.demo.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.dto.auth.RefreshRequest;
 import com.example.demo.dto.oauth2.KakaoOAuth2TokenRequest;
 import com.example.demo.dto.oauth2.NaverOAuth2TokenRequest;
+import com.example.demo.service.AuthService;
 import com.example.demo.service.OAuth2Service;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class OAuthController {
 	private final OAuth2Service kakaoOAuth2Service;
 	private final OAuth2Service naverOAuth2Service;
+	private final AuthService authService;
 
 	@GetMapping("/kakao")
 	public CafegoryToken kakao(@RequestParam String code) {
@@ -29,5 +34,10 @@ public class OAuthController {
 	public CafegoryToken naver(@RequestParam String code, @RequestParam String state) {
 		NaverOAuth2TokenRequest naverOAuth2LoginRequest = new NaverOAuth2TokenRequest(code, state);
 		return naverOAuth2Service.joinOrLogin(naverOAuth2LoginRequest);
+	}
+
+	@PostMapping("/refresh")
+	public CafegoryToken refresh(@RequestBody RefreshRequest refreshRequest) {
+		return authService.refresh(refreshRequest.getRefreshToken());
 	}
 }
