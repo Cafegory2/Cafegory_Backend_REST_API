@@ -678,6 +678,4 @@ class StudyOnceServiceImplTest {
 		assertThat(joinedMembers.size()).isEqualTo(3);
 	}
 
-	//참여자가 존재하지 않으면 빈 리스트를 반환한다.
-
 }

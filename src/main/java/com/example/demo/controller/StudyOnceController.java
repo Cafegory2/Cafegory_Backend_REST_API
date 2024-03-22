@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.CafeSearchResponse;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
 import com.example.demo.dto.StudyOnceSearchRequest;
@@ -92,6 +93,14 @@ public class StudyOnceController {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		Long changedCafeId = studyOnceService.changeCafe(leaderId, studyOnceId, cafeId);
 		CafeSearchResponse response = cafeQueryService.searchCafeBasicInfoById(changedCafeId);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{studyOnceId:[0-9]+}/member/list")
+	public ResponseEntity<StudyMembersResponse> findStudyMemberList(@PathVariable Long studyOnceId,
+		@RequestHeader("Authorization") String authorization) {
+		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
+		StudyMembersResponse response = studyOnceService.findStudyMembersById(studyOnceId);
 		return ResponseEntity.ok(response);
 	}
 
