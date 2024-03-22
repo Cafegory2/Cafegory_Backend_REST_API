@@ -10,5 +10,4 @@ public class MemberResponse {
 	private final long memberId;
 	private final String name;
 	private final String thumbnailImg;
-	
 }
