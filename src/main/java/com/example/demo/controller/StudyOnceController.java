@@ -106,7 +106,7 @@ public class StudyOnceController {
 		@RequestHeader("Authorization") String authorization) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		if (!studyOnceService.isStudyOnceLeader(leaderId, studyOnceId)) {
-			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
+			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
 		}
 		StudyMembersResponse response = studyOnceService.findStudyMembersById(studyOnceId);
 		return ResponseEntity.ok(response);
