@@ -654,7 +654,7 @@ class StudyOnceServiceImplTest {
 		assertThatThrownBy(
 			() -> studyOnceService.changeCafe(otherPerson.getId(), studyOnce.getId(), changingCafe.getId()))
 			.isInstanceOf(CafegoryException.class)
-			.hasMessage(ExceptionType.STUDY_ONCE_INVALID_LEADER.getErrorMessage());
+			.hasMessage(ExceptionType.STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED.getErrorMessage());
 	}
 
 	@Test

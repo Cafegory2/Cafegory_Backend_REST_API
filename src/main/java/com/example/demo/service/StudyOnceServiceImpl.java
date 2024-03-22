@@ -198,7 +198,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
 		final StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
 		if (!isStudyOnceLeader(requestMemberId, studyOnceId)) {
-			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
+			throw new CafegoryException(STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED);
 		}
 		studyOnce.changeCafe(findCafeById(changingCafeId));
 		return changingCafeId;
