@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.repository.StudyOnceRepository;
 import com.example.demo.service.CafeQueryService;
 import com.example.demo.service.StudyOnceService;
 
@@ -36,6 +40,7 @@ public class StudyOnceController {
 	private final StudyOnceService studyOnceService;
 	private final CafegoryTokenManager cafegoryTokenManager;
 	private final CafeQueryService cafeQueryService;
+	private final StudyOnceRepository studyOnceRepository;
 
 	@GetMapping("/{studyOnceId:[0-9]+}")
 	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId) {
@@ -100,6 +105,9 @@ public class StudyOnceController {
 	public ResponseEntity<StudyMembersResponse> findStudyMemberList(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
+		if (!studyOnceService.isStudyOnceLeader(leaderId, studyOnceId)) {
+			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
+		}
 		StudyMembersResponse response = studyOnceService.findStudyMembersById(studyOnceId);
 		return ResponseEntity.ok(response);
 	}

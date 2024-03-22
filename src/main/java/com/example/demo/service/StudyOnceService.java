@@ -30,4 +30,6 @@ public interface StudyOnceService {
 	Long changeCafe(Long requestMemberId, Long studyOnceId, Long changingCafeId);
 
 	StudyMembersResponse findStudyMembersById(Long studyOnceId);
+
+	boolean isStudyOnceLeader(Long memberId, Long studyOnceId);
 }

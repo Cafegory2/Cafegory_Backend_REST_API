@@ -197,7 +197,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
 		final StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
-		if (!studyOnce.isLeader(findMemberById(requestMemberId))) {
+		if (!isStudyOnceLeader(requestMemberId, studyOnceId)) {
 			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
 		}
 		studyOnce.changeCafe(findCafeById(changingCafeId));
@@ -214,6 +214,12 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 				studyMember.getMember().getThumbnailImage().getThumbnailImage()))
 			.collect(Collectors.toList());
 		return new StudyMembersResponse(memberResponses);
+	}
+
+	@Override
+	public boolean isStudyOnceLeader(Long memberId, Long studyOnceId) {
+		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		return studyOnce.isLeader(findMemberById(memberId));
 	}
 
 	private MemberImpl findMemberById(Long memberId) {
