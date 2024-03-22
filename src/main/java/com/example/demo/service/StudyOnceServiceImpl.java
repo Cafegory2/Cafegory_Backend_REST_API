@@ -16,9 +16,11 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
+import com.example.demo.dto.MemberResponse;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyMemberStateRequest;
 import com.example.demo.dto.StudyMemberStateResponse;
+import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
@@ -200,6 +202,18 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		}
 		studyOnce.changeCafe(findCafeById(changingCafeId));
 		return changingCafeId;
+	}
+
+	@Override
+	public StudyMembersResponse findStudyMembersById(Long studyOnceId) {
+		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		List<MemberResponse> memberResponses = studyOnce.getStudyMembers().stream()
+			.map(studyMember -> new MemberResponse(
+				studyMember.getMember().getId(),
+				studyMember.getMember().getName(),
+				studyMember.getMember().getThumbnailImage().getThumbnailImage()))
+			.collect(Collectors.toList());
+		return new StudyMembersResponse(memberResponses);
 	}
 
 	private MemberImpl findMemberById(Long memberId) {

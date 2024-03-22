@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.demo.domain.Attendance;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
@@ -26,5 +27,7 @@ public interface StudyOnceService {
 
 	StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
 
-	Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId);
+	Long changeCafe(Long requestMemberId, Long studyOnceId, Long changingCafeId);
+
+	StudyMembersResponse findStudyMembersById(Long studyOnceId);
 }
