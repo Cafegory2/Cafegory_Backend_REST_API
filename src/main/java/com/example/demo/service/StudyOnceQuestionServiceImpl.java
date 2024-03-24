@@ -40,14 +40,14 @@ public class StudyOnceQuestionServiceImpl implements StudyOnceQuestionService {
 	@Override
 	public void updateQuestion(Long memberId, Long studyOnceQuestionId, StudyOnceQuestionUpdateRequest request) {
 		StudyOnceQuestion question = findStudyOnceQuestionById(studyOnceQuestionId);
-		if (isPersonAsked(memberId, question)) {
+		if (!isPersonAsked(memberId, question)) {
 			throw new CafegoryException(STUDY_ONCE_QUESTION_PERMISSION_DENIED);
 		}
 		question.changeContent(request.getContent());
 	}
 
 	private boolean isPersonAsked(Long memberId, StudyOnceQuestion question) {
-		return !question.isPersonAsked(findMemberById(memberId));
+		return question.isPersonAsked(findMemberById(memberId));
 	}
 
 	private StudyOnceQuestion findStudyOnceQuestionById(Long studyOnceQuestionId) {
