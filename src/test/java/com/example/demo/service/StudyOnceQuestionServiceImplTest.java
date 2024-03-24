@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ import com.example.demo.domain.StudyOnceQuestion;
 import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.dto.StudyOnceQuestionRequest;
 import com.example.demo.dto.StudyOnceQuestionUpdateRequest;
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
 import com.example.demo.helper.StudyOncePersistHelper;
@@ -52,7 +55,7 @@ class StudyOnceQuestionServiceImplTest {
 
 	@Test
 	@DisplayName("카공 질문을 저장한다.")
-	void saveQuestion() {
+	void save_question() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
@@ -71,7 +74,7 @@ class StudyOnceQuestionServiceImplTest {
 
 	@Test
 	@DisplayName("카공장의 카공 질문을 저장한다.")
-	void saveQuestionByLeader() {
+	void save_question_by_leader() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
@@ -89,7 +92,7 @@ class StudyOnceQuestionServiceImplTest {
 
 	@Test
 	@DisplayName("카공 질문을 수정한다.")
-	void updateQuestion() {
+	void update_question() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
@@ -107,4 +110,42 @@ class StudyOnceQuestionServiceImplTest {
 		//then
 		assertThat(findQuestion.getContent()).isEqualTo("수정내용");
 	}
+
+	@Test
+	@DisplayName("카공 질문은 질문한 회원 본인만 수정 할 수 있다.")
+	void update_question_by_member_who_asked_the_question() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "등록내용");
+		//when
+		assertDoesNotThrow(() ->
+			studyOnceQuestionService.updateQuestion(otherPerson.getId(), question.getId(),
+				new StudyOnceQuestionUpdateRequest("수정내용"))
+		);
+	}
+
+	@Test
+	@DisplayName("카공 질문은 질문한 회원 본인이 아니라면 예외가 터진다.")
+	void update_question_by_member_who_not_asked_the_question_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "등록내용");
+		//when
+		assertThatThrownBy(() ->
+			studyOnceQuestionService.updateQuestion(leader.getId(), question.getId(),
+				new StudyOnceQuestionUpdateRequest("수정내용"))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_QUESTION_PERMISSION_DENIED.getErrorMessage());
+	}
+
 }

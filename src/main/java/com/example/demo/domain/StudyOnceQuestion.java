@@ -52,4 +52,8 @@ public class StudyOnceQuestion extends BaseEntity {
 		this.content = content;
 	}
 
+	public boolean isPersonAsked(MemberImpl member) {
+		return this.member.getId().equals(member.getId());
+	}
+
 }
