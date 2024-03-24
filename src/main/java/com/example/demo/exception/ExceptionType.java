@@ -27,6 +27,8 @@ public enum ExceptionType {
 	STUDY_ONCE_TRY_QUIT_NOT_JOIN(CONFLICT, "참여중인 카공이 아닙니다."),
 	STUDY_ONCE_LEADER_QUIT_FAIL(CONFLICT, "카공장은 다른 참여자가 있는 경우 참여 취소를 할 수 없습니다."),
 	STUDY_ONCE_INVALID_LEADER(BAD_REQUEST, "스터디 리더가 아닙니다."),
+	STUDY_ONCE_LEADER_PERMISSION_DENIED(FORBIDDEN, "스터디 리더만 권한이 있습니다."),
+	STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED(FORBIDDEN, "스터디 리더만 장소 변경을 할 권한이 있습니다."),
 	STUDY_ONCE_EARLY_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 시작 10분 이후여야 합니다."),
 	STUDY_ONCE_LATE_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 진행시간 절반이 지나기전에만 변경할 수 있습니다. "),
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),

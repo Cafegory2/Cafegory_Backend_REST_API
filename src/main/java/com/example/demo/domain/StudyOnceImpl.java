@@ -152,6 +152,17 @@ public class StudyOnceImpl implements StudyOnce {
 
 	}
 
+	@Override
+	public void changeCafe(CafeImpl cafe) {
+		this.cafe = cafe;
+		cafe.getStudyOnceGroup().add(this);
+	}
+
+	@Override
+	public boolean isLeader(MemberImpl member) {
+		return leader.getId().equals(member.getId());
+	}
+
 	public boolean canJoin(LocalDateTime baseDateTime) {
 		Duration between = Duration.between(baseDateTime, startDateTime);
 		return between.toSeconds() >= 60 * 60;

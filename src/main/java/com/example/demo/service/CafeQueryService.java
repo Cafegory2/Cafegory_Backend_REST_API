@@ -11,6 +11,8 @@ public interface CafeQueryService {
 
 	CafeResponse searchCafeById(Long cafeId);
 
+	CafeSearchResponse searchCafeBasicInfoById(Long cafeId);
+
 	CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId);
 
 	CafeResponse searchCafeForNotMemberByCafeId(Long cafeId);

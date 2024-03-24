@@ -16,15 +16,18 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
+import com.example.demo.dto.MemberResponse;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyMemberStateRequest;
 import com.example.demo.dto.StudyMemberStateResponse;
+import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.mapper.StudyMemberMapper;
 import com.example.demo.mapper.StudyOnceMapper;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyMemberRepository;
@@ -43,6 +46,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
 	private final StudyOnceMapper studyOnceMapper;
+	private final StudyMemberMapper studyMemberMapper;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -192,4 +196,36 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		return leader;
 	}
 
+	@Override
+	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
+		final StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		if (!isStudyOnceLeader(requestMemberId, studyOnceId)) {
+			throw new CafegoryException(STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED);
+		}
+		studyOnce.changeCafe(findCafeById(changingCafeId));
+		return changingCafeId;
+	}
+
+	@Override
+	public StudyMembersResponse findStudyMembersById(Long studyOnceId) {
+		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		List<MemberResponse> memberResponses = studyMemberMapper.toMemberResponses(studyOnce.getStudyMembers());
+		return new StudyMembersResponse(memberResponses);
+	}
+
+	@Override
+	public boolean isStudyOnceLeader(Long memberId, Long studyOnceId) {
+		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		return studyOnce.isLeader(findMemberById(memberId));
+	}
+
+	private MemberImpl findMemberById(Long memberId) {
+		return memberRepository.findById(memberId)
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+	}
+
+	private CafeImpl findCafeById(Long cafeId) {
+		return cafeRepository.findById(cafeId)
+			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+	}
 }

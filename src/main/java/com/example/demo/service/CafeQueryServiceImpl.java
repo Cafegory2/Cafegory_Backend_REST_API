@@ -70,6 +70,11 @@ public class CafeQueryServiceImpl implements CafeQueryService {
 		);
 	}
 
+	@Override
+	public CafeSearchResponse searchCafeBasicInfoById(Long cafeId) {
+		return cafeMapper.toCafeSearchResponse(findCafeById(cafeId), openChecker);
+	}
+
 	private CafeImpl findCafeById(Long cafeId) {
 		return cafeRepository.findById(cafeId)
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));

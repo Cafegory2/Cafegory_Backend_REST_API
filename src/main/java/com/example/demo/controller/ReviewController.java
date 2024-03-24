@@ -43,7 +43,6 @@ public class ReviewController {
 	public ResponseEntity<ReviewResponse> saveReview(@PathVariable Long cafeId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody @Validated ReviewSaveRequest reviewSaveRequest) {
-
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		Long savedReviewId = reviewService.saveReview(memberId, cafeId, reviewSaveRequest);
 		ReviewResponse response = reviewQueryService.searchOne(savedReviewId);
@@ -54,7 +53,6 @@ public class ReviewController {
 	public ResponseEntity<ReviewResponse> updateReview(@PathVariable Long reviewId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody @Validated ReviewUpdateRequest reviewUpdateRequest) {
-
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		reviewService.updateReview(memberId, reviewId, reviewUpdateRequest);
 		ReviewResponse response = reviewQueryService.searchOne(reviewId);
@@ -64,7 +62,6 @@ public class ReviewController {
 	@DeleteMapping("/cafe/review/{reviewId}")
 	public ResponseEntity<ReviewResponse> deleteReview(@PathVariable Long reviewId,
 		@RequestHeader("Authorization") String authorization) {
-
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		ReviewResponse response = reviewQueryService.searchOne(reviewId);
 		reviewService.deleteReview(memberId, reviewId);

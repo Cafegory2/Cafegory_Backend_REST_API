@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,13 +31,16 @@ import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyMemberId;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.domain.ThumbnailImage;
+import com.example.demo.dto.MemberResponse;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyMemberStateRequest;
+import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
 import com.example.demo.helper.StudyMemberPersistHelper;
@@ -444,7 +448,7 @@ class StudyOnceServiceImplTest {
 		studyMemberPersistHelper.persistDefaultStudyMember(member, studyOnce);
 		//then
 		assertThatThrownBy(() ->
-			studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), 10L, Attendance.NO,
+			studyOnceService.updateAttendance(leader.getId(), studyOnce.getId(), 999L, Attendance.NO,
 				LocalDateTime.of(2999, 2, 17, 18, 10))
 		).isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_MEMBER_NOT_FOUND.getErrorMessage());
@@ -591,6 +595,87 @@ class StudyOnceServiceImplTest {
 		assertThat(searchedStudyMembers)
 			.extracting(StudyMember::getAttendance)
 			.contains(Attendance.NO);
+	}
+
+	@Test
+	@DisplayName("카공 카페 장소를 변경할 수 있다.")
+	void change_cafe() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		CafeImpl changingCafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		//when
+		studyOnceService.changeCafe(leader.getId(), studyOnce.getId(), changingCafe.getId());
+		//then
+		assertThat(studyOnce.getCafe().getId()).isEqualTo(changingCafe.getId());
+	}
+
+	@Test
+	@DisplayName("카공장만이 카페 장소를 변경할 수 있다.")
+	void change_cafe_by_leader_only() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		CafeImpl changingCafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		//then
+		assertDoesNotThrow(() -> studyOnceService.changeCafe(leader.getId(), studyOnce.getId(), changingCafe.getId()));
+	}
+
+	@Test
+	@DisplayName("카페 장소를 변경하는 요청 멤버가 존재하지 않으면 예외가 터진다.")
+	void change_cafe_if_not_exist_requestMember() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		CafeImpl changingCafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		//then
+		assertThatThrownBy(() -> studyOnceService.changeCafe(999L, studyOnce.getId(), changingCafe.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.MEMBER_NOT_FOUND.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("카페 장소를 변경하는 요청 멤버가 카공장이 아니라면 예외가 터진다.")
+	void change_cafe_if_not_leader() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "카공장이아닌사람");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		CafeImpl changingCafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		//then
+		assertThatThrownBy(
+			() -> studyOnceService.changeCafe(otherPerson.getId(), studyOnce.getId(), changingCafe.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("카공 참여자 정보 조회")
+	void findStudyMembers() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl member1 = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		MemberImpl member2 = memberPersistHelper.persistMemberWithName(thumb, "임수빈");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		studyMemberPersistHelper.persistDefaultStudyMember(member1, studyOnce);
+		studyMemberPersistHelper.persistDefaultStudyMember(member2, studyOnce);
+		em.flush();
+		em.clear();
+		//when
+		StudyMembersResponse response = studyOnceService.findStudyMembersById(studyOnce.getId());
+		List<MemberResponse> joinedMembers = response.getJoinedMembers();
+		//then
+		assertThat(joinedMembers.size()).isEqualTo(3);
 	}
 
 }
