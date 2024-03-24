@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -119,7 +120,7 @@ public class StudyOnceController {
 	@PostMapping("/{studyOnceId:[0-9]+}/question")
 	public ResponseEntity<StudyOnceQuestionResponse> saveQuestion(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization,
-		@RequestBody StudyOnceQuestionRequest request) {
+		@RequestBody @Validated StudyOnceQuestionRequest request) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		Long savedQuestionId = studyOnceQuestionService.saveQuestion(memberId, studyOnceId, request);
 		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(

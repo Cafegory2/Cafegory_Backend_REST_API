@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Table(name = "study_once_question")
 public class StudyOnceQuestion extends BaseEntity {
@@ -39,5 +37,19 @@ public class StudyOnceQuestion extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "study_once_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private StudyOnceImpl studyOnce;
+
+	@Builder
+	private StudyOnceQuestion(Long id, String content, MemberImpl member, StudyOnceImpl studyOnce) {
+		//todo content에 대한 검증 추가
+		this.id = id;
+		this.content = content;
+		this.member = member;
+		this.studyOnce = studyOnce;
+	}
+
+	public void changeContent(String content) {
+		//todo content 에 대한 검증 추가
+		this.content = content;
+	}
 
 }
