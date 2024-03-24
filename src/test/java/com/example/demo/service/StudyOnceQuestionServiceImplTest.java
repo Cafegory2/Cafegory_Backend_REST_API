@@ -167,5 +167,4 @@ class StudyOnceQuestionServiceImplTest {
 		//then
 		assertThat(findQuestion).isNull();
 	}
-
 }
