@@ -138,4 +138,13 @@ public class StudyOnceController {
 		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
 		return ResponseEntity.ok(response);
 	}
+
+	@DeleteMapping("/question/{questionId:[0-9]+}")
+	public ResponseEntity<StudyOnceQuestionResponse> deleteQuestion(@PathVariable final Long questionId,
+		@RequestHeader("Authorization") String authorization) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		// studyOnceQuestionService.updateQuestion(memberId, questionId, request);
+		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
+		return ResponseEntity.ok(response);
+	}
 }
