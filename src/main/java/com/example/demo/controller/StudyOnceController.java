@@ -143,8 +143,11 @@ public class StudyOnceController {
 	public ResponseEntity<StudyOnceQuestionResponse> deleteQuestion(@PathVariable final Long questionId,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		// studyOnceQuestionService.updateQuestion(memberId, questionId, request);
+		if (!studyOnceQuestionService.isPersonWhoAskedQuestion(memberId, questionId)) {
+			throw new CafegoryException(STUDY_ONCE_QUESTION_PERMISSION_DENIED);
+		}
 		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
+		studyOnceQuestionService.deleteQuestion(questionId);
 		return ResponseEntity.ok(response);
 	}
 }

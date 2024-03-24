@@ -168,24 +168,4 @@ class StudyOnceQuestionServiceImplTest {
 		assertThat(findQuestion).isNull();
 	}
 
-	// @Test
-	// @DisplayName("카공 질문 삭제는 질문한 회원 본인만 삭제한다.")
-	// void delete_question() {
-	// 	//given
-	// 	ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-	// 	MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
-	// 	MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
-	// 	CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-	// 	StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-	// 	StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistDefaultStudyOnceQuestion(
-	// 		otherPerson, studyOnce);
-	// 	//when
-	// 	studyOnceQuestionService.deleteQuestion(otherPerson.getId(), question.getId());
-	// 	em.flush();
-	// 	em.clear();
-	// 	StudyOnceQuestion findQuestion = studyOnceQuestionRepository.findById(question.getId()).orElse(null);
-	// 	//then
-	// 	assertThat(findQuestion).isNull();
-	// }
-
 }
