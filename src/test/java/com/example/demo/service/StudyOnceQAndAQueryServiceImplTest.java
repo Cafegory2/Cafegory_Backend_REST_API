@@ -27,7 +27,6 @@ import com.example.demo.helper.ThumbnailImagePersistHelper;
 @Import(TestConfig.class)
 @Transactional
 class StudyOnceQAndAQueryServiceImplTest {
-	
 	@Autowired
 	private StudyOnceQAndAQueryService studyOnceQAndAQueryService;
 	@Autowired
