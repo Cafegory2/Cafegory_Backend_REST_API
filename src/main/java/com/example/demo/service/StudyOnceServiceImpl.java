@@ -27,6 +27,7 @@ import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.mapper.StudyMemberMapper;
 import com.example.demo.mapper.StudyOnceMapper;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyMemberRepository;
@@ -45,6 +46,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
 	private final StudyOnceMapper studyOnceMapper;
+	private final StudyMemberMapper studyMemberMapper;
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -207,12 +209,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyMembersResponse findStudyMembersById(Long studyOnceId) {
 		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
-		List<MemberResponse> memberResponses = studyOnce.getStudyMembers().stream()
-			.map(studyMember -> new MemberResponse(
-				studyMember.getMember().getId(),
-				studyMember.getMember().getName(),
-				studyMember.getMember().getThumbnailImage().getThumbnailImage()))
-			.collect(Collectors.toList());
+		List<MemberResponse> memberResponses = studyMemberMapper.toMemberResponses(studyOnce.getStudyMembers());
 		return new StudyMembersResponse(memberResponses);
 	}
 
