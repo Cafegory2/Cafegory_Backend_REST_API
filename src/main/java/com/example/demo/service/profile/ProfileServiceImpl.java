@@ -5,7 +5,6 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,22 +33,27 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileResponse get(Long requestMemberID, Long targetMemberID, LocalDateTime baseDateTime) {
 		if (isOwnerOfProfile(requestMemberID, targetMemberID)) {
-			MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
-			return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
+			return makeProfileResponse(targetMemberID);
 		}
 		if (isAllowedCauseStudyLeader(requestMemberID, targetMemberID)) {
-			MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
-			return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
+			return makeProfileResponse(targetMemberID);
 		}
 		if (isAllowedCauseSameStudyOnceMember(requestMemberID, targetMemberID, baseDateTime)) {
-			MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
-			return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
+			return makeProfileResponse(targetMemberID);
 		}
 		throw new CafegoryException(PROFILE_GET_PERMISSION_DENIED);
 	}
 
+	private ProfileResponse makeProfileResponse(Long targetMemberID) {
+		MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
+		return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
+	}
+
 	private boolean isOwnerOfProfile(Long requestMemberID, Long targetMemberID) {
-		return Objects.equals(requestMemberID, targetMemberID);
+		if (requestMemberID == null || targetMemberID == null) {
+			return false;
+		}
+		return requestMemberID.equals(targetMemberID);
 	}
 
 	private boolean isAllowedCauseStudyLeader(Long requestMemberID, Long targetMemberID) {
