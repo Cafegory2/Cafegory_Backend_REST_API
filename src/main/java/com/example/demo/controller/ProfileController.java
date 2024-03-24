@@ -1,7 +1,5 @@
 package com.example.demo.controller;
 
-import java.time.LocalDateTime;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,10 +21,10 @@ public class ProfileController {
 	private final CafegoryTokenManager cafegoryTokenManager;
 
 	@GetMapping("/{memberId:[0-9]+}")
-	public ResponseEntity<ProfileResponse> get(@PathVariable("memberId") Long targetMemberID,
+	public ResponseEntity<ProfileResponse> get(@PathVariable("memberId") Long targetMemberId,
 		@RequestHeader("Authorization") String authorization) {
-		long requestMemberID = cafegoryTokenManager.getIdentityId(authorization);
-		ProfileResponse profileResponse = profileService.get(requestMemberID, targetMemberID, LocalDateTime.now());
+		long requestMemberId = cafegoryTokenManager.getIdentityId(authorization);
+		ProfileResponse profileResponse = profileService.get(requestMemberId, targetMemberId);
 		return ResponseEntity.ok(profileResponse);
 	}
 }
