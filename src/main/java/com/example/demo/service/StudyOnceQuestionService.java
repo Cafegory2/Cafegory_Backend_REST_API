@@ -8,4 +8,6 @@ public interface StudyOnceQuestionService {
 	Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceQuestionRequest request);
 
 	void updateQuestion(Long memberId, Long studyOnceQuestionId, StudyOnceQuestionUpdateRequest request);
+
+	void deleteQuestion(Long memberId, Long studyOnceQuestionId);
 }

@@ -148,4 +148,24 @@ class StudyOnceQuestionServiceImplTest {
 			.hasMessage(ExceptionType.STUDY_ONCE_QUESTION_PERMISSION_DENIED.getErrorMessage());
 	}
 
+	@Test
+	@DisplayName("카공 질문을 삭제한다.")
+	void deleteQuestion() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistDefaultStudyOnceQuestion(
+			otherPerson, studyOnce);
+		//when
+		studyOnceQuestionService.deleteQuestion(otherPerson.getId(), question.getId());
+		em.flush();
+		em.clear();
+		StudyOnceQuestion findQuestion = studyOnceQuestionRepository.findById(question.getId()).orElse(null);
+		//then
+		assertThat(findQuestion).isNull();
+	}
+
 }
