@@ -25,6 +25,7 @@ import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
 import com.example.demo.dto.StudyOnceQuestionRequest;
 import com.example.demo.dto.StudyOnceQuestionResponse;
+import com.example.demo.dto.StudyOnceQuestionUpdateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
@@ -125,6 +126,16 @@ public class StudyOnceController {
 		Long savedQuestionId = studyOnceQuestionService.saveQuestion(memberId, studyOnceId, request);
 		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(
 			savedQuestionId);
+		return ResponseEntity.ok(response);
+	}
+
+	@PatchMapping("/question/{questionId:[0-9]+}")
+	public ResponseEntity<StudyOnceQuestionResponse> updateQuestion(@PathVariable final Long questionId,
+		@RequestHeader("Authorization") String authorization,
+		@RequestBody @Validated StudyOnceQuestionUpdateRequest request) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		studyOnceQuestionService.updateQuestion(memberId, questionId, request);
+		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
 		return ResponseEntity.ok(response);
 	}
 }
