@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.domain.StudyOnceQuestion;
+import com.example.demo.dto.StudyOnceQuestionRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyOnceQuestionRepository;
@@ -25,9 +26,9 @@ public class StudyOnceQuestionServiceImpl implements StudyOnceQuestionService {
 	private final StudyOnceRepository studyOnceRepository;
 
 	@Override
-	public Long saveQuestion(Long memberId, Long studyOnceId, final String content) {
+	public Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceQuestionRequest request) {
 		StudyOnceQuestion question = StudyOnceQuestion.builder()
-			.content(content)
+			.content(request.getContent())
 			.member(findMemberById(memberId))
 			.studyOnce(findStudyOnceById(studyOnceId))
 			.build();

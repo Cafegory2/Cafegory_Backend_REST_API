@@ -8,6 +8,7 @@ import com.example.demo.helper.MemberPersistHelper;
 import com.example.demo.helper.ReviewPersistHelper;
 import com.example.demo.helper.StudyMemberPersistHelper;
 import com.example.demo.helper.StudyOncePersistHelper;
+import com.example.demo.helper.StudyOnceQuestionPersistHelper;
 import com.example.demo.helper.ThumbnailImagePersistHelper;
 
 @TestConfiguration
@@ -41,5 +42,10 @@ public class TestConfig {
 	@Bean
 	public StudyOncePersistHelper studyOncePersistHelper() {
 		return new StudyOncePersistHelper();
+	}
+
+	@Bean
+	public StudyOnceQuestionPersistHelper studyOnceQuestionPersistHelper() {
+		return new StudyOnceQuestionPersistHelper();
 	}
 }

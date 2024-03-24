@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.mapper.BusinessHourMapper;
 import com.example.demo.mapper.CafeMapper;
+import com.example.demo.mapper.MemberMapper;
 import com.example.demo.mapper.ReviewMapper;
 import com.example.demo.mapper.SnsDetailMapper;
 import com.example.demo.mapper.StudyOnceMapper;
@@ -35,5 +36,10 @@ public class MapperConfig {
 	@Bean
 	public StudyOnceMapper studyOnceMapper() {
 		return new StudyOnceMapper();
+	}
+
+	@Bean
+	public MemberMapper memberMapper() {
+		return new MemberMapper();
 	}
 }
