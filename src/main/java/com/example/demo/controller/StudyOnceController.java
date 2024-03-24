@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,13 +23,17 @@ import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
+import com.example.demo.dto.StudyOnceQuestionRequest;
+import com.example.demo.dto.StudyOnceQuestionResponse;
+import com.example.demo.dto.StudyOnceQuestionUpdateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.repository.StudyOnceRepository;
 import com.example.demo.service.CafeQueryService;
+import com.example.demo.service.StudyOnceQAndAQueryService;
+import com.example.demo.service.StudyOnceQuestionService;
 import com.example.demo.service.StudyOnceService;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +45,8 @@ public class StudyOnceController {
 	private final StudyOnceService studyOnceService;
 	private final CafegoryTokenManager cafegoryTokenManager;
 	private final CafeQueryService cafeQueryService;
-	private final StudyOnceRepository studyOnceRepository;
+	private final StudyOnceQuestionService studyOnceQuestionService;
+	private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
 
 	@GetMapping("/{studyOnceId:[0-9]+}")
 	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId) {
@@ -112,4 +118,36 @@ public class StudyOnceController {
 		return ResponseEntity.ok(response);
 	}
 
+	@PostMapping("/{studyOnceId:[0-9]+}/question")
+	public ResponseEntity<StudyOnceQuestionResponse> saveQuestion(@PathVariable Long studyOnceId,
+		@RequestHeader("Authorization") String authorization,
+		@RequestBody @Validated StudyOnceQuestionRequest request) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		Long savedQuestionId = studyOnceQuestionService.saveQuestion(memberId, studyOnceId, request);
+		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(
+			savedQuestionId);
+		return ResponseEntity.ok(response);
+	}
+
+	@PatchMapping("/question/{questionId:[0-9]+}")
+	public ResponseEntity<StudyOnceQuestionResponse> updateQuestion(@PathVariable final Long questionId,
+		@RequestHeader("Authorization") String authorization,
+		@RequestBody @Validated StudyOnceQuestionUpdateRequest request) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		studyOnceQuestionService.updateQuestion(memberId, questionId, request);
+		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
+		return ResponseEntity.ok(response);
+	}
+
+	@DeleteMapping("/question/{questionId:[0-9]+}")
+	public ResponseEntity<StudyOnceQuestionResponse> deleteQuestion(@PathVariable final Long questionId,
+		@RequestHeader("Authorization") String authorization) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		if (!studyOnceQuestionService.isPersonWhoAskedQuestion(memberId, questionId)) {
+			throw new CafegoryException(STUDY_ONCE_QUESTION_PERMISSION_DENIED);
+		}
+		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
+		studyOnceQuestionService.deleteQuestion(questionId);
+		return ResponseEntity.ok(response);
+	}
 }
