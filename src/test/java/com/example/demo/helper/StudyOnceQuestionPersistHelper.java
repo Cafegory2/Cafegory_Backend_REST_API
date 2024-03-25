@@ -30,4 +30,13 @@ public class StudyOnceQuestionPersistHelper {
 		em.persist(studyOnceQuestion);
 		return studyOnceQuestion;
 	}
+
+	public StudyOnceQuestion persistDefaultStudyOnceReply(MemberImpl member, StudyOnceImpl studyOnce,
+		StudyOnceQuestion parent) {
+		StudyOnceQuestion studyOnceQuestion = new TestStudyOnceQuestionBuilder().member(member)
+			.studyOnce(studyOnce)
+			.build();
+		em.persist(studyOnceQuestion);
+		return studyOnceQuestion;
+	}
 }

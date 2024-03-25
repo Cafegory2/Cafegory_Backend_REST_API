@@ -9,6 +9,7 @@ public class TestStudyOnceQuestionBuilder {
 	private String content = "몇시까지 공부하시나요?";
 	private MemberImpl member;
 	private StudyOnceImpl studyOnce;
+	private StudyOnceQuestion parent;
 
 	public TestStudyOnceQuestionBuilder id(Long id) {
 		this.id = id;
@@ -30,12 +31,19 @@ public class TestStudyOnceQuestionBuilder {
 		return this;
 	}
 
+	public TestStudyOnceQuestionBuilder parent(StudyOnceQuestion parent) {
+		this.parent = parent;
+		return this;
+	}
+
 	public StudyOnceQuestion build() {
 		return StudyOnceQuestion.builder()
 			.id(id)
 			.content(content)
 			.member(member)
 			.studyOnce(studyOnce)
+			.parent(parent)
 			.build();
 	}
+	
 }

@@ -12,4 +12,6 @@ public interface StudyOnceQuestionService {
 	void deleteQuestion(Long studyOnceQuestionId);
 
 	boolean isPersonWhoAskedQuestion(Long memberId, Long studyOnceQuestionId);
+
+	Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceQuestionId, StudyOnceQuestionRequest request);
 }

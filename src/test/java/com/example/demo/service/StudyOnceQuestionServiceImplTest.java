@@ -167,4 +167,27 @@ class StudyOnceQuestionServiceImplTest {
 		//then
 		assertThat(findQuestion).isNull();
 	}
+
+	@Test
+	@DisplayName("카공 답변(대댓글)을 생성한다.")
+	void saveReply() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		studyOnceQuestionPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
+		//when
+		Long savedReplyId = studyOnceQuestionService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
+			new StudyOnceQuestionRequest("카페 끝날때까지 공부합니다."));
+		em.flush();
+		em.clear();
+		StudyOnceQuestion savedReply = studyOnceQuestionRepository.findById(savedReplyId).get();
+		//then
+		assertThat(savedReply.getParent().getId()).isEqualTo(question.getId());
+
+	}
 }

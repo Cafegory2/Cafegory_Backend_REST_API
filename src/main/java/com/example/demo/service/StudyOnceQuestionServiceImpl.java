@@ -53,6 +53,19 @@ public class StudyOnceQuestionServiceImpl implements StudyOnceQuestionService {
 	}
 
 	@Override
+	public Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceQuestionId,
+		StudyOnceQuestionRequest request) {
+		StudyOnceQuestion reply = StudyOnceQuestion.builder()
+			.content(request.getContent())
+			.member(findMemberById(memberId))
+			.studyOnce(findStudyOnceById(studyOnceId))
+			.parent(findStudyOnceQuestionById(parentStudyOnceQuestionId))
+			.build();
+		StudyOnceQuestion savedReply = studyOnceQuestionRepository.save(reply);
+		return savedReply.getId();
+	}
+
+	@Override
 	public void deleteQuestion(Long studyOnceQuestionId) {
 		StudyOnceQuestion question = findStudyOnceQuestionById(studyOnceQuestionId);
 		studyOnceQuestionRepository.delete(question);
