@@ -1,8 +1,8 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.StudyOnceQuestionResponse;
+import com.example.demo.dto.StudyOnceCommentResponse;
 
 public interface StudyOnceQAndAQueryService {
 
-	StudyOnceQuestionResponse searchQuestion(Long studyOnceQuestionId);
+	StudyOnceCommentResponse searchComment(Long studyOnceCommentId);
 }

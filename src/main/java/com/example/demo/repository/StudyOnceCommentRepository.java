@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.domain.StudyOnceComment;
 
-public interface StudyOnceQuestionRepository extends JpaRepository<StudyOnceComment, Long> {
+public interface StudyOnceCommentRepository extends JpaRepository<StudyOnceComment, Long> {
 }

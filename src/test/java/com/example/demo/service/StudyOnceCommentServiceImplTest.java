@@ -17,29 +17,29 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.config.TestConfig;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyOnceComment;
 import com.example.demo.domain.StudyOnceImpl;
-import com.example.demo.domain.StudyOnceQuestion;
 import com.example.demo.domain.ThumbnailImage;
-import com.example.demo.dto.StudyOnceQuestionRequest;
-import com.example.demo.dto.StudyOnceQuestionUpdateRequest;
+import com.example.demo.dto.StudyOnceCommentRequest;
+import com.example.demo.dto.StudyOnceCommentUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
+import com.example.demo.helper.StudyOnceCommentPersistHelper;
 import com.example.demo.helper.StudyOncePersistHelper;
-import com.example.demo.helper.StudyOnceQuestionPersistHelper;
 import com.example.demo.helper.ThumbnailImagePersistHelper;
-import com.example.demo.repository.StudyOnceQuestionRepository;
+import com.example.demo.repository.StudyOnceCommentRepository;
 
 @SpringBootTest
 @Transactional
 @Import(TestConfig.class)
-class StudyOnceQuestionServiceImplTest {
+class StudyOnceCommentServiceImplTest {
 
 	@Autowired
-	private StudyOnceQuestionService studyOnceQuestionService;
+	private StudyOnceCommentService studyOnceCommentService;
 	@Autowired
-	private StudyOnceQuestionRepository studyOnceQuestionRepository;
+	private StudyOnceCommentRepository studyOnceCommentRepository;
 	@Autowired
 	private MemberPersistHelper memberPersistHelper;
 	@Autowired
@@ -49,7 +49,7 @@ class StudyOnceQuestionServiceImplTest {
 	@Autowired
 	private CafePersistHelper cafePersistHelper;
 	@Autowired
-	private StudyOnceQuestionPersistHelper studyOnceQuestionPersistHelper;
+	private StudyOnceCommentPersistHelper studyOnceCommentPersistHelper;
 	@Autowired
 	private EntityManager em;
 
@@ -63,11 +63,11 @@ class StudyOnceQuestionServiceImplTest {
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		//when
-		studyOnceQuestionService.saveQuestion(otherPerson.getId(), studyOnce.getId(),
-			new StudyOnceQuestionRequest("몇시까지 공부하시나요?"));
+		studyOnceCommentService.saveQuestion(otherPerson.getId(), studyOnce.getId(),
+			new StudyOnceCommentRequest("몇시까지 공부하시나요?"));
 		em.flush();
 		em.clear();
-		List<StudyOnceQuestion> questions = studyOnceQuestionRepository.findAll();
+		List<StudyOnceComment> questions = studyOnceCommentRepository.findAll();
 		//then
 		assertThat(questions.size()).isEqualTo(1);
 	}
@@ -81,11 +81,11 @@ class StudyOnceQuestionServiceImplTest {
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		//when
-		studyOnceQuestionService.saveQuestion(leader.getId(), studyOnce.getId(),
-			new StudyOnceQuestionRequest("카페 끝날때까지 공부합니다."));
+		studyOnceCommentService.saveQuestion(leader.getId(), studyOnce.getId(),
+			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다."));
 		em.flush();
 		em.clear();
-		List<StudyOnceQuestion> questions = studyOnceQuestionRepository.findAll();
+		List<StudyOnceComment> questions = studyOnceCommentRepository.findAll();
 		//then
 		assertThat(questions.size()).isEqualTo(1);
 	}
@@ -99,14 +99,14 @@ class StudyOnceQuestionServiceImplTest {
 		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
-		studyOnceQuestionService.updateQuestion(otherPerson.getId(), question.getId(),
-			new StudyOnceQuestionUpdateRequest("수정내용"));
+		studyOnceCommentService.updateComment(otherPerson.getId(), question.getId(),
+			new StudyOnceCommentUpdateRequest("수정내용"));
 		em.flush();
 		em.clear();
-		StudyOnceQuestion findQuestion = studyOnceQuestionRepository.findById(question.getId()).get();
+		StudyOnceComment findQuestion = studyOnceCommentRepository.findById(question.getId()).get();
 		//then
 		assertThat(findQuestion.getContent()).isEqualTo("수정내용");
 	}
@@ -120,12 +120,12 @@ class StudyOnceQuestionServiceImplTest {
 		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
 		assertDoesNotThrow(() ->
-			studyOnceQuestionService.updateQuestion(otherPerson.getId(), question.getId(),
-				new StudyOnceQuestionUpdateRequest("수정내용"))
+			studyOnceCommentService.updateComment(otherPerson.getId(), question.getId(),
+				new StudyOnceCommentUpdateRequest("수정내용"))
 		);
 	}
 
@@ -138,14 +138,14 @@ class StudyOnceQuestionServiceImplTest {
 		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
 		assertThatThrownBy(() ->
-			studyOnceQuestionService.updateQuestion(leader.getId(), question.getId(),
-				new StudyOnceQuestionUpdateRequest("수정내용"))
+			studyOnceCommentService.updateComment(leader.getId(), question.getId(),
+				new StudyOnceCommentUpdateRequest("수정내용"))
 		).isInstanceOf(CafegoryException.class)
-			.hasMessage(ExceptionType.STUDY_ONCE_QUESTION_PERMISSION_DENIED.getErrorMessage());
+			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
 	}
 
 	@Test
@@ -157,13 +157,13 @@ class StudyOnceQuestionServiceImplTest {
 		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistDefaultStudyOnceQuestion(
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistDefaultStudyOnceQuestion(
 			otherPerson, studyOnce);
 		//when
-		studyOnceQuestionService.deleteQuestion(question.getId());
+		studyOnceCommentService.deleteQuestion(question.getId());
 		em.flush();
 		em.clear();
-		StudyOnceQuestion findQuestion = studyOnceQuestionRepository.findById(question.getId()).orElse(null);
+		StudyOnceComment findQuestion = studyOnceCommentRepository.findById(question.getId()).orElse(null);
 		//then
 		assertThat(findQuestion).isNull();
 	}
@@ -177,15 +177,15 @@ class StudyOnceQuestionServiceImplTest {
 		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceQuestion question = studyOnceQuestionPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		studyOnceQuestionPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
+		studyOnceCommentPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
 		//when
-		Long savedReplyId = studyOnceQuestionService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
-			new StudyOnceQuestionRequest("카페 끝날때까지 공부합니다."));
+		Long savedReplyId = studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
+			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다."));
 		em.flush();
 		em.clear();
-		StudyOnceQuestion savedReply = studyOnceQuestionRepository.findById(savedReplyId).get();
+		StudyOnceComment savedReply = studyOnceCommentRepository.findById(savedReplyId).get();
 		//then
 		assertThat(savedReply.getParent().getId()).isEqualTo(question.getId());
 

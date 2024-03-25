@@ -1,17 +1,17 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.StudyOnceQuestionRequest;
-import com.example.demo.dto.StudyOnceQuestionUpdateRequest;
+import com.example.demo.dto.StudyOnceCommentRequest;
+import com.example.demo.dto.StudyOnceCommentUpdateRequest;
 
-public interface StudyOnceQuestionService {
+public interface StudyOnceCommentService {
 
-	Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceQuestionRequest request);
+	Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceCommentRequest request);
 
-	void updateQuestion(Long memberId, Long studyOnceQuestionId, StudyOnceQuestionUpdateRequest request);
+	void updateComment(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request);
 
 	void deleteQuestion(Long studyOnceQuestionId);
 
-	boolean isPersonWhoAskedQuestion(Long memberId, Long studyOnceQuestionId);
+	boolean isPersonWhoAskedComment(Long memberId, Long studyOnceCommentId);
 
-	Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceQuestionId, StudyOnceQuestionRequest request);
+	Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceCommentId, StudyOnceCommentRequest request);
 }

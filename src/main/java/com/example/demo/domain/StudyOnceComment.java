@@ -26,23 +26,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "study_once_question")
-public class StudyOnceQuestion extends BaseEntity {
+@Table(name = "study_once_comment")
+public class StudyOnceComment extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "study_once_question_id")
+	@Column(name = "study_once_comment_id")
 	private Long id;
 
 	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_study_once_question_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private StudyOnceQuestion parent;
+	@JoinColumn(name = "parent_study_once_comment_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private StudyOnceComment parent;
 
 	@OneToMany(mappedBy = "parent")
 	@Builder.Default
-	private List<StudyOnceQuestion> children = new ArrayList<>();
+	private List<StudyOnceComment> children = new ArrayList<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -53,7 +53,7 @@ public class StudyOnceQuestion extends BaseEntity {
 	private StudyOnceImpl studyOnce;
 
 	@Builder
-	private StudyOnceQuestion(Long id, String content, MemberImpl member, StudyOnceImpl studyOnce) {
+	private StudyOnceComment(Long id, String content, MemberImpl member, StudyOnceImpl studyOnce) {
 		//todo content에 대한 검증 추가
 		this.id = id;
 		this.content = content;

@@ -13,14 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.config.TestConfig;
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyOnceComment;
 import com.example.demo.domain.StudyOnceImpl;
-import com.example.demo.domain.StudyOnceQuestion;
 import com.example.demo.domain.ThumbnailImage;
-import com.example.demo.dto.StudyOnceQuestionResponse;
+import com.example.demo.dto.StudyOnceCommentResponse;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
+import com.example.demo.helper.StudyOnceCommentPersistHelper;
 import com.example.demo.helper.StudyOncePersistHelper;
-import com.example.demo.helper.StudyOnceQuestionPersistHelper;
 import com.example.demo.helper.ThumbnailImagePersistHelper;
 
 @SpringBootTest
@@ -38,7 +38,7 @@ class StudyOnceQAndAQueryServiceImplTest {
 	@Autowired
 	private CafePersistHelper cafePersistHelper;
 	@Autowired
-	private StudyOnceQuestionPersistHelper studyOnceQuestionPersistHelper;
+	private StudyOnceCommentPersistHelper studyOnceCommentPersistHelper;
 	@Autowired
 	private EntityManager em;
 
@@ -51,12 +51,12 @@ class StudyOnceQAndAQueryServiceImplTest {
 		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceQuestion studyOnceQuestion = studyOnceQuestionPersistHelper.persistDefaultStudyOnceQuestion(
+		StudyOnceComment studyOnceComment = studyOnceCommentPersistHelper.persistDefaultStudyOnceQuestion(
 			otherPerson, studyOnce);
 		em.flush();
 		em.clear();
 		//when
-		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(studyOnceQuestion.getId());
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(studyOnceComment.getId());
 		Assertions.assertThat(response).isNotNull();
 	}
 

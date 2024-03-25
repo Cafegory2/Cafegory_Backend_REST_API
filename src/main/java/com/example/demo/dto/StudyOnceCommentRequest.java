@@ -5,15 +5,15 @@ import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class StudyOnceQuestionRequest {
+public class StudyOnceCommentRequest {
 
 	@NotBlank
 	private String content;
 
-	public StudyOnceQuestionRequest() {
+	public StudyOnceCommentRequest() {
 	}
 
-	public StudyOnceQuestionRequest(String content) {
+	public StudyOnceCommentRequest(String content) {
 		this.content = content;
 	}
 }

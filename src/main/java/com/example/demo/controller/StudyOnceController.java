@@ -21,19 +21,19 @@ import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.CafeSearchResponse;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.StudyMembersResponse;
+import com.example.demo.dto.StudyOnceCommentRequest;
+import com.example.demo.dto.StudyOnceCommentResponse;
+import com.example.demo.dto.StudyOnceCommentUpdateRequest;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
-import com.example.demo.dto.StudyOnceQuestionRequest;
-import com.example.demo.dto.StudyOnceQuestionResponse;
-import com.example.demo.dto.StudyOnceQuestionUpdateRequest;
 import com.example.demo.dto.StudyOnceSearchRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.service.CafeQueryService;
+import com.example.demo.service.StudyOnceCommentService;
 import com.example.demo.service.StudyOnceQAndAQueryService;
-import com.example.demo.service.StudyOnceQuestionService;
 import com.example.demo.service.StudyOnceService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class StudyOnceController {
 	private final StudyOnceService studyOnceService;
 	private final CafegoryTokenManager cafegoryTokenManager;
 	private final CafeQueryService cafeQueryService;
-	private final StudyOnceQuestionService studyOnceQuestionService;
+	private final StudyOnceCommentService studyOnceCommentService;
 	private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
 
 	@GetMapping("/{studyOnceId:[0-9]+}")
@@ -119,35 +119,47 @@ public class StudyOnceController {
 	}
 
 	@PostMapping("/{studyOnceId:[0-9]+}/question")
-	public ResponseEntity<StudyOnceQuestionResponse> saveQuestion(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyOnceCommentResponse> saveQuestion(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization,
-		@RequestBody @Validated StudyOnceQuestionRequest request) {
+		@RequestBody @Validated StudyOnceCommentRequest request) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		Long savedQuestionId = studyOnceQuestionService.saveQuestion(memberId, studyOnceId, request);
-		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(
-			savedQuestionId);
+		Long savedCommentId = studyOnceCommentService.saveQuestion(memberId, studyOnceId, request);
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(
+			savedCommentId);
 		return ResponseEntity.ok(response);
 	}
 
-	@PatchMapping("/question/{questionId:[0-9]+}")
-	public ResponseEntity<StudyOnceQuestionResponse> updateQuestion(@PathVariable final Long questionId,
+	@PatchMapping("/question/{commentId:[0-9]+}")
+	public ResponseEntity<StudyOnceCommentResponse> updateQuestion(@PathVariable final Long commentId,
 		@RequestHeader("Authorization") String authorization,
-		@RequestBody @Validated StudyOnceQuestionUpdateRequest request) {
+		@RequestBody @Validated StudyOnceCommentUpdateRequest request) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		studyOnceQuestionService.updateQuestion(memberId, questionId, request);
-		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
+		studyOnceCommentService.updateComment(memberId, commentId, request);
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
 		return ResponseEntity.ok(response);
 	}
 
-	@DeleteMapping("/question/{questionId:[0-9]+}")
-	public ResponseEntity<StudyOnceQuestionResponse> deleteQuestion(@PathVariable final Long questionId,
+	@DeleteMapping("/question/{commentId:[0-9]+}")
+	public ResponseEntity<StudyOnceCommentResponse> deleteQuestion(@PathVariable final Long commentId,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		if (!studyOnceQuestionService.isPersonWhoAskedQuestion(memberId, questionId)) {
-			throw new CafegoryException(STUDY_ONCE_QUESTION_PERMISSION_DENIED);
+		if (!studyOnceCommentService.isPersonWhoAskedComment(memberId, commentId)) {
+			throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
 		}
-		StudyOnceQuestionResponse response = studyOnceQAndAQueryService.searchQuestion(questionId);
-		studyOnceQuestionService.deleteQuestion(questionId);
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
+		studyOnceCommentService.deleteQuestion(commentId);
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/{studyOnceId:[0-9]+}/question/{parentCommentId:[0-9]+}/reply")
+	public ResponseEntity<StudyOnceCommentResponse> saveReply(@PathVariable Long studyOnceId,
+		@PathVariable Long parentCommentId,
+		@RequestHeader("Authorization") String authorization,
+		@RequestBody @Validated StudyOnceCommentRequest request) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		Long savedCommentId = studyOnceCommentService.saveReply(memberId, studyOnceId, parentCommentId, request);
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(
+			savedCommentId);
 		return ResponseEntity.ok(response);
 	}
 }

@@ -1,43 +1,43 @@
 package com.example.demo.builder;
 
 import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyOnceComment;
 import com.example.demo.domain.StudyOnceImpl;
-import com.example.demo.domain.StudyOnceQuestion;
 
-public class TestStudyOnceQuestionBuilder {
+public class TestStudyOnceCommentBuilder {
 	private Long id;
 	private String content = "몇시까지 공부하시나요?";
 	private MemberImpl member;
 	private StudyOnceImpl studyOnce;
-	private StudyOnceQuestion parent;
+	private StudyOnceComment parent;
 
-	public TestStudyOnceQuestionBuilder id(Long id) {
+	public TestStudyOnceCommentBuilder id(Long id) {
 		this.id = id;
 		return this;
 	}
 
-	public TestStudyOnceQuestionBuilder content(String content) {
+	public TestStudyOnceCommentBuilder content(String content) {
 		this.content = content;
 		return this;
 	}
 
-	public TestStudyOnceQuestionBuilder member(MemberImpl member) {
+	public TestStudyOnceCommentBuilder member(MemberImpl member) {
 		this.member = member;
 		return this;
 	}
 
-	public TestStudyOnceQuestionBuilder studyOnce(StudyOnceImpl studyOnce) {
+	public TestStudyOnceCommentBuilder studyOnce(StudyOnceImpl studyOnce) {
 		this.studyOnce = studyOnce;
 		return this;
 	}
 
-	public TestStudyOnceQuestionBuilder parent(StudyOnceQuestion parent) {
+	public TestStudyOnceCommentBuilder parent(StudyOnceComment parent) {
 		this.parent = parent;
 		return this;
 	}
 
-	public StudyOnceQuestion build() {
-		return StudyOnceQuestion.builder()
+	public StudyOnceComment build() {
+		return StudyOnceComment.builder()
 			.id(id)
 			.content(content)
 			.member(member)
@@ -45,5 +45,5 @@ public class TestStudyOnceQuestionBuilder {
 			.parent(parent)
 			.build();
 	}
-	
+
 }
