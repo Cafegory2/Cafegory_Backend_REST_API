@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudyOnceQuestionResponse {
 
-	private final Long questionId;
+	private final Long commentId;
 	private final String content;
 	private final WriterResponse writer;
 }
