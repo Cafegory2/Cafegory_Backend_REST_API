@@ -55,10 +55,15 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	@Override
 	public Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceCommentId,
 		StudyOnceCommentRequest request) {
+		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		MemberImpl member = findMemberById(memberId);
+		if (!studyOnce.isLeader(member)) {
+			throw new CafegoryException(STUDY_ONCE_REPLY_PERMISSION_DENIED);
+		}
 		StudyOnceComment reply = StudyOnceComment.builder()
 			.content(request.getContent())
-			.member(findMemberById(memberId))
-			.studyOnce(findStudyOnceById(studyOnceId))
+			.member(member)
+			.studyOnce(studyOnce)
 			.parent(findStudyOnceQuestionById(parentStudyOnceCommentId))
 			.build();
 		StudyOnceComment savedReply = studyOnceCommentRepository.save(reply);

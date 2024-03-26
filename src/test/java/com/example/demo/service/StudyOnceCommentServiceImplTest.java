@@ -170,7 +170,7 @@ class StudyOnceCommentServiceImplTest {
 
 	@Test
 	@DisplayName("카공 답변(대댓글)을 생성한다.")
-	void saveReply() {
+	void save_reply() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
@@ -188,6 +188,47 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceComment savedReply = studyOnceCommentRepository.findById(savedReplyId).get();
 		//then
 		assertThat(savedReply.getParent().getId()).isEqualTo(question.getId());
-
 	}
+
+	@Test
+	@DisplayName("카공장만이 질문에 답변을 할 수 있다.")
+	void save_reply_by_leader() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		studyOnceCommentPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
+		em.flush();
+		em.clear();
+		//when
+		assertDoesNotThrow(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
+			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다.")));
+	}
+
+	@Test
+	@DisplayName("카공장이 아닌 다른 사람이 질문을 할 경우, 예외가 터진다.")
+	void save_reply_by_not_leader_then_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		studyOnceCommentPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
+		em.flush();
+		em.clear();
+		//when
+		assertThatThrownBy(
+			() -> studyOnceCommentService.saveReply(otherPerson.getId(), studyOnce.getId(), question.getId(),
+				new StudyOnceCommentRequest("카페 끝날때까지 공부합니다.")))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_REPLY_PERMISSION_DENIED.getErrorMessage());
+	}
+
 }

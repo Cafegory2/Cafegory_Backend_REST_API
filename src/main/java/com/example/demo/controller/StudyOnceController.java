@@ -130,7 +130,7 @@ public class StudyOnceController {
 	}
 
 	@PatchMapping("/question/{commentId:[0-9]+}")
-	public ResponseEntity<StudyOnceCommentResponse> updateQuestion(@PathVariable final Long commentId,
+	public ResponseEntity<StudyOnceCommentResponse> updateComment(@PathVariable final Long commentId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody @Validated StudyOnceCommentUpdateRequest request) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
