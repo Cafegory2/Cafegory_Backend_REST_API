@@ -78,6 +78,12 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	}
 
 	@Override
+	public void deleteReply(Long studyOnceCommentId) {
+		StudyOnceComment comment = findStudyOnceCommentById(studyOnceCommentId);
+		studyOnceCommentRepository.delete(comment);
+	}
+
+	@Override
 	public void deleteQuestion(Long studyOnceQuestionId) {
 		StudyOnceComment question = findStudyOnceCommentById(studyOnceQuestionId);
 		studyOnceCommentRepository.delete(question);

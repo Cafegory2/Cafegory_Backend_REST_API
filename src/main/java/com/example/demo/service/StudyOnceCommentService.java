@@ -14,4 +14,6 @@ public interface StudyOnceCommentService {
 	boolean isPersonWhoAskedComment(Long memberId, Long studyOnceCommentId);
 
 	Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceCommentId, StudyOnceCommentRequest request);
+
+	void deleteReply(Long studyOnceCommentId);
 }

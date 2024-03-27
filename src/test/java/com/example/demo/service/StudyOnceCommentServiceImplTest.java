@@ -273,4 +273,49 @@ class StudyOnceCommentServiceImplTest {
 			.hasMessage(ExceptionType.STUDY_ONCE_PARENT_COMMENT_HAS_SINGLE_CHILD_COMMENT.getErrorMessage());
 	}
 
+	@Test
+	@DisplayName("답변(대댓글)을 수정한다.")
+	void update_reply() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "댓글");
+		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+			studyOnce, question, "대댓글");
+		//when
+		studyOnceCommentService.updateComment(leader.getId(), reply.getId(),
+			new StudyOnceCommentUpdateRequest("대댓글수정"));
+		em.flush();
+		em.clear();
+		StudyOnceComment updatedComment = studyOnceCommentRepository.findById(reply.getId()).get();
+		//then
+		assertThat(updatedComment.getContent()).isEqualTo("대댓글수정");
+	}
+
+	@Test
+	@DisplayName("답변(대댓글)을 삭제한다.")
+	void remove_reply() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+			studyOnce, question, "최상위 댓글을 참조로 가지는 첫번째 댓글");
+		//when
+		studyOnceCommentService.deleteReply(reply.getId());
+		em.flush();
+		em.clear();
+		StudyOnceComment removedComment = studyOnceCommentRepository.findById(reply.getId()).orElse(null);
+		//then
+		assertThat(removedComment).isNull();
+	}
+
 }
