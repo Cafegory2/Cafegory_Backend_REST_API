@@ -179,7 +179,6 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		studyOnceCommentPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
 		//when
 		Long savedReplyId = studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
 			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다."));
@@ -201,10 +200,9 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		studyOnceCommentPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
 		em.flush();
 		em.clear();
-		//when
+		//then
 		assertDoesNotThrow(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
 			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다.")));
 	}
@@ -220,15 +218,37 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		studyOnceCommentPersistHelper.persistDefaultStudyOnceReply(leader, studyOnce, question);
 		em.flush();
 		em.clear();
-		//when
+		//then
 		assertThatThrownBy(
 			() -> studyOnceCommentService.saveReply(otherPerson.getId(), studyOnce.getId(), question.getId(),
 				new StudyOnceCommentRequest("카페 끝날때까지 공부합니다.")))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(ExceptionType.STUDY_ONCE_REPLY_PERMISSION_DENIED.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("한개의 질문(댓글)에 한개의 답변(대댓글)이 존재할때, 한개의 답변(대대댓글)을 생성하면 예외가 터진다.")
+	void save_reply_second_times_then_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+			studyOnce, question, "카페 끝날때 까지 공부할것 같아요");
+		em.flush();
+		em.clear();
+		//then
+		assertThatThrownBy(
+			() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), reply.getId(),
+				new StudyOnceCommentRequest("카페 23시까지 운영해요")))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_SINGLE_REPLY_PER_QUESTION.getErrorMessage());
 	}
 
 }

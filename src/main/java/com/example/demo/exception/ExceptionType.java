@@ -30,6 +30,7 @@ public enum ExceptionType {
 	STUDY_ONCE_LEADER_PERMISSION_DENIED(FORBIDDEN, "스터디 리더만 권한이 있습니다."),
 	STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED(FORBIDDEN, "스터디 리더만 장소 변경을 할 권한이 있습니다."),
 	STUDY_ONCE_REPLY_PERMISSION_DENIED(FORBIDDEN, "스터디 리더만 답변을 할 권한이 있습니다."),
+	STUDY_ONCE_SINGLE_REPLY_PER_QUESTION(CONFLICT, "하나의 카공 질문에는 하나의 답변만 할 수 있습니다."),
 	STUDY_ONCE_EARLY_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 시작 10분 이후여야 합니다."),
 	STUDY_ONCE_LATE_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 진행시간 절반이 지나기전에만 변경할 수 있습니다. "),
 	STUDY_ONCE_COMMENT_NOT_FOUND(NOT_FOUND, "없는 카공 댓글입니다."),

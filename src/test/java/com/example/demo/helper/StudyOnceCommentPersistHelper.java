@@ -33,10 +33,23 @@ public class StudyOnceCommentPersistHelper {
 
 	public StudyOnceComment persistDefaultStudyOnceReply(MemberImpl member, StudyOnceImpl studyOnce,
 		StudyOnceComment parent) {
-		StudyOnceComment studyOnceComment = new TestStudyOnceCommentBuilder().member(member)
+		StudyOnceComment reply = new TestStudyOnceCommentBuilder().member(member)
 			.studyOnce(studyOnce)
+			.parent(parent)
 			.build();
-		em.persist(studyOnceComment);
-		return studyOnceComment;
+		em.persist(reply);
+		return reply;
 	}
+
+	public StudyOnceComment persistStudyOnceReplyWithContent(MemberImpl member, StudyOnceImpl studyOnce,
+		StudyOnceComment parent, String content) {
+		StudyOnceComment reply = new TestStudyOnceCommentBuilder().member(member)
+			.studyOnce(studyOnce)
+			.parent(parent)
+			.content(content)
+			.build();
+		em.persist(reply);
+		return reply;
+	}
+
 }

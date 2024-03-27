@@ -39,7 +39,7 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 
 	@Override
 	public void updateComment(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request) {
-		StudyOnceComment question = findStudyOnceQuestionById(studyOnceCommentId);
+		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
 		if (!isPersonWhoAskedComment(memberId, studyOnceCommentId)) {
 			throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
 		}
@@ -48,7 +48,7 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 
 	@Override
 	public boolean isPersonWhoAskedComment(Long memberId, Long studyOnceCommentId) {
-		StudyOnceComment question = findStudyOnceQuestionById(studyOnceCommentId);
+		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
 		return question.isPersonAsked(findMemberById(memberId));
 	}
 
@@ -60,11 +60,15 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 		if (!studyOnce.isLeader(member)) {
 			throw new CafegoryException(STUDY_ONCE_REPLY_PERMISSION_DENIED);
 		}
+		StudyOnceComment parentComment = findStudyOnceCommentById(parentStudyOnceCommentId);
+		if (parentComment.hasParentComment()) {
+			throw new CafegoryException(STUDY_ONCE_SINGLE_REPLY_PER_QUESTION);
+		}
 		StudyOnceComment reply = StudyOnceComment.builder()
 			.content(request.getContent())
 			.member(member)
 			.studyOnce(studyOnce)
-			.parent(findStudyOnceQuestionById(parentStudyOnceCommentId))
+			.parent(parentComment)
 			.build();
 		StudyOnceComment savedReply = studyOnceCommentRepository.save(reply);
 		return savedReply.getId();
@@ -72,12 +76,12 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 
 	@Override
 	public void deleteQuestion(Long studyOnceQuestionId) {
-		StudyOnceComment question = findStudyOnceQuestionById(studyOnceQuestionId);
+		StudyOnceComment question = findStudyOnceCommentById(studyOnceQuestionId);
 		studyOnceCommentRepository.delete(question);
 	}
 
-	private StudyOnceComment findStudyOnceQuestionById(Long studyOnceQuestionId) {
-		return studyOnceCommentRepository.findById(studyOnceQuestionId)
+	private StudyOnceComment findStudyOnceCommentById(Long studyOnceCommentId) {
+		return studyOnceCommentRepository.findById(studyOnceCommentId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_COMMENT_NOT_FOUND));
 	}
 

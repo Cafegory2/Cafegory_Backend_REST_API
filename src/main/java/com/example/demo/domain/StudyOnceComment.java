@@ -61,6 +61,11 @@ public class StudyOnceComment extends BaseEntity {
 		this.studyOnce = studyOnce;
 	}
 
+	public void addReply(StudyOnceComment reply) {
+		this.children.add(reply);
+		reply.parent = this;
+	}
+
 	public void changeContent(String content) {
 		//todo content 에 대한 검증 추가
 		this.content = content;
@@ -68,6 +73,14 @@ public class StudyOnceComment extends BaseEntity {
 
 	public boolean isPersonAsked(MemberImpl member) {
 		return this.member.getId().equals(member.getId());
+	}
+
+	public boolean hasReply() {
+		return !this.children.isEmpty();
+	}
+
+	public boolean hasParentComment() {
+		return this.parent != null;
 	}
 
 }
