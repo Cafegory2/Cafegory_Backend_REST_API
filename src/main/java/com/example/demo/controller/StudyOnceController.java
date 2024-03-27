@@ -147,7 +147,7 @@ public class StudyOnceController {
 			throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
 		}
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
-		studyOnceCommentService.deleteQuestion(commentId);
+		studyOnceCommentService.deleteQuestion(memberId, commentId);
 		return ResponseEntity.ok(response);
 	}
 

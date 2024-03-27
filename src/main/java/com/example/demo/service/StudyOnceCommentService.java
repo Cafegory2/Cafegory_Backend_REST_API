@@ -9,7 +9,7 @@ public interface StudyOnceCommentService {
 
 	void updateQuestion(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request);
 
-	void deleteQuestion(Long studyOnceQuestionId);
+	void deleteQuestion(Long memberId, Long studyOnceCommentId);
 
 	boolean isPersonWhoAskedComment(Long memberId, Long studyOnceCommentId);
 

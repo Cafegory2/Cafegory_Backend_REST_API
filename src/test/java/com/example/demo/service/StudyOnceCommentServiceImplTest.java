@@ -160,12 +160,32 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceComment question = studyOnceCommentPersistHelper.persistDefaultStudyOnceQuestion(
 			otherPerson, studyOnce);
 		//when
-		studyOnceCommentService.deleteQuestion(question.getId());
+		studyOnceCommentService.deleteQuestion(otherPerson.getId(), question.getId());
 		em.flush();
 		em.clear();
 		StudyOnceComment findQuestion = studyOnceCommentRepository.findById(question.getId()).orElse(null);
 		//then
 		assertThat(findQuestion).isNull();
+	}
+
+	@Test
+	@DisplayName("카공 질문(대댓글) 삭제은 질문한 회원 본인이 아니라면 예외가 터진다.")
+	void delete_question_by_who_not_asked_then_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistDefaultStudyOnceQuestion(
+			otherPerson, studyOnce);
+		em.flush();
+		em.clear();
+		//then
+		assertThatThrownBy(() -> studyOnceCommentService.deleteQuestion(leader.getId(), question.getId()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
+
 	}
 
 	@Test
