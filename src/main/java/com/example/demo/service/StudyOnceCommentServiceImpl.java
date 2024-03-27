@@ -63,7 +63,7 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 			throw new CafegoryException(STUDY_ONCE_SINGLE_REPLY_PER_QUESTION);
 		}
 		if (!parentComment.hasParentComment() && parentComment.hasReply()) {
-			throw new CafegoryException(STUDY_ONCE_PARENT_COMMENT_HAS_SINGLE_CHILD_COMMENT);
+			throw new CafegoryException(STUDY_ONCE_SINGLE_REPLY_PER_QUESTION);
 		}
 		StudyOnceComment reply = StudyOnceComment.builder()
 			.content(request.getContent())

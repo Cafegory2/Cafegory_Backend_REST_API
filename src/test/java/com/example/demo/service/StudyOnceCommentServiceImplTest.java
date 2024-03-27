@@ -270,7 +270,7 @@ class StudyOnceCommentServiceImplTest {
 		assertThatThrownBy(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
 			new StudyOnceCommentRequest("최상위 댓글을 참조로 가지는 두번째 댓글")))
 			.isInstanceOf(CafegoryException.class)
-			.hasMessage(ExceptionType.STUDY_ONCE_PARENT_COMMENT_HAS_SINGLE_CHILD_COMMENT.getErrorMessage());
+			.hasMessage(ExceptionType.STUDY_ONCE_SINGLE_REPLY_PER_QUESTION.getErrorMessage());
 	}
 
 	@Test
