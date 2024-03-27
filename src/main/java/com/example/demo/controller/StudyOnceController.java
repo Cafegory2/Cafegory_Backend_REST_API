@@ -130,11 +130,11 @@ public class StudyOnceController {
 	}
 
 	@PatchMapping("/question/{commentId:[0-9]+}")
-	public ResponseEntity<StudyOnceCommentResponse> updateComment(@PathVariable final Long commentId,
+	public ResponseEntity<StudyOnceCommentResponse> updateQuestion(@PathVariable final Long commentId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody @Validated StudyOnceCommentUpdateRequest request) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		studyOnceCommentService.updateComment(memberId, commentId, request);
+		studyOnceCommentService.updateQuestion(memberId, commentId, request);
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
 		return ResponseEntity.ok(response);
 	}
@@ -160,6 +160,16 @@ public class StudyOnceController {
 		Long savedCommentId = studyOnceCommentService.saveReply(memberId, studyOnceId, parentCommentId, request);
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(
 			savedCommentId);
+		return ResponseEntity.ok(response);
+	}
+
+	@PatchMapping("/reply/{commentId:[0-9]+}")
+	public ResponseEntity<StudyOnceCommentResponse> updateReply(@PathVariable final Long commentId,
+		@RequestHeader("Authorization") String authorization,
+		@RequestBody @Validated StudyOnceCommentUpdateRequest request) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		studyOnceCommentService.updateReply(memberId, commentId, request);
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
 		return ResponseEntity.ok(response);
 	}
 }

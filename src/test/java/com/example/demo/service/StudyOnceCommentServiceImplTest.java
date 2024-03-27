@@ -102,7 +102,7 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
-		studyOnceCommentService.updateComment(otherPerson.getId(), question.getId(),
+		studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
 			new StudyOnceCommentUpdateRequest("수정내용"));
 		em.flush();
 		em.clear();
@@ -124,7 +124,7 @@ class StudyOnceCommentServiceImplTest {
 			otherPerson, studyOnce, "등록내용");
 		//when
 		assertDoesNotThrow(() ->
-			studyOnceCommentService.updateComment(otherPerson.getId(), question.getId(),
+			studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
 				new StudyOnceCommentUpdateRequest("수정내용"))
 		);
 	}
@@ -142,7 +142,7 @@ class StudyOnceCommentServiceImplTest {
 			otherPerson, studyOnce, "등록내용");
 		//when
 		assertThatThrownBy(() ->
-			studyOnceCommentService.updateComment(leader.getId(), question.getId(),
+			studyOnceCommentService.updateQuestion(leader.getId(), question.getId(),
 				new StudyOnceCommentUpdateRequest("수정내용"))
 		).isInstanceOf(CafegoryException.class)
 			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
@@ -287,7 +287,7 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		//when
-		studyOnceCommentService.updateComment(leader.getId(), reply.getId(),
+		studyOnceCommentService.updateReply(leader.getId(), reply.getId(),
 			new StudyOnceCommentUpdateRequest("대댓글수정"));
 		em.flush();
 		em.clear();
@@ -306,9 +306,9 @@ class StudyOnceCommentServiceImplTest {
 		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "언제까지 공부하시나요?");
+			otherPerson, studyOnce, "댓글");
 		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "최상위 댓글을 참조로 가지는 첫번째 댓글");
+			studyOnce, question, "대댓글");
 		//when
 		studyOnceCommentService.deleteReply(reply.getId());
 		em.flush();

@@ -38,11 +38,9 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	}
 
 	@Override
-	public void updateComment(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request) {
+	public void updateQuestion(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request) {
 		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
-		if (!isPersonWhoAskedComment(memberId, studyOnceCommentId)) {
-			throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
-		}
+		validatePersonAsked(memberId, studyOnceCommentId);
 		question.changeContent(request.getContent());
 	}
 
@@ -81,6 +79,19 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	public void deleteReply(Long studyOnceCommentId) {
 		StudyOnceComment comment = findStudyOnceCommentById(studyOnceCommentId);
 		studyOnceCommentRepository.delete(comment);
+	}
+
+	@Override
+	public void updateReply(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request) {
+		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
+		validatePersonAsked(memberId, studyOnceCommentId);
+		question.changeContent(request.getContent());
+	}
+
+	private void validatePersonAsked(Long memberId, Long studyOnceCommentId) {
+		if (!isPersonWhoAskedComment(memberId, studyOnceCommentId)) {
+			throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
+		}
 	}
 
 	@Override
