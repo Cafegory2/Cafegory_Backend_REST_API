@@ -35,7 +35,6 @@ public enum ExceptionType {
 	STUDY_ONCE_LATE_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 진행시간 절반이 지나기전에만 변경할 수 있습니다. "),
 	STUDY_ONCE_COMMENT_NOT_FOUND(NOT_FOUND, "없는 카공 댓글입니다."),
 	STUDY_ONCE_COMMENT_PERMISSION_DENIED(FORBIDDEN, "댓글을 작성한 회원 본인만 수정 할 권한이 있습니다."),
-	STUDY_ONCE_PARENT_COMMENT_HAS_SINGLE_CHILD_COMMENT(BAD_REQUEST, "부모 댓글은 하나의 자식 댓글만 가져야 합니다."),
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
 	REVIEW_NOT_FOUND(NOT_FOUND, "없는 리뷰입니다."),
 	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 최대 글자수 이하여야 합니다."),
