@@ -15,7 +15,7 @@ public interface StudyOnceCommentService {
 
 	Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceCommentId, StudyOnceCommentRequest request);
 
-	void deleteReply(Long studyOnceCommentId);
+	void deleteReply(Long memberId, Long studyOnceCommentId);
 
 	void updateReply(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request);
 

@@ -310,12 +310,33 @@ class StudyOnceCommentServiceImplTest {
 		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		//when
-		studyOnceCommentService.deleteReply(reply.getId());
+		studyOnceCommentService.deleteReply(leader.getId(), reply.getId());
 		em.flush();
 		em.clear();
 		StudyOnceComment removedComment = studyOnceCommentRepository.findById(reply.getId()).orElse(null);
 		//then
 		assertThat(removedComment).isNull();
+	}
+
+	@Test
+	@DisplayName("카공 답변(대댓글) 수정은 답변한 회원 본인이 아니라면 예외가 터진다.")
+	void update_reply_by_member_who_not_asked_the_reply_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "댓글");
+		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+			studyOnce, question, "대댓글");
+		//when
+		assertThatThrownBy(() ->
+			studyOnceCommentService.updateReply(otherPerson.getId(), reply.getId(),
+				new StudyOnceCommentUpdateRequest("수정내용"))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
 	}
 
 }
