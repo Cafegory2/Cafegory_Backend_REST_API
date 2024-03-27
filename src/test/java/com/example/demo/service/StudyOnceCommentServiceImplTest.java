@@ -251,4 +251,26 @@ class StudyOnceCommentServiceImplTest {
 			.hasMessage(ExceptionType.STUDY_ONCE_SINGLE_REPLY_PER_QUESTION.getErrorMessage());
 	}
 
+	@Test
+	@DisplayName("부모댓글이 없는 최상위 댓글이 자식댓글을 두개이상 가지면 예외가 터진다.")
+	void save_reply_when_top_level_comment_try_to_have_two_replies() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+			studyOnce, question, "최상위 댓글을 참조로 가지는 첫번째 댓글");
+		em.flush();
+		em.clear();
+		//then
+		assertThatThrownBy(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
+			new StudyOnceCommentRequest("최상위 댓글을 참조로 가지는 두번째 댓글")))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_PARENT_COMMENT_HAS_SINGLE_CHILD_COMMENT.getErrorMessage());
+	}
+
 }
