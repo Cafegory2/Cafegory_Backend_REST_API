@@ -76,9 +76,9 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	}
 
 	@Override
-	public void deleteReply(Long memberId, Long studyOnceCommentId) {
+	public void deleteReply(Long studyOnceCommentId) {
+		// 작성한 본인인지 검증하는 로직은 호출하는 쪽에서 한다. 관리자가 호출할 수 있기 때문이다.
 		StudyOnceComment comment = findStudyOnceCommentById(studyOnceCommentId);
-		validatePersonAsked(memberId, studyOnceCommentId);
 		studyOnceCommentRepository.delete(comment);
 	}
 
@@ -96,9 +96,9 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	}
 
 	@Override
-	public void deleteQuestion(Long memberId, Long studyOnceCommentId) {
+	public void deleteQuestion(Long studyOnceCommentId) {
+		// 작성한 본인인지 검증하는 로직은 호출하는 쪽에서 한다. 관리자가 호출할 수 있기 때문이다.
 		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
-		validatePersonAsked(memberId, studyOnceCommentId);
 		studyOnceCommentRepository.delete(question);
 	}
 

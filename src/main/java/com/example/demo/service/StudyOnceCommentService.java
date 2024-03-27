@@ -9,13 +9,13 @@ public interface StudyOnceCommentService {
 
 	void updateQuestion(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request);
 
-	void deleteQuestion(Long memberId, Long studyOnceCommentId);
+	void deleteQuestion(Long studyOnceCommentId);
 
 	boolean isPersonWhoAskedComment(Long memberId, Long studyOnceCommentId);
 
 	Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceCommentId, StudyOnceCommentRequest request);
 
-	void deleteReply(Long memberId, Long studyOnceCommentId);
+	void deleteReply(Long studyOnceCommentId);
 
 	void updateReply(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request);
 
