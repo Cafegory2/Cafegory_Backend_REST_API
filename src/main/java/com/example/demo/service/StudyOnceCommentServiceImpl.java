@@ -102,6 +102,9 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	public void deleteQuestion(Long studyOnceCommentId) {
 		// 작성한 본인인지 검증하는 로직은 호출하는 쪽에서 한다. 관리자가 호출할 수 있기 때문이다.
 		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
+		if (question.hasReply()) {
+			throw new CafegoryException(STUDY_ONCE_PARENT_COMMENT_REMOVAL_BLOCKED);
+		}
 		studyOnceCommentRepository.delete(question);
 	}
 
