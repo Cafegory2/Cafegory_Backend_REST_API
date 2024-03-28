@@ -149,6 +149,28 @@ class StudyOnceCommentServiceImplTest {
 	}
 
 	@Test
+	@DisplayName("답변(대댓글)이 작성된 질문(댓글)을 수정 할 경우 예외가 터진다.")
+	void save_question_when_reply_already_existed_then_exception() {
+		//given
+		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+			otherPerson, studyOnce, "댓글");
+		studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+			studyOnce, question, "대댓글");
+		em.flush();
+		em.clear();
+		//when
+		assertThatThrownBy(() -> studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
+			new StudyOnceCommentUpdateRequest("수정내용")))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_PARENT_COMMENT_MODIFICATION_BLOCKED.getErrorMessage());
+	}
+
+	@Test
 	@DisplayName("카공 질문을 삭제한다.")
 	void delete_question() {
 		//given

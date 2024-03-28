@@ -40,6 +40,9 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	@Override
 	public void updateQuestion(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request) {
 		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
+		if (question.hasReply()) {
+			throw new CafegoryException(STUDY_ONCE_PARENT_COMMENT_MODIFICATION_BLOCKED);
+		}
 		validatePersonAsked(memberId, studyOnceCommentId);
 		question.changeContent(request.getContent());
 	}
