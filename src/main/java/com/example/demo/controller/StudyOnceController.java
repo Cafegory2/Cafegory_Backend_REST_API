@@ -172,4 +172,16 @@ public class StudyOnceController {
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
 		return ResponseEntity.ok(response);
 	}
+
+	@DeleteMapping("/reply/{commentId:[0-9]+}")
+	public ResponseEntity<StudyOnceCommentResponse> deleteReply(@PathVariable final Long commentId,
+		@RequestHeader("Authorization") String authorization) {
+		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		if (!studyOnceCommentService.isPersonWhoAskedComment(memberId, commentId)) {
+			throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
+		}
+		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
+		studyOnceCommentService.deleteReply(commentId);
+		return ResponseEntity.ok(response);
+	}
 }
