@@ -16,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.example.demo.dto.profile.ProfileUpdateRequest;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +40,7 @@ public class MemberImpl implements Member {
 	private String name;
 
 	private String email;
+	private String introduction;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "thumbnail_image_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -52,6 +55,11 @@ public class MemberImpl implements Member {
 	@Override
 	public void addStudyMember(StudyMember studyMember) {
 		studyMembers.add(studyMember);
+	}
+
+	public void updateProfile(ProfileUpdateRequest profileUpdateRequest) {
+		name = profileUpdateRequest.getName();
+		introduction = profileUpdateRequest.getIntroduction();
 	}
 
 }
