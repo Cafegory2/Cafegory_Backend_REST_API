@@ -9,6 +9,7 @@ import com.example.demo.mapper.MemberMapper;
 import com.example.demo.mapper.ReviewMapper;
 import com.example.demo.mapper.SnsDetailMapper;
 import com.example.demo.mapper.StudyMemberMapper;
+import com.example.demo.mapper.StudyOnceCommentMapper;
 import com.example.demo.mapper.StudyOnceMapper;
 
 @Configuration
@@ -47,5 +48,10 @@ public class MapperConfig {
 	@Bean
 	public StudyMemberMapper studyMemberMapper() {
 		return new StudyMemberMapper();
+	}
+
+	@Bean
+	public StudyOnceCommentMapper studyOnceCommentMapper() {
+		return new StudyOnceCommentMapper();
 	}
 }
