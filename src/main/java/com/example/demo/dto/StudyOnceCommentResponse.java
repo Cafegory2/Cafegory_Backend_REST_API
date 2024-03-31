@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class StudyOnceQuestionResponse {
+public class StudyOnceCommentResponse {
 
-	private final Long questionId;
+	private final Long commentId;
 	private final String content;
 	private final WriterResponse writer;
 }

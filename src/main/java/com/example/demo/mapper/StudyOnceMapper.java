@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 
 import com.example.demo.domain.CafeImpl;
 import com.example.demo.domain.MemberImpl;
+import com.example.demo.domain.StudyOnceComment;
 import com.example.demo.domain.StudyOnceImpl;
-import com.example.demo.domain.StudyOnceQuestion;
+import com.example.demo.dto.StudyOnceCommentResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceForCafeResponse;
-import com.example.demo.dto.StudyOnceQuestionResponse;
 import com.example.demo.dto.StudyOnceSearchResponse;
 import com.example.demo.dto.WriterResponse;
 
@@ -62,9 +62,9 @@ public class StudyOnceMapper {
 			.build();
 	}
 
-	public StudyOnceQuestionResponse toStudyOnceQuestionResponse(StudyOnceQuestion question,
+	public StudyOnceCommentResponse toStudyOnceQuestionResponse(StudyOnceComment question,
 		WriterResponse writerResponse) {
-		return new StudyOnceQuestionResponse(question.getId(), question.getContent(), writerResponse);
+		return new StudyOnceCommentResponse(question.getId(), question.getContent(), writerResponse);
 	}
 
 }
