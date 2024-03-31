@@ -24,6 +24,7 @@ import com.example.demo.dto.StudyMembersResponse;
 import com.example.demo.dto.StudyOnceCommentRequest;
 import com.example.demo.dto.StudyOnceCommentResponse;
 import com.example.demo.dto.StudyOnceCommentUpdateRequest;
+import com.example.demo.dto.StudyOnceCommentsSearchResponse;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceJoinResult;
 import com.example.demo.dto.StudyOnceSearchRequest;
@@ -32,6 +33,7 @@ import com.example.demo.dto.UpdateAttendanceRequest;
 import com.example.demo.dto.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.service.CafeQueryService;
+import com.example.demo.service.StudyOnceCommentQueryService;
 import com.example.demo.service.StudyOnceCommentService;
 import com.example.demo.service.StudyOnceQAndAQueryService;
 import com.example.demo.service.StudyOnceService;
@@ -47,6 +49,7 @@ public class StudyOnceController {
 	private final CafeQueryService cafeQueryService;
 	private final StudyOnceCommentService studyOnceCommentService;
 	private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
+	private final StudyOnceCommentQueryService studyOnceCommentQueryService;
 
 	@GetMapping("/{studyOnceId:[0-9]+}")
 	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId) {
@@ -182,6 +185,15 @@ public class StudyOnceController {
 		}
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
 		studyOnceCommentService.deleteReply(commentId);
+		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/{studyOnceId:[0-9]+}/comment/list")
+	public ResponseEntity<StudyOnceCommentsSearchResponse> searchComments(@PathVariable Long studyOnceId,
+		@RequestHeader("Authorization") String authorization) {
+		cafegoryTokenManager.getIdentityId(authorization);
+		StudyOnceCommentsSearchResponse response = studyOnceCommentQueryService.searchSortedCommentsByStudyOnceId(
+			studyOnceId);
 		return ResponseEntity.ok(response);
 	}
 }

@@ -73,7 +73,6 @@ class StudyOnceCommentRepositoryTest {
 		assertThat(comments.get(1).getContent()).isEqualTo("댓글2");
 		assertThat(comments.get(2).getContent()).isEqualTo("대댓글2");
 		assertThat(comments.get(3).getContent()).isEqualTo("대댓글1");
-
 	}
 
 }

@@ -16,5 +16,4 @@ public interface StudyOnceCommentRepository extends JpaRepository<StudyOnceComme
 		+ " where c.studyOnce.id = :studyOnceId"
 		+ " order by c.id asc")
 	List<StudyOnceComment> findAllByStudyOnceId(@Param("studyOnceId") Long studyOnceId);
-	
 }
