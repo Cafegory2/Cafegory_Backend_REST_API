@@ -22,6 +22,8 @@ import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.domain.ThumbnailImage;
 import com.example.demo.dto.StudyOnceCreateRequest;
 import com.example.demo.dto.StudyOnceSearchResponse;
+import com.example.demo.dto.profile.ProfileResponse;
+import com.example.demo.dto.profile.ProfileUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.service.StudyOnceService;
 
@@ -122,5 +124,25 @@ class ProfileServiceImplTest {
 		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
 			() -> profileService.get(requestMemberId, targetMemberId));
 		Assertions.assertEquals(cafegoryException.getMessage(), PROFILE_GET_PERMISSION_DENIED.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("자신의 프로필을 수정하는 경우 성공")
+	void updateSuccessWhenSelf() {
+		long requestMemberId = initMember();
+		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
+		ProfileResponse update = profileService.update(requestMemberId, requestMemberId, profileUpdateRequest);
+		Assertions.assertEquals(update, new ProfileResponse("name", "testUrl", "introduction"));
+	}
+
+	@Test
+	@DisplayName("타인의 프로필을 수정하는 경우 실패")
+	void updateFailWhenOther() {
+		long requestMemberId = initMember();
+		long targetMemberId = initMember();
+		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
+		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
+			() -> profileService.update(requestMemberId, targetMemberId, profileUpdateRequest));
+		Assertions.assertEquals(cafegoryException.getMessage(), PROFILE_UPDATE_PERMISSION_DENIED.getErrorMessage());
 	}
 }
