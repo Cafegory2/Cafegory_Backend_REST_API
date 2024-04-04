@@ -15,6 +15,7 @@ import com.example.demo.domain.MemberImpl;
 import com.example.demo.domain.StudyMember;
 import com.example.demo.domain.StudyOnceImpl;
 import com.example.demo.dto.profile.ProfileResponse;
+import com.example.demo.dto.profile.ProfileUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.StudyMemberRepository;
@@ -44,9 +45,22 @@ public class ProfileServiceImpl implements ProfileService {
 		throw new CafegoryException(PROFILE_GET_PERMISSION_DENIED);
 	}
 
+	@Override
+	public ProfileResponse update(Long requestMemberID, Long targetMemberId,
+		ProfileUpdateRequest profileUpdateRequest) {
+		if (!isOwnerOfProfile(requestMemberID, targetMemberId)) {
+			throw new CafegoryException(PROFILE_UPDATE_PERMISSION_DENIED);
+		}
+		MemberImpl targetMember = memberRepository.findById(targetMemberId)
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+		targetMember.updateProfile(profileUpdateRequest);
+		return makeProfileResponse(targetMemberId);
+	}
+
 	private ProfileResponse makeProfileResponse(Long targetMemberID) {
 		MemberImpl member = memberRepository.findById(targetMemberID).orElseThrow();
-		return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(), "");
+		return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(),
+			member.getIntroduction());
 	}
 
 	private boolean isOwnerOfProfile(Long requestMemberID, Long targetMemberID) {
