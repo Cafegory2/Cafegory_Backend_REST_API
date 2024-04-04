@@ -12,5 +12,5 @@ public interface ProfileService {
 
 	ProfileResponse get(Long requestMemberID, Long targetMemberID, LocalDateTime baseDateTime);
 
-	ProfileResponse update(Long requestMemberID, Long targetMemberId, ProfileUpdateRequest profileUpdateRequest);
+	ProfileResponse update(Long requestMemberId, Long targetMemberId, ProfileUpdateRequest profileUpdateRequest);
 }
