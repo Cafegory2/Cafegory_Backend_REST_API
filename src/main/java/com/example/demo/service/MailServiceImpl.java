@@ -35,5 +35,4 @@ public class MailServiceImpl implements MailService {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
-	
 }
