@@ -48,7 +48,8 @@ public enum ExceptionType {
 	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다."),
 	STUDY_MEMBER_NOT_FOUND(NOT_FOUND, "없는 스터디멤버입니다."),
 	PROFILE_GET_PERMISSION_DENIED(FORBIDDEN, "프로필을 조회할 권한이 없는 상대입니다."),
-	PROFILE_UPDATE_PERMISSION_DENIED(FORBIDDEN, "자신의 프로필만 조회할 수 있습니다.");
+	PROFILE_UPDATE_PERMISSION_DENIED(FORBIDDEN, "자신의 프로필만 조회할 수 있습니다."),
+	PROFILE_UPDATE_INVALID_INTRODUCTION(FORBIDDEN, "자기 소개글은 300자 이하로만 작성할 수 있습니다.");
 
 	private final HttpStatus errStatus;
 	private final String errorMessage;

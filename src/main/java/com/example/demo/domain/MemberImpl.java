@@ -1,5 +1,7 @@
 package com.example.demo.domain;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.example.demo.dto.profile.ProfileUpdateRequest;
+import com.example.demo.exception.CafegoryException;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -57,9 +59,16 @@ public class MemberImpl implements Member {
 		studyMembers.add(studyMember);
 	}
 
-	public void updateProfile(ProfileUpdateRequest profileUpdateRequest) {
-		name = profileUpdateRequest.getName();
-		introduction = profileUpdateRequest.getIntroduction();
+	public void updateProfile(String name, String introduction) {
+		validateIntroduction(introduction);
+		this.name = name;
+		this.introduction = introduction;
+	}
+
+	private void validateIntroduction(String introduction) {
+		if (introduction.length() > 300) {
+			throw new CafegoryException(PROFILE_UPDATE_INVALID_INTRODUCTION);
+		}
 	}
 
 }

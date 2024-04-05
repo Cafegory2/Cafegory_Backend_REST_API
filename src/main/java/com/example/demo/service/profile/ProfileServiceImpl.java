@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,15 +47,28 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public ProfileResponse update(Long requestMemberID, Long targetMemberId,
+	public ProfileResponse update(Long requestMemberId, Long targetMemberId,
 		ProfileUpdateRequest profileUpdateRequest) {
-		if (!isOwnerOfProfile(requestMemberID, targetMemberId)) {
+		validateProfileUpdatePermission(requestMemberId, targetMemberId);
+		MemberImpl targetMember = findTargetMember(targetMemberId);
+		String name = profileUpdateRequest.getName();
+		String introduction = profileUpdateRequest.getIntroduction();
+		targetMember.updateProfile(name, introduction);
+		return makeProfileResponse(targetMemberId);
+	}
+
+	private void validateProfileUpdatePermission(Long requestMemberId, Long targetMemberId) {
+		if (!isOwnerOfProfile(requestMemberId, targetMemberId)) {
 			throw new CafegoryException(PROFILE_UPDATE_PERMISSION_DENIED);
 		}
-		MemberImpl targetMember = memberRepository.findById(targetMemberId)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		targetMember.updateProfile(profileUpdateRequest);
-		return makeProfileResponse(targetMemberId);
+	}
+
+	private MemberImpl findTargetMember(Long targetMemberId) {
+		Optional<MemberImpl> targetMember = memberRepository.findById(targetMemberId);
+		if (targetMember.isEmpty()) {
+			throw new CafegoryException(MEMBER_NOT_FOUND);
+		}
+		return targetMember.get();
 	}
 
 	private ProfileResponse makeProfileResponse(Long targetMemberID) {
