@@ -34,6 +34,7 @@ public class CafeMapper {
 			cafe.getId(),
 			cafe.getName(),
 			cafe.showFullAddress(),
+			cafe.getRegion(),
 			cafe.getBusinessHours().stream()
 				.map(hour -> new BusinessHourResponse(hour.getDay(), hour.getStartTime().toString(),
 					hour.getEndTime().toString()))

@@ -71,6 +71,11 @@ public class CafeImpl implements Cafe {
 		return address.showFullAddress();
 	}
 
+	@Override
+	public String getRegion() {
+		return this.address.getRegion();
+	}
+
 	public boolean isOpen(OpenChecker<BusinessHour> openChecker) {
 		return openChecker.checkWithBusinessHours(this.businessHours, LocalDateTime.now());
 	}
