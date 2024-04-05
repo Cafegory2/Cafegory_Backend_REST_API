@@ -185,6 +185,7 @@ class StudyOnceServiceImplTest {
 		boolean isEnd = false;
 		return StudyOnceSearchResponse.builder()
 			.cafeId(cafeId)
+			.area(result.getArea())
 			.studyOnceId(result.getStudyOnceId())
 			.name(studyOnceCreateRequest.getName())
 			.startDateTime(studyOnceCreateRequest.getStartDateTime())
