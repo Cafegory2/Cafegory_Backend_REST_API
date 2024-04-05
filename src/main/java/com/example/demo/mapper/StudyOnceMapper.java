@@ -50,6 +50,7 @@ public class StudyOnceMapper {
 	public StudyOnceSearchResponse toStudyOnceSearchResponse(StudyOnceImpl saved, boolean canJoin) {
 		return StudyOnceSearchResponse.builder()
 			.cafeId(saved.getCafe().getId())
+			.area(saved.getCafe().getRegion())
 			.studyOnceId(saved.getId())
 			.name(saved.getName())
 			.startDateTime(saved.getStartDateTime())

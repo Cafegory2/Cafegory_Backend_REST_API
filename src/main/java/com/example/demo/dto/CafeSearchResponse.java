@@ -12,6 +12,7 @@ public class CafeSearchResponse {
 	private final long cafeId;
 	private final String name;
 	private final String address;
+	private final String area;
 	private final List<BusinessHourResponse> businessHours;
 	private final Boolean isOpen;
 	private final List<SnsResponse> sns;
