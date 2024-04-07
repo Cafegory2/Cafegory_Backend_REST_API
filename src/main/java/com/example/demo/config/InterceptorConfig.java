@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,5 +21,13 @@ public class InterceptorConfig implements WebMvcConfigurer {
 			.addPathPatterns("/**")
 			.excludePathPatterns("/cafe/{cafeId:^[0-9]*$}/review/list", "/cafe/list/**", "/cafe/{cafeId:^[0-9]*$}",
 				"/oauth2/**");
+	}
+
+	@Override
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/**")
+			.allowedOriginPatterns("http://localhost:3000")
+			.allowCredentials(true)
+			.allowedMethods("*");
 	}
 }
