@@ -3,8 +3,8 @@ package com.example.demo.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.domain.BusinessHour;
-import com.example.demo.dto.BusinessHourResponse;
+import com.example.demo.domain.cafe.BusinessHour;
+import com.example.demo.dto.cafe.BusinessHourResponse;
 
 public class BusinessHourMapper {
 

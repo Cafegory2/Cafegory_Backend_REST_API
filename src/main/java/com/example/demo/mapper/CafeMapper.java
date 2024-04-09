@@ -4,19 +4,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.domain.BusinessHour;
-import com.example.demo.domain.CafeImpl;
-import com.example.demo.domain.CafeSearchCondition;
-import com.example.demo.domain.OpenChecker;
-import com.example.demo.dto.BusinessHourResponse;
-import com.example.demo.dto.CafeBasicInfoResponse;
-import com.example.demo.dto.CafeResponse;
-import com.example.demo.dto.CafeSearchRequest;
-import com.example.demo.dto.CafeSearchResponse;
-import com.example.demo.dto.CanMakeStudyOnceResponse;
-import com.example.demo.dto.ReviewResponse;
-import com.example.demo.dto.SnsResponse;
-import com.example.demo.dto.StudyOnceForCafeResponse;
+import com.example.demo.domain.cafe.BusinessHour;
+import com.example.demo.domain.cafe.CafeImpl;
+import com.example.demo.domain.cafe.CafeSearchCondition;
+import com.example.demo.domain.cafe.OpenChecker;
+import com.example.demo.dto.cafe.BusinessHourResponse;
+import com.example.demo.dto.cafe.CafeBasicInfoResponse;
+import com.example.demo.dto.cafe.CafeResponse;
+import com.example.demo.dto.cafe.CafeSearchRequest;
+import com.example.demo.dto.cafe.CafeSearchResponse;
+import com.example.demo.dto.cafe.SnsResponse;
+import com.example.demo.dto.review.ReviewResponse;
+import com.example.demo.dto.study.CanMakeStudyOnceResponse;
+import com.example.demo.dto.study.StudyOnceForCafeResponse;
 
 public class CafeMapper {
 
