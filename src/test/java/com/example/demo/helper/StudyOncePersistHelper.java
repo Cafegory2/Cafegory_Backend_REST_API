@@ -2,34 +2,32 @@ package com.example.demo.helper;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.example.demo.builder.TestStudyOnceBuilder;
-import com.example.demo.domain.cafe.CafeImpl;
-import com.example.demo.domain.member.MemberImpl;
-import com.example.demo.domain.study.StudyOnceImpl;
+import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.domain.member.Member;
+import com.example.demo.domain.study.StudyOnce;
+import com.example.demo.helper.entitymanager.EntityManagerForPersistHelper;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class StudyOncePersistHelper {
 
-	@PersistenceContext
-	private EntityManager em;
+	private final EntityManagerForPersistHelper<StudyOnce> em;
 
-	public StudyOnceImpl persistDefaultStudyOnce(CafeImpl cafe, MemberImpl leader) {
-		StudyOnceImpl studyOnce = new TestStudyOnceBuilder().cafe(cafe).leader(leader).build();
-		em.persist(studyOnce);
-		return studyOnce;
+	public StudyOnce persistDefaultStudyOnce(Cafe cafe, Member leader) {
+		StudyOnce studyOnce = new TestStudyOnceBuilder().cafe(cafe).leader(leader).build();
+		return em.save(studyOnce);
 	}
 
-	public StudyOnceImpl persistStudyOnceWithTime(CafeImpl cafe, MemberImpl leader, LocalDateTime startDateTime,
+	public StudyOnce persistStudyOnceWithTime(Cafe cafe, Member leader, LocalDateTime startDateTime,
 		LocalDateTime endDateTime) {
-		StudyOnceImpl studyOnce = new TestStudyOnceBuilder().cafe(cafe)
+		StudyOnce studyOnce = new TestStudyOnceBuilder().cafe(cafe)
 			.leader(leader)
 			.startDateTime(startDateTime)
 			.endDateTime(endDateTime)
 			.build();
-		em.persist(studyOnce);
-		return studyOnce;
+		return em.save(studyOnce);
 	}
 
 }

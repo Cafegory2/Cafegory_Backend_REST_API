@@ -2,22 +2,22 @@ package com.example.demo.builder;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.domain.cafe.CafeImpl;
-import com.example.demo.domain.member.MemberImpl;
-import com.example.demo.domain.study.StudyOnceImpl;
+import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.domain.member.Member;
+import com.example.demo.domain.study.StudyOnce;
 
 public class TestStudyOnceBuilder {
 
 	private Long id;
 	private String name = "카페 스터디";
-	private CafeImpl cafe;
+	private Cafe cafe;
 	private LocalDateTime startDateTime = LocalDateTime.of(2999, 2, 16, 12, 0);
 	private LocalDateTime endDateTime = LocalDateTime.of(2999, 2, 16, 15, 0);
 	private int maxMemberCount = 5;
 	private int nowMemberCount = 0;
 	private boolean isEnd = false;
 	private boolean ableToTalk = true;
-	private MemberImpl leader;
+	private Member leader;
 
 	public TestStudyOnceBuilder id(Long id) {
 		this.id = id;
@@ -29,7 +29,7 @@ public class TestStudyOnceBuilder {
 		return this;
 	}
 
-	public TestStudyOnceBuilder cafe(CafeImpl cafe) {
+	public TestStudyOnceBuilder cafe(Cafe cafe) {
 		this.cafe = cafe;
 		return this;
 	}
@@ -64,13 +64,13 @@ public class TestStudyOnceBuilder {
 		return this;
 	}
 
-	public TestStudyOnceBuilder leader(MemberImpl leader) {
+	public TestStudyOnceBuilder leader(Member leader) {
 		this.leader = leader;
 		return this;
 	}
 
-	public StudyOnceImpl build() {
-		StudyOnceImpl studyOnce = StudyOnceImpl.builder()
+	public StudyOnce build() {
+		StudyOnce studyOnce = StudyOnce.builder()
 			.id(id)
 			.name(name)
 			.cafe(cafe)

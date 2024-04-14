@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.QueryDslConfig;
 import com.example.demo.config.TestConfig;
-import com.example.demo.domain.cafe.CafeImpl;
-import com.example.demo.domain.member.MemberImpl;
+import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
-import com.example.demo.domain.review.ReviewImpl;
+import com.example.demo.domain.review.Review;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
 import com.example.demo.helper.ReviewPersistHelper;
@@ -47,15 +47,15 @@ class ReviewRepositoryTest {
 	@Test
 	void findAllByCafeId() {
 		//given
-		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		Cafe cafe = cafePersistHelper.persistDefaultCafe();
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		MemberImpl member = memberPersistHelper.persistDefaultMember(thumb);
+		Member member = memberPersistHelper.persistDefaultMember(thumb);
 		reviewPersistHelper.persistDefaultReview(cafe, member);
 		reviewPersistHelper.persistDefaultReview(cafe, member);
 		em.flush();
 		em.clear();
 		//when
-		List<ReviewImpl> reviews = reviewRepository.findAllByCafeId(cafe.getId());
+		List<Review> reviews = reviewRepository.findAllByCafeId(cafe.getId());
 		//then
 		assertThat(reviews.size()).isEqualTo(2);
 	}
@@ -64,9 +64,9 @@ class ReviewRepositoryTest {
 	@DisplayName("페이징 기본값")
 	void findAllWithPagingByCafeId() {
 		//given
-		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
+		Cafe cafe = cafePersistHelper.persistDefaultCafe();
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		MemberImpl member = memberPersistHelper.persistDefaultMember(thumb);
+		Member member = memberPersistHelper.persistDefaultMember(thumb);
 
 		for (int i = 0; i < 20; i++) {
 			reviewPersistHelper.persistDefaultReview(cafe, member);
@@ -75,7 +75,7 @@ class ReviewRepositoryTest {
 		em.flush();
 		em.clear();
 		//when
-		Page<ReviewImpl> pagedReviews = reviewRepository.findAllWithPagingByCafeId(cafe.getId(),
+		Page<Review> pagedReviews = reviewRepository.findAllWithPagingByCafeId(cafe.getId(),
 			PageRequestCustom.createByDefault());
 		//then
 		assertThat(pagedReviews.getContent().size()).isEqualTo(10);

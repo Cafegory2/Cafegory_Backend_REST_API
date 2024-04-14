@@ -15,11 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.QueryDslConfig;
 import com.example.demo.config.TestConfig;
-import com.example.demo.domain.cafe.CafeImpl;
-import com.example.demo.domain.member.MemberImpl;
+import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
+import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.domain.study.StudyOnceImpl;
 import com.example.demo.helper.CafePersistHelper;
 import com.example.demo.helper.MemberPersistHelper;
 import com.example.demo.helper.StudyOnceCommentPersistHelper;
@@ -51,10 +51,10 @@ class StudyOnceCommentRepositoryTest {
 	void findAllByStudyOnceId() {
 		//given
 		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		MemberImpl leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
-		MemberImpl otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
-		CafeImpl cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnceImpl studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		Member leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
+		Member otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
+		Cafe cafe = cafePersistHelper.persistDefaultCafe();
+		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		StudyOnceComment question1 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글1");
 		StudyOnceComment question2 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(

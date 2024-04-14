@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.cafe.CafeImpl;
-import com.example.demo.domain.member.MemberImpl;
+import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.Attendance;
 import com.example.demo.domain.study.StudyMember;
 import com.example.demo.domain.study.StudyMemberId;
-import com.example.demo.domain.study.StudyOnceImpl;
+import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.member.MemberResponse;
 import com.example.demo.dto.study.StudyMemberStateRequest;
@@ -50,18 +50,18 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
-		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
+		StudyOnce studyOnce = studyOnceRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		LocalDateTime startDateTime = studyOnce.getStartDateTime();
-		MemberImpl member = getMember(memberIdThatExpectedToJoin, startDateTime);
+		Member member = getMember(memberIdThatExpectedToJoin, startDateTime);
 		studyOnce.tryJoin(member, LocalDateTime.now());
 	}
 
 	@Override
 	public void tryQuit(long memberIdThatExpectedToQuit, long studyId) {
-		MemberImpl member = memberRepository.findById(memberIdThatExpectedToQuit)
+		Member member = memberRepository.findById(memberIdThatExpectedToQuit)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		StudyOnceImpl studyOnce = studyOnceRepository.findById(studyId)
+		StudyOnce studyOnce = studyOnceRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		if (studyOnce.getLeader().equals(member)) {
 			deleteStudy(studyOnce);
@@ -70,7 +70,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		studyMemberRepository.delete(needToRemoveStudyMember);
 	}
 
-	private void deleteStudy(StudyOnceImpl studyOnce) {
+	private void deleteStudy(StudyOnce studyOnce) {
 		if (studyOnce.getStudyMembers().size() > 1) {
 			throw new CafegoryException(STUDY_ONCE_LEADER_QUIT_FAIL);
 		}
@@ -82,8 +82,9 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		int totalCount = Math.toIntExact(studyOnceRepository.count(studyOnceSearchRequest));
 		int sizePerPage = studyOnceSearchRequest.getSizePerPage();
 		int maxPage = calculateMaxPage(totalCount, sizePerPage);
-		List<StudyOnceSearchResponse> searchResults = studyOnceRepository.findAllByStudyOnceSearchRequest(
-				studyOnceSearchRequest)
+		List<StudyOnce> allByStudyOnceSearchRequest = studyOnceRepository.findAllByStudyOnceSearchRequest(
+			studyOnceSearchRequest);
+		List<StudyOnceSearchResponse> searchResults = allByStudyOnceSearchRequest
 			.stream()
 			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchResponse(studyOnce,
 				studyOnce.canJoin(LocalDateTime.now())))
@@ -100,7 +101,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public StudyOnceSearchResponse searchByStudyId(long studyId) {
-		StudyOnceImpl searched = studyOnceRepository.findById(studyId)
+		StudyOnce searched = studyOnceRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 		boolean canJoin = searched.canJoin(LocalDateTime.now());
 		return studyOnceMapper.toStudyOnceSearchResponse(searched, canJoin);
@@ -140,11 +141,10 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
 		LocalDateTime now) {
+		StudyOnce searched = findStudyOnceById(studyOnceId);
 		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
 			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
 		}
-
-		StudyOnceImpl searched = findStudyOnceById(studyOnceId);
 		validateEarlyToTakeAttendance(now, searched.getStartDateTime());
 		validateLateToTakeAttendance(now, searched.getStartDateTime(), searched.getEndDateTime());
 
@@ -170,35 +170,27 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		}
 	}
 
-	private StudyOnceImpl findStudyOnceById(long studyOnceId) {
+	private StudyOnce findStudyOnceById(long studyOnceId) {
 		return studyOnceRepository.findById(studyOnceId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 	}
 
 	@Override
 	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
-		CafeImpl cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId())
+		Cafe cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId())
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
 		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
-		MemberImpl leader = getMember(leaderId, startDateTime);
-		StudyOnceImpl studyOnce = studyOnceMapper.toNewEntity(studyOnceCreateRequest, cafe, leader);
-		StudyOnceImpl saved = studyOnceRepository.save(studyOnce);
+		Member leader = getMember(leaderId, startDateTime);
+		StudyOnce studyOnce = studyOnceMapper.toNewEntity(studyOnceCreateRequest, cafe, leader);
+		StudyOnce saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
 		return studyOnceMapper.toStudyOnceSearchResponse(saved, canJoin);
 	}
 
-	private MemberImpl getMember(long leaderId, LocalDateTime startDateTime) {
-		MemberImpl leader = memberRepository.findById(leaderId)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		var studyMembers = studyMemberRepository.findByMemberAndStudyDate(leader, startDateTime.toLocalDate());
-		leader.setStudyMembers(studyMembers);
-		return leader;
-	}
-
 	@Override
 	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
-		final StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		final StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		if (!isStudyOnceLeader(requestMemberId, studyOnceId)) {
 			throw new CafegoryException(STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED);
 		}
@@ -208,24 +200,32 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	@Override
 	public StudyMembersResponse findStudyMembersById(Long studyOnceId) {
-		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		List<MemberResponse> memberResponses = studyMemberMapper.toMemberResponses(studyOnce.getStudyMembers());
 		return new StudyMembersResponse(memberResponses);
 	}
 
 	@Override
 	public boolean isStudyOnceLeader(Long memberId, Long studyOnceId) {
-		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		return studyOnce.isLeader(findMemberById(memberId));
 	}
 
-	private MemberImpl findMemberById(Long memberId) {
+	private Member findMemberById(Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
 
-	private CafeImpl findCafeById(Long cafeId) {
+	private Cafe findCafeById(Long cafeId) {
 		return cafeRepository.findById(cafeId)
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+	}
+
+	private Member getMember(long leaderId, LocalDateTime startDateTime) {
+		Member leader = memberRepository.findById(leaderId)
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+		var studyMembers = studyMemberRepository.findByMemberAndStudyDate(leader, startDateTime.toLocalDate());
+		leader.setStudyMembers(studyMembers);
+		return leader;
 	}
 }

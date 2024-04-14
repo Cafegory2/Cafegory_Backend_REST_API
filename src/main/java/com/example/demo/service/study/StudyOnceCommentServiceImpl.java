@@ -5,9 +5,9 @@ import static com.example.demo.exception.ExceptionType.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.member.MemberImpl;
+import com.example.demo.domain.member.Member;
+import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.domain.study.StudyOnceImpl;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.exception.CafegoryException;
@@ -56,8 +56,8 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	@Override
 	public Long saveReply(Long memberId, Long studyOnceId, Long parentStudyOnceCommentId,
 		StudyOnceCommentRequest request) {
-		StudyOnceImpl studyOnce = findStudyOnceById(studyOnceId);
-		MemberImpl member = findMemberById(memberId);
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		Member member = findMemberById(memberId);
 		if (!studyOnce.isLeader(member)) {
 			throw new CafegoryException(STUDY_ONCE_REPLY_PERMISSION_DENIED);
 		}
@@ -113,12 +113,12 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_COMMENT_NOT_FOUND));
 	}
 
-	private MemberImpl findMemberById(Long memberId) {
+	private Member findMemberById(Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
 
-	private StudyOnceImpl findStudyOnceById(long studyOnceId) {
+	private StudyOnce findStudyOnceById(long studyOnceId) {
 		return studyOnceRepository.findById(studyOnceId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 	}

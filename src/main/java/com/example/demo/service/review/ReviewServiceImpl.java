@@ -5,9 +5,9 @@ import static com.example.demo.exception.ExceptionType.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.cafe.CafeImpl;
-import com.example.demo.domain.member.MemberImpl;
-import com.example.demo.domain.review.ReviewImpl;
+import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.domain.member.Member;
+import com.example.demo.domain.review.Review;
 import com.example.demo.dto.review.ReviewSaveRequest;
 import com.example.demo.dto.review.ReviewUpdateRequest;
 import com.example.demo.exception.CafegoryException;
@@ -29,52 +29,52 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public Long saveReview(Long memberId, Long cafeId, ReviewSaveRequest request) {
-		ReviewImpl review = ReviewImpl.builder()
+		Review review = Review.builder()
 			.content(request.getContent())
 			.rate(request.getRate())
 			.cafe(findCafeById(cafeId))
 			.member(findMemberById(memberId))
 			.build();
-		ReviewImpl savedReview = reviewRepository.save(review);
+		Review savedReview = reviewRepository.save(review);
 		return savedReview.getId();
 	}
 
 	@Override
 	public void updateReview(Long memberId, Long reviewId, ReviewUpdateRequest request) {
-		ReviewImpl findReview = findReviewById(reviewId);
-		MemberImpl findMember = findMemberById(memberId);
+		Review findReview = findReviewById(reviewId);
+		Member findMember = findMemberById(memberId);
 		validateReviewer(findReview, findMember);
 
 		findReview.updateContent(request.getContent());
 		findReview.updateRate(request.getRate());
 	}
 
-	private static void validateReviewer(ReviewImpl findReview, MemberImpl findMember) {
+	private static void validateReviewer(Review findReview, Member findMember) {
 		if (!findReview.isValidMember(findMember)) {
 			throw new CafegoryException(ExceptionType.REVIEW_INVALID_MEMBER);
 		}
 	}
 
-	private ReviewImpl findReviewById(Long reviewId) {
+	private Review findReviewById(Long reviewId) {
 		return reviewRepository.findById(reviewId)
 			.orElseThrow(() -> new CafegoryException(REVIEW_NOT_FOUND));
 	}
 
 	@Override
 	public void deleteReview(Long memberId, Long reviewId) {
-		ReviewImpl findReview = findReviewById(reviewId);
-		MemberImpl findMember = findMemberById(memberId);
+		Review findReview = findReviewById(reviewId);
+		Member findMember = findMemberById(memberId);
 		validateReviewer(findReview, findMember);
 
 		reviewRepository.delete(findReview);
 	}
 
-	private MemberImpl findMemberById(Long memberId) {
+	private Member findMemberById(Long memberId) {
 		return memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
 
-	private CafeImpl findCafeById(Long cafeId) {
+	private Cafe findCafeById(Long cafeId) {
 		return cafeRepository.findById(cafeId)
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
