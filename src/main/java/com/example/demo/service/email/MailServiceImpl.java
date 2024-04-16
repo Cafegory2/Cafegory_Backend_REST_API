@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.domain.email.EmailSender;
 import com.example.demo.domain.email.EmailTemplate;
 import com.example.demo.domain.member.Member;
+import com.example.demo.dto.email.CustomEmailSendRequest;
 import com.example.demo.dto.email.EmailSendRequest;
 import com.example.demo.dto.email.EmailTemplateResponse;
 import com.example.demo.exception.CafegoryException;
@@ -29,6 +30,15 @@ public class MailServiceImpl implements MailService {
 				template.getContent());
 		}
 		return new EmailTemplateResponse(template.getSubject(), template.getContent());
+	}
+
+	@Override
+	public EmailTemplateResponse sendCustomEmail(CustomEmailSendRequest request) {
+		for (Long memberId : request.getMemberIds()) {
+			emailSender.sendSimpleMessage(findMemberById(memberId).getEmail(), request.getTitle(),
+				request.getContent());
+		}
+		return new EmailTemplateResponse(request.getTitle(), request.getContent());
 	}
 
 	private Member findMemberById(Long memberId) {
