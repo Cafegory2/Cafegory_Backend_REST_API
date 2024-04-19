@@ -20,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.thymeleaf.util.StringUtils;
+
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.exception.CafegoryException;
@@ -35,6 +37,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "study_once")
 public class StudyOnce {
+
+	private static final int LIMIT_MEMBER_CAPACITY = 5;
 
 	@Id
 	@GeneratedValue
@@ -160,4 +164,30 @@ public class StudyOnce {
 		Duration between = Duration.between(baseDateTime, startDateTime);
 		return between.toSeconds() >= 60 * 60;
 	}
+
+	public void changeName(String name) {
+		if (StringUtils.isEmptyOrWhitespace(name)) {
+			throw new CafegoryException(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+		}
+		this.name = name;
+	}
+
+	public void changeStudyOnceTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		validateStartDateTime(startDateTime);
+		validateStudyOnceTime(startDateTime, endDateTime);
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+	}
+
+	public void changeMaxMemberCount(int maxMemberCount) {
+		if (maxMemberCount > LIMIT_MEMBER_CAPACITY) {
+			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
+		}
+		this.maxMemberCount = maxMemberCount;
+	}
+
+	public void changeCanTalk(boolean ableToTalk) {
+		this.ableToTalk = ableToTalk;
+	}
+
 }

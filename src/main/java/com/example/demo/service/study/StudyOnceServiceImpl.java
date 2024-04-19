@@ -24,6 +24,7 @@ import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
+import com.example.demo.dto.study.StudyOnceUpdateRequest;
 import com.example.demo.dto.study.UpdateAttendanceRequest;
 import com.example.demo.dto.study.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
@@ -186,6 +187,19 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
 		return studyOnceMapper.toStudyOnceSearchResponse(saved, canJoin);
+	}
+
+	@Override
+	public void updateStudyOnce(long leaderId, long studyOnceId, StudyOnceUpdateRequest request, LocalDateTime now) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		if (!studyOnce.isLeader(findMemberById(leaderId))) {
+			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
+		}
+		studyOnce.changeCafe(findCafeById(request.getCafeId()));
+		studyOnce.changeName(request.getName());
+		studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
+		studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
+		studyOnce.changeCanTalk(request.isCanTalk());
 	}
 
 	@Override

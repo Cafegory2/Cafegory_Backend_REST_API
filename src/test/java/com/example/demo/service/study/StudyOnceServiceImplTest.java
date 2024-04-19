@@ -3,6 +3,7 @@ package com.example.demo.service.study;
 import static com.example.demo.domain.study.Attendance.*;
 import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -10,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,6 +29,7 @@ import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
+import com.example.demo.dto.study.StudyOnceUpdateRequest;
 import com.example.demo.dto.study.UpdateAttendanceRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.cafe.CafeRepository;
@@ -272,7 +273,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 
-		Assertions.assertDoesNotThrow(() -> studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId()));
+		assertDoesNotThrow(() -> studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId()));
 	}
 
 	@Test
@@ -329,7 +330,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 
-		Assertions.assertDoesNotThrow(() -> studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId()));
+		assertDoesNotThrow(() -> studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId()));
 	}
 
 	@Test
@@ -387,7 +388,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyMember studyMember = studyMemberRepository.findByMemberAndStudyDate(member, start.toLocalDate()).get(0);
 
 		Attendance attendance = studyMember.getAttendance();
-		Assertions.assertEquals(YES, attendance);
+		assertEquals(YES, attendance);
 	}
 
 	@Test
@@ -568,5 +569,32 @@ class StudyOnceServiceImplTest extends ServiceTest {
 
 		assertThat(actualStudyMemberIds)
 			.containsExactly(leaderId, memberId);
+	}
+
+	@Test
+	@DisplayName("카공 수정")
+	void update_studyOnce() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
+			start.plusHours(6), 5, false);
+
+		studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now());
+		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
+
+		assertAll(
+			() -> assertThat(studyOnce.getName()).isEqualTo(request.getName()),
+			() -> assertThat(studyOnce.getCafe().getId()).isEqualTo(request.getCafeId()),
+			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(request.getStartDateTime()),
+			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(request.getEndDateTime()),
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk())
+		);
+
 	}
 }
