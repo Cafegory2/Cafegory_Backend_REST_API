@@ -69,6 +69,7 @@ public class StudyOnce {
 		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, Member leader) {
 		validateStartDateTime(startDateTime);
 		validateStudyOnceTime(startDateTime, endDateTime);
+		validateMaxMemberCount(maxMemberCount);
 		this.id = id;
 		this.name = name;
 		this.cafe = cafe;
@@ -99,6 +100,12 @@ public class StudyOnce {
 		}
 		if (between.toSeconds() > 5 * 60 * 60) {
 			throw new CafegoryException(STUDY_ONCE_LONG_DURATION);
+		}
+	}
+
+	private void validateMaxMemberCount(int maxMemberCount) {
+		if (maxMemberCount > LIMIT_MEMBER_CAPACITY) {
+			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}
 	}
 
@@ -181,9 +188,7 @@ public class StudyOnce {
 	}
 
 	public void changeMaxMemberCount(int maxMemberCount) {
-		if (maxMemberCount > LIMIT_MEMBER_CAPACITY) {
-			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
-		}
+		validateMaxMemberCount(maxMemberCount);
 		this.maxMemberCount = maxMemberCount;
 	}
 
