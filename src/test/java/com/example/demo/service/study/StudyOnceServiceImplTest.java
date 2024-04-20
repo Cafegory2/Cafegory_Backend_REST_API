@@ -595,6 +595,44 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(request.getEndDateTime()),
 			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk())
 		);
-
 	}
+
+	@Test
+	@DisplayName("변경할 카페가 존재하지 않으면 예외가 터진다")
+	void update_studyOnce_by_invalid_cafe_then_exception() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(999L, "변경된카공이름", start.plusHours(5),
+			start.plusHours(6), 5, false);
+
+		assertThatThrownBy(() -> studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(CAFE_NOT_FOUND.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("스터디 리더가 아닌 다른 회원이 변경을 시도하면, 예외가 터진다")
+	void update_studyOnce_by_invalid_member_then_exception() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, "변경된카공이름", start.plusHours(5),
+			start.plusHours(6), 5, false);
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+
+		assertThatThrownBy(
+			() -> studyOnceService.updateStudyOnce(memberId, studyOnceId, request, LocalDateTime.now()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LEADER_PERMISSION_DENIED.getErrorMessage());
+	}
+
 }
