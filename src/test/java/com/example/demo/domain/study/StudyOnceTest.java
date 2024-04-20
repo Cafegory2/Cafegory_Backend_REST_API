@@ -245,4 +245,23 @@ class StudyOnceTest {
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
 	}
+
+	@Test
+	@DisplayName("최대 참여인원 5명이다. 정상동작")
+	void changeMaxMemberCount() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertDoesNotThrow(() -> studyOnce.changeMaxMemberCount(5));
+	}
+
+	@Test
+	@DisplayName("최대 참여인원은 5명이다. 6명이면 예외가 터진다.")
+	void validate_maxMemberCount_by_changeMaxMemberCount() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(6))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LIMIT_MEMBER_CAPACITY.getErrorMessage());
+	}
+
 }
