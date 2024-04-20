@@ -195,10 +195,18 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		if (!studyOnce.isLeader(findMemberById(leaderId))) {
 			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
 		}
-		studyOnce.changeCafe(findCafeById(request.getCafeId()));
-		studyOnce.changeName(request.getName());
-		studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
-		studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
+		if (request.getCafeId() != null) {
+			studyOnce.changeCafe(findCafeById(request.getCafeId()));
+		}
+		if (request.getName() != null) {
+			studyOnce.changeName(request.getName());
+		}
+		if (request.getStartDateTime() != null && request.getEndDateTime() != null) {
+			studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
+		}
+		if (request.getMaxMemberCount() != 0) {
+			studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
+		}
 		studyOnce.changeCanTalk(request.isCanTalk());
 	}
 
