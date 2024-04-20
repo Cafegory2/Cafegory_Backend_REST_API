@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
 import org.thymeleaf.util.StringUtils;
 
 import com.example.demo.domain.cafe.Cafe;
@@ -151,7 +152,7 @@ public class StudyOnce {
 		}
 	}
 
-	public void changeCafe(Cafe cafe) {
+	public void changeCafe(@NonNull Cafe cafe) {
 		this.cafe = cafe;
 		cafe.getStudyOnceGroup().add(this);
 	}

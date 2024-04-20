@@ -1,6 +1,7 @@
 package com.example.demo.domain.study;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.domain.member.Member;
 import com.example.demo.exception.CafegoryException;
@@ -221,5 +223,26 @@ class StudyOnceTest {
 				() -> studyOnce.tryQuit(member, NOW))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_TRY_QUIT_NOT_JOIN.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("스터디 이름 변경, null 검증")
+	void validate_null_by_changeName() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertThatThrownBy(() -> studyOnce.changeName(null))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", " "})
+	@DisplayName("스터디 이름 변경, 빈값, 공백문자 검증")
+	void validate_empty_or_whitespace_by_changeName(String value) {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertThatThrownBy(() -> studyOnce.changeName(value))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
 	}
 }
