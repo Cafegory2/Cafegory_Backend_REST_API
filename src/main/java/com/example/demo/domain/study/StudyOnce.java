@@ -189,7 +189,14 @@ public class StudyOnce {
 
 	public void changeMaxMemberCount(int maxMemberCount) {
 		validateMaxMemberCount(maxMemberCount);
+		if (isNowMemberCountOverMaxLimit(this.nowMemberCount, maxMemberCount)) {
+			throw new CafegoryException(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT);
+		}
 		this.maxMemberCount = maxMemberCount;
+	}
+
+	private boolean isNowMemberCountOverMaxLimit(int nowMemberCount, int maxMemberCount) {
+		return nowMemberCount > maxMemberCount;
 	}
 
 	public void changeCanTalk(boolean ableToTalk) {

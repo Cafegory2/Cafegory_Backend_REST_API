@@ -264,4 +264,21 @@ class StudyOnceTest {
 			.hasMessage(STUDY_ONCE_LIMIT_MEMBER_CAPACITY.getErrorMessage());
 	}
 
+	@Test
+	@DisplayName("최대 참여 인원보다 현재 참석예정인 인원이 크다면 예외가 터진다.")
+	void validate_maxOrNowMemberCount_by_changeMaxMemberCount() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = StudyOnce.builder()
+			.startDateTime(NOW.plusHours(4))
+			.endDateTime(NOW.plusHours(8))
+			.maxMemberCount(4)
+			.nowMemberCount(1)
+			.leader(leader)
+			.build();
+		
+		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(0))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT.getErrorMessage());
+	}
+
 }
