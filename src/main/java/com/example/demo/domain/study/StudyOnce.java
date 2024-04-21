@@ -75,6 +75,7 @@ public class StudyOnce {
 		this.cafe = cafe;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
+		validateNowMemberCountOverMaxLimit(nowMemberCount, maxMemberCount);
 		this.maxMemberCount = maxMemberCount;
 		this.nowMemberCount = nowMemberCount;
 		this.isEnd = isEnd;
@@ -106,6 +107,12 @@ public class StudyOnce {
 	private void validateMaxMemberCount(int maxMemberCount) {
 		if (maxMemberCount > LIMIT_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
+		}
+	}
+
+	private void validateNowMemberCountOverMaxLimit(int nowMemberCount, int maxMemberCount) {
+		if (nowMemberCount > maxMemberCount) {
+			throw new CafegoryException(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT);
 		}
 	}
 
@@ -189,14 +196,8 @@ public class StudyOnce {
 
 	public void changeMaxMemberCount(int maxMemberCount) {
 		validateMaxMemberCount(maxMemberCount);
-		if (isNowMemberCountOverMaxLimit(this.nowMemberCount, maxMemberCount)) {
-			throw new CafegoryException(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT);
-		}
+		validateNowMemberCountOverMaxLimit(this.nowMemberCount, maxMemberCount);
 		this.maxMemberCount = maxMemberCount;
-	}
-
-	private boolean isNowMemberCountOverMaxLimit(int nowMemberCount, int maxMemberCount) {
-		return nowMemberCount > maxMemberCount;
 	}
 
 	public void changeCanTalk(boolean ableToTalk) {
