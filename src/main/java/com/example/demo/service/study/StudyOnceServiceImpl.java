@@ -190,11 +190,13 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public void updateStudyOnce(long leaderId, long studyOnceId, StudyOnceUpdateRequest request, LocalDateTime now) {
+	public void updateStudyOnce(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request,
+		LocalDateTime now) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
-		if (!studyOnce.isLeader(findMemberById(leaderId))) {
+		if (!isStudyOnceLeader(requestedMemberId, studyOnceId)) {
 			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
 		}
+		//null 이라면 예외처리를 해아할까?
 		if (request.getCafeId() != null) {
 			studyOnce.changeCafe(findCafeById(request.getCafeId()));
 		}
@@ -208,6 +210,22 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
 		}
 		studyOnce.changeCanTalk(request.isCanTalk());
+	}
+
+	@Override
+	public void updateStudyOncePartially(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request,
+		LocalDateTime now) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		if (!isStudyOnceLeader(requestedMemberId, studyOnceId)) {
+			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
+		}
+		if (request.getCafeId() != null) {
+			studyOnce.changeCafe(findCafeById(request.getCafeId()));
+		}
+		if (request.getMaxMemberCount() < studyOnce.getNowMemberCount()) {
+			throw new CafegoryException(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT);
+		}
+		studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
 	}
 
 	@Override

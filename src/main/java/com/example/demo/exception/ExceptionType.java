@@ -19,6 +19,7 @@ public enum ExceptionType {
 	STUDY_ONCE_LONG_DURATION(BAD_REQUEST, "카공 시간은 5시간 미만이어야 합니다."),
 	STUDY_ONCE_TOO_MUCH_STUDY_IN_CAFE(BAD_REQUEST, "이 카페에 이 인원의 카공을 더이상 생성할 수 없습니다."),
 	STUDY_ONCE_LIMIT_MEMBER_CAPACITY(BAD_REQUEST, "카공 최대 참여 인원 수는 5명 입니다."),
+	STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT(BAD_REQUEST, "카공 최대 참여 인원 수는 현재 참여 신청중인 인원보다 적을 수 없습니다."),
 	STUDY_ONCE_CONFLICT_TIME(CONFLICT, "해당 시간에 참여중인 카공이 이미 있습니다."),
 	STUDY_ONCE_DUPLICATE(CONFLICT, "이미 참여중인 카공입니다."),
 	STUDY_ONCE_FULL(CONFLICT, "카공 신청 가능 인원을 초과하였습니다."),

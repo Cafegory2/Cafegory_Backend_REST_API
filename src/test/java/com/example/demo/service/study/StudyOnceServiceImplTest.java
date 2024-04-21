@@ -573,7 +573,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 
 	@Test
 	@DisplayName("카공 수정")
-	void update_studyOnce() {
+	void updateStudyOnce() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
@@ -593,6 +593,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getCafe().getId()).isEqualTo(request.getCafeId()),
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(request.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(request.getEndDateTime()),
+			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
 			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk())
 		);
 	}
@@ -635,4 +636,33 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			.hasMessage(STUDY_ONCE_LEADER_PERMISSION_DENIED.getErrorMessage());
 	}
 
+	@Test
+	@DisplayName("참여자가 존재하는 경우, 카공 수정")
+	void updateStudyOnceWithParticipants() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		long studyOnceId = searchResponse.getStudyOnceId();
+		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
+		studyOnceService.tryJoin(memberId, studyOnceId);
+		syncStudyOnceRepositoryAndStudyMemberRepository();
+
+		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, null, null,
+			null, 5, false);
+		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
+		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
+
+		assertAll(
+			() -> assertThat(studyOnce.getName()).isEqualTo(searchResponse.getName()),
+			() -> assertThat(studyOnce.getCafe().getId()).isEqualTo(request.getCafeId()),
+			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(searchResponse.getStartDateTime()),
+			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(searchResponse.getEndDateTime()),
+			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk())
+		);
+	}
 }

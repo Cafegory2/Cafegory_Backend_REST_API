@@ -34,5 +34,8 @@ public interface StudyOnceService {
 
 	boolean isStudyOnceLeader(Long memberId, Long studyOnceId);
 
-	void updateStudyOnce(long leaderId, long studyOnceId, StudyOnceUpdateRequest request, LocalDateTime now);
+	void updateStudyOnce(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request, LocalDateTime now);
+
+	void updateStudyOncePartially(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request,
+		LocalDateTime now);
 }
