@@ -204,4 +204,8 @@ public class StudyOnce {
 		this.ableToTalk = ableToTalk;
 	}
 
+	public boolean doesOnlyLeaderExist() {
+		return this.studyMembers.size() == 1 && this.studyMembers.get(0).isLeader(this.leader);
+	}
+
 }

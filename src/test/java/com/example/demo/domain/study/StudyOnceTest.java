@@ -275,10 +275,33 @@ class StudyOnceTest {
 			.nowMemberCount(1)
 			.leader(leader)
 			.build();
-		
+
 		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(0))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("카공에 참여인원이 카공장만 있으면 true 반환")
+	void doesOnlyLeaderExist_then_true() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+
+		boolean doesOnlyLeaderExist = studyOnce.doesOnlyLeaderExist();
+		assertThat(doesOnlyLeaderExist).isTrue();
+	}
+
+	@Test
+	@DisplayName("카공에 참여인원이 여러명이라면 false 반환")
+	void doesOnlyLeaderExist_then_false() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+
+		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
+
+		boolean doesOnlyLeaderExist = studyOnce.doesOnlyLeaderExist();
+		assertThat(doesOnlyLeaderExist).isFalse();
 	}
 
 }
