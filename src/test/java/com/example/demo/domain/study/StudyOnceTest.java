@@ -1,6 +1,7 @@
 package com.example.demo.domain.study;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.domain.member.Member;
 import com.example.demo.exception.CafegoryException;
@@ -222,4 +224,84 @@ class StudyOnceTest {
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_TRY_QUIT_NOT_JOIN.getErrorMessage());
 	}
+
+	@Test
+	@DisplayName("스터디 이름 변경, null 검증")
+	void validate_null_by_changeName() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertThatThrownBy(() -> studyOnce.changeName(null))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", " "})
+	@DisplayName("스터디 이름 변경, 빈값, 공백문자 검증")
+	void validate_empty_or_whitespace_by_changeName(String value) {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertThatThrownBy(() -> studyOnce.changeName(value))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("최대 참여인원 5명이다. 정상동작")
+	void changeMaxMemberCount() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertDoesNotThrow(() -> studyOnce.changeMaxMemberCount(5));
+	}
+
+	@Test
+	@DisplayName("최대 참여인원은 5명이다. 6명이면 예외가 터진다.")
+	void validate_maxMemberCount_by_changeMaxMemberCount() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(6))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LIMIT_MEMBER_CAPACITY.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("최대 참여 인원보다 현재 참석예정인 인원이 크다면 예외가 터진다.")
+	void validate_maxOrNowMemberCount_by_changeMaxMemberCount() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = StudyOnce.builder()
+			.startDateTime(NOW.plusHours(4))
+			.endDateTime(NOW.plusHours(8))
+			.maxMemberCount(4)
+			.nowMemberCount(1)
+			.leader(leader)
+			.build();
+
+		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(0))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("카공에 참여인원이 카공장만 있으면 true 반환")
+	void doesOnlyLeaderExist_then_true() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+
+		boolean doesOnlyLeaderExist = studyOnce.doesOnlyLeaderExist();
+		assertThat(doesOnlyLeaderExist).isTrue();
+	}
+
+	@Test
+	@DisplayName("카공에 참여인원이 여러명이라면 false 반환")
+	void doesOnlyLeaderExist_then_false() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8));
+
+		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
+
+		boolean doesOnlyLeaderExist = studyOnce.doesOnlyLeaderExist();
+		assertThat(doesOnlyLeaderExist).isFalse();
+	}
+
 }

@@ -20,6 +20,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.lang.NonNull;
+import org.thymeleaf.util.StringUtils;
+
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.exception.CafegoryException;
@@ -35,6 +38,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "study_once")
 public class StudyOnce {
+
+	private static final int LIMIT_MEMBER_CAPACITY = 5;
 
 	@Id
 	@GeneratedValue
@@ -64,11 +69,13 @@ public class StudyOnce {
 		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, Member leader) {
 		validateStartDateTime(startDateTime);
 		validateStudyOnceTime(startDateTime, endDateTime);
+		validateMaxMemberCount(maxMemberCount);
 		this.id = id;
 		this.name = name;
 		this.cafe = cafe;
 		this.startDateTime = startDateTime;
 		this.endDateTime = endDateTime;
+		validateNowMemberCountOverMaxLimit(nowMemberCount, maxMemberCount);
 		this.maxMemberCount = maxMemberCount;
 		this.nowMemberCount = nowMemberCount;
 		this.isEnd = isEnd;
@@ -94,6 +101,18 @@ public class StudyOnce {
 		}
 		if (between.toSeconds() > 5 * 60 * 60) {
 			throw new CafegoryException(STUDY_ONCE_LONG_DURATION);
+		}
+	}
+
+	private void validateMaxMemberCount(int maxMemberCount) {
+		if (maxMemberCount > LIMIT_MEMBER_CAPACITY) {
+			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
+		}
+	}
+
+	private void validateNowMemberCountOverMaxLimit(int nowMemberCount, int maxMemberCount) {
+		if (nowMemberCount > maxMemberCount) {
+			throw new CafegoryException(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT);
 		}
 	}
 
@@ -147,7 +166,7 @@ public class StudyOnce {
 		}
 	}
 
-	public void changeCafe(Cafe cafe) {
+	public void changeCafe(@NonNull Cafe cafe) {
 		this.cafe = cafe;
 		cafe.getStudyOnceGroup().add(this);
 	}
@@ -160,4 +179,33 @@ public class StudyOnce {
 		Duration between = Duration.between(baseDateTime, startDateTime);
 		return between.toSeconds() >= 60 * 60;
 	}
+
+	public void changeName(String name) {
+		if (StringUtils.isEmptyOrWhitespace(name)) {
+			throw new CafegoryException(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+		}
+		this.name = name;
+	}
+
+	public void changeStudyOnceTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		validateStartDateTime(startDateTime);
+		validateStudyOnceTime(startDateTime, endDateTime);
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+	}
+
+	public void changeMaxMemberCount(int maxMemberCount) {
+		validateMaxMemberCount(maxMemberCount);
+		validateNowMemberCountOverMaxLimit(this.nowMemberCount, maxMemberCount);
+		this.maxMemberCount = maxMemberCount;
+	}
+
+	public void changeCanTalk(boolean ableToTalk) {
+		this.ableToTalk = ableToTalk;
+	}
+
+	public boolean doesOnlyLeaderExist() {
+		return this.studyMembers.size() == 1 && this.studyMembers.get(0).isLeader(this.leader);
+	}
+
 }

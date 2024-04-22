@@ -24,6 +24,7 @@ import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
+import com.example.demo.dto.study.StudyOnceUpdateRequest;
 import com.example.demo.dto.study.UpdateAttendanceRequest;
 import com.example.demo.dto.study.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
@@ -189,6 +190,39 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
+	public void updateStudyOnce(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request,
+		LocalDateTime now) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		if (!isStudyOnceLeader(requestedMemberId, studyOnceId)) {
+			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
+		}
+		if (request.getCafeId() != null) {
+			studyOnce.changeCafe(findCafeById(request.getCafeId()));
+		}
+		if (request.getName() != null) {
+			studyOnce.changeName(request.getName());
+		}
+		if (request.getStartDateTime() != null && request.getEndDateTime() != null) {
+			studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
+		}
+		studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
+		studyOnce.changeCanTalk(request.isCanTalk());
+	}
+
+	@Override
+	public void updateStudyOncePartially(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request,
+		LocalDateTime now) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		if (!isStudyOnceLeader(requestedMemberId, studyOnceId)) {
+			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
+		}
+		if (request.getCafeId() != null) {
+			studyOnce.changeCafe(findCafeById(request.getCafeId()));
+		}
+		studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
+	}
+
+	@Override
 	public Long changeCafe(Long requestMemberId, Long studyOnceId, final Long changingCafeId) {
 		final StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		if (!isStudyOnceLeader(requestMemberId, studyOnceId)) {
@@ -203,6 +237,18 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		List<MemberResponse> memberResponses = studyMemberMapper.toMemberResponses(studyOnce.getStudyMembers());
 		return new StudyMembersResponse(memberResponses);
+	}
+
+	@Override
+	public StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		return studyOnceMapper.toStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(now));
+	}
+
+	@Override
+	public boolean doesOnlyStudyLeaderExist(Long studyOnceId) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		return studyOnce.doesOnlyLeaderExist();
 	}
 
 	@Override

@@ -58,4 +58,8 @@ public class StudyMember extends BaseEntity {
 			end) || studyStartDateTime.isEqual(end));
 	}
 
+	public boolean isLeader(Member member) {
+		return this.id.getMemberId().equals(member.getId());
+	}
+
 }
