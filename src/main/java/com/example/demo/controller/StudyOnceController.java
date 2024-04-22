@@ -29,6 +29,7 @@ import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceJoinResult;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
+import com.example.demo.dto.study.StudyOnceUpdateRequest;
 import com.example.demo.dto.study.UpdateAttendanceRequest;
 import com.example.demo.dto.study.UpdateAttendanceResponse;
 import com.example.demo.exception.CafegoryException;
@@ -69,6 +70,20 @@ public class StudyOnceController {
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		StudyOnceSearchResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
+		return ResponseEntity.ok(response);
+	}
+
+	@PatchMapping("/{studyOnceId:[0-9]+}")
+	public ResponseEntity<StudyOnceSearchResponse> update(@PathVariable Long studyOnceId,
+		@RequestBody StudyOnceUpdateRequest request,
+		@RequestHeader("Authorization") String authorization) {
+		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
+		if (studyOnceService.doesOnlyStudyLeaderExist(studyOnceId)) {
+			studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now());
+		} else {
+			studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
+		}
+		StudyOnceSearchResponse response = studyOnceService.findStudyOnce(studyOnceId, LocalDateTime.now());
 		return ResponseEntity.ok(response);
 	}
 

@@ -240,6 +240,12 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
+	public StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		return studyOnceMapper.toStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(now));
+	}
+
+	@Override
 	public boolean doesOnlyStudyLeaderExist(Long studyOnceId) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		return studyOnce.doesOnlyLeaderExist();

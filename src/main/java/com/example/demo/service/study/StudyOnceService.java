@@ -32,6 +32,8 @@ public interface StudyOnceService {
 
 	StudyMembersResponse findStudyMembersById(Long studyOnceId);
 
+	StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
+
 	boolean doesOnlyStudyLeaderExist(Long studyOnceId);
 
 	boolean isStudyOnceLeader(Long memberId, Long studyOnceId);
