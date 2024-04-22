@@ -240,6 +240,12 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
+	public boolean doesOnlyStudyLeaderExist(Long studyOnceId) {
+		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
+		return studyOnce.doesOnlyLeaderExist();
+	}
+
+	@Override
 	public boolean isStudyOnceLeader(Long memberId, Long studyOnceId) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		return studyOnce.isLeader(findMemberById(memberId));

@@ -715,4 +715,39 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LEADER_PERMISSION_DENIED.getErrorMessage());
 	}
+
+	@Test
+	@DisplayName("카공에 카공장만 존재하는지 확인")
+	void doesOnlyStudyLeaderExist() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+
+		boolean doesOnlyStudyLeaderExist = studyOnceService.doesOnlyStudyLeaderExist(studyOnceId);
+
+		assertThat(doesOnlyStudyLeaderExist).isTrue();
+	}
+
+	@Test
+	@DisplayName("카공에 카공장과 멤버가 존재하면 false 반환")
+	void doesOnlyStudyLeaderExist_with_members() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		long studyOnceId = searchResponse.getStudyOnceId();
+		studyOnceService.tryJoin(memberId, studyOnceId);
+
+		boolean doesOnlyStudyLeaderExist = studyOnceService.doesOnlyStudyLeaderExist(studyOnceId);
+
+		assertThat(doesOnlyStudyLeaderExist).isFalse();
+	}
+
 }
