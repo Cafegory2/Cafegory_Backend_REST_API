@@ -36,7 +36,7 @@ public class CafeController {
 	@GetMapping("/cafe/{cafeId}")
 	public ResponseEntity<CafeResponse> searchCafe(@PathVariable Long cafeId,
 		@RequestHeader(value = "Authorization", required = false) String authorization) {
-		if (!StringUtils.hasText(authorization)) {
+		if (StringUtils.hasText(authorization)) {
 			long memberId = cafegoryTokenManager.getIdentityId(authorization);
 			CafeResponse response = cafeService.searchCafeForMemberByCafeId(cafeId, memberId);
 			return new ResponseEntity<>(response, HttpStatus.OK);
