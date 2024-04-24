@@ -23,6 +23,7 @@ import com.example.demo.dto.study.StudyMemberStateResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
+import com.example.demo.dto.study.StudyOnceInfoResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -242,9 +243,9 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
+	public StudyOnceInfoResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
-		return studyOnceMapper.toStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(now));
+		return studyOnceMapper.toStudyOnceInfoResponse(studyOnce, studyOnce.canJoin(now));
 	}
 
 	@Override

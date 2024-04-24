@@ -7,6 +7,7 @@ import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
+import com.example.demo.dto.study.StudyOnceInfoResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -34,7 +35,7 @@ public interface StudyOnceService {
 
 	StudyMembersResponse findStudyMembersById(Long studyOnceId);
 
-	StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
+	StudyOnceInfoResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
 
 	boolean doesOnlyStudyLeaderExist(Long studyOnceId);
 

@@ -12,6 +12,7 @@ import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceForCafeResponse;
+import com.example.demo.dto.study.StudyOnceInfoResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 
@@ -46,6 +47,22 @@ public class StudyOnceMapper {
 			.ableToTalk(studyOnceCreateRequest.isCanTalk())
 			.cafe(cafe)
 			.leader(leader)
+			.build();
+	}
+
+	public StudyOnceInfoResponse toStudyOnceInfoResponse(StudyOnce saved, boolean canJoin) {
+		return StudyOnceInfoResponse.builder()
+			.cafeId(saved.getCafe().getId())
+			.area(saved.getCafe().getRegion())
+			.studyOnceId(saved.getId())
+			.name(saved.getName())
+			.startDateTime(saved.getStartDateTime())
+			.endDateTime(saved.getEndDateTime())
+			.maxMemberCount(saved.getMaxMemberCount())
+			.nowMemberCount(saved.getNowMemberCount())
+			.canTalk(saved.isAbleToTalk())
+			.canJoin(canJoin)
+			.isEnd(saved.isEnd())
 			.build();
 	}
 
