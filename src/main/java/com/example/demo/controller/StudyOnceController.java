@@ -26,7 +26,10 @@ import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
+import com.example.demo.dto.study.StudyOnceInfoResponse;
 import com.example.demo.dto.study.StudyOnceJoinResult;
+import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 import com.example.demo.dto.study.StudyOnceUpdateRequest;
@@ -59,22 +62,22 @@ public class StudyOnceController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<PagedResponse<StudyOnceSearchResponse>> searchList(
+	public ResponseEntity<PagedResponse<StudyOnceSearchListResponse>> searchList(
 		@ModelAttribute StudyOnceSearchRequest studyOnceSearchRequest) {
-		PagedResponse<StudyOnceSearchResponse> pagedResponse = studyOnceService.searchStudy(studyOnceSearchRequest);
+		PagedResponse<StudyOnceSearchListResponse> pagedResponse = studyOnceService.searchStudy(studyOnceSearchRequest);
 		return ResponseEntity.ok(pagedResponse);
 	}
 
 	@PostMapping("")
-	public ResponseEntity<StudyOnceSearchResponse> create(@RequestBody StudyOnceCreateRequest studyOnceCreateRequest,
+	public ResponseEntity<StudyOnceCreateResponse> create(@RequestBody StudyOnceCreateRequest studyOnceCreateRequest,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		StudyOnceSearchResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
 		return ResponseEntity.ok(response);
 	}
 
 	@PatchMapping("/{studyOnceId:[0-9]+}")
-	public ResponseEntity<StudyOnceSearchResponse> update(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyOnceInfoResponse> update(@PathVariable Long studyOnceId,
 		@RequestBody StudyOnceUpdateRequest request,
 		@RequestHeader("Authorization") String authorization) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
@@ -83,7 +86,7 @@ public class StudyOnceController {
 		} else {
 			studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
 		}
-		StudyOnceSearchResponse response = studyOnceService.findStudyOnce(studyOnceId, LocalDateTime.now());
+		StudyOnceInfoResponse response = studyOnceService.findStudyOnce(studyOnceId, LocalDateTime.now());
 		return ResponseEntity.ok(response);
 	}
 

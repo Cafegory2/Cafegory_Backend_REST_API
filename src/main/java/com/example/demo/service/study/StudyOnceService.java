@@ -6,6 +6,9 @@ import com.example.demo.domain.study.Attendance;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
+import com.example.demo.dto.study.StudyOnceInfoResponse;
+import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 import com.example.demo.dto.study.StudyOnceUpdateRequest;
@@ -17,7 +20,7 @@ public interface StudyOnceService {
 
 	void tryQuit(long memberIdThatExpectedToQuit, long studyId);
 
-	PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest);
+	PagedResponse<StudyOnceSearchListResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest);
 
 	StudyOnceSearchResponse searchByStudyId(long studyId);
 
@@ -26,13 +29,13 @@ public interface StudyOnceService {
 
 	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance, LocalDateTime now);
 
-	StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
+	StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
 
 	Long changeCafe(Long requestMemberId, Long studyOnceId, Long changingCafeId);
 
 	StudyMembersResponse findStudyMembersById(Long studyOnceId);
 
-	StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
+	StudyOnceInfoResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
 
 	boolean doesOnlyStudyLeaderExist(Long studyOnceId);
 

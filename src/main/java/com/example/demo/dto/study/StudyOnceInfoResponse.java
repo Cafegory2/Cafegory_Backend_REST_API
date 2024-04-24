@@ -7,9 +7,8 @@ import lombok.Data;
 
 @Builder
 @Data
-public class StudyOnceSearchResponse {
+public class StudyOnceInfoResponse {
 	private long cafeId;
-	private long creatorId;
 	private String area;
 	private long studyOnceId;
 	private String name;
@@ -21,4 +20,3 @@ public class StudyOnceSearchResponse {
 	private boolean canJoin;
 	private boolean isEnd;
 }
-

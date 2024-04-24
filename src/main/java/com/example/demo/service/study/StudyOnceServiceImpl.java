@@ -22,6 +22,9 @@ import com.example.demo.dto.study.StudyMemberStateRequest;
 import com.example.demo.dto.study.StudyMemberStateResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
+import com.example.demo.dto.study.StudyOnceInfoResponse;
+import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 import com.example.demo.dto.study.StudyOnceUpdateRequest;
@@ -79,15 +82,15 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
+	public PagedResponse<StudyOnceSearchListResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
 		int totalCount = Math.toIntExact(studyOnceRepository.count(studyOnceSearchRequest));
 		int sizePerPage = studyOnceSearchRequest.getSizePerPage();
 		int maxPage = calculateMaxPage(totalCount, sizePerPage);
 		List<StudyOnce> allByStudyOnceSearchRequest = studyOnceRepository.findAllByStudyOnceSearchRequest(
 			studyOnceSearchRequest);
-		List<StudyOnceSearchResponse> searchResults = allByStudyOnceSearchRequest
+		List<StudyOnceSearchListResponse> searchResults = allByStudyOnceSearchRequest
 			.stream()
-			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchResponse(studyOnce,
+			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchListResponse(studyOnce,
 				studyOnce.canJoin(LocalDateTime.now())))
 			.collect(Collectors.toList());
 		return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), searchResults);
@@ -177,7 +180,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
+	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		Cafe cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId())
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
@@ -186,7 +189,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		StudyOnce studyOnce = studyOnceMapper.toNewEntity(studyOnceCreateRequest, cafe, leader);
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
-		return studyOnceMapper.toStudyOnceSearchResponse(saved, canJoin);
+		return studyOnceMapper.toStudyOnceCreateResponse(saved, canJoin);
 	}
 
 	@Override
@@ -240,9 +243,9 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceSearchResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
+	public StudyOnceInfoResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
-		return studyOnceMapper.toStudyOnceSearchResponse(studyOnce, studyOnce.canJoin(now));
+		return studyOnceMapper.toStudyOnceInfoResponse(studyOnce, studyOnce.canJoin(now));
 	}
 
 	@Override
