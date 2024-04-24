@@ -6,6 +6,7 @@ import com.example.demo.domain.study.Attendance;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 import com.example.demo.dto.study.StudyOnceUpdateRequest;
@@ -17,7 +18,7 @@ public interface StudyOnceService {
 
 	void tryQuit(long memberIdThatExpectedToQuit, long studyId);
 
-	PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest);
+	PagedResponse<StudyOnceSearchListResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest);
 
 	StudyOnceSearchResponse searchByStudyId(long studyId);
 

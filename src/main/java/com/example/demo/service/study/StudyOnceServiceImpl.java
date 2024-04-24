@@ -22,6 +22,7 @@ import com.example.demo.dto.study.StudyMemberStateRequest;
 import com.example.demo.dto.study.StudyMemberStateResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 import com.example.demo.dto.study.StudyOnceUpdateRequest;
@@ -79,15 +80,15 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public PagedResponse<StudyOnceSearchResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
+	public PagedResponse<StudyOnceSearchListResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
 		int totalCount = Math.toIntExact(studyOnceRepository.count(studyOnceSearchRequest));
 		int sizePerPage = studyOnceSearchRequest.getSizePerPage();
 		int maxPage = calculateMaxPage(totalCount, sizePerPage);
 		List<StudyOnce> allByStudyOnceSearchRequest = studyOnceRepository.findAllByStudyOnceSearchRequest(
 			studyOnceSearchRequest);
-		List<StudyOnceSearchResponse> searchResults = allByStudyOnceSearchRequest
+		List<StudyOnceSearchListResponse> searchResults = allByStudyOnceSearchRequest
 			.stream()
-			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchResponse(studyOnce,
+			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchListResponse(studyOnce,
 				studyOnce.canJoin(LocalDateTime.now())))
 			.collect(Collectors.toList());
 		return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), searchResults);

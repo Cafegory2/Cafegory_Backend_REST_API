@@ -27,6 +27,7 @@ import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceJoinResult;
+import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 import com.example.demo.dto.study.StudyOnceUpdateRequest;
@@ -59,9 +60,9 @@ public class StudyOnceController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<PagedResponse<StudyOnceSearchResponse>> searchList(
+	public ResponseEntity<PagedResponse<StudyOnceSearchListResponse>> searchList(
 		@ModelAttribute StudyOnceSearchRequest studyOnceSearchRequest) {
-		PagedResponse<StudyOnceSearchResponse> pagedResponse = studyOnceService.searchStudy(studyOnceSearchRequest);
+		PagedResponse<StudyOnceSearchListResponse> pagedResponse = studyOnceService.searchStudy(studyOnceSearchRequest);
 		return ResponseEntity.ok(pagedResponse);
 	}
 
