@@ -22,6 +22,7 @@ import com.example.demo.dto.study.StudyMemberStateRequest;
 import com.example.demo.dto.study.StudyMemberStateResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -178,7 +179,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceSearchResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
+	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
 		Cafe cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId())
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
@@ -187,7 +188,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		StudyOnce studyOnce = studyOnceMapper.toNewEntity(studyOnceCreateRequest, cafe, leader);
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
 		boolean canJoin = true;
-		return studyOnceMapper.toStudyOnceSearchResponse(saved, canJoin);
+		return studyOnceMapper.toStudyOnceCreateResponse(saved, canJoin);
 	}
 
 	@Override

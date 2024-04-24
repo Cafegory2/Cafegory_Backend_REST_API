@@ -27,6 +27,7 @@ import com.example.demo.dto.member.MemberResponse;
 import com.example.demo.dto.study.StudyMemberStateRequest;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -74,7 +75,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		LocalDateTime end = start.plusHours(1);
 		Cafe cafe = cafePersistHelper.persistDefaultCafe();
 		Member leader = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE);
-		StudyOnceSearchResponse expectedStudyOnceSearchResponse = studyOnceService.createStudy(leader.getId(),
+		StudyOnceCreateResponse expectedStudyOnceSearchResponse = studyOnceService.createStudy(leader.getId(),
 			makeStudyOnceCreateRequest(start, end, cafe.getId()));
 		//when
 		StudyOnceSearchRequest studyOnceSearchRequest = new StudyOnceSearchRequest("합정동");
@@ -109,7 +110,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
-		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getStudyOnceId());
 
 		assertThat(studyOnceSearchResponse.getStudyOnceId()).isEqualTo(result.getStudyOnceId());
@@ -124,18 +125,18 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
-		StudyOnceSearchResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
-		StudyOnceSearchResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
+		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse expected = makeExpectedStudyOnceCreateResult(cafeId, studyOnceCreateRequest, result);
 
 		assertThat(result).isEqualTo(expected);
 	}
 
-	private static StudyOnceSearchResponse makeExpectedStudyOnceCreateResult(long cafeId,
-		StudyOnceCreateRequest studyOnceCreateRequest, StudyOnceSearchResponse result) {
+	private static StudyOnceCreateResponse makeExpectedStudyOnceCreateResult(long cafeId,
+		StudyOnceCreateRequest studyOnceCreateRequest, StudyOnceCreateResponse result) {
 		int nowMemberCount = 0;
 		boolean canJoin = true;
 		boolean isEnd = false;
-		return StudyOnceSearchResponse.builder()
+		return StudyOnceCreateResponse.builder()
 			.cafeId(cafeId)
 			.area(result.getArea())
 			.studyOnceId(result.getStudyOnceId())
@@ -222,7 +223,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		StudyOnceSearchResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(memberId, study.getStudyOnceId());
 
 		// 오른쪽 끝에서 겹침
@@ -272,7 +273,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
 			LocalDateTime.now().plusHours(7), cafeId);
 
-		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 
 		assertDoesNotThrow(() -> studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId()));
 	}
@@ -285,7 +286,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
 			LocalDateTime.now().plusHours(7), cafeId);
-		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 
 		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 
@@ -305,12 +306,12 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long thirdMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 		StudyOnceCreateRequest conflictStudyOnceCreateRequest = makeStudyOnceCreateRequest(conflictStart, conflictEnd,
 			cafeId);
 
-		StudyOnceSearchResponse conflictStudy = studyOnceService.createStudy(thirdMemberId,
+		StudyOnceCreateResponse conflictStudy = studyOnceService.createStudy(thirdMemberId,
 			conflictStudyOnceCreateRequest);
 
 		syncStudyOnceRepositoryAndStudyMemberRepository();
@@ -328,7 +329,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long secondMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 
 		assertDoesNotThrow(() -> studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId()));
@@ -344,7 +345,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
-		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 
 		assertThatThrownBy(() -> studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId()))
 			.isInstanceOf(CafegoryException.class)
@@ -360,7 +361,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long secondMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		StudyOnceSearchResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
 
 		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
 
@@ -377,7 +378,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -414,7 +415,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -435,7 +436,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -456,7 +457,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -477,7 +478,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -498,7 +499,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -522,7 +523,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 
 		long changingCafeId = cafePersistHelper.persistDefaultCafe().getId();
@@ -539,7 +540,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 
 		long changingCafeId = cafePersistHelper.persistDefaultCafe().getId();
@@ -557,7 +558,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
@@ -580,7 +581,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
@@ -607,7 +608,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(999L, "변경된카공이름", start.plusHours(5),
 			start.plusHours(6), 5, false);
@@ -625,7 +626,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, "변경된카공이름", start.plusHours(5),
 			start.plusHours(6), 5, false);
@@ -645,7 +646,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
@@ -675,7 +676,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
@@ -705,7 +706,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, null, null,
 			null, 5, true);
@@ -725,7 +726,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 
 		boolean doesOnlyStudyLeaderExist = studyOnceService.doesOnlyStudyLeaderExist(studyOnceId);
@@ -741,7 +742,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId1 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		StudyOnceSearchResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);

@@ -18,7 +18,7 @@ import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.dto.profile.ProfileResponse;
 import com.example.demo.dto.profile.ProfileUpdateRequest;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
-import com.example.demo.dto.study.StudyOnceSearchResponse;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.cafe.InMemoryCafeRepository;
 import com.example.demo.repository.member.InMemoryMemberRepository;
@@ -50,7 +50,7 @@ class ProfileServiceImplTest extends ServiceTest {
 		long targetMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, start.plusHours(5), cafeId);
-		StudyOnceSearchResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest);
 		studyOnceService.tryJoin(targetMemberId, study.getStudyOnceId());
 		Assertions.assertDoesNotThrow(() -> profileService.get(requestMemberId, targetMemberId));
 	}

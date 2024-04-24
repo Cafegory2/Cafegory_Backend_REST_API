@@ -10,6 +10,7 @@ import com.example.demo.domain.study.StudyOnceComment;
 import com.example.demo.dto.WriterResponse;
 import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceForCafeResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -66,6 +67,22 @@ public class StudyOnceMapper {
 
 	public StudyOnceSearchListResponse toStudyOnceSearchListResponse(StudyOnce saved, boolean canJoin) {
 		return StudyOnceSearchListResponse.builder()
+			.cafeId(saved.getCafe().getId())
+			.area(saved.getCafe().getRegion())
+			.studyOnceId(saved.getId())
+			.name(saved.getName())
+			.startDateTime(saved.getStartDateTime())
+			.endDateTime(saved.getEndDateTime())
+			.maxMemberCount(saved.getMaxMemberCount())
+			.nowMemberCount(saved.getNowMemberCount())
+			.canTalk(saved.isAbleToTalk())
+			.canJoin(canJoin)
+			.isEnd(saved.isEnd())
+			.build();
+	}
+
+	public StudyOnceCreateResponse toStudyOnceCreateResponse(StudyOnce saved, boolean canJoin) {
+		return StudyOnceCreateResponse.builder()
 			.cafeId(saved.getCafe().getId())
 			.area(saved.getCafe().getRegion())
 			.studyOnceId(saved.getId())

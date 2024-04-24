@@ -26,6 +26,7 @@ import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
+import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceJoinResult;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
@@ -67,10 +68,10 @@ public class StudyOnceController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<StudyOnceSearchResponse> create(@RequestBody StudyOnceCreateRequest studyOnceCreateRequest,
+	public ResponseEntity<StudyOnceCreateResponse> create(@RequestBody StudyOnceCreateRequest studyOnceCreateRequest,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		StudyOnceSearchResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
 		return ResponseEntity.ok(response);
 	}
 
