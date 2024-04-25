@@ -58,6 +58,7 @@ public class StudyOnce {
 	private int nowMemberCount;
 	private boolean isEnd;
 	private boolean ableToTalk;
+	private String openChatUrl;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "leader_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Member leader;
@@ -66,7 +67,7 @@ public class StudyOnce {
 
 	@Builder
 	private StudyOnce(Long id, String name, Cafe cafe, LocalDateTime startDateTime, LocalDateTime endDateTime,
-		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, Member leader) {
+		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, String openChatUrl, Member leader) {
 		validateStartDateTime(startDateTime);
 		validateStudyOnceTime(startDateTime, endDateTime);
 		validateMaxMemberCount(maxMemberCount);
@@ -80,6 +81,7 @@ public class StudyOnce {
 		this.nowMemberCount = nowMemberCount;
 		this.isEnd = isEnd;
 		this.ableToTalk = ableToTalk;
+		this.openChatUrl = openChatUrl;
 		this.leader = leader;
 		validateConflictJoin(leader);
 		studyMembers = new ArrayList<>();

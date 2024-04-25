@@ -45,6 +45,7 @@ public class StudyOnceMapper {
 			.nowMemberCount(0)
 			.isEnd(false)
 			.ableToTalk(studyOnceCreateRequest.isCanTalk())
+			.openChatUrl(studyOnceCreateRequest.getOpenChatUrl())
 			.cafe(cafe)
 			.leader(leader)
 			.build();
@@ -112,6 +113,7 @@ public class StudyOnceMapper {
 			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
+			.openChatUrl(saved.getOpenChatUrl())
 			.build();
 	}
 

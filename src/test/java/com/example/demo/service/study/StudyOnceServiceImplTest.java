@@ -90,7 +90,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 
 	private StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
 		long cafeId) {
-		return new StudyOnceCreateRequest(cafeId, "테스트 스터디", start, end, 4, true);
+		return new StudyOnceCreateRequest(cafeId, "테스트 스터디", start, end, 4, true, "오픈채팅방 링크");
 	}
 
 	private void syncStudyOnceRepositoryAndStudyMemberRepository() {

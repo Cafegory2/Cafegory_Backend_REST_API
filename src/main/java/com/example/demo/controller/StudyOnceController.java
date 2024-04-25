@@ -69,7 +69,8 @@ public class StudyOnceController {
 	}
 
 	@PostMapping("")
-	public ResponseEntity<StudyOnceCreateResponse> create(@RequestBody StudyOnceCreateRequest studyOnceCreateRequest,
+	public ResponseEntity<StudyOnceCreateResponse> create(
+		@RequestBody @Validated StudyOnceCreateRequest studyOnceCreateRequest,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		StudyOnceCreateResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
