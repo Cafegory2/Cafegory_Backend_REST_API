@@ -148,6 +148,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			.canTalk(studyOnceCreateRequest.isCanTalk())
 			.canJoin(canJoin)
 			.isEnd(isEnd)
+			.openChatUrl(studyOnceCreateRequest.getOpenChatUrl())
 			.build();
 	}
 
@@ -585,7 +586,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 
 		studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now());
 		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
@@ -596,7 +597,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(request.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(request.getEndDateTime()),
 			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
-			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk())
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk()),
+			() -> assertThat(studyOnce.getOpenChatUrl()).isEqualTo(request.getOpenChatUrl())
 		);
 	}
 
@@ -611,7 +613,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(999L, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 
 		assertThatThrownBy(() -> studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now()))
 			.isInstanceOf(CafegoryException.class)
@@ -629,7 +631,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 
 		assertThatThrownBy(
@@ -654,7 +656,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, null, null,
-			null, 5, false);
+			null, 5, false, null);
 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
 		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
 
@@ -664,7 +666,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(searchResponse.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(searchResponse.getEndDateTime()),
 			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
-			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk())
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk()),
+			() -> assertThat(studyOnce.getOpenChatUrl()).isEqualTo(searchResponse.getOpenChatUrl())
 		);
 	}
 
@@ -684,7 +687,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
 		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
 
@@ -694,7 +697,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(searchResponse.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(searchResponse.getEndDateTime()),
 			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
-			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk())
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk()),
+			() -> assertThat(studyOnce.getOpenChatUrl()).isEqualTo(searchResponse.getOpenChatUrl())
 		);
 	}
 
@@ -709,7 +713,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, null, null,
-			null, 5, true);
+			null, 5, true, null);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 
 		assertThatThrownBy(

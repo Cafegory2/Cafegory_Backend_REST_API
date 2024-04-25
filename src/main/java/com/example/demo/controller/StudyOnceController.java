@@ -79,7 +79,7 @@ public class StudyOnceController {
 
 	@PatchMapping("/{studyOnceId:[0-9]+}")
 	public ResponseEntity<StudyOnceInfoResponse> update(@PathVariable Long studyOnceId,
-		@RequestBody StudyOnceUpdateRequest request,
+		@RequestBody @Validated StudyOnceUpdateRequest request,
 		@RequestHeader("Authorization") String authorization) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		if (studyOnceService.doesOnlyStudyLeaderExist(studyOnceId)) {

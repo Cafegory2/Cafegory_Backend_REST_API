@@ -64,6 +64,7 @@ public class StudyOnceMapper {
 			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
+			.openChatUrl(saved.getOpenChatUrl())
 			.build();
 	}
 

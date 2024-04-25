@@ -72,6 +72,7 @@ public class StudyOnce {
 		validateStudyOnceTime(startDateTime, endDateTime);
 		validateMaxMemberCount(maxMemberCount);
 		this.id = id;
+		validateEmptyOrWhiteSpace(name, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 		this.name = name;
 		this.cafe = cafe;
 		this.startDateTime = startDateTime;
@@ -81,6 +82,7 @@ public class StudyOnce {
 		this.nowMemberCount = nowMemberCount;
 		this.isEnd = isEnd;
 		this.ableToTalk = ableToTalk;
+		validateEmptyOrWhiteSpace(openChatUrl, STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE);
 		this.openChatUrl = openChatUrl;
 		this.leader = leader;
 		validateConflictJoin(leader);
@@ -183,9 +185,7 @@ public class StudyOnce {
 	}
 
 	public void changeName(String name) {
-		if (StringUtils.isEmptyOrWhitespace(name)) {
-			throw new CafegoryException(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		}
+		validateEmptyOrWhiteSpace(name, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 		this.name = name;
 	}
 
@@ -210,4 +210,14 @@ public class StudyOnce {
 		return this.studyMembers.size() == 1 && this.studyMembers.get(0).isLeader(this.leader);
 	}
 
+	public void changeOpenChatUrl(String openChatUrl) {
+		validateEmptyOrWhiteSpace(openChatUrl, STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE);
+		this.openChatUrl = openChatUrl;
+	}
+
+	private void validateEmptyOrWhiteSpace(String target, ExceptionType exceptionType) {
+		if (StringUtils.isEmptyOrWhitespace(target)) {
+			throw new CafegoryException(exceptionType);
+		}
+	}
 }

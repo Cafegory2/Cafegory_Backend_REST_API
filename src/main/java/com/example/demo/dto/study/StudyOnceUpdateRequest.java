@@ -25,4 +25,6 @@ public class StudyOnceUpdateRequest {
 	private int maxMemberCount;
 	@Nullable
 	private boolean canTalk;
+	@Nullable
+	private String openChatUrl;
 }

@@ -208,6 +208,9 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		if (request.getStartDateTime() != null && request.getEndDateTime() != null) {
 			studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
 		}
+		if (request.getOpenChatUrl() != null) {
+			studyOnce.changeOpenChatUrl(request.getOpenChatUrl());
+		}
 		studyOnce.changeMaxMemberCount(request.getMaxMemberCount());
 		studyOnce.changeCanTalk(request.isCanTalk());
 	}

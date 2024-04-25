@@ -38,6 +38,7 @@ public class InMemoryStudyOnceRepository implements StudyOnceRepository {
 			.ableToTalk(studyOnce.isAbleToTalk())
 			.cafe(studyOnce.getCafe())
 			.isEnd(studyOnce.isEnd())
+			.openChatUrl(studyOnce.getOpenChatUrl())
 			.build();
 	}
 
