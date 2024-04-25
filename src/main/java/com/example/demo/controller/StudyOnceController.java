@@ -4,7 +4,9 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,7 +58,14 @@ public class StudyOnceController {
 	private final StudyOnceCommentQueryService studyOnceCommentQueryService;
 
 	@GetMapping("/{studyOnceId:[0-9]+}")
-	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId) {
+	public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId,
+		@RequestHeader(value = "Authorization", required = false) String authorization) {
+		if (StringUtils.hasText(authorization)) {
+			long memberId = cafegoryTokenManager.getIdentityId(authorization);
+			StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(studyOnceId,
+				memberId);
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		}
 		StudyOnceSearchResponse response = studyOnceService.searchByStudyId(studyOnceId);
 		return ResponseEntity.ok(response);
 	}
