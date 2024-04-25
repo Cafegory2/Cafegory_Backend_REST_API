@@ -220,4 +220,9 @@ public class StudyOnce {
 			throw new CafegoryException(exceptionType);
 		}
 	}
+
+	public boolean isAttendance(Member member) {
+		return studyMembers.stream()
+			.anyMatch(s -> s.getId().getMemberId().equals(member.getId()));
+	}
 }

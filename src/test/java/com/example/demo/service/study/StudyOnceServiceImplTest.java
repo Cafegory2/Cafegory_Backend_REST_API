@@ -117,8 +117,24 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	}
 
 	@Test
+	@DisplayName("회원이 아닐떄 카공을 조회하면 카공의 참석여부는 false를 반환한다.")
+	void searchByStudyId_when_not_member() {
+		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+
+		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getStudyOnceId());
+
+		assertThat(studyOnceSearchResponse.isAttendance()).isFalse();
+	}
+
+	@Test
 	@DisplayName("정상 생성 테스트")
 	void create() {
+
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();

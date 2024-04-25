@@ -335,4 +335,26 @@ class StudyOnceTest {
 		assertThat(doesOnlyLeaderExist).isFalse();
 	}
 
+	@Test
+	@DisplayName("멤버가 스터디에 참여했으면 true 반환")
+	void isAttendance() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
+
+		boolean isAttendance = studyOnce.isAttendance(member);
+		assertThat(isAttendance).isTrue();
+	}
+
+	@Test
+	@DisplayName("멤버가 스터디에 참여하지 않았으면 false 반환")
+	void isNotAttendance() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
+		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+
+		boolean isAttendance = studyOnce.isAttendance(member);
+		assertThat(isAttendance).isFalse();
+	}
 }

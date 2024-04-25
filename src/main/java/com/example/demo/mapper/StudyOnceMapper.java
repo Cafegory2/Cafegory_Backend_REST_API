@@ -68,7 +68,7 @@ public class StudyOnceMapper {
 			.build();
 	}
 
-	public StudyOnceSearchResponse toStudyOnceSearchResponse(StudyOnce saved, boolean canJoin) {
+	public StudyOnceSearchResponse toStudyOnceSearchResponse(StudyOnce saved, boolean canJoin, boolean isAttendance) {
 		return StudyOnceSearchResponse.builder()
 			.cafeId(saved.getCafe().getId())
 			.creatorId(saved.getLeader().getId())
@@ -83,6 +83,7 @@ public class StudyOnceMapper {
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
 			.openChatUrl(saved.getOpenChatUrl())
+			.isAttendance(isAttendance)
 			.build();
 	}
 
