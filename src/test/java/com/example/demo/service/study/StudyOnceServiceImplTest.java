@@ -564,8 +564,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 		LocalDateTime attendanceUpdateTime = start.plusMinutes(11);
 		UpdateAttendanceRequest request = new UpdateAttendanceRequest(
-			new StudyMemberStateRequest(memberId, true, attendanceUpdateTime),
-			new StudyMemberStateRequest(memberId, true, attendanceUpdateTime)
+			new StudyMemberStateRequest(memberId, true),
+			new StudyMemberStateRequest(memberId, true)
 		);
 		studyOnceService.updateAttendances(leaderId, studyOnceId, request, attendanceUpdateTime);
 	}
