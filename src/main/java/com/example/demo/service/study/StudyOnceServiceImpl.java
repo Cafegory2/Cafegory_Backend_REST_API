@@ -112,8 +112,12 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceSearchResponse searchStudyOnceWithMemberParticipation(long studyId, long memberId) {
-		return null;
+	public StudyOnceSearchResponse searchStudyOnceWithMemberParticipation(long studyOnceId, long memberId) {
+		StudyOnce searched = studyOnceRepository.findById(studyOnceId)
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
+		boolean canJoin = searched.canJoin(LocalDateTime.now());
+		boolean isAttendance = searched.isAttendance(findMemberById(memberId));
+		return studyOnceMapper.toStudyOnceSearchResponse(searched, canJoin, isAttendance);
 	}
 
 	@Override

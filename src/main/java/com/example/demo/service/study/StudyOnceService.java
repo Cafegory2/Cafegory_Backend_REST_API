@@ -24,7 +24,7 @@ public interface StudyOnceService {
 
 	StudyOnceSearchResponse searchByStudyId(long studyId);
 
-	StudyOnceSearchResponse searchStudyOnceWithMemberParticipation(long studyId, long memberId);
+	StudyOnceSearchResponse searchStudyOnceWithMemberParticipation(long studyOnceId, long memberId);
 
 	UpdateAttendanceResponse updateAttendances(long leaderId, long studyOnceId,
 		UpdateAttendanceRequest request, LocalDateTime now);

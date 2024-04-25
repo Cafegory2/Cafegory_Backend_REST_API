@@ -124,11 +124,49 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
 		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-
 		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+
 		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getStudyOnceId());
 
 		assertThat(studyOnceSearchResponse.isAttendance()).isFalse();
+	}
+
+	@Test
+	@DisplayName("회원이 카공을 조회할때 카공 멤버라면 참석여부는 true를 반환한다.")
+	void searchStudyOnceWithMemberParticipation_when_takes_attendance() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		studyOnceService.tryJoin(memberId, studyOnceId);
+		syncStudyOnceRepositoryAndStudyMemberRepository();
+
+		StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(
+			studyOnceId, memberId);
+
+		assertThat(response.isAttendance()).isTrue();
+	}
+
+	@Test
+	@DisplayName("회원이 카공을 조회할때 카공 멤버가 아니라면 참석여부는 false를 반환한다.")
+	void searchStudyOnceWithMemberParticipation_when_not_take_attendance() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+
+		StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(
+			studyOnceId, memberId);
+
+		assertThat(response.isAttendance()).isFalse();
 	}
 
 	@Test
