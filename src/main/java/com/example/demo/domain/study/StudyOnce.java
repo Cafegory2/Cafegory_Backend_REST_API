@@ -58,6 +58,7 @@ public class StudyOnce {
 	private int nowMemberCount;
 	private boolean isEnd;
 	private boolean ableToTalk;
+	private String openChatUrl;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "leader_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Member leader;
@@ -66,11 +67,12 @@ public class StudyOnce {
 
 	@Builder
 	private StudyOnce(Long id, String name, Cafe cafe, LocalDateTime startDateTime, LocalDateTime endDateTime,
-		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, Member leader) {
+		int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, String openChatUrl, Member leader) {
 		validateStartDateTime(startDateTime);
 		validateStudyOnceTime(startDateTime, endDateTime);
 		validateMaxMemberCount(maxMemberCount);
 		this.id = id;
+		validateEmptyOrWhiteSpace(name, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 		this.name = name;
 		this.cafe = cafe;
 		this.startDateTime = startDateTime;
@@ -80,6 +82,8 @@ public class StudyOnce {
 		this.nowMemberCount = nowMemberCount;
 		this.isEnd = isEnd;
 		this.ableToTalk = ableToTalk;
+		validateEmptyOrWhiteSpace(openChatUrl, STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE);
+		this.openChatUrl = openChatUrl;
 		this.leader = leader;
 		validateConflictJoin(leader);
 		studyMembers = new ArrayList<>();
@@ -181,9 +185,7 @@ public class StudyOnce {
 	}
 
 	public void changeName(String name) {
-		if (StringUtils.isEmptyOrWhitespace(name)) {
-			throw new CafegoryException(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		}
+		validateEmptyOrWhiteSpace(name, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 		this.name = name;
 	}
 
@@ -208,4 +210,19 @@ public class StudyOnce {
 		return this.studyMembers.size() == 1 && this.studyMembers.get(0).isLeader(this.leader);
 	}
 
+	public void changeOpenChatUrl(String openChatUrl) {
+		validateEmptyOrWhiteSpace(openChatUrl, STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE);
+		this.openChatUrl = openChatUrl;
+	}
+
+	private void validateEmptyOrWhiteSpace(String target, ExceptionType exceptionType) {
+		if (StringUtils.isEmptyOrWhitespace(target)) {
+			throw new CafegoryException(exceptionType);
+		}
+	}
+
+	public boolean isAttendance(Member member) {
+		return studyMembers.stream()
+			.anyMatch(s -> s.getId().getMemberId().equals(member.getId()));
+	}
 }

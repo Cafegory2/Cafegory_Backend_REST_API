@@ -45,7 +45,7 @@ class StudyMemberTest {
 	void isConflict(TimeInterval timeInterval, boolean expected) {
 		LocalDateTime start = BASE_TIME.plusHours(4);
 		LocalDateTime end = BASE_TIME.plusHours(7);
-		StudyOnce studyOnce = makeStudyOnce(start, end);
+		StudyOnce studyOnce = makeStudyOnce("스터디 이름", start, end, "오픈채팅방 링크");
 		StudyMember studyMember = makeStudyMember(studyOnce);
 
 		boolean actual = studyMember.isConflictWith(timeInterval.start, timeInterval.end);
@@ -54,11 +54,13 @@ class StudyMemberTest {
 			.isEqualTo(expected);
 	}
 
-	private StudyOnce makeStudyOnce(LocalDateTime start, LocalDateTime end) {
+	private StudyOnce makeStudyOnce(String name, LocalDateTime start, LocalDateTime end, String openChatUrl) {
 		return StudyOnce.builder()
+			.name(name)
 			.startDateTime(start)
 			.endDateTime(end)
 			.leader(new TestMemberBuilder().build())
+			.openChatUrl(openChatUrl)
 			.build();
 	}
 

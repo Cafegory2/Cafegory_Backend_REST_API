@@ -45,6 +45,7 @@ public class StudyOnceMapper {
 			.nowMemberCount(0)
 			.isEnd(false)
 			.ableToTalk(studyOnceCreateRequest.isCanTalk())
+			.openChatUrl(studyOnceCreateRequest.getOpenChatUrl())
 			.cafe(cafe)
 			.leader(leader)
 			.build();
@@ -63,10 +64,11 @@ public class StudyOnceMapper {
 			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
+			.openChatUrl(saved.getOpenChatUrl())
 			.build();
 	}
 
-	public StudyOnceSearchResponse toStudyOnceSearchResponse(StudyOnce saved, boolean canJoin) {
+	public StudyOnceSearchResponse toStudyOnceSearchResponse(StudyOnce saved, boolean canJoin, boolean isAttendance) {
 		return StudyOnceSearchResponse.builder()
 			.cafeId(saved.getCafe().getId())
 			.creatorId(saved.getLeader().getId())
@@ -80,6 +82,8 @@ public class StudyOnceMapper {
 			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
+			.openChatUrl(saved.getOpenChatUrl())
+			.isAttendance(isAttendance)
 			.build();
 	}
 
@@ -112,6 +116,7 @@ public class StudyOnceMapper {
 			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
+			.openChatUrl(saved.getOpenChatUrl())
 			.build();
 	}
 

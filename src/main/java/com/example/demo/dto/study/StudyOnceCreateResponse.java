@@ -19,4 +19,5 @@ public class StudyOnceCreateResponse {
 	private boolean canTalk;
 	private boolean canJoin;
 	private boolean isEnd;
+	private String openChatUrl;
 }

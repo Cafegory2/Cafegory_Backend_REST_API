@@ -90,7 +90,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 
 	private StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
 		long cafeId) {
-		return new StudyOnceCreateRequest(cafeId, "테스트 스터디", start, end, 4, true);
+		return new StudyOnceCreateRequest(cafeId, "테스트 스터디", start, end, 4, true, "오픈채팅방 링크");
 	}
 
 	private void syncStudyOnceRepositoryAndStudyMemberRepository() {
@@ -117,8 +117,62 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	}
 
 	@Test
+	@DisplayName("회원이 아닐떄 카공을 조회하면 카공의 참석여부는 false를 반환한다.")
+	void searchByStudyId_when_not_member() {
+		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
+		LocalDateTime end = start.plusHours(1);
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+
+		StudyOnceSearchResponse studyOnceSearchResponse = studyOnceService.searchByStudyId(result.getStudyOnceId());
+
+		assertThat(studyOnceSearchResponse.isAttendance()).isFalse();
+	}
+
+	@Test
+	@DisplayName("회원이 카공을 조회할때 카공 멤버라면 참석여부는 true를 반환한다.")
+	void searchStudyOnceWithMemberParticipation_when_takes_attendance() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		studyOnceService.tryJoin(memberId, studyOnceId);
+		syncStudyOnceRepositoryAndStudyMemberRepository();
+
+		StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(
+			studyOnceId, memberId);
+
+		assertThat(response.isAttendance()).isTrue();
+	}
+
+	@Test
+	@DisplayName("회원이 카공을 조회할때 카공 멤버가 아니라면 참석여부는 false를 반환한다.")
+	void searchStudyOnceWithMemberParticipation_when_not_take_attendance() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
+		long studyOnceId = searchResponse.getStudyOnceId();
+		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+
+		StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(
+			studyOnceId, memberId);
+
+		assertThat(response.isAttendance()).isFalse();
+	}
+
+	@Test
 	@DisplayName("정상 생성 테스트")
 	void create() {
+
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
@@ -148,6 +202,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			.canTalk(studyOnceCreateRequest.isCanTalk())
 			.canJoin(canJoin)
 			.isEnd(isEnd)
+			.openChatUrl(studyOnceCreateRequest.getOpenChatUrl())
 			.build();
 	}
 
@@ -585,7 +640,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 
 		studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now());
 		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
@@ -596,7 +651,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(request.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(request.getEndDateTime()),
 			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
-			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk())
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(request.isCanTalk()),
+			() -> assertThat(studyOnce.getOpenChatUrl()).isEqualTo(request.getOpenChatUrl())
 		);
 	}
 
@@ -611,7 +667,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(999L, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 
 		assertThatThrownBy(() -> studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now()))
 			.isInstanceOf(CafegoryException.class)
@@ -629,7 +685,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 
 		assertThatThrownBy(
@@ -654,7 +710,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, null, null,
-			null, 5, false);
+			null, 5, false, null);
 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
 		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
 
@@ -664,7 +720,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(searchResponse.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(searchResponse.getEndDateTime()),
 			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
-			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk())
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk()),
+			() -> assertThat(studyOnce.getOpenChatUrl()).isEqualTo(searchResponse.getOpenChatUrl())
 		);
 	}
 
@@ -684,7 +741,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
-			start.plusHours(6), 5, false);
+			start.plusHours(6), 5, false, "오픈채팅방 링크");
 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
 		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
 
@@ -694,7 +751,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			() -> assertThat(studyOnce.getStartDateTime()).isEqualTo(searchResponse.getStartDateTime()),
 			() -> assertThat(studyOnce.getEndDateTime()).isEqualTo(searchResponse.getEndDateTime()),
 			() -> assertThat(studyOnce.getMaxMemberCount()).isEqualTo(request.getMaxMemberCount()),
-			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk())
+			() -> assertThat(studyOnce.isAbleToTalk()).isEqualTo(searchResponse.isCanTalk()),
+			() -> assertThat(studyOnce.getOpenChatUrl()).isEqualTo(searchResponse.getOpenChatUrl())
 		);
 	}
 
@@ -709,7 +767,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, null, null,
-			null, 5, true);
+			null, 5, true, null);
 		long memberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 
 		assertThatThrownBy(

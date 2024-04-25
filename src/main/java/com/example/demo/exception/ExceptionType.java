@@ -40,6 +40,7 @@ public enum ExceptionType {
 	STUDY_ONCE_PARENT_COMMENT_MODIFICATION_BLOCKED(FORBIDDEN, "답변이 존재하는 질문은 수정 할 수 없습니다."),
 	STUDY_ONCE_PARENT_COMMENT_REMOVAL_BLOCKED(FORBIDDEN, "답변이 존재하는 질문은 삭제 할 수 없습니다."),
 	STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디 이름은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
+	STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디의 오픈채팅방 URL은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
 	REVIEW_NOT_FOUND(NOT_FOUND, "없는 리뷰입니다."),
 	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 최대 글자수 이하여야 합니다."),

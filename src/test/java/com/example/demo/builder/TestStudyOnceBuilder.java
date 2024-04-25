@@ -17,6 +17,7 @@ public class TestStudyOnceBuilder {
 	private int nowMemberCount = 0;
 	private boolean isEnd = false;
 	private boolean ableToTalk = true;
+	private String openChatUrl = "오픈채팅방 링크";
 	private Member leader;
 
 	public TestStudyOnceBuilder id(Long id) {
@@ -69,6 +70,11 @@ public class TestStudyOnceBuilder {
 		return this;
 	}
 
+	public TestStudyOnceBuilder openChatUrl(String openChatUrl) {
+		this.openChatUrl = openChatUrl;
+		return this;
+	}
+
 	public StudyOnce build() {
 		StudyOnce studyOnce = StudyOnce.builder()
 			.id(id)
@@ -81,6 +87,7 @@ public class TestStudyOnceBuilder {
 			.isEnd(isEnd)
 			.ableToTalk(ableToTalk)
 			.leader(leader)
+			.openChatUrl(openChatUrl)
 			.build();
 		return studyOnce;
 	}

@@ -20,5 +20,7 @@ public class StudyOnceSearchResponse {
 	private boolean canTalk;
 	private boolean canJoin;
 	private boolean isEnd;
+	private String openChatUrl;
+	private boolean isAttendance;
 }
 
