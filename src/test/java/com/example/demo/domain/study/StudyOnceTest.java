@@ -123,7 +123,7 @@ class StudyOnceTest {
 	void tryJoin() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 
 		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
 		List<Member> collect = studyOnce.getStudyMembers()
@@ -137,20 +137,20 @@ class StudyOnceTest {
 
 	private static Member makeMemberWithStudyOnce(LocalDateTime start, LocalDateTime end) {
 		Member member = Member.builder().id(MEMBER_ID).build();
-		StudyMember studyMember = new StudyMember(member, makeStudy(member, "스터디 이름", start, end, "오픈채팅방 링크"));
+		StudyMember studyMember = new StudyMember(member, makeStudy(member, start, end, "오픈채팅방 링크"));
 		member.setStudyMembers(new ArrayList<>(List.of(studyMember)));
 		return member;
 	}
 
-	private static StudyOnce makeStudy(Member leader, String studyName, LocalDateTime start, LocalDateTime end,
+	private static StudyOnce makeStudy(Member leader, LocalDateTime start, LocalDateTime end,
 		String openChatUrl) {
 		return StudyOnce.builder()
-			.name(studyName)
 			.startDateTime(start)
 			.endDateTime(end)
 			.leader(leader)
-			.name(studyName)
+			.name("스터디 이름")
 			.openChatUrl(openChatUrl)
+			.maxMemberCount(5)
 			.build();
 	}
 
@@ -160,7 +160,7 @@ class StudyOnceTest {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = Member.builder().id(MEMBER_ID).build();
 
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 
 		Assertions.assertThatThrownBy(
 				() -> studyOnce.tryJoin(member, NOW.plusHours(3).plusSeconds(1)))
@@ -174,7 +174,7 @@ class StudyOnceTest {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
 
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(5), NOW.plusHours(9), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(5), NOW.plusHours(9), "오픈채팅방 링크");
 
 		Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(member, NOW))
 			.isInstanceOf(CafegoryException.class)
@@ -186,7 +186,7 @@ class StudyOnceTest {
 	void tryJoinFailByDuplicate() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 
 		studyOnce.tryJoin(member, NOW);
 
@@ -196,12 +196,28 @@ class StudyOnceTest {
 	}
 
 	@Test
+	@DisplayName("카공 신청시 최대 인원이 넘어서 실패하는 테스트")
+	void tryJoinFailByFullMember() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(7), "오픈채팅링크");
+		for (int index = 0; index < 4; index++) {
+			Member member = Member.builder().id(MEMBER_ID + index).build();
+			studyOnce.tryJoin(member, NOW.plusSeconds(index));
+		}
+		Member failMember = Member.builder().id(MEMBER_ID + 4).build();
+		Assertions.assertThatThrownBy(() -> studyOnce.tryJoin(failMember, NOW.plusSeconds(4)))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_FULL.getErrorMessage());
+	}
+
+	@Test
 	@DisplayName("카공 참여 취소 테스트")
 	void tryQuit() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = Member.builder().id(MEMBER_ID).build();
 
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		studyOnce.tryJoin(member, NOW);
 
 		LocalDateTime validRequestTime = NOW.plusHours(3).minusSeconds(1);
@@ -213,7 +229,7 @@ class StudyOnceTest {
 	void tryQuitFailByTimeOver() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = Member.builder().id(MEMBER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		studyOnce.tryJoin(member, NOW);
 		Assertions.assertThatThrownBy(
 				() -> studyOnce.tryQuit(member, NOW.plusHours(3).plusSeconds(1)))
@@ -226,7 +242,7 @@ class StudyOnceTest {
 	void tryQuitFailByNotJoin() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = Member.builder().id(MEMBER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		Assertions.assertThatThrownBy(
 				() -> studyOnce.tryQuit(member, NOW))
 			.isInstanceOf(CafegoryException.class)
@@ -237,7 +253,7 @@ class StudyOnceTest {
 	@DisplayName("스터디 이름 변경, null 검증")
 	void validate_null_by_changeName() {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		assertThatThrownBy(() -> studyOnce.changeName(null))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
@@ -248,7 +264,7 @@ class StudyOnceTest {
 	@DisplayName("스터디 이름 변경, 빈값, 공백문자 검증")
 	void validate_empty_or_whitespace_by_changeName(String value) {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		assertThatThrownBy(() -> studyOnce.changeName(value))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE.getErrorMessage());
@@ -258,7 +274,7 @@ class StudyOnceTest {
 	@DisplayName("스터디 오픈채팅방 url 변경, null 검증")
 	void validate_null_by_changeOpenChatUrl() {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		assertThatThrownBy(() -> studyOnce.changeOpenChatUrl(null))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE.getErrorMessage());
@@ -269,7 +285,7 @@ class StudyOnceTest {
 	@DisplayName("스터디 오픈채팅방 url 변경, 빈값, 공백문자 검증")
 	void validate_empty_or_whitespace_by_changeOpenChatUrl(String value) {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		assertThatThrownBy(() -> studyOnce.changeOpenChatUrl(value))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE.getErrorMessage());
@@ -279,7 +295,7 @@ class StudyOnceTest {
 	@DisplayName("최대 참여인원 5명이다. 정상동작")
 	void changeMaxMemberCount() {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		assertDoesNotThrow(() -> studyOnce.changeMaxMemberCount(5));
 	}
 
@@ -287,7 +303,7 @@ class StudyOnceTest {
 	@DisplayName("최대 참여인원은 5명이다. 6명이면 예외가 터진다.")
 	void validate_maxMemberCount_by_changeMaxMemberCount() {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(6))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LIMIT_MEMBER_CAPACITY.getErrorMessage());
@@ -316,7 +332,7 @@ class StudyOnceTest {
 	@DisplayName("카공에 참여인원이 카공장만 있으면 true 반환")
 	void doesOnlyLeaderExist_then_true() {
 		Member leader = Member.builder().id(LEADER_ID).build();
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 
 		boolean doesOnlyLeaderExist = studyOnce.doesOnlyLeaderExist();
 		assertThat(doesOnlyLeaderExist).isTrue();
@@ -327,7 +343,7 @@ class StudyOnceTest {
 	void doesOnlyLeaderExist_then_false() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 
 		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
 
@@ -340,7 +356,7 @@ class StudyOnceTest {
 	void isAttendance() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 		studyOnce.tryJoin(member, NOW.plusHours(3).minusSeconds(1));
 
 		boolean isAttendance = studyOnce.isAttendance(member);
@@ -352,9 +368,35 @@ class StudyOnceTest {
 	void isNotAttendance() {
 		Member leader = Member.builder().id(LEADER_ID).build();
 		Member member = makeMemberWithStudyOnce(NOW.plusHours(9), NOW.plusHours(13));
-		StudyOnce studyOnce = makeStudy(leader, "스터디 이름", NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
 
 		boolean isAttendance = studyOnce.isAttendance(member);
 		assertThat(isAttendance).isFalse();
+	}
+
+	@Test
+	@DisplayName("카공 생성시 카공장이 인원에 잘 반영되는지 확인")
+	void validateNowMemberCountWhenCreate() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(7), "오픈채팅링크");
+
+		int nowMemberCount = studyOnce.getNowMemberCount();
+
+		Assertions.assertThat(nowMemberCount)
+			.isEqualTo(1);
+	}
+
+	@Test
+	@DisplayName("카공 신청시 인원에 잘 반영되는지 확인")
+	void validateNowMemberCountWhenJoin() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		Member member = Member.builder().id(MEMBER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(7), "오픈채팅링크");
+
+		studyOnce.tryJoin(member, NOW.plusHours(3));
+		int nowMemberCount = studyOnce.getNowMemberCount();
+
+		Assertions.assertThat(nowMemberCount)
+			.isEqualTo(2);
 	}
 }

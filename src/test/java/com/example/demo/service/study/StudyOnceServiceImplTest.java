@@ -187,7 +187,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 
 	private static StudyOnceCreateResponse makeExpectedStudyOnceCreateResult(long cafeId,
 		StudyOnceCreateRequest studyOnceCreateRequest, StudyOnceCreateResponse result) {
-		int nowMemberCount = 0;
+		int nowMemberCount = 1;
 		boolean canJoin = true;
 		boolean isEnd = false;
 		return StudyOnceCreateResponse.builder()
@@ -643,7 +643,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			start.plusHours(6), 5, false, "오픈채팅방 링크");
 
 		studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now());
-		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
+		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).orElseThrow();
 
 		assertAll(
 			() -> assertThat(studyOnce.getName()).isEqualTo(request.getName()),
@@ -712,7 +712,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, null, null,
 			null, 5, false, null);
 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
-		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
+		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).orElseThrow();
 
 		assertAll(
 			() -> assertThat(studyOnce.getName()).isEqualTo(searchResponse.getName()),
@@ -743,7 +743,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
 			start.plusHours(6), 5, false, "오픈채팅방 링크");
 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
-		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).get();
+		StudyOnce studyOnce = studyOnceRepository.findById(studyOnceId).orElseThrow();
 
 		assertAll(
 			() -> assertThat(studyOnce.getName()).isEqualTo(searchResponse.getName()),
