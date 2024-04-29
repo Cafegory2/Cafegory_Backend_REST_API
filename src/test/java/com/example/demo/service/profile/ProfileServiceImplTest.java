@@ -15,8 +15,8 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyMember;
 import com.example.demo.domain.study.StudyOnce;
-import com.example.demo.dto.profile.ProfileResponse;
 import com.example.demo.dto.profile.ProfileUpdateRequest;
+import com.example.demo.dto.profile.ProfileUpdateResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.exception.CafegoryException;
@@ -111,8 +111,8 @@ class ProfileServiceImplTest extends ServiceTest {
 	void updateSuccessWhenSelf() {
 		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
-		ProfileResponse update = profileService.update(requestMemberId, requestMemberId, profileUpdateRequest);
-		Assertions.assertEquals(update, new ProfileResponse("name", "testUrl", "introduction"));
+		ProfileUpdateResponse update = profileService.update(requestMemberId, requestMemberId, profileUpdateRequest);
+		Assertions.assertEquals(update, new ProfileUpdateResponse("name", "testUrl", "introduction"));
 	}
 
 	@Test
