@@ -15,9 +15,9 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.cafe.CafeResponse;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
+import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.BusinessHourMapper;
 import com.example.demo.mapper.CafeMapper;
@@ -68,12 +68,12 @@ public class CafeServiceImpl implements CafeService {
 	}
 
 	@Override
-	public CafeResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId) {
+	public CafeSearchResponse searchCafeForMemberByCafeId(Long cafeId, Long memberId) {
 		Cafe findCafe = findCafeById(cafeId);
 		if (!memberRepository.existsById(memberId)) {
 			throw new CafegoryException(MEMBER_NOT_FOUND);
 		}
-		return cafeMapper.toCafeResponse(
+		return cafeMapper.toCafeSearchResponse(
 			findCafe,
 			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
 			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
@@ -84,9 +84,9 @@ public class CafeServiceImpl implements CafeService {
 	}
 
 	@Override
-	public CafeResponse searchCafeForNotMemberByCafeId(Long cafeId) {
+	public CafeSearchResponse searchCafeForNotMemberByCafeId(Long cafeId) {
 		Cafe findCafe = findCafeById(cafeId);
-		return cafeMapper.toCafeResponseWithEmptyInfo(
+		return cafeMapper.toCafeSearchResponseWithEmptyInfo(
 			findCafe,
 			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
 			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
@@ -96,12 +96,12 @@ public class CafeServiceImpl implements CafeService {
 	}
 
 	private PagedResponse<CafeSearchListResponse> createPagedResponse(Page<Cafe> pagedCafes,
-		List<CafeSearchListResponse> cafeSearchListRespons) {
+		List<CafeSearchListResponse> cafeSearchListResponse) {
 		return PagedResponse.createWithFirstPageAsOne(
 			pagedCafes.getNumber(),
 			pagedCafes.getTotalPages(),
 			pagedCafes.getNumberOfElements(),
-			cafeSearchListRespons
+			cafeSearchListResponse
 		);
 	}
 

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.cafe.CafeResponse;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
+import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.service.cafe.CafeService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,14 +34,14 @@ public class CafeController {
 	}
 
 	@GetMapping("/cafe/{cafeId}")
-	public ResponseEntity<CafeResponse> searchCafe(@PathVariable Long cafeId,
+	public ResponseEntity<CafeSearchResponse> searchCafe(@PathVariable Long cafeId,
 		@RequestHeader(value = "Authorization", required = false) String authorization) {
 		if (StringUtils.hasText(authorization)) {
 			long memberId = cafegoryTokenManager.getIdentityId(authorization);
-			CafeResponse response = cafeService.searchCafeForMemberByCafeId(cafeId, memberId);
+			CafeSearchResponse response = cafeService.searchCafeForMemberByCafeId(cafeId, memberId);
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
-		CafeResponse response = cafeService.searchCafeForNotMemberByCafeId(cafeId);
+		CafeSearchResponse response = cafeService.searchCafeForNotMemberByCafeId(cafeId);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 

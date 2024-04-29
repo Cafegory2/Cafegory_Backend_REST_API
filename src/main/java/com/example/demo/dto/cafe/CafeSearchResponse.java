@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CafeResponse {
+public class CafeSearchResponse {
 
 	private final CafeBasicInfoResponse basicInfo;
 	private final List<ReviewResponse> review;

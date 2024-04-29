@@ -10,9 +10,9 @@ import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.cafe.BusinessHourResponse;
 import com.example.demo.dto.cafe.CafeBasicInfoResponse;
-import com.example.demo.dto.cafe.CafeResponse;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
+import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.dto.cafe.SnsResponse;
 import com.example.demo.dto.review.ReviewResponse;
 import com.example.demo.dto.study.CanMakeStudyOnceResponse;
@@ -82,14 +82,14 @@ public class CafeMapper {
 			.build();
 	}
 
-	public CafeResponse toCafeResponse(
+	public CafeSearchResponse toCafeSearchResponse(
 		Cafe findCafe,
 		List<BusinessHourResponse> businessHourResponses,
 		List<SnsResponse> snsResponses,
 		List<ReviewResponse> reviewResponses,
 		List<StudyOnceForCafeResponse> studyOnceForCafeResponses,
 		OpenChecker<BusinessHour> openChecker) {
-		return CafeResponse.builder()
+		return CafeSearchResponse.builder()
 			.basicInfo(
 				toCafeBasicInfoResponse(
 					findCafe,
@@ -109,14 +109,14 @@ public class CafeMapper {
 			.build();
 	}
 
-	public CafeResponse toCafeResponseWithEmptyInfo(
+	public CafeSearchResponse toCafeSearchResponseWithEmptyInfo(
 		Cafe findCafe,
 		List<BusinessHourResponse> businessHourResponses,
 		List<SnsResponse> snsResponses,
 		List<ReviewResponse> reviewResponses,
 		OpenChecker<BusinessHour> openChecker
 	) {
-		return CafeResponse.builder()
+		return CafeSearchResponse.builder()
 			.basicInfo(
 				toCafeBasicInfoResponse(
 					findCafe,
