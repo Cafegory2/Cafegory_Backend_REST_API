@@ -11,8 +11,8 @@ import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.cafe.BusinessHourResponse;
 import com.example.demo.dto.cafe.CafeBasicInfoResponse;
 import com.example.demo.dto.cafe.CafeResponse;
+import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
-import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.dto.cafe.SnsResponse;
 import com.example.demo.dto.review.ReviewResponse;
 import com.example.demo.dto.study.CanMakeStudyOnceResponse;
@@ -20,17 +20,17 @@ import com.example.demo.dto.study.StudyOnceForCafeResponse;
 
 public class CafeMapper {
 
-	public List<CafeSearchResponse> toCafeSearchResponses(List<Cafe> cafes,
+	public List<CafeSearchListResponse> toCafeSearchListResponses(List<Cafe> cafes,
 		OpenChecker<BusinessHour> openChecker) {
 		return cafes.stream()
 			.map(cafe ->
-				produceCafeSearchResponse(cafe, openChecker)
+				produceCafeSearchListResponse(cafe, openChecker)
 			)
 			.collect(Collectors.toList());
 	}
 
-	private CafeSearchResponse produceCafeSearchResponse(Cafe cafe, OpenChecker<BusinessHour> openChecker) {
-		return new CafeSearchResponse(
+	private CafeSearchListResponse produceCafeSearchListResponse(Cafe cafe, OpenChecker<BusinessHour> openChecker) {
+		return new CafeSearchListResponse(
 			cafe.getId(),
 			cafe.getName(),
 			cafe.showFullAddress(),
@@ -50,8 +50,8 @@ public class CafeMapper {
 		);
 	}
 
-	public CafeSearchResponse toCafeSearchResponse(Cafe cafe, OpenChecker<BusinessHour> openChecker) {
-		return produceCafeSearchResponse(cafe, openChecker);
+	public CafeSearchListResponse toCafeSearchResponse(Cafe cafe, OpenChecker<BusinessHour> openChecker) {
+		return produceCafeSearchListResponse(cafe, openChecker);
 	}
 
 	public CafeBasicInfoResponse toCafeBasicInfoResponse(Cafe cafe,

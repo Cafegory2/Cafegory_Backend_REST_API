@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CafeSearchResponse {
+public class CafeSearchListResponse {
 
 	private final long cafeId;
 	private final String name;

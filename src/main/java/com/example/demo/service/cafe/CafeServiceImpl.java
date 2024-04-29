@@ -16,8 +16,8 @@ import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.cafe.CafeResponse;
+import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
-import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.BusinessHourMapper;
 import com.example.demo.mapper.CafeMapper;
@@ -47,18 +47,18 @@ public class CafeServiceImpl implements CafeService {
 	private final StudyOnceMapper studyOnceMapper;
 
 	@Override
-	public PagedResponse<CafeSearchResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
+	public PagedResponse<CafeSearchListResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		CafeSearchCondition cafeSearchCondition = cafeMapper.toCafeSearchCondition(request);
 
 		Page<Cafe> pagedCafes = cafeQueryDslRepository.findWithDynamicFilter(cafeSearchCondition,
 			pageable);
 		return createPagedResponse(pagedCafes,
-			cafeMapper.toCafeSearchResponses(pagedCafes.getContent(), openChecker));
+			cafeMapper.toCafeSearchListResponses(pagedCafes.getContent(), openChecker));
 	}
 
 	@Override
-	public CafeSearchResponse searchCafeBasicInfoById(Long cafeId) {
+	public CafeSearchListResponse searchCafeBasicInfoById(Long cafeId) {
 		return cafeMapper.toCafeSearchResponse(findCafeById(cafeId), openChecker);
 	}
 
@@ -95,13 +95,13 @@ public class CafeServiceImpl implements CafeService {
 		);
 	}
 
-	private PagedResponse<CafeSearchResponse> createPagedResponse(Page<Cafe> pagedCafes,
-		List<CafeSearchResponse> cafeSearchResponses) {
+	private PagedResponse<CafeSearchListResponse> createPagedResponse(Page<Cafe> pagedCafes,
+		List<CafeSearchListResponse> cafeSearchListRespons) {
 		return PagedResponse.createWithFirstPageAsOne(
 			pagedCafes.getNumber(),
 			pagedCafes.getTotalPages(),
 			pagedCafes.getNumberOfElements(),
-			cafeSearchResponses
+			cafeSearchListRespons
 		);
 	}
 

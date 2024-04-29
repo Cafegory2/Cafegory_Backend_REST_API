@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.cafe.CafeSearchResponse;
+import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
 import com.example.demo.dto.study.StudyOnceCommentResponse;
@@ -129,12 +129,12 @@ public class StudyOnceController {
 	}
 
 	@PatchMapping("/{studyOnceId:[0-9]+}/location")
-	public ResponseEntity<CafeSearchResponse> changeCafe(@PathVariable Long studyOnceId,
+	public ResponseEntity<CafeSearchListResponse> changeCafe(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody Long cafeId) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		Long changedCafeId = studyOnceService.changeCafe(leaderId, studyOnceId, cafeId);
-		CafeSearchResponse response = cafeService.searchCafeBasicInfoById(changedCafeId);
+		CafeSearchListResponse response = cafeService.searchCafeBasicInfoById(changedCafeId);
 		return ResponseEntity.ok(response);
 	}
 

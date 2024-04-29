@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.cafe.CafeResponse;
+import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
-import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.service.cafe.CafeService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,9 @@ public class CafeController {
 	private final CafegoryTokenManager cafegoryTokenManager;
 
 	@GetMapping("/cafe/list")
-	public ResponseEntity<PagedResponse<CafeSearchResponse>> searchCafeList(
+	public ResponseEntity<PagedResponse<CafeSearchListResponse>> searchCafeList(
 		@ModelAttribute CafeSearchRequest cafeSearchRequest) {
-		PagedResponse<CafeSearchResponse> response = cafeService.searchWithPagingByDynamicFilter(
+		PagedResponse<CafeSearchListResponse> response = cafeService.searchWithPagingByDynamicFilter(
 			cafeSearchRequest);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
