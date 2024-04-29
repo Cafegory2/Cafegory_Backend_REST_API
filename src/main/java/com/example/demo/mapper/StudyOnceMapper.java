@@ -6,14 +6,11 @@ import java.util.stream.Collectors;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
-import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.dto.WriterResponse;
 import com.example.demo.dto.cafe.CafeSearchStudyOnceResponse;
-import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceForCafeResponse;
-import com.example.demo.dto.study.StudyOnceInfoResponse;
+import com.example.demo.dto.study.StudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 
@@ -69,8 +66,8 @@ public class StudyOnceMapper {
 			.build();
 	}
 
-	public StudyOnceInfoResponse toStudyOnceInfoResponse(StudyOnce saved, boolean canJoin) {
-		return StudyOnceInfoResponse.builder()
+	public StudyOnceResponse toStudyOnceResponse(StudyOnce saved, boolean canJoin) {
+		return StudyOnceResponse.builder()
 			.cafeId(saved.getCafe().getId())
 			.area(saved.getCafe().getRegion())
 			.studyOnceId(saved.getId())
@@ -138,9 +135,9 @@ public class StudyOnceMapper {
 			.build();
 	}
 
-	public StudyOnceCommentResponse toStudyOnceQuestionResponse(StudyOnceComment question,
-		WriterResponse writerResponse) {
-		return new StudyOnceCommentResponse(question.getId(), question.getContent(), writerResponse);
-	}
+	// public StudyOnceCommentResponse toStudyOnceQuestionResponse(StudyOnceComment question,
+	// 	WriterResponse writerResponse) {
+	// 	return new StudyOnceCommentResponse(question.getId(), question.getContent(), writerResponse);
+	// }
 
 }

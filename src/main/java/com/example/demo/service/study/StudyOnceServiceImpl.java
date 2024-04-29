@@ -18,12 +18,12 @@ import com.example.demo.domain.study.StudyMemberId;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.member.MemberResponse;
+import com.example.demo.dto.study.StudyMemberListResponse;
 import com.example.demo.dto.study.StudyMemberStateRequest;
 import com.example.demo.dto.study.StudyMemberStateResponse;
-import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
-import com.example.demo.dto.study.StudyOnceInfoResponse;
+import com.example.demo.dto.study.StudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -248,16 +248,16 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyMembersResponse findStudyMembersById(Long studyOnceId) {
+	public StudyMemberListResponse findStudyMembersById(Long studyOnceId) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		List<MemberResponse> memberResponses = studyMemberMapper.toMemberResponses(studyOnce.getStudyMembers());
-		return new StudyMembersResponse(memberResponses);
+		return new StudyMemberListResponse(memberResponses);
 	}
 
 	@Override
-	public StudyOnceInfoResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
+	public StudyOnceResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
-		return studyOnceMapper.toStudyOnceInfoResponse(studyOnce, studyOnce.canJoin(now));
+		return studyOnceMapper.toStudyOnceResponse(studyOnce, studyOnce.canJoin(now));
 	}
 
 	@Override

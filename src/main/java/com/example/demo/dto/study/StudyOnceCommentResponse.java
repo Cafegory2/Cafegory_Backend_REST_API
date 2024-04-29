@@ -1,7 +1,5 @@
 package com.example.demo.dto.study;
 
-import com.example.demo.dto.WriterResponse;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -11,5 +9,5 @@ public class StudyOnceCommentResponse {
 
 	private final Long commentId;
 	private final String content;
-	private final WriterResponse writer;
+	private final StudyOnceSearchCommentWriterResponse writer;
 }
