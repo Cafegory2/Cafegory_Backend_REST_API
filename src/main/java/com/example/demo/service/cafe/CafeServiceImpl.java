@@ -15,8 +15,8 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.PagedResponse;
+import com.example.demo.dto.cafe.CafeSearchListRequest;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
-import com.example.demo.dto.cafe.CafeSearchRequest;
 import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.BusinessHourMapper;
@@ -47,7 +47,7 @@ public class CafeServiceImpl implements CafeService {
 	private final StudyOnceMapper studyOnceMapper;
 
 	@Override
-	public PagedResponse<CafeSearchListResponse> searchWithPagingByDynamicFilter(CafeSearchRequest request) {
+	public PagedResponse<CafeSearchListResponse> searchWithPagingByDynamicFilter(CafeSearchListRequest request) {
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		CafeSearchCondition cafeSearchCondition = cafeMapper.toCafeSearchCondition(request);
 

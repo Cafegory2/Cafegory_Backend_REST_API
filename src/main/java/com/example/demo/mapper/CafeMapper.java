@@ -10,6 +10,7 @@ import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.cafe.BusinessHourResponse;
 import com.example.demo.dto.cafe.CafeBasicInfoResponse;
+import com.example.demo.dto.cafe.CafeSearchListRequest;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
 import com.example.demo.dto.cafe.CafeSearchResponse;
@@ -73,6 +74,16 @@ public class CafeMapper {
 	}
 
 	public CafeSearchCondition toCafeSearchCondition(CafeSearchRequest request) {
+		return new CafeSearchCondition.Builder(request.isCanStudy(),
+			request.getArea())
+			.maxTime(request.getMaxTime())
+			.minMenuPrice(request.getMinBeveragePrice())
+			.startTime(request.getStartTime())
+			.endTime(request.getEndTime())
+			.build();
+	}
+
+	public CafeSearchCondition toCafeSearchCondition(CafeSearchListRequest request) {
 		return new CafeSearchCondition.Builder(request.isCanStudy(),
 			request.getArea())
 			.maxTime(request.getMaxTime())
