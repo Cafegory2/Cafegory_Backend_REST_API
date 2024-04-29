@@ -10,14 +10,17 @@ import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.cafe.BusinessHourResponse;
 import com.example.demo.dto.cafe.CafeBasicInfoResponse;
+import com.example.demo.dto.cafe.CafeSearchBasicInfoResponse;
+import com.example.demo.dto.cafe.CafeSearchBusinessHourResponse;
 import com.example.demo.dto.cafe.CafeSearchListRequest;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
 import com.example.demo.dto.cafe.CafeSearchRequest;
 import com.example.demo.dto.cafe.CafeSearchResponse;
+import com.example.demo.dto.cafe.CafeSearchReviewResponse;
+import com.example.demo.dto.cafe.CafeSearchSnsResponse;
+import com.example.demo.dto.cafe.CafeSearchStudyOnceResponse;
 import com.example.demo.dto.cafe.SnsResponse;
-import com.example.demo.dto.review.ReviewResponse;
 import com.example.demo.dto.study.CanMakeStudyOnceResponse;
-import com.example.demo.dto.study.StudyOnceForCafeResponse;
 
 public class CafeMapper {
 
@@ -73,6 +76,24 @@ public class CafeMapper {
 		);
 	}
 
+	public CafeSearchBasicInfoResponse toCafeSearchBasicInfoResponse(Cafe cafe,
+		List<CafeSearchBusinessHourResponse> cafeSearchBusinessHourResponses,
+		List<CafeSearchSnsResponse> cafeSearchSnsResponses,
+		OpenChecker<BusinessHour> openChecker) {
+		return new CafeSearchBasicInfoResponse(
+			cafe.getId(),
+			cafe.getName(),
+			cafe.showFullAddress(),
+			cafeSearchBusinessHourResponses,
+			cafe.isOpen(openChecker),
+			cafeSearchSnsResponses,
+			cafe.getPhone(),
+			cafe.getMinBeveragePrice(),
+			cafe.getMaxAllowableStay().getValue(),
+			cafe.getAvgReviewRate()
+		);
+	}
+
 	public CafeSearchCondition toCafeSearchCondition(CafeSearchRequest request) {
 		return new CafeSearchCondition.Builder(request.isCanStudy(),
 			request.getArea())
@@ -95,24 +116,24 @@ public class CafeMapper {
 
 	public CafeSearchResponse toCafeSearchResponse(
 		Cafe findCafe,
-		List<BusinessHourResponse> businessHourResponses,
-		List<SnsResponse> snsResponses,
-		List<ReviewResponse> reviewResponses,
-		List<StudyOnceForCafeResponse> studyOnceForCafeResponses,
+		List<CafeSearchBusinessHourResponse> cafeSearchBusinessHourResponses,
+		List<CafeSearchSnsResponse> cafeSearchSnsResponses,
+		List<CafeSearchReviewResponse> cafeSearchReviewResponses,
+		List<CafeSearchStudyOnceResponse> cafeSearchStudyOnceResponses,
 		OpenChecker<BusinessHour> openChecker) {
 		return CafeSearchResponse.builder()
 			.basicInfo(
-				toCafeBasicInfoResponse(
+				toCafeSearchBasicInfoResponse(
 					findCafe,
-					businessHourResponses,
-					snsResponses,
+					cafeSearchBusinessHourResponses,
+					cafeSearchSnsResponses,
 					openChecker)
 			)
 			.review(
-				reviewResponses
+				cafeSearchReviewResponses
 			)
 			.meetings(
-				studyOnceForCafeResponses
+				cafeSearchStudyOnceResponses
 			)
 			.canMakeMeeting(
 				List.of(new CanMakeStudyOnceResponse(), new CanMakeStudyOnceResponse())
@@ -122,14 +143,14 @@ public class CafeMapper {
 
 	public CafeSearchResponse toCafeSearchResponseWithEmptyInfo(
 		Cafe findCafe,
-		List<BusinessHourResponse> businessHourResponses,
-		List<SnsResponse> snsResponses,
-		List<ReviewResponse> reviewResponses,
+		List<CafeSearchBusinessHourResponse> businessHourResponses,
+		List<CafeSearchSnsResponse> snsResponses,
+		List<CafeSearchReviewResponse> reviewResponses,
 		OpenChecker<BusinessHour> openChecker
 	) {
 		return CafeSearchResponse.builder()
 			.basicInfo(
-				toCafeBasicInfoResponse(
+				toCafeSearchBasicInfoResponse(
 					findCafe,
 					businessHourResponses,
 					snsResponses,

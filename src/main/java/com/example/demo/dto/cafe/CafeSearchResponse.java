@@ -2,9 +2,7 @@ package com.example.demo.dto.cafe;
 
 import java.util.List;
 
-import com.example.demo.dto.review.ReviewResponse;
 import com.example.demo.dto.study.CanMakeStudyOnceResponse;
-import com.example.demo.dto.study.StudyOnceForCafeResponse;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,8 +11,8 @@ import lombok.Getter;
 @Builder
 public class CafeSearchResponse {
 
-	private final CafeBasicInfoResponse basicInfo;
-	private final List<ReviewResponse> review;
-	private final List<StudyOnceForCafeResponse> meetings;
+	private final CafeSearchBasicInfoResponse basicInfo;
+	private final List<CafeSearchReviewResponse> review;
+	private final List<CafeSearchStudyOnceResponse> meetings;
 	private final List<CanMakeStudyOnceResponse> canMakeMeeting;
 }

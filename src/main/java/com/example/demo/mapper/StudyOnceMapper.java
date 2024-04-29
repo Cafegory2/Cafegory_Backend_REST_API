@@ -8,6 +8,7 @@ import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
 import com.example.demo.dto.WriterResponse;
+import com.example.demo.dto.cafe.CafeSearchStudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
@@ -22,6 +23,23 @@ public class StudyOnceMapper {
 		return findCafe.getStudyOnceGroup().stream()
 			.map(studyOnce ->
 				StudyOnceForCafeResponse.builder()
+					.cafeId(findCafe.getId())
+					.studyOnceId(studyOnce.getId())
+					.name(studyOnce.getName())
+					.startDateTime(studyOnce.getStartDateTime())
+					.endDateTime(studyOnce.getEndDateTime())
+					.maxMemberCount(studyOnce.getMaxMemberCount())
+					.nowMemberCount(studyOnce.getNowMemberCount())
+					.isEnd(studyOnce.isAbleToTalk())
+					.build()
+			)
+			.collect(Collectors.toList());
+	}
+
+	public List<CafeSearchStudyOnceResponse> toCafeSearchStudyOnceResponse(Cafe findCafe) {
+		return findCafe.getStudyOnceGroup().stream()
+			.map(studyOnce ->
+				CafeSearchStudyOnceResponse.builder()
 					.cafeId(findCafe.getId())
 					.studyOnceId(studyOnce.getId())
 					.name(studyOnce.getName())

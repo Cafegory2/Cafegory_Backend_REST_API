@@ -75,10 +75,10 @@ public class CafeServiceImpl implements CafeService {
 		}
 		return cafeMapper.toCafeSearchResponse(
 			findCafe,
-			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
-			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
-			reviewMapper.toReviewResponses(findCafe.getReviews()),
-			studyOnceMapper.toStudyOnceForCafeResponse(findCafe),
+			businessHourMapper.toCafeSearchBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.toCafeSearchSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.toCafeSearchReviewResponses(findCafe.getReviews()),
+			studyOnceMapper.toCafeSearchStudyOnceResponse(findCafe),
 			openChecker
 		);
 	}
@@ -88,9 +88,9 @@ public class CafeServiceImpl implements CafeService {
 		Cafe findCafe = findCafeById(cafeId);
 		return cafeMapper.toCafeSearchResponseWithEmptyInfo(
 			findCafe,
-			businessHourMapper.toBusinessHourResponses(findCafe.getBusinessHours()),
-			snsDetailMapper.toSnsResponses(findCafe.getSnsDetails()),
-			reviewMapper.toReviewResponses(findCafe.getReviews()),
+			businessHourMapper.toCafeSearchBusinessHourResponses(findCafe.getBusinessHours()),
+			snsDetailMapper.toCafeSearchSnsResponses(findCafe.getSnsDetails()),
+			reviewMapper.toCafeSearchReviewResponses(findCafe.getReviews()),
 			openChecker
 		);
 	}
