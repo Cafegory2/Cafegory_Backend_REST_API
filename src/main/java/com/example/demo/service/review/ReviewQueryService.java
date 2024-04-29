@@ -2,12 +2,12 @@ package com.example.demo.service.review;
 
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.review.ReviewResponse;
-import com.example.demo.dto.review.ReviewSearchRequest;
-import com.example.demo.dto.review.ReviewSearchResponse;
+import com.example.demo.dto.review.ReviewSearchListRequest;
+import com.example.demo.dto.review.ReviewSearchListResponse;
 
 public interface ReviewQueryService {
 
-	PagedResponse<ReviewSearchResponse> searchWithPagingByCafeId(ReviewSearchRequest request);
+	PagedResponse<ReviewSearchListResponse> searchWithPagingByCafeId(ReviewSearchListRequest request);
 
 	ReviewResponse searchOne(Long reviewId);
 }

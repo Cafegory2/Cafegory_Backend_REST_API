@@ -9,6 +9,7 @@ import com.example.demo.dto.WriterResponse;
 import com.example.demo.dto.cafe.CafeSearchReviewResponse;
 import com.example.demo.dto.cafe.CafeSearchWriterResponse;
 import com.example.demo.dto.review.ReviewResponse;
+import com.example.demo.dto.review.ReviewSearchListResponse;
 import com.example.demo.dto.review.ReviewSearchResponse;
 
 public class ReviewMapper {
@@ -17,6 +18,21 @@ public class ReviewMapper {
 		return reviews.stream()
 			.map(review ->
 				new ReviewSearchResponse(
+					review.getId(),
+					produceWriterResponse(
+						review.getMember().getId(), review.getMember().getName(),
+						review.getMember().getThumbnailImage().getThumbnailImage()
+					),
+					review.getRate(),
+					review.getContent()
+				))
+			.collect(Collectors.toList());
+	}
+
+	public List<ReviewSearchListResponse> toReviewSearchListResponses(List<Review> reviews) {
+		return reviews.stream()
+			.map(review ->
+				new ReviewSearchListResponse(
 					review.getId(),
 					produceWriterResponse(
 						review.getMember().getId(), review.getMember().getName(),

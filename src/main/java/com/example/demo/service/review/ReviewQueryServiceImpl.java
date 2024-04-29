@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.domain.review.Review;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.review.ReviewResponse;
-import com.example.demo.dto.review.ReviewSearchRequest;
-import com.example.demo.dto.review.ReviewSearchResponse;
+import com.example.demo.dto.review.ReviewSearchListRequest;
+import com.example.demo.dto.review.ReviewSearchListResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.ReviewMapper;
 import com.example.demo.repository.cafe.CafeRepository;
@@ -32,13 +32,13 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 	private final ReviewMapper reviewMapper;
 
 	@Override
-	public PagedResponse<ReviewSearchResponse> searchWithPagingByCafeId(ReviewSearchRequest request) {
+	public PagedResponse<ReviewSearchListResponse> searchWithPagingByCafeId(ReviewSearchListRequest request) {
 		validateExistCafe(request.getCafeId());
 		Pageable pageable = PageRequestCustom.of(request.getPage(), request.getSizePerPage());
 		Page<Review> pagedReviews = reviewRepository.findAllWithPagingByCafeId(request.getCafeId(),
 			pageable);
 		return createPagedResponse(pagedReviews,
-			reviewMapper.toReviewSearchResponses(pagedReviews.getContent()));
+			reviewMapper.toReviewSearchListResponses(pagedReviews.getContent()));
 	}
 
 	@Override
@@ -57,13 +57,13 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 		}
 	}
 
-	private PagedResponse<ReviewSearchResponse> createPagedResponse(Page<Review> pagedReviews,
-		List<ReviewSearchResponse> reviewSearchResponse) {
+	private PagedResponse<ReviewSearchListResponse> createPagedResponse(Page<Review> pagedReviews,
+		List<ReviewSearchListResponse> reviewSearchListResponse) {
 		return PagedResponse.createWithFirstPageAsOne(
 			pagedReviews.getNumber(),
 			pagedReviews.getTotalPages(),
 			pagedReviews.getNumberOfElements(),
-			reviewSearchResponse
+			reviewSearchListResponse
 		);
 	}
 
