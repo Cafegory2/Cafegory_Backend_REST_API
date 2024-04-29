@@ -20,5 +20,5 @@ public class CafeSearchListResponse {
 	private final int minBeveragePrice;
 	private final int maxTime;
 	private final double avgReviewRate;
-
+	private final boolean canStudy;
 }
