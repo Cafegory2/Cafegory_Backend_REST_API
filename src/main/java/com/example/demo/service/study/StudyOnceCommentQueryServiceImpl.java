@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
+import com.example.demo.dto.study.StudyOnceCommentSearchListResponse;
 import com.example.demo.dto.study.StudyOnceCommentSearchResponse;
-import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.MemberMapper;
 import com.example.demo.mapper.StudyOnceCommentMapper;
@@ -32,18 +32,19 @@ public class StudyOnceCommentQueryServiceImpl implements StudyOnceCommentQuerySe
 	private final StudyOnceCommentMapper studyOnceCommentMapper;
 
 	@Override
-	public StudyOnceCommentsSearchResponse searchSortedCommentsByStudyOnceId(Long studyOnceId) {
+	public StudyOnceCommentSearchListResponse searchSortedCommentsByStudyOnceId(Long studyOnceId) {
 		List<StudyOnceComment> comments = studyOnceCommentRepository.findAllByStudyOnceId(studyOnceId);
 		Map<Long, StudyOnceComment> commentMap = comments.stream()
 			.collect(Collectors.toMap(StudyOnceComment::getId, comment -> comment));
 
-		StudyOnceCommentsSearchResponse response = new StudyOnceCommentsSearchResponse(
-			memberMapper.toMemberResponse(findStudyOnceById(studyOnceId).getLeader()));
+		StudyOnceCommentSearchListResponse response = new StudyOnceCommentSearchListResponse(
+			memberMapper.toStudyOnceSearchCommentWriterResponse(findStudyOnceById(studyOnceId).getLeader()));
 
 		for (StudyOnceComment comment : comments) {
 			StudyOnceCommentSearchResponse commentSearchResponse = new StudyOnceCommentSearchResponse();
 			if (!comment.hasParentComment()) {
-				commentSearchResponse.setQuestionWriter(memberMapper.toMemberResponse(comment.getMember()));
+				commentSearchResponse.setQuestionWriter(
+					memberMapper.toStudyOnceSearchCommentWriterResponse(comment.getMember()));
 				commentSearchResponse.setQuestionInfo(studyOnceCommentMapper.toStudyOnceCommentInfo(comment));
 				for (StudyOnceComment childComment : comment.getChildren()) {
 					commentSearchResponse.addStudyOnceReplyResponse(

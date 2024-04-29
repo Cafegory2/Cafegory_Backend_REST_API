@@ -1,14 +1,13 @@
-package com.example.demo.dto.review;
+package com.example.demo.dto.cafe;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class ReviewResponse {
-
+public class CafeSearchReviewResponse {
 	private final long reviewId;
-	private final ReviewWriterSearchResponse writer;
+	private final CafeSearchWriterResponse writer;
 	private final double rate;
 	private final String content;
 }

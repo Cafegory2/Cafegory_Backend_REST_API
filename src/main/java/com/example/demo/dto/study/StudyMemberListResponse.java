@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class StudyMembersResponse {
+public class StudyMemberListResponse {
 
 	private final List<MemberResponse> joinedMembers;
 

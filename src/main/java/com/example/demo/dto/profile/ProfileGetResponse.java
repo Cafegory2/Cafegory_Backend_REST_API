@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class ProfileResponse {
+public class ProfileGetResponse {
 	private final String name;
 	private final String thumbnailImg;
 	private final String introduction;

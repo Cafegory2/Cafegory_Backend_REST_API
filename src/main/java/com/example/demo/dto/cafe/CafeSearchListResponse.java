@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CafeBasicInfoResponse {
+public class CafeSearchListResponse {
 
 	private final long cafeId;
 	private final String name;
 	private final String address;
+	private final String area;
 	private final List<BusinessHourResponse> businessHours;
 	private final Boolean isOpen;
 	private final List<SnsResponse> sns;
@@ -19,4 +20,5 @@ public class CafeBasicInfoResponse {
 	private final int minBeveragePrice;
 	private final int maxTime;
 	private final double avgReviewRate;
+
 }

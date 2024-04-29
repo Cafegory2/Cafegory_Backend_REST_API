@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class StudyOnceInfoResponse {
+public class StudyOnceResponse {
 	private long cafeId;
 	private String area;
 	private long studyOnceId;

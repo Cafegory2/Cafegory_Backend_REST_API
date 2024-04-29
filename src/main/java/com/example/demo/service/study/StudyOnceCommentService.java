@@ -1,11 +1,12 @@
 package com.example.demo.service.study;
 
 import com.example.demo.dto.study.StudyOnceCommentRequest;
+import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 
 public interface StudyOnceCommentService {
 
-	Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceCommentRequest request);
+	Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceCommentSaveRequest request);
 
 	void updateQuestion(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request);
 

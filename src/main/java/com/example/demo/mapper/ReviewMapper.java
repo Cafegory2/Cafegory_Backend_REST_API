@@ -5,18 +5,21 @@ import java.util.stream.Collectors;
 
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.review.Review;
-import com.example.demo.dto.WriterResponse;
+import com.example.demo.dto.cafe.CafeSearchReviewResponse;
+import com.example.demo.dto.cafe.CafeSearchWriterResponse;
 import com.example.demo.dto.review.ReviewResponse;
-import com.example.demo.dto.review.ReviewSearchResponse;
+import com.example.demo.dto.review.ReviewSearchListResponse;
+import com.example.demo.dto.review.ReviewWriterSearchListResponse;
+import com.example.demo.dto.review.ReviewWriterSearchResponse;
 
 public class ReviewMapper {
 
-	public List<ReviewSearchResponse> toReviewSearchResponses(List<Review> reviews) {
+	public List<ReviewSearchListResponse> toReviewSearchListResponses(List<Review> reviews) {
 		return reviews.stream()
 			.map(review ->
-				new ReviewSearchResponse(
+				new ReviewSearchListResponse(
 					review.getId(),
-					produceWriterResponse(
+					makeReviewWriterSearchListResponse(
 						review.getMember().getId(), review.getMember().getName(),
 						review.getMember().getThumbnailImage().getThumbnailImage()
 					),
@@ -26,15 +29,20 @@ public class ReviewMapper {
 			.collect(Collectors.toList());
 	}
 
-	private WriterResponse produceWriterResponse(Long memberId, String name, String thumbnailImg) {
-		return new WriterResponse(memberId, name, thumbnailImg);
+	private ReviewWriterSearchListResponse makeReviewWriterSearchListResponse(Long memberId, String name,
+		String thumbnailImg) {
+		return new ReviewWriterSearchListResponse(memberId, name, thumbnailImg);
+	}
+
+	private ReviewWriterSearchResponse makeReviewWriterSearchResponse(Long memberId, String name, String thumbnailImg) {
+		return new ReviewWriterSearchResponse(memberId, name, thumbnailImg);
 	}
 
 	public ReviewResponse toReviewResponse(Review findReview) {
 		return ReviewResponse.builder()
 			.reviewId(findReview.getId())
 			.writer(
-				produceWriterResponse(
+				makeReviewWriterSearchResponse(
 					findReview.getMember().getId(),
 					findReview.getMember().getName(),
 					findReview.getMember().getThumbnailImage().getThumbnailImage()
@@ -44,12 +52,12 @@ public class ReviewMapper {
 			.build();
 	}
 
-	public List<ReviewResponse> toReviewResponses(List<Review> reviews) {
+	public List<CafeSearchReviewResponse> toCafeSearchReviewResponses(List<Review> reviews) {
 		return reviews.stream()
 			.map(review ->
-				produceReviewResponse(
+				makeCafeSearchReviewResponse(
 					review.getId(),
-					productWriterResponse(review.getMember()),
+					makeCafeSearchWriterResponse(review.getMember()),
 					review.getRate(),
 					review.getContent()
 				)
@@ -57,9 +65,11 @@ public class ReviewMapper {
 			.collect(Collectors.toList());
 	}
 
-	private ReviewResponse produceReviewResponse(Long reviewId, WriterResponse writerResponse, double rate,
+	private CafeSearchReviewResponse makeCafeSearchReviewResponse(Long reviewId,
+		CafeSearchWriterResponse writerResponse,
+		double rate,
 		String content) {
-		return ReviewResponse.builder()
+		return CafeSearchReviewResponse.builder()
 			.reviewId(reviewId)
 			.writer(writerResponse)
 			.rate(rate)
@@ -67,8 +77,8 @@ public class ReviewMapper {
 			.build();
 	}
 
-	private WriterResponse productWriterResponse(Member member) {
-		return new WriterResponse(member.getId(),
+	private CafeSearchWriterResponse makeCafeSearchWriterResponse(Member member) {
+		return new CafeSearchWriterResponse(member.getId(),
 			member.getName(),
 			member.getThumbnailImage().getThumbnailImage()
 		);

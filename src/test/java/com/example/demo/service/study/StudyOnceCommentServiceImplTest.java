@@ -13,6 +13,7 @@ import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
+import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
@@ -41,7 +42,7 @@ class StudyOnceCommentServiceImplTest extends ServiceTest {
 		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		//when
 		studyOnceCommentService.saveQuestion(otherPerson.getId(), studyOnce.getId(),
-			new StudyOnceCommentRequest("몇시까지 공부하시나요?"));
+			new StudyOnceCommentSaveRequest("몇시까지 공부하시나요?"));
 		List<StudyOnceComment> questions = studyOnceCommentRepository.findAll();
 		//then
 		assertThat(questions.size()).isEqualTo(1);
@@ -56,7 +57,7 @@ class StudyOnceCommentServiceImplTest extends ServiceTest {
 		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
 		//when
 		studyOnceCommentService.saveQuestion(leader.getId(), studyOnce.getId(),
-			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다."));
+			new StudyOnceCommentSaveRequest("카페 끝날때까지 공부합니다."));
 		List<StudyOnceComment> questions = studyOnceCommentRepository.findAll();
 		//then
 		assertThat(questions.size()).isEqualTo(1);

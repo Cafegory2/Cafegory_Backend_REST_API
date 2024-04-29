@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class EmailTemplateResponse {
-
+public class EmailSendTemplateResponse {
 	private final String title;
 	private final String content;
 }

@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 
 import com.example.demo.domain.study.Attendance;
 import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.study.StudyMembersResponse;
+import com.example.demo.dto.study.StudyMemberListResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
-import com.example.demo.dto.study.StudyOnceInfoResponse;
+import com.example.demo.dto.study.StudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -35,9 +35,9 @@ public interface StudyOnceService {
 
 	Long changeCafe(Long requestMemberId, Long studyOnceId, Long changingCafeId);
 
-	StudyMembersResponse findStudyMembersById(Long studyOnceId);
+	StudyMemberListResponse findStudyMembersById(Long studyOnceId);
 
-	StudyOnceInfoResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
+	StudyOnceResponse findStudyOnce(Long studyOnceId, LocalDateTime now);
 
 	boolean doesOnlyStudyLeaderExist(Long studyOnceId);
 

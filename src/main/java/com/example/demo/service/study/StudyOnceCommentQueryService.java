@@ -1,8 +1,8 @@
 package com.example.demo.service.study;
 
-import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
+import com.example.demo.dto.study.StudyOnceCommentSearchListResponse;
 
 public interface StudyOnceCommentQueryService {
 
-	StudyOnceCommentsSearchResponse searchSortedCommentsByStudyOnceId(Long studyOnceId);
+	StudyOnceCommentSearchListResponse searchSortedCommentsByStudyOnceId(Long studyOnceId);
 }

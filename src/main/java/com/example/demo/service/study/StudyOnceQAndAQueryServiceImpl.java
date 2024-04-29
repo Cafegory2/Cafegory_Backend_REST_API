@@ -6,10 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.dto.WriterResponse;
 import com.example.demo.dto.study.StudyOnceCommentResponse;
+import com.example.demo.dto.study.StudyOnceSearchCommentWriterResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.mapper.MemberMapper;
+import com.example.demo.mapper.StudyOnceCommentMapper;
 import com.example.demo.mapper.StudyOnceMapper;
 import com.example.demo.repository.study.StudyOnceCommentRepository;
 
@@ -23,12 +24,14 @@ public class StudyOnceQAndAQueryServiceImpl implements StudyOnceQAndAQueryServic
 	private final StudyOnceCommentRepository studyOnceCommentRepository;
 	private final MemberMapper memberMapper;
 	private final StudyOnceMapper studyOnceMapper;
+	private final StudyOnceCommentMapper studyOnceCommentMapper;
 
 	@Override
 	public StudyOnceCommentResponse searchComment(Long studyOnceCommentId) {
 		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
-		WriterResponse writerResponse = memberMapper.toWriterResponse(question.getMember());
-		return studyOnceMapper.toStudyOnceQuestionResponse(question, writerResponse);
+		StudyOnceSearchCommentWriterResponse writerResponse = memberMapper.toStudyOnceSearchCommentWriterResponse(
+			question.getMember());
+		return studyOnceCommentMapper.toStudyOnceCommentResponse(question, writerResponse);
 	}
 
 	private StudyOnceComment findStudyOnceCommentById(Long studyOnceCommentId) {

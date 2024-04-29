@@ -12,6 +12,7 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
+import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentSearchResponse;
 import com.example.demo.dto.study.StudyOnceReplyResponse;
 import com.example.demo.repository.member.InMemoryMemberRepository;
@@ -39,7 +40,7 @@ class StudyOnceCommentQueryServiceImplTest extends ServiceTest {
 		Member leader = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE);
 		Cafe cafe = cafePersistHelper.persistDefaultCafe();
 		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceCommentRequest questionRequest = new StudyOnceCommentRequest("질문");
+		StudyOnceCommentSaveRequest questionRequest = new StudyOnceCommentSaveRequest("질문");
 		Member member = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE);
 		Long questionId = studyOnceCommentService.saveQuestion(member.getId(), studyOnce.getId(), questionRequest);
 		StudyOnceCommentRequest replyRequest = new StudyOnceCommentRequest("답변");

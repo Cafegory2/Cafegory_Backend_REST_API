@@ -21,16 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.auth.CafegoryTokenManager;
 import com.example.demo.dto.PagedResponse;
-import com.example.demo.dto.cafe.CafeSearchResponse;
-import com.example.demo.dto.study.StudyMembersResponse;
+import com.example.demo.dto.cafe.CafeSearchListResponse;
+import com.example.demo.dto.study.StudyMemberListResponse;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
 import com.example.demo.dto.study.StudyOnceCommentResponse;
+import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
+import com.example.demo.dto.study.StudyOnceCommentSearchListResponse;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
-import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
-import com.example.demo.dto.study.StudyOnceInfoResponse;
 import com.example.demo.dto.study.StudyOnceJoinResult;
+import com.example.demo.dto.study.StudyOnceQuitResponse;
+import com.example.demo.dto.study.StudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchRequest;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
@@ -87,7 +89,7 @@ public class StudyOnceController {
 	}
 
 	@PatchMapping("/{studyOnceId:[0-9]+}")
-	public ResponseEntity<StudyOnceInfoResponse> update(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyOnceResponse> update(@PathVariable Long studyOnceId,
 		@RequestBody @Validated StudyOnceUpdateRequest request,
 		@RequestHeader("Authorization") String authorization) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
@@ -96,7 +98,7 @@ public class StudyOnceController {
 		} else {
 			studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request, LocalDateTime.now());
 		}
-		StudyOnceInfoResponse response = studyOnceService.findStudyOnce(studyOnceId, LocalDateTime.now());
+		StudyOnceResponse response = studyOnceService.findStudyOnce(studyOnceId, LocalDateTime.now());
 		return ResponseEntity.ok(response);
 	}
 
@@ -110,12 +112,12 @@ public class StudyOnceController {
 	}
 
 	@DeleteMapping("/{studyOnceId:[0-9]+}")
-	public ResponseEntity<StudyOnceJoinResult> tryQuit(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyOnceQuitResponse> tryQuit(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
 		studyOnceService.tryQuit(memberId, studyOnceId);
-		return ResponseEntity.ok(new StudyOnceJoinResult(requestTime, true));
+		return ResponseEntity.ok(new StudyOnceQuitResponse(requestTime, true));
 	}
 
 	@PatchMapping("/{studyOnceId:[0-9]+}/attendance")
@@ -129,30 +131,30 @@ public class StudyOnceController {
 	}
 
 	@PatchMapping("/{studyOnceId:[0-9]+}/location")
-	public ResponseEntity<CafeSearchResponse> changeCafe(@PathVariable Long studyOnceId,
+	public ResponseEntity<CafeSearchListResponse> changeCafe(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization,
 		@RequestBody Long cafeId) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		Long changedCafeId = studyOnceService.changeCafe(leaderId, studyOnceId, cafeId);
-		CafeSearchResponse response = cafeService.searchCafeBasicInfoById(changedCafeId);
+		CafeSearchListResponse response = cafeService.searchCafeBasicInfoById(changedCafeId);
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{studyOnceId:[0-9]+}/member/list")
-	public ResponseEntity<StudyMembersResponse> findStudyMemberList(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyMemberListResponse> searchStudyMemberList(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		if (!studyOnceService.isStudyOnceLeader(leaderId, studyOnceId)) {
 			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
 		}
-		StudyMembersResponse response = studyOnceService.findStudyMembersById(studyOnceId);
+		StudyMemberListResponse response = studyOnceService.findStudyMembersById(studyOnceId);
 		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/{studyOnceId:[0-9]+}/question")
 	public ResponseEntity<StudyOnceCommentResponse> saveQuestion(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization,
-		@RequestBody @Validated StudyOnceCommentRequest request) {
+		@RequestBody @Validated StudyOnceCommentSaveRequest request) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		Long savedCommentId = studyOnceCommentService.saveQuestion(memberId, studyOnceId, request);
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(
@@ -217,10 +219,10 @@ public class StudyOnceController {
 	}
 
 	@GetMapping("/{studyOnceId:[0-9]+}/comment/list")
-	public ResponseEntity<StudyOnceCommentsSearchResponse> searchComments(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyOnceCommentSearchListResponse> searchComments(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		cafegoryTokenManager.getIdentityId(authorization);
-		StudyOnceCommentsSearchResponse response = studyOnceCommentQueryService.searchSortedCommentsByStudyOnceId(
+		StudyOnceCommentSearchListResponse response = studyOnceCommentQueryService.searchSortedCommentsByStudyOnceId(
 			studyOnceId);
 		return ResponseEntity.ok(response);
 	}

@@ -9,6 +9,7 @@ import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
+import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.member.MemberRepository;
@@ -27,7 +28,7 @@ public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
 	private final StudyOnceRepository studyOnceRepository;
 
 	@Override
-	public Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceCommentRequest request) {
+	public Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceCommentSaveRequest request) {
 		StudyOnceComment question = StudyOnceComment.builder()
 			.content(request.getContent())
 			.member(findMemberById(memberId))

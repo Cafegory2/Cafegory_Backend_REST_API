@@ -1,4 +1,4 @@
-package com.example.demo.dto.study;
+package com.example.demo.dto.cafe;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class StudyOnceForCafeResponse {
+public class CafeSearchStudyOnceResponse {
 	private long cafeId;
 	private long studyOnceId;
 	private String name;

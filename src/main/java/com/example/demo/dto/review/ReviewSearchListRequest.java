@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class ReviewSearchRequest extends PagedRequest {
-
+public class ReviewSearchListRequest extends PagedRequest {
 	private final Long cafeId;
 }

@@ -24,8 +24,8 @@ import com.example.demo.domain.study.StudyMember;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.dto.PagedResponse;
 import com.example.demo.dto.member.MemberResponse;
+import com.example.demo.dto.study.StudyMemberListResponse;
 import com.example.demo.dto.study.StudyMemberStateRequest;
-import com.example.demo.dto.study.StudyMembersResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
@@ -619,7 +619,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		studyOnceService.tryJoin(memberId, studyOnceId);
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
-		StudyMembersResponse studyMembersById = studyOnceService.findStudyMembersById(studyOnceId);
+		StudyMemberListResponse studyMembersById = studyOnceService.findStudyMembersById(studyOnceId);
 		List<Long> actualStudyMemberIds = studyMembersById.getJoinedMembers().stream()
 			.map(MemberResponse::getMemberId)
 			.collect(Collectors.toList());

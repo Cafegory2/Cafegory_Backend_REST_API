@@ -16,7 +16,7 @@ class StudyOnceQAndAQueryServiceImplTest extends ServiceTest {
 	private final InMemoryStudyOnceCommentRepository studyOnceCommentRepository =
 		InMemoryStudyOnceCommentRepository.INSTANCE;
 	private final StudyOnceQAndAQueryService studyOnceQAndAQueryService = new StudyOnceQAndAQueryServiceImpl(
-		studyOnceCommentRepository, memberMapper, studyOnceMapper);
+		studyOnceCommentRepository, memberMapper, studyOnceMapper, studyOnceCommentMapper);
 
 	@Test
 	@DisplayName("카공 질문을 찾는다")

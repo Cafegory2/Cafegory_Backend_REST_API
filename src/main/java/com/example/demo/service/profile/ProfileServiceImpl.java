@@ -15,8 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyMember;
 import com.example.demo.domain.study.StudyOnce;
-import com.example.demo.dto.profile.ProfileResponse;
+import com.example.demo.dto.profile.ProfileGetResponse;
 import com.example.demo.dto.profile.ProfileUpdateRequest;
+import com.example.demo.dto.profile.ProfileUpdateResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
@@ -33,28 +34,28 @@ public class ProfileServiceImpl implements ProfileService {
 	private final StudyMemberRepository studyMemberRepository;
 
 	@Override
-	public ProfileResponse get(Long requestMemberID, Long targetMemberID, LocalDateTime baseDateTime) {
+	public ProfileGetResponse get(Long requestMemberID, Long targetMemberID, LocalDateTime baseDateTime) {
 		if (isOwnerOfProfile(requestMemberID, targetMemberID)) {
-			return makeProfileResponse(targetMemberID);
+			return makeProfileGetResponse(targetMemberID);
 		}
 		if (isAllowedCauseStudyLeader(requestMemberID, targetMemberID)) {
-			return makeProfileResponse(targetMemberID);
+			return makeProfileGetResponse(targetMemberID);
 		}
 		if (isAllowedCauseSameStudyOnceMember(requestMemberID, targetMemberID, baseDateTime)) {
-			return makeProfileResponse(targetMemberID);
+			return makeProfileGetResponse(targetMemberID);
 		}
 		throw new CafegoryException(PROFILE_GET_PERMISSION_DENIED);
 	}
 
 	@Override
-	public ProfileResponse update(Long requestMemberId, Long targetMemberId,
+	public ProfileUpdateResponse update(Long requestMemberId, Long targetMemberId,
 		ProfileUpdateRequest profileUpdateRequest) {
 		validateProfileUpdatePermission(requestMemberId, targetMemberId);
 		Member targetMember = findTargetMember(targetMemberId);
 		String name = profileUpdateRequest.getName();
 		String introduction = profileUpdateRequest.getIntroduction();
 		targetMember.updateProfile(name, introduction);
-		return makeProfileResponse(targetMemberId);
+		return makeProfileUpdateResponse(targetMemberId);
 	}
 
 	private void validateProfileUpdatePermission(Long requestMemberId, Long targetMemberId) {
@@ -71,9 +72,15 @@ public class ProfileServiceImpl implements ProfileService {
 		return targetMember.get();
 	}
 
-	private ProfileResponse makeProfileResponse(Long targetMemberID) {
+	private ProfileGetResponse makeProfileGetResponse(Long targetMemberID) {
 		Member member = memberRepository.findById(targetMemberID).orElseThrow();
-		return new ProfileResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(),
+		return new ProfileGetResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(),
+			member.getIntroduction());
+	}
+
+	private ProfileUpdateResponse makeProfileUpdateResponse(Long targetMemberID) {
+		Member member = memberRepository.findById(targetMemberID).orElseThrow();
+		return new ProfileUpdateResponse(member.getName(), member.getThumbnailImage().getThumbnailImage(),
 			member.getIntroduction());
 	}
 
