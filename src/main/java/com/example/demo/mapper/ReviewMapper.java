@@ -10,24 +10,8 @@ import com.example.demo.dto.cafe.CafeSearchReviewResponse;
 import com.example.demo.dto.cafe.CafeSearchWriterResponse;
 import com.example.demo.dto.review.ReviewResponse;
 import com.example.demo.dto.review.ReviewSearchListResponse;
-import com.example.demo.dto.review.ReviewSearchResponse;
 
 public class ReviewMapper {
-
-	public List<ReviewSearchResponse> toReviewSearchResponses(List<Review> reviews) {
-		return reviews.stream()
-			.map(review ->
-				new ReviewSearchResponse(
-					review.getId(),
-					produceWriterResponse(
-						review.getMember().getId(), review.getMember().getName(),
-						review.getMember().getThumbnailImage().getThumbnailImage()
-					),
-					review.getRate(),
-					review.getContent()
-				))
-			.collect(Collectors.toList());
-	}
 
 	public List<ReviewSearchListResponse> toReviewSearchListResponses(List<Review> reviews) {
 		return reviews.stream()
@@ -62,19 +46,6 @@ public class ReviewMapper {
 			.build();
 	}
 
-	public List<ReviewResponse> toReviewResponses(List<Review> reviews) {
-		return reviews.stream()
-			.map(review ->
-				produceReviewResponse(
-					review.getId(),
-					productWriterResponse(review.getMember()),
-					review.getRate(),
-					review.getContent()
-				)
-			)
-			.collect(Collectors.toList());
-	}
-
 	public List<CafeSearchReviewResponse> toCafeSearchReviewResponses(List<Review> reviews) {
 		return reviews.stream()
 			.map(review ->
@@ -98,23 +69,6 @@ public class ReviewMapper {
 			.rate(rate)
 			.content(content)
 			.build();
-	}
-
-	private ReviewResponse produceReviewResponse(Long reviewId, WriterResponse writerResponse, double rate,
-		String content) {
-		return ReviewResponse.builder()
-			.reviewId(reviewId)
-			.writer(writerResponse)
-			.rate(rate)
-			.content(content)
-			.build();
-	}
-
-	private WriterResponse productWriterResponse(Member member) {
-		return new WriterResponse(member.getId(),
-			member.getName(),
-			member.getThumbnailImage().getThumbnailImage()
-		);
 	}
 
 	private CafeSearchWriterResponse makeCafeSearchWriterResponse(Member member) {

@@ -9,29 +9,11 @@ import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.dto.cafe.CafeSearchStudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
-import com.example.demo.dto.study.StudyOnceForCafeResponse;
 import com.example.demo.dto.study.StudyOnceResponse;
 import com.example.demo.dto.study.StudyOnceSearchListResponse;
 import com.example.demo.dto.study.StudyOnceSearchResponse;
 
 public class StudyOnceMapper {
-
-	public List<StudyOnceForCafeResponse> toStudyOnceForCafeResponse(Cafe findCafe) {
-		return findCafe.getStudyOnceGroup().stream()
-			.map(studyOnce ->
-				StudyOnceForCafeResponse.builder()
-					.cafeId(findCafe.getId())
-					.studyOnceId(studyOnce.getId())
-					.name(studyOnce.getName())
-					.startDateTime(studyOnce.getStartDateTime())
-					.endDateTime(studyOnce.getEndDateTime())
-					.maxMemberCount(studyOnce.getMaxMemberCount())
-					.nowMemberCount(studyOnce.getNowMemberCount())
-					.isEnd(studyOnce.isAbleToTalk())
-					.build()
-			)
-			.collect(Collectors.toList());
-	}
 
 	public List<CafeSearchStudyOnceResponse> toCafeSearchStudyOnceResponse(Cafe findCafe) {
 		return findCafe.getStudyOnceGroup().stream()
@@ -134,10 +116,5 @@ public class StudyOnceMapper {
 			.openChatUrl(saved.getOpenChatUrl())
 			.build();
 	}
-
-	// public StudyOnceCommentResponse toStudyOnceQuestionResponse(StudyOnceComment question,
-	// 	WriterResponse writerResponse) {
-	// 	return new StudyOnceCommentResponse(question.getId(), question.getContent(), writerResponse);
-	// }
 
 }

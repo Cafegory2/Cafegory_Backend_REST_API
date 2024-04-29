@@ -9,12 +9,10 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.OpenChecker;
 import com.example.demo.dto.cafe.BusinessHourResponse;
-import com.example.demo.dto.cafe.CafeBasicInfoResponse;
 import com.example.demo.dto.cafe.CafeSearchBasicInfoResponse;
 import com.example.demo.dto.cafe.CafeSearchBusinessHourResponse;
 import com.example.demo.dto.cafe.CafeSearchListRequest;
 import com.example.demo.dto.cafe.CafeSearchListResponse;
-import com.example.demo.dto.cafe.CafeSearchRequest;
 import com.example.demo.dto.cafe.CafeSearchResponse;
 import com.example.demo.dto.cafe.CafeSearchReviewResponse;
 import com.example.demo.dto.cafe.CafeSearchSnsResponse;
@@ -58,24 +56,6 @@ public class CafeMapper {
 		return produceCafeSearchListResponse(cafe, openChecker);
 	}
 
-	public CafeBasicInfoResponse toCafeBasicInfoResponse(Cafe cafe,
-		List<BusinessHourResponse> businessHourResponses,
-		List<SnsResponse> snsResponses,
-		OpenChecker<BusinessHour> openChecker) {
-		return new CafeBasicInfoResponse(
-			cafe.getId(),
-			cafe.getName(),
-			cafe.showFullAddress(),
-			businessHourResponses,
-			cafe.isOpen(openChecker),
-			snsResponses,
-			cafe.getPhone(),
-			cafe.getMinBeveragePrice(),
-			cafe.getMaxAllowableStay().getValue(),
-			cafe.getAvgReviewRate()
-		);
-	}
-
 	public CafeSearchBasicInfoResponse toCafeSearchBasicInfoResponse(Cafe cafe,
 		List<CafeSearchBusinessHourResponse> cafeSearchBusinessHourResponses,
 		List<CafeSearchSnsResponse> cafeSearchSnsResponses,
@@ -92,16 +72,6 @@ public class CafeMapper {
 			cafe.getMaxAllowableStay().getValue(),
 			cafe.getAvgReviewRate()
 		);
-	}
-
-	public CafeSearchCondition toCafeSearchCondition(CafeSearchRequest request) {
-		return new CafeSearchCondition.Builder(request.isCanStudy(),
-			request.getArea())
-			.maxTime(request.getMaxTime())
-			.minMenuPrice(request.getMinBeveragePrice())
-			.startTime(request.getStartTime())
-			.endTime(request.getEndTime())
-			.build();
 	}
 
 	public CafeSearchCondition toCafeSearchCondition(CafeSearchListRequest request) {
