@@ -3,18 +3,16 @@ package com.example.demo.dto.study;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.dto.member.MemberResponse;
-
 import lombok.Getter;
 
 @Getter
-public class StudyOnceCommentsSearchResponse {
+public class StudyOnceCommentSearchListResponse {
 
-	private MemberResponse replyWriter;
+	private StudyOnceSearchCommentWriterResponse writerResponse;
 	private List<StudyOnceCommentSearchResponse> comments = new ArrayList<>();
 
-	public StudyOnceCommentsSearchResponse(MemberResponse replyWriter) {
-		this.replyWriter = replyWriter;
+	public StudyOnceCommentSearchListResponse(StudyOnceSearchCommentWriterResponse writerResponse) {
+		this.writerResponse = writerResponse;
 	}
 
 	public void addStudyOnceCommentSearchResponse(StudyOnceCommentSearchResponse studyOnceCommentSearchResponse) {

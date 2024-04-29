@@ -26,8 +26,8 @@ import com.example.demo.dto.study.StudyMemberListResponse;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
 import com.example.demo.dto.study.StudyOnceCommentResponse;
 import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
+import com.example.demo.dto.study.StudyOnceCommentSearchListResponse;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
-import com.example.demo.dto.study.StudyOnceCommentsSearchResponse;
 import com.example.demo.dto.study.StudyOnceCreateRequest;
 import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.dto.study.StudyOnceJoinResult;
@@ -219,10 +219,10 @@ public class StudyOnceController {
 	}
 
 	@GetMapping("/{studyOnceId:[0-9]+}/comment/list")
-	public ResponseEntity<StudyOnceCommentsSearchResponse> searchComments(@PathVariable Long studyOnceId,
+	public ResponseEntity<StudyOnceCommentSearchListResponse> searchComments(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		cafegoryTokenManager.getIdentityId(authorization);
-		StudyOnceCommentsSearchResponse response = studyOnceCommentQueryService.searchSortedCommentsByStudyOnceId(
+		StudyOnceCommentSearchListResponse response = studyOnceCommentQueryService.searchSortedCommentsByStudyOnceId(
 			studyOnceId);
 		return ResponseEntity.ok(response);
 	}

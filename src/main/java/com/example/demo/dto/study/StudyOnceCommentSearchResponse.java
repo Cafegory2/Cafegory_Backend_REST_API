@@ -3,8 +3,6 @@ package com.example.demo.dto.study;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.dto.member.MemberResponse;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class StudyOnceCommentSearchResponse {
 
-	private MemberResponse questionWriter;
+	private StudyOnceSearchCommentWriterResponse questionWriter;
 	private StudyOnceCommentInfo questionInfo;
 	private List<StudyOnceReplyResponse> replies = new ArrayList<>();
 
