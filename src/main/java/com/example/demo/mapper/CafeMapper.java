@@ -48,7 +48,7 @@ public class CafeMapper {
 			cafe.getPhone(),
 			cafe.getMinBeveragePrice(),
 			cafe.getMaxAllowableStay().getValue(),
-			cafe.getAvgReviewRate(),
+			cafe.calcAverageRating().orElse(0),
 			cafe.isAbleToStudy()
 		);
 	}
@@ -71,7 +71,7 @@ public class CafeMapper {
 			cafe.getPhone(),
 			cafe.getMinBeveragePrice(),
 			cafe.getMaxAllowableStay().getValue(),
-			cafe.getAvgReviewRate(),
+			cafe.calcAverageRating().orElse(0),
 			cafe.isAbleToStudy()
 		);
 	}

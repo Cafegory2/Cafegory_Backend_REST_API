@@ -3,6 +3,7 @@ package com.example.demo.domain.cafe;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalDouble;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -81,4 +82,9 @@ public class Cafe {
 		return openChecker.checkWithBusinessHours(this.businessHours, LocalDateTime.now());
 	}
 
+	public OptionalDouble calcAverageRating() {
+		return reviews.stream()
+			.mapToDouble(Review::getRate)
+			.average();
+	}
 }
