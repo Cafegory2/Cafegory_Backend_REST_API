@@ -26,7 +26,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
-			.allowedOriginPatterns("http://localhost:3000")
+			.allowedOriginPatterns("http://localhost:3000", "https://cafegory.netlify.app")
 			.allowCredentials(true)
 			.allowedMethods("*");
 	}
