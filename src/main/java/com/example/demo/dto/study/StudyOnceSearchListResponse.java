@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class StudyOnceSearchListResponse {
 	private long cafeId;
+	private String cafeName;
 	private String area;
 	private long studyOnceId;
 	private String name;
