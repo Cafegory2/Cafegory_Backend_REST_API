@@ -87,6 +87,7 @@ public class StudyOnceMapper {
 	public StudyOnceSearchListResponse toStudyOnceSearchListResponse(StudyOnce saved, boolean canJoin) {
 		return StudyOnceSearchListResponse.builder()
 			.cafeId(saved.getCafe().getId())
+			.cafeName(saved.getCafe().getName())
 			.area(saved.getCafe().getRegion())
 			.studyOnceId(saved.getId())
 			.name(saved.getName())
