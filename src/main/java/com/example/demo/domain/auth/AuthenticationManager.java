@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.example.demo.exception.CafegoryException;
@@ -17,6 +18,11 @@ public class AuthenticationManager implements HandlerInterceptor {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+		String rawMethod = request.getMethod();
+		HttpMethod requestedMethod = HttpMethod.valueOf(rawMethod);
+		if (requestedMethod.equals(HttpMethod.OPTIONS)) {
+			return true;
+		}
 		try {
 			String accessToken = request.getHeader("Authorization");
 			accessToken = accessToken.replaceFirst("Bearer ", "");
