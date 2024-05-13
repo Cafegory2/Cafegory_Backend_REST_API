@@ -63,6 +63,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 			pagedReviews.getNumber(),
 			pagedReviews.getTotalPages(),
 			pagedReviews.getNumberOfElements(),
+			pagedReviews.getTotalElements(),
 			reviewSearchListResponse
 		);
 	}

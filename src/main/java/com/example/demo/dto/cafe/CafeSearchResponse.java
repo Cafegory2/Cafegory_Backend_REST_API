@@ -12,7 +12,7 @@ import lombok.Getter;
 public class CafeSearchResponse {
 
 	private final CafeSearchBasicInfoResponse basicInfo;
-	private final List<CafeSearchReviewResponse> review;
+	private final long totalElementsOfReview;
 	private final List<CafeSearchStudyOnceResponse> meetings;
 	private final List<CanMakeStudyOnceResponse> canMakeMeeting;
 }

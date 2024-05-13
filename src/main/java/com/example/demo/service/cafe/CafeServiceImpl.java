@@ -101,6 +101,7 @@ public class CafeServiceImpl implements CafeService {
 			pagedCafes.getNumber(),
 			pagedCafes.getTotalPages(),
 			pagedCafes.getNumberOfElements(),
+			pagedCafes.getTotalElements(),
 			cafeSearchListResponse
 		);
 	}
