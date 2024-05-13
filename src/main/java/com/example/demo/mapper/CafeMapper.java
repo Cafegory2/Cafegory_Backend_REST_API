@@ -101,8 +101,8 @@ public class CafeMapper {
 					cafeSearchSnsResponses,
 					openChecker)
 			)
-			.review(
-				cafeSearchReviewResponses
+			.totalElementsOfReview(
+				findCafe.getReviews().size()
 			)
 			.meetings(
 				cafeSearchStudyOnceResponses
@@ -128,8 +128,8 @@ public class CafeMapper {
 					snsResponses,
 					openChecker)
 			)
-			.review(
-				reviewResponses
+			.totalElementsOfReview(
+				findCafe.getReviews().size()
 			)
 			.meetings(
 				Collections.emptyList()
