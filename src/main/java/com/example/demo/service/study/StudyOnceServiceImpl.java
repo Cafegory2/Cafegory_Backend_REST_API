@@ -93,7 +93,8 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			.map(studyOnce -> studyOnceMapper.toStudyOnceSearchListResponse(studyOnce,
 				studyOnce.canJoin(LocalDateTime.now())))
 			.collect(Collectors.toList());
-		return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), searchResults);
+		return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), totalCount,
+			searchResults);
 	}
 
 	private int calculateMaxPage(int totalCount, int sizePerPage) {
