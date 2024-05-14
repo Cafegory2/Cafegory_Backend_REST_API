@@ -66,10 +66,10 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 				hour -> checkByNowTime(DayOfWeek.valueOf(hour.getDay()), hour.getStartTime(), hour.getEndTime(), now));
 	}
 
-	public boolean checkBetweenHours(LocalTime businessStartTime, LocalTime businessEndTime,
+	public boolean checkBetweenBusinessHours(LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalTime chosenStartTime, LocalTime chosenEndTime) {
-		if ((chosenStartTime.equals(businessStartTime) || chosenStartTime.isBefore(businessStartTime))
-			&& (chosenEndTime.equals(businessEndTime) || chosenEndTime.isAfter(businessEndTime))) {
+		if ((businessStartTime.equals(chosenStartTime) || businessStartTime.isBefore(chosenStartTime))
+			&& (businessEndTime.equals(chosenEndTime) || businessEndTime.isAfter(chosenEndTime))) {
 			return true;
 		}
 		return false;
