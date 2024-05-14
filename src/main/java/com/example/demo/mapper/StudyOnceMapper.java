@@ -75,7 +75,7 @@ public class StudyOnceMapper {
 			.startDateTime(saved.getStartDateTime())
 			.endDateTime(saved.getEndDateTime())
 			.maxMemberCount(saved.getMaxMemberCount())
-			.nowMemberCount(saved.getNowMemberCount())
+			.nowMemberCount(saved.getStudyMembers().size())
 			.canTalk(saved.isAbleToTalk())
 			.canJoin(canJoin)
 			.isEnd(saved.isEnd())
