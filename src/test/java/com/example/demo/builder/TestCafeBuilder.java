@@ -1,6 +1,10 @@
 package com.example.demo.builder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.demo.domain.cafe.Address;
+import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.MaxAllowableStay;
 
@@ -14,6 +18,8 @@ public class TestCafeBuilder {
 	private double avgReviewRate = 4.5;
 	private boolean isAbleToStudy = true;
 	private int minBeveragePrice = 3_000;
+
+	private List<BusinessHour> businessHours = new ArrayList<>();
 
 	public TestCafeBuilder id(Long id) {
 		this.id = id;
@@ -55,6 +61,11 @@ public class TestCafeBuilder {
 		return this;
 	}
 
+	public TestCafeBuilder businessHours(List<BusinessHour> businessHours) {
+		this.businessHours = businessHours;
+		return this;
+	}
+
 	public Cafe build() {
 		return Cafe.builder()
 			.id(id)
@@ -65,6 +76,7 @@ public class TestCafeBuilder {
 			.avgReviewRate(avgReviewRate)
 			.isAbleToStudy(isAbleToStudy)
 			.minBeveragePrice(minBeveragePrice)
+			.businessHours(businessHours)
 			.build();
 	}
 }

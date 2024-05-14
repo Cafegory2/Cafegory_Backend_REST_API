@@ -1,5 +1,8 @@
 package com.example.demo.domain.cafe;
 
+import static com.example.demo.exception.ExceptionType.*;
+
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ import javax.persistence.Table;
 
 import com.example.demo.domain.review.Review;
 import com.example.demo.domain.study.StudyOnce;
+import com.example.demo.exception.CafegoryException;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -86,5 +90,12 @@ public class Cafe {
 		return reviews.stream()
 			.mapToDouble(Review::getRate)
 			.average();
+	}
+
+	public BusinessHour findBusinessHour(DayOfWeek dayOfWeek) {
+		return businessHours.stream()
+			.filter(businessHour -> businessHour.matchesDayOfWeek(dayOfWeek))
+			.findFirst()
+			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND_DAY_OF_WEEK));
 	}
 }

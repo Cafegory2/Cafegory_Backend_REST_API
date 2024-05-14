@@ -51,4 +51,8 @@ public class BusinessHour {
 			return false;
 		}
 	}
+
+	public boolean matchesDayOfWeek(DayOfWeek dayOfWeek) {
+		return day.equals(dayOfWeek.toString());
+	}
 }

@@ -3,13 +3,17 @@ package com.example.demo.service.study;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.cafe.BusinessHour;
+import com.example.demo.domain.cafe.BusinessHourOpenChecker;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.Attendance;
@@ -51,6 +55,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final StudyMemberRepository studyMemberRepository;
 	private final StudyOnceMapper studyOnceMapper;
 	private final StudyMemberMapper studyMemberMapper;
+	private final BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 
 	@Override
 	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
@@ -190,16 +195,24 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest) {
-		Cafe cafe = cafeRepository.findById(studyOnceCreateRequest.getCafeId())
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-		//ToDo 카페 영업시간 이내인지 확인 하는 작업 추가 필요
-		LocalDateTime startDateTime = studyOnceCreateRequest.getStartDateTime();
-		Member leader = getMember(leaderId, startDateTime);
-		StudyOnce studyOnce = studyOnceMapper.toNewEntity(studyOnceCreateRequest, cafe, leader);
+	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest request, LocalDate nowDate) {
+		Cafe cafe = findCafeById(request.getCafeId());
+		BusinessHour businessHour = cafe.findBusinessHour(nowDate.getDayOfWeek());
+		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
+			businessHour);
+		Member leader = getMember(leaderId, request.getStartDateTime());
+		StudyOnce studyOnce = studyOnceMapper.toNewEntity(request, cafe, leader);
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
-		boolean canJoin = true;
-		return studyOnceMapper.toStudyOnceCreateResponse(saved, canJoin);
+		return studyOnceMapper.toStudyOnceCreateResponse(saved, true);
+	}
+
+	private void validateBetweenBusinessHour(LocalTime studyOnceStartTime, LocalTime studyOnceEndTime,
+		BusinessHour businessHour) {
+		boolean isBetweenBusinessHour = openChecker.checkBetweenBusinessHours(businessHour.getStartTime(),
+			businessHour.getEndTime(), studyOnceStartTime, studyOnceEndTime);
+		if (!isBetweenBusinessHour) {
+			throw new CafegoryException(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS);
+		}
 	}
 
 	@Override

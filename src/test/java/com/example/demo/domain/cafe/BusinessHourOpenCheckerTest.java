@@ -285,15 +285,15 @@ public class BusinessHourOpenCheckerTest {
 
 	@ParameterizedTest
 	@MethodSource("provideChosenTimeAndExpected")
-	@DisplayName("선택된 시간사이에 영업시간이 포함한다.")
-	void when_check_businessHours_between_chosen_hours_then_contains(LocalTime chosenStartTime, LocalTime chosenEndTime,
+	@DisplayName("영업시간 시간사이에 선택된 시간이 포함한다.")
+	void when_check_chosen_hours_between_businessHours_then_contains(LocalTime chosenStartTime, LocalTime chosenEndTime,
 		boolean expected) {
 		//given
 		LocalTime businessStartTime = LocalTime.of(9, 0);
 		LocalTime businessEndTime = LocalTime.of(21, 0);
 
 		//when
-		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);
 		//then
 		assertThat(isBetween).isEqualTo(expected);
@@ -305,28 +305,23 @@ public class BusinessHourOpenCheckerTest {
 			// LocalTime chosenEndTime,
 			// boolean expected
 			Arguments.of(
-				LocalTime.of(8, 0),
-				LocalTime.of(22, 0),
-				true
-			),
-			Arguments.of(
 				LocalTime.of(9, 0),
 				LocalTime.of(21, 0),
 				true
 			),
 			Arguments.of(
-				LocalTime.of(8, 59, 59),
+				LocalTime.of(9, 0, 0, 1),
 				LocalTime.of(21, 0),
 				true
 			),
 			Arguments.of(
-				LocalTime.of(8, 59, 59),
-				LocalTime.of(21, 0, 1),
+				LocalTime.of(9, 0),
+				LocalTime.of(20, 59, 59, 999_999_999),
 				true
 			),
 			Arguments.of(
-				LocalTime.of(0, 0, 0),
-				LocalTime.of(23, 59, 59, 999_999_999),
+				LocalTime.of(9, 0, 0, 1),
+				LocalTime.of(20, 59, 59, 999_999_999),
 				true
 			)
 		);
@@ -334,8 +329,8 @@ public class BusinessHourOpenCheckerTest {
 
 	@ParameterizedTest
 	@MethodSource("provideChosenTimeAndExpected2")
-	@DisplayName("선택된 시간사이에 영업시간이 포함되지 않는다.")
-	void when_check_businessHours_between_chosen_hours_then_not_contains(LocalTime chosenStartTime,
+	@DisplayName("영업시간 사이에 선택된 시간이 포함되지 않는다.")
+	void when_check_chosen_hours_between_businessHours_then_not_contains(LocalTime chosenStartTime,
 		LocalTime chosenEndTime,
 		boolean expected) {
 		//given
@@ -343,7 +338,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime businessEndTime = LocalTime.of(21, 0);
 
 		//when
-		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);
 		//then
 		assertThat(isBetween).isEqualTo(expected);
@@ -355,18 +350,18 @@ public class BusinessHourOpenCheckerTest {
 			// LocalTime chosenEndTime,
 			// boolean expected
 			Arguments.of(
-				LocalTime.of(9, 0),
-				LocalTime.of(20, 59, 59),
-				false
-			),
-			Arguments.of(
-				LocalTime.of(9, 0, 1),
+				LocalTime.of(8, 59, 59, 999_999_999),
 				LocalTime.of(21, 0),
 				false
 			),
 			Arguments.of(
-				LocalTime.of(8, 59, 59),
-				LocalTime.of(20, 59, 59),
+				LocalTime.of(9, 0, 0),
+				LocalTime.of(21, 0, 0, 1),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(8, 59, 59, 999_999_999),
+				LocalTime.of(21, 0, 0, 1),
 				false
 			)
 		);
@@ -382,7 +377,7 @@ public class BusinessHourOpenCheckerTest {
 		//when
 		LocalTime chosenStartTime1 = LocalTime.of(0, 0);
 		LocalTime chosenEndTime = LocalTime.MAX;
-		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime1, chosenEndTime);
 		//then
 		assertThat(isBetween).isTrue();
@@ -399,7 +394,7 @@ public class BusinessHourOpenCheckerTest {
 		LocalTime businessEndTime = LocalTime.of(2, 0);
 
 		//when
-		boolean isBetween = openChecker.checkBetweenHours(businessStartTime, businessEndTime,
+		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);
 		//then
 		assertThat(isBetween).isEqualTo(expected);
@@ -416,24 +411,24 @@ public class BusinessHourOpenCheckerTest {
 				true
 			),
 			Arguments.of(
-				LocalTime.of(21, 0),
+				LocalTime.of(22, 0, 0, 1),
 				LocalTime.of(2, 0),
 				true
 			),
 			Arguments.of(
-				LocalTime.of(22, 0, 1),
+				LocalTime.of(21, 59, 59, 999_999_999),
 				LocalTime.of(2, 0),
 				false
 			),
 			Arguments.of(
 				LocalTime.of(22, 0, 0),
-				LocalTime.of(1, 59, 59),
+				LocalTime.of(2, 0, 0, 1),
 				false
 			),
 			Arguments.of(
 				LocalTime.of(0, 0),
 				LocalTime.MAX,
-				true
+				false
 			)
 		);
 	}

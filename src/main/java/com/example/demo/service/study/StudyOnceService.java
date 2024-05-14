@@ -1,5 +1,6 @@
 package com.example.demo.service.study;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.demo.domain.study.Attendance;
@@ -31,7 +32,8 @@ public interface StudyOnceService {
 
 	void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance, LocalDateTime now);
 
-	StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest);
+	StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest studyOnceCreateRequest,
+		LocalDate nowDate);
 
 	Long changeCafe(Long requestMemberId, Long studyOnceId, Long changingCafeId);
 
