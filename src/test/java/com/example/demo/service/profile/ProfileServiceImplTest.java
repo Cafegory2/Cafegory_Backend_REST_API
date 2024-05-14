@@ -2,6 +2,7 @@ package com.example.demo.service.profile;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -45,12 +46,13 @@ class ProfileServiceImplTest extends ServiceTest {
 	@Test
 	@DisplayName("자신이 스터디 장인 카공의 멤버면 프로필 조회 성공")
 	void successWhenRequestMemberIsLeaderWithTargetMember() {
-		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
 		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		long targetMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, start.plusHours(5), cafeId);
-		StudyOnceCreateResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest,
+			LocalDate.now());
 		studyOnceService.tryJoin(targetMemberId, study.getStudyOnceId());
 		Assertions.assertDoesNotThrow(() -> profileService.get(requestMemberId, targetMemberId));
 	}
