@@ -391,6 +391,23 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	}
 
 	@Test
+	@DisplayName("카공 참여 취소를 하면 카공의 모집 인원수가 줄어든다.")
+	void tryQuit_then_studyOnce_nowMemberCount_is_reduced() {
+		LocalDateTime start = LocalDateTime.now().plusHours(4);
+		LocalDateTime end = start.plusHours(4);
+		long firstMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		long secondMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		long cafeId = cafePersistHelper.persistDefaultCafe().getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest);
+		studyOnceService.tryJoin(secondMemberId, study.getStudyOnceId());
+
+		studyOnceService.tryQuit(secondMemberId, study.getStudyOnceId());
+
+		assertThat(study.getNowMemberCount()).isEqualTo(1);
+	}
+
+	@Test
 	@DisplayName("참여중인 카공이 아니라 참여 취소 실패")
 	void tryQuitFailCauseNotJoin() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
