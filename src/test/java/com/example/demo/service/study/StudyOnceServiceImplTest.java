@@ -816,6 +816,84 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			.hasMessage(STUDY_ONCE_LEADER_PERMISSION_DENIED.getErrorMessage());
 	}
 
+	@ParameterizedTest
+	@MethodSource("provideStartAndEndDateTime3")
+	@DisplayName("카공 시작시간과 종료시간 수정시 카페 영업시간 이후로 수정할 경우 예외가 터진다.")
+	void update_studyOnce_between_not_businessHours_then_exception(LocalDateTime start, LocalDateTime end) {
+		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
+		long cafeId = cafePersistHelper.persistCafeWithBusinessHour(businessHours).getId();
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.of(2999, 1, 1, 9, 0),
+			LocalDateTime.of(2999, 1, 1, 10, 0),
+			cafeId);
+		StudyOnceCreateResponse studyOnceCreateResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
+			LocalDate.now());
+
+		StudyOnceUpdateRequest studyOnceUpdateRequest = new StudyOnceUpdateRequest(cafeId, null, start, end, 5, true,
+			null);
+
+		assertThatThrownBy(
+			() -> studyOnceService.updateStudyOnce(leaderId, studyOnceCreateResponse.getStudyOnceId(),
+				studyOnceUpdateRequest, LocalDateTime.of(2999, 1, 1, 8, 0)))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
+	}
+
+	static Stream<Arguments> provideStartAndEndDateTime3() {
+		return Stream.of(
+			Arguments.of(
+				LocalDateTime.of(2999, 1, 1, 8, 59, 59, 999_999_999),
+				LocalDateTime.of(2999, 1, 1, 10, 0)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 1, 1, 8, 0),
+				LocalDateTime.of(2999, 1, 1, 9, 0, 0, 1)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 1, 1, 20, 0),
+				LocalDateTime.of(2999, 1, 1, 21, 0, 0, 1)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 1, 1, 20, 59, 59, 999_999_999),
+				LocalDateTime.of(2999, 1, 1, 22, 0)
+			)
+		);
+	}
+
+	@ParameterizedTest()
+	@MethodSource("provideStartAndEndDateTime4")
+	@DisplayName("카공 시작시간과 종료시간 수정시 카페 영업시간 사이로 선택 할 경우 수정된다.")
+	void update_studyOnce_between__businessHours(LocalDateTime start, LocalDateTime end) {
+		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
+		long cafeId = cafePersistHelper.persistCafeWithBusinessHour(businessHours).getId();
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.of(2999, 1, 1, 9, 0),
+			LocalDateTime.of(2999, 1, 1, 10, 0),
+			cafeId);
+		StudyOnceCreateResponse studyOnceCreateResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
+			LocalDate.now());
+
+		StudyOnceUpdateRequest studyOnceUpdateRequest = new StudyOnceUpdateRequest(cafeId, null, start, end, 5, true,
+			null);
+
+		assertDoesNotThrow(
+			() -> studyOnceService.updateStudyOnce(leaderId, studyOnceCreateResponse.getStudyOnceId(),
+				studyOnceUpdateRequest, LocalDateTime.of(2999, 1, 1, 8, 0)));
+	}
+
+	static Stream<Arguments> provideStartAndEndDateTime4() {
+		return Stream.of(
+			Arguments.of(
+				LocalDateTime.of(2999, 1, 1, 9, 0),
+				LocalDateTime.of(2999, 1, 1, 10, 0)
+			),
+			Arguments.of(
+				LocalDateTime.of(2999, 1, 1, 20, 0),
+				LocalDateTime.of(2999, 1, 1, 21, 0)
+			)
+		);
+	}
+
 	@Test
 	@DisplayName("참여자가 존재하는 경우, 카공 수정")
 	void updateStudyOncePartially() {

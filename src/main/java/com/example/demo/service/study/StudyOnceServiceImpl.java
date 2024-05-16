@@ -229,6 +229,9 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			studyOnce.changeName(request.getName());
 		}
 		if (request.getStartDateTime() != null && request.getEndDateTime() != null) {
+			Cafe cafe = studyOnce.getCafe();
+			validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
+				request.getEndDateTime().toLocalTime(), cafe.findBusinessHour(now.getDayOfWeek()));
 			studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
 		}
 		if (request.getOpenChatUrl() != null) {
