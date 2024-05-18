@@ -89,6 +89,7 @@ class StudyOnceTest {
 			.endDateTime(start.plusHours(4))
 			.leader(Member.builder().build())
 			.openChatUrl("오픈채팅방 링크")
+			.maxMemberCount(5)
 			.build();
 
 		boolean canJoin = studyOnce.canJoin(base);
@@ -109,6 +110,7 @@ class StudyOnceTest {
 			.endDateTime(start.plusHours(4))
 			.leader(leader)
 			.openChatUrl("오픈채팅방 링크")
+			.maxMemberCount(5)
 			.build();
 
 		StudyOnce study = studyOnce.getStudyMembers().get(0).getStudy();
@@ -310,9 +312,28 @@ class StudyOnceTest {
 	}
 
 	@Test
+	@DisplayName("최소 참여인원은 1명이다. 0명이면 예외가 터진다.")
+	void validate_MemberCount_by_changeMaxMemberCount_then_exception() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(0))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(STUDY_ONCE_LIMIT_MEMBER_CAPACITY.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("최소 참여인원은 1명이다.")
+	void changeMaxMemberCount_by_one() {
+		Member leader = Member.builder().id(LEADER_ID).build();
+		StudyOnce studyOnce = makeStudy(leader, NOW.plusHours(4), NOW.plusHours(8), "오픈채팅방 링크");
+		assertDoesNotThrow(() -> studyOnce.changeMaxMemberCount(1));
+	}
+
+	@Test
 	@DisplayName("최대 참여 인원보다 현재 참석예정인 인원이 크다면 예외가 터진다.")
 	void validate_maxOrNowMemberCount_by_changeMaxMemberCount() {
 		Member leader = Member.builder().id(LEADER_ID).build();
+		Member member = Member.builder().id(MEMBER_ID).build();
 		StudyOnce studyOnce = StudyOnce.builder()
 			.name("스터디 이름")
 			.startDateTime(NOW.plusHours(4))
@@ -322,8 +343,9 @@ class StudyOnceTest {
 			.leader(leader)
 			.openChatUrl("오픈채팅방 링크")
 			.build();
+		studyOnce.tryJoin(member, NOW);
 
-		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(0))
+		assertThatThrownBy(() -> studyOnce.changeMaxMemberCount(1))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CANNOT_REDUCE_BELOW_CURRENT.getErrorMessage());
 	}

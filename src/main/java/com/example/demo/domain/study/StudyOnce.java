@@ -40,6 +40,7 @@ import lombok.NoArgsConstructor;
 public class StudyOnce {
 
 	private static final int LIMIT_MEMBER_CAPACITY = 5;
+	private static final int MIN_LIMIT_MEMBER_CAPACITY = 1;
 
 	@Id
 	@GeneratedValue
@@ -110,7 +111,7 @@ public class StudyOnce {
 	}
 
 	private void validateMaxMemberCount(int maxMemberCount) {
-		if (maxMemberCount > LIMIT_MEMBER_CAPACITY) {
+		if (maxMemberCount > LIMIT_MEMBER_CAPACITY || maxMemberCount < MIN_LIMIT_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}
 	}

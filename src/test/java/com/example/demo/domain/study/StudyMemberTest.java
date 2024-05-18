@@ -61,6 +61,7 @@ class StudyMemberTest {
 			.endDateTime(end)
 			.leader(new TestMemberBuilder().build())
 			.openChatUrl(openChatUrl)
+			.maxMemberCount(5)
 			.build();
 	}
 
