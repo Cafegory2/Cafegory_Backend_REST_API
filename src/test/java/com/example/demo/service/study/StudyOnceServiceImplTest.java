@@ -216,6 +216,18 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	}
 
 	@Test
+	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초 999_999_999초)이면 카공이 생성된다.")
+	void create_studyOnce_when_studyOnce_startTime_is_23_and_endTime_is_LocalTime_Max() {
+		LocalDateTime start = LocalDateTime.of(2999, 1, 1, 23, 0);
+		LocalDateTime end = LocalDateTime.of(2999, 1, 1, 23, 59, 59, 999_999_999);
+		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long leaderId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
+
+		assertDoesNotThrow(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now()));
+	}
+
+	@Test
 	@DisplayName("카공 시작 시간이 현재 시간 + 3시간 보다 이전인 경우 실패")
 	void createFailByStartTime() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).minusSeconds(1);
