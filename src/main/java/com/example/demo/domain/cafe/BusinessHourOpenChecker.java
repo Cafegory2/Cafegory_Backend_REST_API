@@ -1,6 +1,7 @@
 package com.example.demo.domain.cafe;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -68,9 +69,37 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 
 	public boolean checkBetweenBusinessHours(LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalTime chosenStartTime, LocalTime chosenEndTime) {
-		if ((businessStartTime.equals(chosenStartTime) || businessStartTime.isBefore(chosenStartTime))
-			&& (businessEndTime.equals(chosenEndTime) || businessEndTime.isAfter(chosenEndTime))) {
-			return true;
+		// 영업 시작시간이 당일, 영업 종료시간이 당일
+		if (businessStartTime.isBefore(businessEndTime)) {
+			return (businessStartTime.equals(chosenStartTime) || businessStartTime.isBefore(chosenStartTime)) && (
+				businessEndTime.equals(chosenEndTime) || businessEndTime.isAfter(chosenEndTime));
+		}
+		// 영업 시작시간이 당일, 영업 종료시간이 다음날
+		if (businessStartTime.isAfter(businessEndTime)) {
+			LocalDateTime businessStartDateTime = LocalDateTime.of(LocalDate.now(), businessStartTime);
+			LocalDateTime businessEndDateTime = LocalDateTime.of(LocalDate.now().plusDays(1), businessEndTime);
+			// 선택된 시작시간이 당일, 선택된 종료시간이 당일 || 선택된 시작시간이 다음날, 선택된 종료시간이 다음날
+			if (chosenStartTime.isBefore(chosenEndTime)) {
+				LocalDate chosenDate = LocalDate.now();
+
+				boolean isChosenTimeOvernight = businessStartTime.isAfter(chosenStartTime);
+				LocalDate date = isChosenTimeOvernight ? chosenDate.plusDays(1) : chosenDate;
+				LocalDateTime chosenStartDateTime = LocalDateTime.of(date, chosenStartTime);
+				LocalDateTime chosenEndDateTime = LocalDateTime.of(date, chosenEndTime);
+
+				return (businessStartDateTime.isBefore(chosenStartDateTime) || businessStartDateTime.equals(
+					chosenStartDateTime))
+					&& (businessEndDateTime.isAfter(chosenEndDateTime) || businessEndDateTime.equals(
+					chosenEndDateTime));
+			}
+			// 선택된 시작시간이 당일, 선택된 종료시간이 다음날
+			if (chosenStartTime.isAfter(chosenEndTime)) {
+				LocalDateTime chosenStartDateTime = LocalDateTime.of(LocalDate.now(), chosenStartTime);
+				LocalDateTime chosenEndDateTime = LocalDateTime.of(LocalDate.now().plusDays(1), chosenEndTime);
+				return (businessStartDateTime.equals(chosenStartDateTime) || businessStartDateTime.isBefore(
+					chosenStartDateTime)) && (businessEndDateTime.equals(chosenEndDateTime)
+					|| businessEndDateTime.isAfter(chosenEndDateTime));
+			}
 		}
 		return false;
 	}

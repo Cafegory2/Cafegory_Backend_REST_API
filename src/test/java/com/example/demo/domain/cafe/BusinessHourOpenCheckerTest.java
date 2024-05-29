@@ -433,4 +433,75 @@ public class BusinessHourOpenCheckerTest {
 		);
 	}
 
+	@ParameterizedTest
+	@MethodSource("provideChosenTimeAndExpected4")
+	@DisplayName("영업시간이 7시부터 새벽2시까지일 경우")
+	void when_businessHour_is_7_to_2(LocalTime chosenStartTime, LocalTime chosenEndTime,
+		boolean expected) {
+		//given
+		LocalTime businessStartTime = LocalTime.of(7, 0);
+		LocalTime businessEndTime = LocalTime.of(2, 0);
+
+		//when
+		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
+			chosenStartTime, chosenEndTime);
+		//then
+		assertThat(isBetween).isEqualTo(expected);
+	}
+
+	private static Stream<Arguments> provideChosenTimeAndExpected4() {
+		return Stream.of(
+			Arguments.of(
+				LocalTime.of(6, 59, 59, 999_999_999),
+				LocalTime.of(8, 0),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(7, 0),
+				LocalTime.of(8, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(12, 0),
+				LocalTime.of(13, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(23, 0),
+				LocalTime.MAX,
+				true
+			),
+			Arguments.of(
+				LocalTime.of(23, 0),
+				LocalTime.of(0, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(23, 0),
+				LocalTime.of(2, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(23, 0),
+				LocalTime.of(2, 0, 0, 1),
+				false
+			),
+			Arguments.of(
+				LocalTime.of(0, 0),
+				LocalTime.of(1, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(0, 0),
+				LocalTime.of(2, 0),
+				true
+			),
+			Arguments.of(
+				LocalTime.of(0, 0),
+				LocalTime.of(2, 0, 0, 1),
+				false
+			)
+		);
+	}
+
 }

@@ -4,6 +4,7 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class StudyOnce {
 		this.nowMemberCount = 1;
 	}
 
-	private static void validateStartDateTime(LocalDateTime startDateTime) {
+	private void validateStartDateTime(LocalDateTime startDateTime) {
 		LocalDateTime now = LocalDateTime.now();
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < 3 * 60 * 60) {
@@ -100,13 +101,21 @@ public class StudyOnce {
 		}
 	}
 
-	private static void validateStudyOnceTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+	private void validateStudyOnceTime(LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		Duration between = Duration.between(startDateTime, endDateTime);
 		if (between.toSeconds() < 60 * 60) {
-			throw new CafegoryException(STUDY_ONCE_SHORT_DURATION);
+			LocalTime startLocalTime = startDateTime.toLocalTime();
+			LocalTime endLocalTime = endDateTime.toLocalTime();
+			validateStartAndEndTime(startLocalTime, endLocalTime);
 		}
 		if (between.toSeconds() > 5 * 60 * 60) {
 			throw new CafegoryException(STUDY_ONCE_LONG_DURATION);
+		}
+	}
+
+	private void validateStartAndEndTime(LocalTime startLocalTime, LocalTime endLocalTime) {
+		if (!(startLocalTime.equals(LocalTime.of(23, 0)) && endLocalTime.equals(LocalTime.MAX))) {
+			throw new CafegoryException(STUDY_ONCE_SHORT_DURATION);
 		}
 	}
 
