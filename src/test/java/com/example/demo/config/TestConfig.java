@@ -11,6 +11,13 @@ import com.example.demo.helper.StudyOnceCommentPersistHelper;
 import com.example.demo.helper.StudyOncePersistHelper;
 import com.example.demo.helper.ThumbnailImagePersistHelper;
 import com.example.demo.helper.entitymanager.RealEntityManagerAdaptor;
+import com.example.demo.helper.save.CafeSaveHelper;
+import com.example.demo.helper.save.MemberSaveHelper;
+import com.example.demo.helper.save.ReviewSaveHelper;
+import com.example.demo.helper.save.StudyMemberSaveHelper;
+import com.example.demo.helper.save.StudyOnceCommentSaveHelper;
+import com.example.demo.helper.save.StudyOnceSaveHelper;
+import com.example.demo.helper.save.ThumbnailImageSaveHelper;
 
 @TestConfiguration
 public class TestConfig {
@@ -54,4 +61,41 @@ public class TestConfig {
 	public RealEntityManagerAdaptor realEntityManagerAdaptor() {
 		return new RealEntityManagerAdaptor();
 	}
+
+	///////////////
+	@Bean
+	public CafeSaveHelper cafeSaveHelper() {
+		return new CafeSaveHelper();
+	}
+
+	@Bean
+	public MemberSaveHelper memberSaveHelper() {
+		return new MemberSaveHelper();
+	}
+
+	@Bean
+	public ReviewSaveHelper reviewSaveHelper() {
+		return new ReviewSaveHelper();
+	}
+
+	@Bean
+	public StudyMemberSaveHelper studyMemberSaveHelper() {
+		return new StudyMemberSaveHelper();
+	}
+
+	@Bean
+	public StudyOnceCommentSaveHelper studyOnceCommentSaveHelper() {
+		return new StudyOnceCommentSaveHelper();
+	}
+
+	@Bean
+	public StudyOnceSaveHelper studyOnceSaveHelper() {
+		return new StudyOnceSaveHelper();
+	}
+
+	@Bean
+	public ThumbnailImageSaveHelper thumbnailImageSaveHelper() {
+		return new ThumbnailImageSaveHelper();
+	}
+
 }
