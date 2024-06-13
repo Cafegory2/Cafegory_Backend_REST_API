@@ -29,7 +29,7 @@ import com.example.demo.repository.review.ReviewRepository;
 @Import({TestConfig.class})
 @Transactional
 class ReviewServiceTest {
-
+	
 	@Autowired
 	private CafeSaveHelper cafePersistHelper;
 	@Autowired
@@ -61,9 +61,6 @@ class ReviewServiceTest {
 		//given
 		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
 		Member member1 = memberPersistHelper.persistDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		//when
-		reviewService.saveReview(member1.getId(), cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
 		//then
 		assertThatThrownBy(() ->
 			reviewService.saveReview(member1.getId(), 10L, new ReviewSaveRequest("커피가 맛있어요", 4.5))
