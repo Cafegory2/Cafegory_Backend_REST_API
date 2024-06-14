@@ -38,4 +38,19 @@ public class TestStudyOnceFactory {
 			.leader(leader)
 			.build();
 	}
+
+	public static StudyOnce createStudyOnceWithTimeAndLeader(LocalDateTime startDateTime,
+		LocalDateTime endDateTime, Member leader) {
+		return StudyOnce.builder()
+			.name("카페 스터디")
+			.startDateTime(startDateTime)
+			.endDateTime(endDateTime)
+			.maxMemberCount(5)
+			.nowMemberCount(0)
+			.isEnd(false)
+			.ableToTalk(true)
+			.openChatUrl("오픈채팅방 링크")
+			.leader(leader)
+			.build();
+	}
 }

@@ -9,7 +9,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.example.demo.domain.member.Member;
 import com.example.demo.factory.TestMemberFactory;
+import com.example.demo.factory.TestStudyMemberFactory;
+import com.example.demo.factory.TestStudyOnceFactory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,30 +48,14 @@ class StudyMemberTest {
 	void isConflict(TimeInterval timeInterval, boolean expected) {
 		LocalDateTime start = BASE_TIME.plusHours(4);
 		LocalDateTime end = BASE_TIME.plusHours(7);
-		StudyOnce studyOnce = makeStudyOnce("스터디 이름", start, end, "오픈채팅방 링크");
-		StudyMember studyMember = makeStudyMember(studyOnce);
+		Member leader = TestMemberFactory.createMember();
+		StudyOnce studyOnce = TestStudyOnceFactory.createStudyOnceWithTimeAndLeader(start, end, leader);
+		Member member = TestMemberFactory.createMember();
+		StudyMember studyMember = TestStudyMemberFactory.createStudyMember(member, studyOnce);
 
 		boolean actual = studyMember.isConflictWith(timeInterval.start, timeInterval.end);
 
 		Assertions.assertThat(actual)
 			.isEqualTo(expected);
-	}
-
-	private StudyOnce makeStudyOnce(String name, LocalDateTime start, LocalDateTime end, String openChatUrl) {
-		return StudyOnce.builder()
-			.name(name)
-			.startDateTime(start)
-			.endDateTime(end)
-			.leader(TestMemberFactory.createMember())
-			.openChatUrl(openChatUrl)
-			.maxMemberCount(5)
-			.build();
-	}
-
-	private StudyMember makeStudyMember(StudyOnce studyOnce) {
-		return StudyMember.builder()
-			.member(TestMemberFactory.createMember())
-			.study(studyOnce)
-			.build();
 	}
 }
