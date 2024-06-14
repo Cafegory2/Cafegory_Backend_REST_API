@@ -11,6 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import com.example.demo.factory.TestBusinessHourFactory;
+
 class BusinessHourTest {
 	static Stream<Arguments> existsMatchingDayOfWeekParameters() {
 		return Stream.of(
@@ -28,14 +30,11 @@ class BusinessHourTest {
 	@DisplayName("해당 요일의 영업 시간을 기술한 객체인지 확인")
 	@MethodSource("existsMatchingDayOfWeekParameters")
 	void existsMatchingDayOfWeek(String targetDay, LocalDate targetDate) {
-		BusinessHour sut = BusinessHour.builder()
-			.day(targetDay)
-			.build();
+		BusinessHour sut = TestBusinessHourFactory.createBusinessHourWithDay(targetDay);
 		LocalDateTime targetDateTime = LocalDateTime.of(targetDate, LocalTime.now());
 
 		boolean result = sut.existsMatchingDayOfWeek(targetDateTime);
 
-		Assertions.assertThat(result)
-			.isTrue();
+		Assertions.assertThat(result).isTrue();
 	}
 }
