@@ -2,23 +2,22 @@ package com.example.demo.helper.save;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.example.demo.builder.TestStudyOnceBuilder;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
+import com.example.demo.repository.study.StudyOnceRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class StudyOnceSaveHelper {
 
-	@PersistenceContext
-	private EntityManager em;
+	private final StudyOnceRepository studyOnceRepository;
 
 	public StudyOnce persistDefaultStudyOnce(Cafe cafe, Member leader) {
 		StudyOnce studyOnce = new TestStudyOnceBuilder().cafe(cafe).leader(leader).build();
-		em.persist(studyOnce);
-		return studyOnce;
+		return studyOnceRepository.save(studyOnce);
 	}
 
 	public StudyOnce persistStudyOnceWithTime(Cafe cafe, Member leader, LocalDateTime startDateTime,
@@ -28,7 +27,6 @@ public class StudyOnceSaveHelper {
 			.startDateTime(startDateTime)
 			.endDateTime(endDateTime)
 			.build();
-		em.persist(studyOnce);
-		return studyOnce;
+		return studyOnceRepository.save(studyOnce);
 	}
 }

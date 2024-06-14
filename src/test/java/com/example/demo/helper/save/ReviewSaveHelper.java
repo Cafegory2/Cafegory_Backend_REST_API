@@ -1,21 +1,20 @@
 package com.example.demo.helper.save;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.example.demo.builder.TestReviewBuilder;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.review.Review;
+import com.example.demo.repository.review.ReviewRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class ReviewSaveHelper {
 
-	@PersistenceContext
-	private EntityManager em;
+	private final ReviewRepository reviewRepository;
 
 	public Review persistDefaultReview(Cafe cafe, Member member) {
 		Review review = new TestReviewBuilder().cafe(cafe).member(member).build();
-		em.persist(review);
-		return review;
+		return reviewRepository.save(review);
 	}
 }

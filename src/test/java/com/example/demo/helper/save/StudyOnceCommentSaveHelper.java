@@ -1,24 +1,23 @@
 package com.example.demo.helper.save;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import com.example.demo.builder.TestStudyOnceCommentBuilder;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
+import com.example.demo.repository.study.StudyOnceCommentRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class StudyOnceCommentSaveHelper {
 
-	@PersistenceContext
-	private EntityManager em;
+	private final StudyOnceCommentRepository studyOnceCommentRepository;
 
 	public StudyOnceComment persistDefaultStudyOnceQuestion(Member member, StudyOnce studyOnce) {
 		StudyOnceComment studyOnceComment = new TestStudyOnceCommentBuilder().member(member)
 			.studyOnce(studyOnce)
 			.build();
-		em.persist(studyOnceComment);
-		return studyOnceComment;
+		return studyOnceCommentRepository.save(studyOnceComment);
 	}
 
 	public StudyOnceComment persistStudyOnceQuestionWithContent(Member member, StudyOnce studyOnce,
@@ -27,8 +26,7 @@ public class StudyOnceCommentSaveHelper {
 			.studyOnce(studyOnce)
 			.content(content)
 			.build();
-		em.persist(studyOnceComment);
-		return studyOnceComment;
+		return studyOnceCommentRepository.save(studyOnceComment);
 	}
 
 	public StudyOnceComment persistStudyOnceReplyWithContent(Member member, StudyOnce studyOnce,
@@ -38,7 +36,6 @@ public class StudyOnceCommentSaveHelper {
 			.parent(parent)
 			.content(content)
 			.build();
-		em.persist(reply);
-		return reply;
+		return studyOnceCommentRepository.save(reply);
 	}
 }

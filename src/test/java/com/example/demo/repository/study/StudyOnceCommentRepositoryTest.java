@@ -20,11 +20,11 @@ import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.helper.CafePersistHelper;
-import com.example.demo.helper.MemberPersistHelper;
-import com.example.demo.helper.StudyOnceCommentPersistHelper;
-import com.example.demo.helper.StudyOncePersistHelper;
-import com.example.demo.helper.ThumbnailImagePersistHelper;
+import com.example.demo.helper.save.CafeSaveHelper;
+import com.example.demo.helper.save.MemberSaveHelper;
+import com.example.demo.helper.save.StudyOnceCommentSaveHelper;
+import com.example.demo.helper.save.StudyOnceSaveHelper;
+import com.example.demo.helper.save.ThumbnailImageSaveHelper;
 
 @DataJpaTest
 @Import({TestConfig.class, QueryDslConfig.class})
@@ -34,15 +34,15 @@ class StudyOnceCommentRepositoryTest {
 	@Autowired
 	private StudyOnceCommentRepository studyOnceCommentRepository;
 	@Autowired
-	private MemberPersistHelper memberPersistHelper;
+	private MemberSaveHelper memberPersistHelper;
 	@Autowired
-	private ThumbnailImagePersistHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
 	@Autowired
-	private StudyOncePersistHelper studyOncePersistHelper;
+	private StudyOnceSaveHelper studyOncePersistHelper;
 	@Autowired
-	private CafePersistHelper cafePersistHelper;
+	private CafeSaveHelper cafePersistHelper;
 	@Autowired
-	private StudyOnceCommentPersistHelper studyOnceCommentPersistHelper;
+	private StudyOnceCommentSaveHelper studyOnceCommentPersistHelper;
 	@Autowired
 	private EntityManager em;
 
