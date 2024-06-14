@@ -20,6 +20,11 @@ public class TestReviewFactory {
 			.content(content)
 			.rate(rate)
 			.build();
-		
+	}
+
+	public static Review createReviewWithContent(String content) {
+		return Review.builder()
+			.content(content)
+			.build();
 	}
 }
