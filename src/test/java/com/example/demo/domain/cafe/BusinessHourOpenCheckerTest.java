@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.factory.TestBusinessHourFactory;
 
 public class BusinessHourOpenCheckerTest {
 
@@ -82,27 +83,16 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("BusinessHours를 가지고 영업시간을 체크한다.")
 	void checkWithBusinessHours(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
-
-		BusinessHour monday = BusinessHour.builder()
-			.day("MONDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(21, 0))
-			.build();
-		BusinessHour tuesday = BusinessHour.builder()
-			.day("TUESDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(21, 0))
-			.build();
-		BusinessHour wednesday = BusinessHour.builder()
-			.day("WEDNESDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(21, 0))
-			.build();
-
+		BusinessHour monday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
+			LocalTime.of(21, 0));
+		BusinessHour tuesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(9, 0),
+			LocalTime.of(21, 0));
+		BusinessHour wednesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("WEDNESDAY",
+			LocalTime.of(9, 0),
+			LocalTime.of(21, 0));
 		businessHours.add(monday);
 		businessHours.add(tuesday);
 		businessHours.add(wednesday);
-
 		//when
 		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
@@ -122,27 +112,16 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("카페가 24시간 운영한다.")
 	void check_businessHours_when_cafe_is_always_open(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
-
-		BusinessHour monday = BusinessHour.builder()
-			.day("MONDAY")
-			.startTime(LocalTime.of(0, 0))
-			.endTime(LocalTime.MAX)
-			.build();
-		BusinessHour tuesday = BusinessHour.builder()
-			.day("TUESDAY")
-			.startTime(LocalTime.of(0, 0))
-			.endTime(LocalTime.MAX)
-			.build();
-		BusinessHour wednesday = BusinessHour.builder()
-			.day("WEDNESDAY")
-			.startTime(LocalTime.of(0, 0))
-			.endTime(LocalTime.MAX)
-			.build();
-
+		BusinessHour monday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(0, 0),
+			LocalTime.MAX);
+		BusinessHour tuesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(0, 0),
+			LocalTime.MAX);
+		BusinessHour wednesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("WEDNESDAY",
+			LocalTime.of(0, 0),
+			LocalTime.MAX);
 		businessHours.add(monday);
 		businessHours.add(tuesday);
 		businessHours.add(wednesday);
-
 		//when
 		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
@@ -164,27 +143,16 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("카페가 새벽2시까지 운영한다.")
 	void check_businessHours_when_cafe_is_open_2am(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
-
-		BusinessHour monday = BusinessHour.builder()
-			.day("MONDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(2, 0))
-			.build();
-		BusinessHour tuesday = BusinessHour.builder()
-			.day("TUESDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(2, 0))
-			.build();
-		BusinessHour wednesday = BusinessHour.builder()
-			.day("WEDNESDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(2, 0))
-			.build();
-
+		BusinessHour monday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
+			LocalTime.of(2, 0));
+		BusinessHour tuesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(9, 0),
+			LocalTime.of(2, 0));
+		BusinessHour wednesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("WEDNESDAY",
+			LocalTime.of(9, 0),
+			LocalTime.of(2, 0));
 		businessHours.add(monday);
 		businessHours.add(tuesday);
 		businessHours.add(wednesday);
-
 		//when
 		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
@@ -206,38 +174,24 @@ public class BusinessHourOpenCheckerTest {
 		boolean expected) {
 		List<BusinessHour> businessHours = new ArrayList<>();
 
-		BusinessHour monday = BusinessHour.builder()
-			.day("MONDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(22, 0))
-			.build();
-		BusinessHour tuesday = BusinessHour.builder()
-			.day("TUESDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(22, 0))
-			.build();
-		BusinessHour friday = BusinessHour.builder()
-			.day("FRIDAY")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.MAX)
-			.build();
-		BusinessHour saturday = BusinessHour.builder()
-			.day("SATURDAY")
-			.startTime(LocalTime.of(0, 0))
-			.endTime(LocalTime.MAX)
-			.build();
-		BusinessHour sunday = BusinessHour.builder()
-			.day("SUNDAY")
-			.startTime(LocalTime.of(0, 0))
-			.endTime(LocalTime.of(22, 0))
-			.build();
-
+		BusinessHour monday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
+			LocalTime.of(22, 0));
+		BusinessHour tuesday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(9, 0),
+			LocalTime.of(22, 0));
+		BusinessHour friday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("FRIDAY",
+			LocalTime.of(9, 0),
+			LocalTime.MAX);
+		BusinessHour saturday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("SATURDAY",
+			LocalTime.of(0, 0),
+			LocalTime.MAX);
+		BusinessHour sunday = TestBusinessHourFactory.createBusinessHourWithDayAndTime("SUNDAY",
+			LocalTime.of(0, 0),
+			LocalTime.of(22, 0));
 		businessHours.add(monday);
 		businessHours.add(tuesday);
 		businessHours.add(friday);
 		businessHours.add(saturday);
 		businessHours.add(sunday);
-
 		//when
 		boolean isOpen = openChecker.checkWithBusinessHours(businessHours, now);
 		//then
@@ -269,11 +223,8 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("DayOfWeek Enum상수가 가지고 있는 요일이 BusinessHours에 존재하지 않으면 예외가 터진다.")
 	void checkDayOfWeekWithBusinessHours() {
 		List<BusinessHour> businessHours = new ArrayList<>();
-		BusinessHour weekends = BusinessHour.builder()
-			.day("WEEKENDS")
-			.startTime(LocalTime.of(9, 0))
-			.endTime(LocalTime.of(21, 0))
-			.build();
+		BusinessHour weekends = TestBusinessHourFactory.createBusinessHourWithDayAndTime("WEEKENDS", LocalTime.of(9, 0),
+			LocalTime.of(21, 0));
 		businessHours.add(weekends);
 
 		//when
@@ -291,7 +242,6 @@ public class BusinessHourOpenCheckerTest {
 		//given
 		LocalTime businessStartTime = LocalTime.of(9, 0);
 		LocalTime businessEndTime = LocalTime.of(21, 0);
-
 		//when
 		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);
@@ -336,7 +286,6 @@ public class BusinessHourOpenCheckerTest {
 		//given
 		LocalTime businessStartTime = LocalTime.of(9, 0);
 		LocalTime businessEndTime = LocalTime.of(21, 0);
-
 		//when
 		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);
@@ -373,7 +322,6 @@ public class BusinessHourOpenCheckerTest {
 		//given
 		LocalTime businessStartTime = LocalTime.of(0, 0);
 		LocalTime businessEndTime = LocalTime.MAX;
-
 		//when
 		LocalTime chosenStartTime1 = LocalTime.of(0, 0);
 		LocalTime chosenEndTime = LocalTime.MAX;
@@ -392,7 +340,6 @@ public class BusinessHourOpenCheckerTest {
 		//given
 		LocalTime businessStartTime = LocalTime.of(22, 0);
 		LocalTime businessEndTime = LocalTime.of(2, 0);
-
 		//when
 		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);
@@ -441,7 +388,6 @@ public class BusinessHourOpenCheckerTest {
 		//given
 		LocalTime businessStartTime = LocalTime.of(7, 0);
 		LocalTime businessEndTime = LocalTime.of(2, 0);
-
 		//when
 		boolean isBetween = openChecker.checkBetweenBusinessHours(businessStartTime, businessEndTime,
 			chosenStartTime, chosenEndTime);

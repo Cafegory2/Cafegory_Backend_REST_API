@@ -13,4 +13,12 @@ public class TestBusinessHourFactory {
 			.day(day)
 			.build();
 	}
+
+	public static BusinessHour createBusinessHourWithDayAndTime(String day, LocalTime startTime, LocalTime endTime) {
+		return BusinessHour.builder()
+			.startTime(startTime)
+			.endTime(endTime)
+			.day(day)
+			.build();
+	}
 }
