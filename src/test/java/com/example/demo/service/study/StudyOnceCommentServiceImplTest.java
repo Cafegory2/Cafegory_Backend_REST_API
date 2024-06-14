@@ -25,11 +25,11 @@ import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.helper.save.CafeSaveHelper;
-import com.example.demo.helper.save.MemberSaveHelper;
-import com.example.demo.helper.save.StudyOnceCommentSaveHelper;
-import com.example.demo.helper.save.StudyOnceSaveHelper;
-import com.example.demo.helper.save.ThumbnailImageSaveHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.StudyOnceCommentSaveHelper;
+import com.example.demo.helper.StudyOnceSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.repository.study.StudyOnceCommentRepository;
 
 @SpringBootTest

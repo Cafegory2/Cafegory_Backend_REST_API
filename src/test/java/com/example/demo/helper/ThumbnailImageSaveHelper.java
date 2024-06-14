@@ -1,4 +1,4 @@
-package com.example.demo.helper.save;
+package com.example.demo.helper;
 
 import com.example.demo.builder.TestThumbnailImageBuilder;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ThumbnailImageSaveHelper {
-	
+
 	private final ThumbnailImageRepository thumbnailImageRepository;
 
 	public ThumbnailImage persistDefaultThumbnailImage() {

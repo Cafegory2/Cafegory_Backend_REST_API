@@ -1,4 +1,4 @@
-package com.example.demo.helper.save;
+package com.example.demo.helper;
 
 import com.example.demo.builder.TestStudyOnceCommentBuilder;
 import com.example.demo.domain.member.Member;

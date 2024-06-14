@@ -20,11 +20,11 @@ import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.helper.save.CafeSaveHelper;
-import com.example.demo.helper.save.MemberSaveHelper;
-import com.example.demo.helper.save.StudyOnceCommentSaveHelper;
-import com.example.demo.helper.save.StudyOnceSaveHelper;
-import com.example.demo.helper.save.ThumbnailImageSaveHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.StudyOnceCommentSaveHelper;
+import com.example.demo.helper.StudyOnceSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 
 @DataJpaTest
 @Import({TestConfig.class, QueryDslConfig.class})

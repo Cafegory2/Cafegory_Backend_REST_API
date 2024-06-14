@@ -20,16 +20,16 @@ import com.example.demo.domain.review.Review;
 import com.example.demo.dto.review.ReviewSaveRequest;
 import com.example.demo.dto.review.ReviewUpdateRequest;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.helper.save.CafeSaveHelper;
-import com.example.demo.helper.save.MemberSaveHelper;
-import com.example.demo.helper.save.ThumbnailImageSaveHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.repository.review.ReviewRepository;
 
 @SpringBootTest
 @Import({TestConfig.class})
 @Transactional
 class ReviewServiceTest {
-	
+
 	@Autowired
 	private CafeSaveHelper cafePersistHelper;
 	@Autowired

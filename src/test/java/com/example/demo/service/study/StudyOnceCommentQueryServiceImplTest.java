@@ -24,10 +24,10 @@ import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentSearchListResponse;
 import com.example.demo.dto.study.StudyOnceCommentSearchResponse;
 import com.example.demo.dto.study.StudyOnceReplyResponse;
-import com.example.demo.helper.save.CafeSaveHelper;
-import com.example.demo.helper.save.MemberSaveHelper;
-import com.example.demo.helper.save.StudyOnceSaveHelper;
-import com.example.demo.helper.save.ThumbnailImageSaveHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.StudyOnceSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 
 @SpringBootTest
 @Import({TestConfig.class})
