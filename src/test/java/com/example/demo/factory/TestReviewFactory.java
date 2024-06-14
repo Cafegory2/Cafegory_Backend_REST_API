@@ -14,4 +14,12 @@ public class TestReviewFactory {
 			.member(member)
 			.build();
 	}
+
+	public static Review createReviewWithContentAndRate(String content, double rate) {
+		return Review.builder()
+			.content(content)
+			.rate(rate)
+			.build();
+		
+	}
 }

@@ -6,6 +6,7 @@ import com.example.demo.domain.cafe.Address;
 import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.MaxAllowableStay;
+import com.example.demo.domain.review.Review;
 
 public class TestCafeFactory {
 
@@ -33,4 +34,18 @@ public class TestCafeFactory {
 			.businessHours(businessHours)
 			.build();
 	}
+
+	public static Cafe createCafeWithReviews(List<Review> reviews) {
+		return Cafe.builder()
+			.name("카페고리")
+			.address(new Address("서울 마포구 합정동", "합정동"))
+			.phone("010-1234-5678")
+			.maxAllowableStay(MaxAllowableStay.THREE_HOUR)
+			.avgReviewRate(4.5)
+			.isAbleToStudy(true)
+			.minBeveragePrice(3_000)
+			.reviews(reviews)
+			.build();
+	}
+
 }
