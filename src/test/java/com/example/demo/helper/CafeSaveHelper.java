@@ -3,10 +3,10 @@ package com.example.demo.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.builder.TestBusinessHourBuilder;
-import com.example.demo.builder.TestCafeBuilder;
 import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.factory.TestBusinessHourFactory;
+import com.example.demo.factory.TestCafeFactory;
 import com.example.demo.repository.cafe.CafeRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -17,18 +17,18 @@ public class CafeSaveHelper {
 	private final CafeRepository cafeRepository;
 
 	public Cafe persistDefaultCafe() {
-		Cafe cafe = new TestCafeBuilder().build();
+		Cafe cafe = TestCafeFactory.createCafe();
 		return cafeRepository.save(cafe);
 	}
 
 	public Cafe persistCafeWithBusinessHour(List<BusinessHour> businessHours) {
-		Cafe cafe = new TestCafeBuilder().businessHours(businessHours).build();
+		Cafe cafe = TestCafeFactory.createCafeWithBusinessHours(businessHours);
 		return cafeRepository.save(cafe);
 	}
 
 	public Cafe persistCafeWith24For7() {
 		List<BusinessHour> businessHours = makeBusinessHourWith24For7();
-		Cafe cafe = new TestCafeBuilder().businessHours(businessHours).build();
+		Cafe cafe = TestCafeFactory.createCafeWithBusinessHours(businessHours);
 		return cafeRepository.save(cafe);
 	}
 
@@ -37,9 +37,7 @@ public class CafeSaveHelper {
 		List<BusinessHour> businessHours = new ArrayList<>();
 		for (String day : daysOfWeek) {
 			businessHours.add(
-				new TestBusinessHourBuilder()
-					.day(day)
-					.build()
+				TestBusinessHourFactory.createBusinessHourWithDay(day)
 			);
 		}
 		return businessHours;

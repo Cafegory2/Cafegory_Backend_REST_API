@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.example.demo.builder.TestMemberBuilder;
+import com.example.demo.factory.TestMemberFactory;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,7 +59,7 @@ class StudyMemberTest {
 			.name(name)
 			.startDateTime(start)
 			.endDateTime(end)
-			.leader(new TestMemberBuilder().build())
+			.leader(TestMemberFactory.createMember())
 			.openChatUrl(openChatUrl)
 			.maxMemberCount(5)
 			.build();
@@ -67,7 +67,7 @@ class StudyMemberTest {
 
 	private StudyMember makeStudyMember(StudyOnce studyOnce) {
 		return StudyMember.builder()
-			.member(new TestMemberBuilder().build())
+			.member(TestMemberFactory.createMember())
 			.study(studyOnce)
 			.build();
 	}
