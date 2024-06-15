@@ -23,11 +23,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.QueryDslConfig;
-import com.example.demo.domain.cafe.Address;
 import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.MaxAllowableStay;
+import com.example.demo.factory.TestBusinessHourFactory;
+import com.example.demo.factory.TestCafeFactory;
 import com.example.demo.util.PageRequestCustom;
 
 @DataJpaTest
@@ -47,31 +48,14 @@ class CafeRepositorySearchMethodTest {
 		List<Cafe> cafes = new ArrayList<>();
 		List<BusinessHour> businessHours = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
-			Cafe cafe = Cafe.builder()
-				.id(id++)
-				.name("카페고리" + i)
-				.address(new Address("서울 마포구 " + region, region))
-				.phone("010-1234-" + i)
-				.maxAllowableStay(maxAllowableStay)
-				.isAbleToStudy(isAbleToStudy)
-				.minBeveragePrice(minBeveragePrice)
-				.build();
+			Cafe cafe = TestCafeFactory.createCafeWithConstraints(id++, region, maxAllowableStay,
+				isAbleToStudy, minBeveragePrice);
 			cafes.add(cafe);
 
-			BusinessHour monday = BusinessHour.builder()
-				.id(id++)
-				.day("MONDAY")
-				.startTime(startTime)
-				.endTime(endTime)
-				.cafe(cafe)
-				.build();
-			BusinessHour tuesday = BusinessHour.builder()
-				.id(id++)
-				.day("TUESDAY")
-				.startTime(startTime)
-				.endTime(endTime)
-				.cafe(cafe)
-				.build();
+			BusinessHour monday = TestBusinessHourFactory.createBusinessHour(id++, "MONDAY", startTime, endTime, cafe);
+			BusinessHour tuesday = TestBusinessHourFactory.createBusinessHour(id++, "TUESDAY", startTime, endTime,
+				cafe);
+
 			businessHours.add(monday);
 			businessHours.add(tuesday);
 		}

@@ -37,7 +37,7 @@ public class CafeSaveHelper {
 		List<BusinessHour> businessHours = new ArrayList<>();
 		for (String day : daysOfWeek) {
 			businessHours.add(
-				TestBusinessHourFactory.createBusinessHourWithDay(day)
+				TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(day)
 			);
 		}
 		return businessHours;

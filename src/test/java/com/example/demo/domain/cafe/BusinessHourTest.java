@@ -30,7 +30,7 @@ class BusinessHourTest {
 	@DisplayName("해당 요일의 영업 시간을 기술한 객체인지 확인")
 	@MethodSource("existsMatchingDayOfWeekParameters")
 	void existsMatchingDayOfWeek(String targetDay, LocalDate targetDate) {
-		BusinessHour sut = TestBusinessHourFactory.createBusinessHourWithDay(targetDay);
+		BusinessHour sut = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(targetDay);
 		LocalDateTime targetDateTime = LocalDateTime.of(targetDate, LocalTime.now());
 
 		boolean result = sut.existsMatchingDayOfWeek(targetDateTime);

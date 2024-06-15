@@ -48,4 +48,18 @@ public class TestCafeFactory {
 			.build();
 	}
 
+	public static Cafe createCafeWithConstraints(Long id, String region, MaxAllowableStay maxAllowableStay,
+		boolean isAbleToStudy, int minBeveragePrice) {
+		return Cafe.builder()
+			.id(id)
+			.name("카페고리")
+			.address(new Address("서울 마포구 " + region, region))
+			.phone("010-1234-5678")
+			.maxAllowableStay(maxAllowableStay)
+			.avgReviewRate(4.5)
+			.isAbleToStudy(isAbleToStudy)
+			.minBeveragePrice(minBeveragePrice)
+			.build();
+	}
+
 }
