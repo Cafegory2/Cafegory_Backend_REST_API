@@ -1,5 +1,6 @@
 package com.example.demo.domain.cafe;
 
+import static com.example.demo.factory.TestBusinessHourFactory.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.example.demo.factory.TestBusinessHourFactory;
-
 public class BusinessHourOpenCheckerTest {
 
 	@ParameterizedTest
@@ -23,7 +22,7 @@ public class BusinessHourOpenCheckerTest {
 	void determines_if_it_is_during_business_hours(LocalDateTime now) {
 		//given
 		List<BusinessHour> businessHours = List.of(
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
+			createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
 				LocalTime.of(21, 0))
 		);
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();
@@ -46,7 +45,7 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("영업 종료 여부를 판단한다.")
 	void determines_if_it_is_after_business_hours(LocalDateTime now) {
 		List<BusinessHour> businessHours = List.of(
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
+			createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
 				LocalTime.of(21, 0))
 		);
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();
@@ -68,9 +67,9 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("24시간 영업한다.")
 	void open_24Hours(LocalDateTime now) {
 		List<BusinessHour> businessHours = List.of(
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(0, 0),
+			createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(0, 0),
 				LocalTime.MAX),
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(0, 0),
+			createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(0, 0),
 				LocalTime.MAX)
 		);
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();
@@ -92,9 +91,9 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("다음날 새벽까지 영업한다.")
 	void open_until_early_morning_the_next_day(LocalDateTime now, boolean expected) {
 		List<BusinessHour> businessHours = List.of(
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
+			createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(9, 0),
 				LocalTime.of(2, 0)),
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(9, 0),
+			createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(9, 0),
 				LocalTime.of(2, 0))
 		);
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();
@@ -120,15 +119,15 @@ public class BusinessHourOpenCheckerTest {
 	void business_hours_are_different_each_day(LocalDateTime now,
 		boolean expected) {
 		List<BusinessHour> businessHours = List.of(
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("MONDAY",
+			createBusinessHourWithDayAndTime("MONDAY",
 				LocalTime.of(9, 0), LocalTime.of(22, 0)),
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("TUESDAY",
+			createBusinessHourWithDayAndTime("TUESDAY",
 				LocalTime.of(9, 0), LocalTime.MAX),
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("FRIDAY",
+			createBusinessHourWithDayAndTime("FRIDAY",
 				LocalTime.of(9, 0), LocalTime.MAX),
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("SATURDAY",
+			createBusinessHourWithDayAndTime("SATURDAY",
 				LocalTime.of(0, 0), LocalTime.MAX),
-			TestBusinessHourFactory.createBusinessHourWithDayAndTime("SUNDAY",
+			createBusinessHourWithDayAndTime("SUNDAY",
 				LocalTime.of(0, 0), LocalTime.of(22, 0))
 		);
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();

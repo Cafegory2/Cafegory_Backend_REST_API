@@ -1,5 +1,6 @@
 package com.example.demo.domain.cafe;
 
+import static com.example.demo.factory.TestBusinessHourFactory.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -12,8 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.example.demo.factory.TestBusinessHourFactory;
-
 class BusinessHourTest {
 
 	@ParameterizedTest
@@ -21,7 +20,7 @@ class BusinessHourTest {
 	@MethodSource("existsMatchingDayOfWeekParameters")
 	void check_business_hour_for_specific_day(String targetDay, LocalDate targetDate) {
 		//given
-		BusinessHour sut = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(targetDay);
+		BusinessHour sut = createBusinessHourWithDayAnd24For7(targetDay);
 		LocalDateTime targetDateTime = LocalDateTime.of(targetDate, LocalTime.now());
 		//when
 		boolean result = sut.existsMatchingDayOfWeek(targetDateTime);
