@@ -145,13 +145,13 @@ public class BusinessHourOpenCheckerTest {
 
 	private static Stream<Arguments> provideLocalDateTime4() {
 		return Stream.of(
-			 /*
+			/*
 			 29일 : 월
 			 30일 : 화
 			 2일 : 금
 			 3일 : 토
 			 4일 : 일
-			 */
+			*/
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59, 999_999_999), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 22, 0), false),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_999_998), true),
