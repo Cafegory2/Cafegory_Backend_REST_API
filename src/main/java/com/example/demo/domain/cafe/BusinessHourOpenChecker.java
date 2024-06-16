@@ -11,8 +11,7 @@ import com.example.demo.exception.ExceptionType;
 
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 
-	@Override
-	public boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
+	private boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalDateTime now) {
 		LocalTime currentTime = now.toLocalTime();
 
@@ -49,8 +48,8 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 	}
 
 	private boolean isOpenOvernightNow(LocalTime startTime, LocalTime endTime, LocalTime currentTime) {
-		return currentTime.isAfter(startTime) || (currentTime.isBefore(endTime) && currentTime.isAfter(
-			LocalTime.MIDNIGHT));
+		return currentTime.isAfter(startTime) || (currentTime.isBefore(endTime) && (currentTime.isAfter(
+			LocalTime.MIDNIGHT) || currentTime.equals(LocalTime.MIDNIGHT)));
 	}
 
 	private boolean isOpenDuringDay(LocalTime startTime, LocalTime endTime, LocalTime currentTime) {
