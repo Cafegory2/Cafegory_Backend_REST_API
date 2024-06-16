@@ -22,6 +22,13 @@ public class TestReviewFactory {
 			.build();
 	}
 
+	public static Review createReviewWithRate(double rate) {
+		return Review.builder()
+			.content("내용")
+			.rate(rate)
+			.build();
+	}
+
 	public static Review createReviewWithContent(String content) {
 		return Review.builder()
 			.content(content)
