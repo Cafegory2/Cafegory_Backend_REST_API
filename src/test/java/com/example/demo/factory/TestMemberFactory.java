@@ -13,6 +13,15 @@ public class TestMemberFactory {
 			.build();
 	}
 
+	public static Member createMemberWithId(Long memberId) {
+		return Member.builder()
+			.id(memberId)
+			.name("김동현")
+			.email("cafegory@gmail.com")
+			.thumbnailImage(ThumbnailImage.builder().thumbnailImage("testUrl").build())
+			.build();
+	}
+
 	public static Member createMemberWithThumbnailImage(ThumbnailImage thumbnailImage) {
 		return Member.builder()
 			.name("김동현")
