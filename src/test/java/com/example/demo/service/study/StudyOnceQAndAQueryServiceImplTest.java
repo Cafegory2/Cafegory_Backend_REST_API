@@ -28,27 +28,27 @@ import com.example.demo.helper.ThumbnailImageSaveHelper;
 class StudyOnceQAndAQueryServiceImplTest {
 
 	@Autowired
-	private CafeSaveHelper cafePersistHelper;
+	private CafeSaveHelper cafeSaveHelper;
 	@Autowired
-	private MemberSaveHelper memberPersistHelper;
+	private MemberSaveHelper memberSaveHelper;
 	@Autowired
-	private StudyOnceSaveHelper studyOncePersistHelper;
+	private StudyOnceSaveHelper studyOnceSaveHelper;
 	@Autowired
-	private StudyOnceCommentSaveHelper studyOnceCommentPersistHelper;
+	private StudyOnceCommentSaveHelper studyOnceCommentSaveHelper;
 	@Autowired
-	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 	@Autowired
 	private StudyOnceQAndAQueryService studyOnceQAndAQueryService;
 
 	@Test
 	@DisplayName("카공 질문을 찾는다")
 	void searchQuestion() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member leader = memberPersistHelper.persistMemberWithName(thumbnailImage, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(thumbnailImage, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment studyOnceComment = studyOnceCommentPersistHelper.persistDefaultStudyOnceQuestion(
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		Member leader = memberSaveHelper.saveMemberWithName(thumbnailImage, "카공장");
+		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
+		Cafe cafe = cafeSaveHelper.saveDefaultCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
+		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.persistDefaultStudyOnceQuestion(
 			otherPerson, studyOnce);
 
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(studyOnceComment.getId());

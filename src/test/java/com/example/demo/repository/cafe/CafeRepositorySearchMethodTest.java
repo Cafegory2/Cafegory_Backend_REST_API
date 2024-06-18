@@ -1,5 +1,7 @@
 package com.example.demo.repository.cafe;
 
+import static com.example.demo.factory.TestBusinessHourFactory.*;
+import static com.example.demo.factory.TestCafeFactory.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.sql.Time;
@@ -27,8 +29,6 @@ import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.cafe.CafeSearchCondition;
 import com.example.demo.domain.cafe.MaxAllowableStay;
-import com.example.demo.factory.TestBusinessHourFactory;
-import com.example.demo.factory.TestCafeFactory;
 import com.example.demo.util.PageRequestCustom;
 
 @DataJpaTest
@@ -48,12 +48,12 @@ class CafeRepositorySearchMethodTest {
 		List<Cafe> cafes = new ArrayList<>();
 		List<BusinessHour> businessHours = new ArrayList<>();
 		for (int i = 0; i < 20; i++) {
-			Cafe cafe = TestCafeFactory.createCafeWithConstraints(id++, region, maxAllowableStay,
+			Cafe cafe = createCafeWithConstraints(id++, region, maxAllowableStay,
 				isAbleToStudy, minBeveragePrice);
 			cafes.add(cafe);
 
-			BusinessHour monday = TestBusinessHourFactory.createBusinessHour(id++, "MONDAY", startTime, endTime, cafe);
-			BusinessHour tuesday = TestBusinessHourFactory.createBusinessHour(id++, "TUESDAY", startTime, endTime,
+			BusinessHour monday = createBusinessHour(id++, "MONDAY", startTime, endTime, cafe);
+			BusinessHour tuesday = createBusinessHour(id++, "TUESDAY", startTime, endTime,
 				cafe);
 
 			businessHours.add(monday);

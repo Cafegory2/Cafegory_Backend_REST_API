@@ -57,9 +57,9 @@ import com.example.demo.repository.study.StudyOnceRepository;
 class StudyOnceServiceImplTest {
 
 	@Autowired
-	private CafeSaveHelper cafePersistHelper;
+	private CafeSaveHelper cafeSaveHelper;
 	@Autowired
-	private MemberSaveHelper memberPersistHelper;
+	private MemberSaveHelper memberSaveHelper;
 	@Autowired
 	private StudyOnceService studyOnceService;
 	@Autowired
@@ -67,7 +67,7 @@ class StudyOnceServiceImplTest {
 	@Autowired
 	private StudyMemberRepository studyMemberRepository;
 	@Autowired
-	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 
 	static Stream<Arguments> createFailByAlreadyStudyLeaderParameters() {
 		LocalDateTime start = LocalDateTime.now().plusYears(1);
@@ -89,9 +89,9 @@ class StudyOnceServiceImplTest {
 		//given
 		LocalDateTime start = LocalDateTime.now().plusHours(4).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafePersistHelper.persistCafeWith24For7();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member leader = memberPersistHelper.persistDefaultMember(thumbnailImage);
+		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		Member leader = memberSaveHelper.saveDefaultMember(thumbnailImage);
 		StudyOnceCreateResponse expectedStudyOnceSearchResponse = studyOnceService.createStudy(leader.getId(),
 			makeStudyOnceCreateRequest(start, end, cafe.getId()), LocalDate.now());
 		//when
@@ -123,9 +123,9 @@ class StudyOnceServiceImplTest {
 	void searchByStudyId() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
@@ -140,9 +140,9 @@ class StudyOnceServiceImplTest {
 	void searchByStudyId_when_not_member() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
@@ -157,14 +157,14 @@ class StudyOnceServiceImplTest {
 	void searchStudyOnceWithMemberParticipation_when_takes_attendance() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
@@ -179,14 +179,14 @@ class StudyOnceServiceImplTest {
 	void searchStudyOnceWithMemberParticipation_when_not_take_attendance() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 
 		StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(
 			studyOnceId, memberId);
@@ -200,9 +200,9 @@ class StudyOnceServiceImplTest {
 
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		StudyOnceCreateResponse result = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
@@ -238,9 +238,9 @@ class StudyOnceServiceImplTest {
 	void create_studyOnce_when_studyOnce_startTime_is_23_and_endTime_is_LocalTime_Max() {
 		LocalDateTime start = LocalDateTime.of(2999, 1, 1, 23, 0);
 		LocalDateTime end = LocalDateTime.of(2999, 1, 1, 23, 59, 59, 999_999_999);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		assertDoesNotThrow(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now()));
@@ -251,9 +251,9 @@ class StudyOnceServiceImplTest {
 	void createFailByStartTime() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).minusSeconds(1);
 		LocalDateTime end = start.plusHours(3);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
@@ -267,9 +267,9 @@ class StudyOnceServiceImplTest {
 	void createFailByStartTimeAndEndTimePeriodIsTooShort() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusMinutes(59).plusSeconds(59);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
@@ -283,9 +283,9 @@ class StudyOnceServiceImplTest {
 	void createFailByStartTimeAndEndTimePeriodIsTooLong() {
 		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(5).plusSeconds(1);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
@@ -299,9 +299,9 @@ class StudyOnceServiceImplTest {
 	@DisplayName("이미 해당 시간에 카공장으로 참여중인 카공이 있는 경우 카공 생성 실패")
 	void createFailByAlreadyStudyLeader(LocalDateTime start, LocalDateTime end, LocalDateTime left,
 		LocalDateTime right) {
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now());
 
@@ -319,10 +319,10 @@ class StudyOnceServiceImplTest {
 	@DisplayName("이미 해당 시간에 참여중인 카공이 있는 경우 카공 생성 실패")
 	void createFailByAlreadyStudyMember(LocalDateTime start, LocalDateTime end, LocalDateTime left,
 		LocalDateTime right) {
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now());
 		studyOnceService.tryJoin(memberId, study.getStudyOnceId());
@@ -342,9 +342,9 @@ class StudyOnceServiceImplTest {
 	void createTwo() {
 		LocalDateTime start = LocalDateTime.now().plusYears(1).plusHours(3).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now());
 
@@ -372,9 +372,9 @@ class StudyOnceServiceImplTest {
 	@DisplayName("카공 생성시 시작시간과 종료시간은 카페 영업시간내에 포함되지 않으면 예외가 터진다.")
 	void creat_studyOnce_between_not_contain_cafe_businessHours(LocalDateTime start, LocalDateTime end) {
 		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		long cafeId = cafePersistHelper.persistCafeWithBusinessHour(businessHours).getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWithBusinessHour(businessHours).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		assertThatThrownBy(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now()))
@@ -408,9 +408,9 @@ class StudyOnceServiceImplTest {
 	@DisplayName("카공 생성시 시작시간과 종료시간은 카페 영업시간내에 포함되면 카공이 생성된다.")
 	void creat_studyOnce_between_cafe_businessHours(LocalDateTime start, LocalDateTime end) {
 		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		long cafeId = cafePersistHelper.persistCafeWithBusinessHour(businessHours).getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWithBusinessHour(businessHours).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		assertDoesNotThrow(() -> studyOnceService.createStudy(leaderId, studyOnceCreateRequest, LocalDate.now()));
@@ -447,10 +447,10 @@ class StudyOnceServiceImplTest {
 	@Test
 	@DisplayName("카공 참여 테스트")
 	void tryJoin() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
 			LocalDateTime.now().plusHours(7), cafeId);
 
@@ -463,10 +463,10 @@ class StudyOnceServiceImplTest {
 	@Test
 	@DisplayName("이미 참여중인 카공이라 참여 실패")
 	void tryJoinFailCauseDuplicate() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.now().plusHours(4),
 			LocalDateTime.now().plusHours(7), cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest,
@@ -485,11 +485,11 @@ class StudyOnceServiceImplTest {
 	@DisplayName("해당 시간에 이미 참여중인 카공이 있어서 참여 실패")
 	void tryJoinFailCauseConflict(LocalDateTime start, LocalDateTime end, LocalDateTime conflictStart,
 		LocalDateTime conflictEnd) {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long thirdMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long thirdMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest,
 			LocalDate.now());
@@ -511,10 +511,10 @@ class StudyOnceServiceImplTest {
 	void tryQuit() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest,
 			LocalDate.now());
@@ -528,10 +528,10 @@ class StudyOnceServiceImplTest {
 	void tryQuit_then_studyOnce_nowMemberCount_is_reduced() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest,
 			LocalDate.now());
@@ -547,10 +547,10 @@ class StudyOnceServiceImplTest {
 	void tryQuitFailCauseNotJoin() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 
 		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest,
@@ -566,10 +566,10 @@ class StudyOnceServiceImplTest {
 	void tryQuitFailCauseNotOnlyLeader() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long firstMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long secondMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long firstMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long secondMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(firstMemberId, studyOnceCreateRequest,
 			LocalDate.now());
@@ -586,13 +586,13 @@ class StudyOnceServiceImplTest {
 	void take_attendance() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 
@@ -610,9 +610,9 @@ class StudyOnceServiceImplTest {
 	@DisplayName("참석여부를 업데이트 할때, 스터디가 존재하지 않으면 예외가 터진다.")
 	void take_attendance_study_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = 1L;
 		LocalDateTime attendanceUpdateTime = start.plusMinutes(11);
 		assertThatThrownBy(
@@ -626,13 +626,13 @@ class StudyOnceServiceImplTest {
 	void take_attendance_memberId_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 
@@ -649,13 +649,13 @@ class StudyOnceServiceImplTest {
 	void take_attendance_leaderId_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 
@@ -672,13 +672,13 @@ class StudyOnceServiceImplTest {
 	void can_take_attendance_from_start_time_in_10min_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 
@@ -695,13 +695,13 @@ class StudyOnceServiceImplTest {
 	void can_take_attendance_until_half_whole_study_time_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 
@@ -718,16 +718,16 @@ class StudyOnceServiceImplTest {
 	void can_take_attendances() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
-		long memberId2 = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId2 = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		studyOnceService.tryJoin(memberId2, studyOnceId);
 
 		syncStudyOnceRepositoryAndStudyMemberRepository();
@@ -744,15 +744,15 @@ class StudyOnceServiceImplTest {
 	void change_cafe() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
 
-		long changingCafeId = cafePersistHelper.persistDefaultCafe().getId();
+		long changingCafeId = cafeSaveHelper.saveDefaultCafe().getId();
 		Long changedCafeId = studyOnceService.changeCafe(leaderId, studyOnceId, changingCafeId);
 		assertThat(changedCafeId)
 			.isEqualTo(changingCafeId);
@@ -763,16 +763,16 @@ class StudyOnceServiceImplTest {
 	void change_cafe_by_leader_only() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
 
-		long changingCafeId = cafePersistHelper.persistDefaultCafe().getId();
-		Long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long changingCafeId = cafeSaveHelper.saveDefaultCafe().getId();
+		Long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		assertThatThrownBy(() -> studyOnceService.changeCafe(memberId, studyOnceId, changingCafeId))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LOCATION_CHANGE_PERMISSION_DENIED.getErrorMessage());
@@ -783,14 +783,14 @@ class StudyOnceServiceImplTest {
 	void findStudyMembers() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
@@ -808,14 +808,14 @@ class StudyOnceServiceImplTest {
 	void updateStudyOnce() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
-		long cafeId2 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId2 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
 			start.plusHours(6), 5, false, "오픈채팅방 링크");
 
@@ -838,10 +838,10 @@ class StudyOnceServiceImplTest {
 	void update_studyOnce_by_invalid_cafe_then_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
@@ -858,16 +858,16 @@ class StudyOnceServiceImplTest {
 	void update_studyOnce_by_invalid_member_then_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, "변경된카공이름", start.plusHours(5),
 			start.plusHours(6), 5, false, "오픈채팅방 링크");
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 
 		assertThatThrownBy(
 			() -> studyOnceService.updateStudyOnce(memberId, studyOnceId, request, LocalDateTime.now()))
@@ -880,9 +880,9 @@ class StudyOnceServiceImplTest {
 	@DisplayName("카공 시작시간과 종료시간 수정시 카페 영업시간 이후로 수정할 경우 예외가 터진다.")
 	void update_studyOnce_between_not_businessHours_then_exception(LocalDateTime start, LocalDateTime end) {
 		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		long cafeId = cafePersistHelper.persistCafeWithBusinessHour(businessHours).getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWithBusinessHour(businessHours).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.of(2999, 1, 1, 9, 0),
 			LocalDateTime.of(2999, 1, 1, 10, 0),
 			cafeId);
@@ -925,9 +925,9 @@ class StudyOnceServiceImplTest {
 	@DisplayName("카공 시작시간과 종료시간 수정시 카페 영업시간 사이로 선택 할 경우 수정된다.")
 	void update_studyOnce_between__businessHours(LocalDateTime start, LocalDateTime end) {
 		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		long cafeId = cafePersistHelper.persistCafeWithBusinessHour(businessHours).getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWithBusinessHour(businessHours).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(LocalDateTime.of(2999, 1, 1, 9, 0),
 			LocalDateTime.of(2999, 1, 1, 10, 0),
 			cafeId);
@@ -960,15 +960,15 @@ class StudyOnceServiceImplTest {
 	void updateStudyOncePartially() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
-		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
+		long cafeId2 = cafeSaveHelper.saveDefaultCafe().getId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
@@ -993,15 +993,15 @@ class StudyOnceServiceImplTest {
 	void update_studyOnce_partially_then_update_partially() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
-		long cafeId2 = cafePersistHelper.persistDefaultCafe().getId();
+		long cafeId2 = cafeSaveHelper.saveDefaultCafe().getId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 		syncStudyOnceRepositoryAndStudyMemberRepository();
 
@@ -1026,16 +1026,16 @@ class StudyOnceServiceImplTest {
 	void update_studyOnce_partially_by_invalid_member_then_exception() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId1, null, null,
 			null, 5, true, null);
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 
 		assertThatThrownBy(
 			() -> studyOnceService.updateStudyOncePartially(memberId, studyOnceId, request, LocalDateTime.now()))
@@ -1048,10 +1048,10 @@ class StudyOnceServiceImplTest {
 	void doesOnlyStudyLeaderExist() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
 		long studyOnceId = searchResponse.getStudyOnceId();
@@ -1066,13 +1066,13 @@ class StudyOnceServiceImplTest {
 	void doesOnlyStudyLeaderExist_with_members() {
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		LocalDateTime end = start.plusHours(4);
-		long cafeId1 = cafePersistHelper.persistCafeWith24For7().getId();
+		long cafeId1 = cafeSaveHelper.saveCafeWith24For7().getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId1);
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long leaderId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long leaderId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		StudyOnceCreateResponse searchResponse = studyOnceService.createStudy(leaderId, studyOnceCreateRequest,
 			LocalDate.now());
-		long memberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long memberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		long studyOnceId = searchResponse.getStudyOnceId();
 		studyOnceService.tryJoin(memberId, studyOnceId);
 

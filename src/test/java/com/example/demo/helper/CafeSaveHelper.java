@@ -16,17 +16,17 @@ public class CafeSaveHelper {
 
 	private final CafeRepository cafeRepository;
 
-	public Cafe persistDefaultCafe() {
+	public Cafe saveDefaultCafe() {
 		Cafe cafe = TestCafeFactory.createCafe();
 		return cafeRepository.save(cafe);
 	}
 
-	public Cafe persistCafeWithBusinessHour(List<BusinessHour> businessHours) {
+	public Cafe saveCafeWithBusinessHour(List<BusinessHour> businessHours) {
 		Cafe cafe = TestCafeFactory.createCafeWithBusinessHours(businessHours);
 		return cafeRepository.save(cafe);
 	}
 
-	public Cafe persistCafeWith24For7() {
+	public Cafe saveCafeWith24For7() {
 		List<BusinessHour> businessHours = makeBusinessHourWith24For7();
 		Cafe cafe = TestCafeFactory.createCafeWithBusinessHours(businessHours);
 		return cafeRepository.save(cafe);

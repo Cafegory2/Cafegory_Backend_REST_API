@@ -50,11 +50,11 @@ class StudyOnceCommentRepositoryTest {
 	@DisplayName("studyOnceCommentId로 오름차순 정렬된, studyOnceId로 댓글목록 조회")
 	void findAllByStudyOnceId() {
 		//given
-		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveDefaultThumbnailImage();
+		Member leader = memberPersistHelper.saveMemberWithName(thumb, "카공장");
+		Member otherPerson = memberPersistHelper.saveMemberWithName(thumb, "김동현");
+		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		StudyOnce studyOnce = studyOncePersistHelper.saveDefaultStudyOnce(cafe, leader);
 		StudyOnceComment question1 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글1");
 		StudyOnceComment question2 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(

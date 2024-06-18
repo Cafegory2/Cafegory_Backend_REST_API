@@ -47,9 +47,9 @@ class ReviewRepositoryTest {
 	@Test
 	void findAllByCafeId() {
 		//given
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member member = memberPersistHelper.persistDefaultMember(thumb);
+		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveDefaultThumbnailImage();
+		Member member = memberPersistHelper.saveDefaultMember(thumb);
 		reviewPersistHelper.persistDefaultReview(cafe, member);
 		reviewPersistHelper.persistDefaultReview(cafe, member);
 		em.flush();
@@ -64,9 +64,9 @@ class ReviewRepositoryTest {
 	@DisplayName("페이징 기본값")
 	void findAllWithPagingByCafeId() {
 		//given
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member member = memberPersistHelper.persistDefaultMember(thumb);
+		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveDefaultThumbnailImage();
+		Member member = memberPersistHelper.saveDefaultMember(thumb);
 
 		for (int i = 0; i < 20; i++) {
 			reviewPersistHelper.persistDefaultReview(cafe, member);

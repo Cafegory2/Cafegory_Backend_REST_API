@@ -50,21 +50,21 @@ class ProfileServiceImplTest {
 	@Autowired
 	private StudyMemberRepository studyMemberRepository;
 	@Autowired
-	private CafeSaveHelper cafePersistHelper;
+	private CafeSaveHelper cafeSaveHelper;
 	@Autowired
-	private MemberSaveHelper memberPersistHelper;
+	private MemberSaveHelper memberSaveHelper;
 	@Autowired
-	private StudyOnceSaveHelper studyOncePersistHelper;
+	private StudyOnceSaveHelper studyOnceSaveHelper;
 	@Autowired
-	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 
 	@Test
 	@DisplayName("자신이 스터디 장인 카공의 멤버면 프로필 조회 성공")
 	void successWhenRequestMemberIsLeaderWithTargetMember() {
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, start.plusHours(5), cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest,
@@ -76,12 +76,12 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("자신이 참여 확정 상태인 카공의 멤버면 프로필 조회 성공")
 	void successWhenRequestMemberAndTargetMemberJoinSameStudy() {
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		Member leader = memberPersistHelper.persistDefaultMember(thumbnailImage);
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		Cafe cafe = cafeSaveHelper.saveDefaultCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		Member leader = memberSaveHelper.saveDefaultMember(thumbnailImage);
+		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
 
 		studyOnceService.tryJoin(targetMemberId, studyOnce.getId());
 		studyOnceService.tryJoin(requestMemberId, studyOnce.getId());
@@ -110,8 +110,8 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("자신의 프로필 조회 성공")
 	void successWhenRequestSelf() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		Assertions.assertDoesNotThrow(
 			() -> profileService.get(requestMemberId, requestMemberId));
 	}
@@ -119,9 +119,9 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("프로필 조회 조건을 만족하지 않는 경우 실패")
 	void failWhenOtherCase() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
 			() -> profileService.get(requestMemberId, targetMemberId));
 		Assertions.assertEquals(cafegoryException.getMessage(), PROFILE_GET_PERMISSION_DENIED.getErrorMessage());
@@ -130,8 +130,8 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("자신의 프로필을 수정하는 경우 성공")
 	void updateSuccessWhenSelf() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
 		ProfileUpdateResponse update = profileService.update(requestMemberId, requestMemberId, profileUpdateRequest);
 		Assertions.assertEquals(update.getName(), "name");
@@ -140,9 +140,9 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("타인의 프로필을 수정하는 경우 실패")
 	void updateFailWhenOther() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
 		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
 			() -> profileService.update(requestMemberId, targetMemberId, profileUpdateRequest));

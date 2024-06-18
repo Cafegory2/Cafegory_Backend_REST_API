@@ -15,12 +15,12 @@ public class StudyOnceSaveHelper {
 
 	private final StudyOnceRepository studyOnceRepository;
 
-	public StudyOnce persistDefaultStudyOnce(Cafe cafe, Member leader) {
+	public StudyOnce saveDefaultStudyOnce(Cafe cafe, Member leader) {
 		StudyOnce studyOnce = TestStudyOnceFactory.createStudyOnce(cafe, leader);
 		return studyOnceRepository.save(studyOnce);
 	}
 
-	public StudyOnce persistStudyOnceWithTime(Cafe cafe, Member leader, LocalDateTime startDateTime,
+	public StudyOnce saveStudyOnceWithTime(Cafe cafe, Member leader, LocalDateTime startDateTime,
 		LocalDateTime endDateTime) {
 		StudyOnce studyOnce = TestStudyOnceFactory.createStudyOnceWithTime(cafe, leader, startDateTime, endDateTime);
 		return studyOnceRepository.save(studyOnce);

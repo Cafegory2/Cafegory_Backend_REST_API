@@ -41,23 +41,23 @@ class StudyOnceCommentQueryServiceImplTest {
 	@Autowired
 	private StudyOnceCommentQueryService studyOnceCommentQueryService;
 	@Autowired
-	private CafeSaveHelper cafePersistHelper;
+	private CafeSaveHelper cafeSaveHelper;
 	@Autowired
-	private MemberSaveHelper memberPersistHelper;
+	private MemberSaveHelper memberSaveHelper;
 	@Autowired
-	private StudyOnceSaveHelper studyOncePersistHelper;
+	private StudyOnceSaveHelper studyOnceSaveHelper;
 	@Autowired
-	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 
 	@Test
 	@DisplayName("댓글,대댓글 목록 조회 기능 ")
 	void searchCommentsSortedByStudyOnceId() {
-		ThumbnailImage thumbnailImage = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member leader = memberPersistHelper.persistDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		Member leader = memberSaveHelper.saveDefaultMember(thumbnailImage);
+		Cafe cafe = cafeSaveHelper.saveDefaultCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
 		StudyOnceCommentSaveRequest questionRequest = new StudyOnceCommentSaveRequest("질문");
-		Member member = memberPersistHelper.persistDefaultMember(thumbnailImage);
+		Member member = memberSaveHelper.saveDefaultMember(thumbnailImage);
 		Long questionId = studyOnceCommentService.saveQuestion(member.getId(), studyOnce.getId(), questionRequest);
 		StudyOnceCommentRequest replyRequest = new StudyOnceCommentRequest("답변");
 		studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), questionId, replyRequest);
