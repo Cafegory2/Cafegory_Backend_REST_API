@@ -13,7 +13,7 @@ public class ReviewSaveHelper {
 
 	private final ReviewRepository reviewRepository;
 
-	public Review persistDefaultReview(Cafe cafe, Member member) {
+	public Review saveDefaultReview(Cafe cafe, Member member) {
 		Review review = TestReviewFactory.createReview(cafe, member);
 		return reviewRepository.save(review);
 	}

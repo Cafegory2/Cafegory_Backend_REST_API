@@ -96,7 +96,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
 		studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
@@ -115,7 +115,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
 		assertDoesNotThrow(() ->
@@ -133,7 +133,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "등록내용");
 		//when
 		assertThatThrownBy(() ->
@@ -152,9 +152,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글");
-		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		em.flush();
 		em.clear();
@@ -175,7 +175,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistDefaultStudyOnceQuestion(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveDefaultStudyOnceQuestion(
 			otherPerson, studyOnce);
 		//when
 		studyOnceCommentService.deleteQuestion(question.getId());
@@ -193,9 +193,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글");
-		studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		em.flush();
 		em.clear();
@@ -214,7 +214,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
 		//when
 		Long savedReplyId = studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
@@ -233,7 +233,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
 		//then
 		assertDoesNotThrow(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
@@ -249,7 +249,7 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
 		//then
 		assertThatThrownBy(
@@ -268,9 +268,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		StudyOnceComment reply = studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		StudyOnceComment reply = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "카페 끝날때 까지 공부할것 같아요");
 		//then
 		assertThatThrownBy(
@@ -289,9 +289,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		StudyOnceComment reply = studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		StudyOnceComment reply = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "최상위 댓글을 참조로 가지는 첫번째 댓글");
 		em.flush();
 		em.clear();
@@ -311,9 +311,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글");
-		StudyOnceComment reply = studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		StudyOnceComment reply = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		//when
 		studyOnceCommentService.updateReply(leader.getId(), reply.getId(),
@@ -332,9 +332,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글");
-		StudyOnceComment reply = studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		StudyOnceComment reply = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		//when
 		studyOnceCommentService.deleteReply(reply.getId());
@@ -352,9 +352,9 @@ class StudyOnceCommentServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentSaveHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글");
-		StudyOnceComment reply = studyOnceCommentSaveHelper.persistStudyOnceReplyWithContent(leader,
+		StudyOnceComment reply = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question, "대댓글");
 		//when
 		assertThatThrownBy(() ->

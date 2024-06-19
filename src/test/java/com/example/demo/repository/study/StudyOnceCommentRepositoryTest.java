@@ -55,13 +55,13 @@ class StudyOnceCommentRepositoryTest {
 		Member otherPerson = memberPersistHelper.saveMemberWithName(thumb, "김동현");
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOncePersistHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question1 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question1 = studyOnceCommentPersistHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글1");
-		StudyOnceComment question2 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question2 = studyOnceCommentPersistHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글2");
-		studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+		studyOnceCommentPersistHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question2, "대댓글2");
-		studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+		studyOnceCommentPersistHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question1, "대댓글1");
 
 		em.flush();

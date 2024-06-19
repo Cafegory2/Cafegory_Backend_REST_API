@@ -13,19 +13,19 @@ public class StudyOnceCommentSaveHelper {
 
 	private final StudyOnceCommentRepository studyOnceCommentRepository;
 
-	public StudyOnceComment persistDefaultStudyOnceQuestion(Member member, StudyOnce studyOnce) {
+	public StudyOnceComment saveDefaultStudyOnceQuestion(Member member, StudyOnce studyOnce) {
 		StudyOnceComment studyOnceComment = TestStudyOnceCommentFactory.createStudyOnceQuestion(member, studyOnce);
 		return studyOnceCommentRepository.save(studyOnceComment);
 	}
 
-	public StudyOnceComment persistStudyOnceQuestionWithContent(Member member, StudyOnce studyOnce,
+	public StudyOnceComment saveStudyOnceQuestionWithContent(Member member, StudyOnce studyOnce,
 		String content) {
 		StudyOnceComment studyOnceComment = TestStudyOnceCommentFactory.createStudyOnceQuestionWithContent(member,
 			studyOnce, content);
 		return studyOnceCommentRepository.save(studyOnceComment);
 	}
 
-	public StudyOnceComment persistStudyOnceReplyWithContent(Member member, StudyOnce studyOnce,
+	public StudyOnceComment saveStudyOnceReplyWithContent(Member member, StudyOnce studyOnce,
 		StudyOnceComment parent, String content) {
 		StudyOnceComment reply = TestStudyOnceCommentFactory.createStudyOnceReplyWithContent(member, studyOnce, parent,
 			content);

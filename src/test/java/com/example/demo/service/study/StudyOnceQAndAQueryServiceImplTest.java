@@ -48,7 +48,7 @@ class StudyOnceQAndAQueryServiceImplTest {
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
 		Cafe cafe = cafeSaveHelper.saveDefaultCafe();
 		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.persistDefaultStudyOnceQuestion(
+		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.saveDefaultStudyOnceQuestion(
 			otherPerson, studyOnce);
 
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(studyOnceComment.getId());

@@ -59,7 +59,7 @@ class ProfileServiceImplTest {
 	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 
 	@Test
-	@DisplayName("자신이 스터디 장인 카공의 멤버면 프로필 조회 성공")
+	@DisplayName("카공장은 카공원의 프로필을 조회한다.")
 	void successWhenRequestMemberIsLeaderWithTargetMember() {
 		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();

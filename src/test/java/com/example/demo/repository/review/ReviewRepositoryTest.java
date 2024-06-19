@@ -50,8 +50,8 @@ class ReviewRepositoryTest {
 		Cafe cafe = cafePersistHelper.saveDefaultCafe();
 		ThumbnailImage thumb = thumbnailImagePersistHelper.saveDefaultThumbnailImage();
 		Member member = memberPersistHelper.saveDefaultMember(thumb);
-		reviewPersistHelper.persistDefaultReview(cafe, member);
-		reviewPersistHelper.persistDefaultReview(cafe, member);
+		reviewPersistHelper.saveDefaultReview(cafe, member);
+		reviewPersistHelper.saveDefaultReview(cafe, member);
 		em.flush();
 		em.clear();
 		//when
@@ -69,8 +69,8 @@ class ReviewRepositoryTest {
 		Member member = memberPersistHelper.saveDefaultMember(thumb);
 
 		for (int i = 0; i < 20; i++) {
-			reviewPersistHelper.persistDefaultReview(cafe, member);
-			reviewPersistHelper.persistDefaultReview(cafe, member);
+			reviewPersistHelper.saveDefaultReview(cafe, member);
+			reviewPersistHelper.saveDefaultReview(cafe, member);
 		}
 		em.flush();
 		em.clear();
