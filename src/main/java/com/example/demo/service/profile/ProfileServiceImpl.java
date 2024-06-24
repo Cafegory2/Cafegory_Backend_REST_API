@@ -34,15 +34,15 @@ public class ProfileServiceImpl implements ProfileService {
 	private final StudyMemberRepository studyMemberRepository;
 
 	@Override
-	public ProfileGetResponse get(Long requestMemberID, Long targetMemberID, LocalDateTime baseDateTime) {
-		if (isOwnerOfProfile(requestMemberID, targetMemberID)) {
-			return makeProfileGetResponse(targetMemberID);
+	public ProfileGetResponse get(Long requestMemberId, Long targetMemberId, LocalDateTime baseDateTime) {
+		if (isOwnerOfProfile(requestMemberId, targetMemberId)) {
+			return makeProfileGetResponse(targetMemberId);
 		}
-		if (isAllowedCauseStudyLeader(requestMemberID, targetMemberID)) {
-			return makeProfileGetResponse(targetMemberID);
+		if (isAllowedCauseStudyLeader(requestMemberId, targetMemberId)) {
+			return makeProfileGetResponse(targetMemberId);
 		}
-		if (isAllowedCauseSameStudyOnceMember(requestMemberID, targetMemberID, baseDateTime)) {
-			return makeProfileGetResponse(targetMemberID);
+		if (isAllowedCauseSameStudyOnceMember(requestMemberId, targetMemberId, baseDateTime)) {
+			return makeProfileGetResponse(targetMemberId);
 		}
 		throw new CafegoryException(PROFILE_GET_PERMISSION_DENIED);
 	}
