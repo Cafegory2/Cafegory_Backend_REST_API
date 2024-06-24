@@ -62,9 +62,9 @@ class ProfileServiceImplTest {
 	@DisplayName("카공장은 카공원의 프로필을 조회한다.")
 	void successWhenRequestMemberIsLeaderWithTargetMember() {
 		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		LocalDateTime start = LocalDateTime.now().plusHours(4);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, start.plusHours(5), cafeId);
 		StudyOnceCreateResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest,
@@ -76,12 +76,12 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("자신이 참여 확정 상태인 카공의 멤버면 프로필 조회 성공")
 	void successWhenRequestMemberAndTargetMemberJoinSameStudy() {
-		Cafe cafe = cafeSaveHelper.saveDefaultCafe();
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
-		Member leader = memberSaveHelper.saveDefaultMember(thumbnailImage);
-		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
 
 		studyOnceService.tryJoin(targetMemberId, studyOnce.getId());
 		studyOnceService.tryJoin(requestMemberId, studyOnce.getId());
@@ -110,8 +110,8 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("자신의 프로필 조회 성공")
 	void successWhenRequestSelf() {
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		Assertions.assertDoesNotThrow(
 			() -> profileService.get(requestMemberId, requestMemberId));
 	}
@@ -119,9 +119,9 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("프로필 조회 조건을 만족하지 않는 경우 실패")
 	void failWhenOtherCase() {
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
 			() -> profileService.get(requestMemberId, targetMemberId));
 		Assertions.assertEquals(cafegoryException.getMessage(), PROFILE_GET_PERMISSION_DENIED.getErrorMessage());
@@ -130,8 +130,8 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("자신의 프로필을 수정하는 경우 성공")
 	void updateSuccessWhenSelf() {
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
 		ProfileUpdateResponse update = profileService.update(requestMemberId, requestMemberId, profileUpdateRequest);
 		Assertions.assertEquals(update.getName(), "name");
@@ -140,9 +140,9 @@ class ProfileServiceImplTest {
 	@Test
 	@DisplayName("타인의 프로필을 수정하는 경우 실패")
 	void updateFailWhenOther() {
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		long requestMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
-		long targetMemberId = memberSaveHelper.saveDefaultMember(thumbnailImage).getId();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		long requestMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
+		long targetMemberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
 		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
 			() -> profileService.update(requestMemberId, targetMemberId, profileUpdateRequest));

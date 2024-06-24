@@ -11,7 +11,7 @@ public class ThumbnailImageSaveHelper {
 
 	private final ThumbnailImageRepository thumbnailImageRepository;
 
-	public ThumbnailImage saveDefaultThumbnailImage() {
+	public ThumbnailImage saveThumbnailImage() {
 		ThumbnailImage thumbnailImage = TestThumbnailImageFactory.createThumbnailImage();
 		return thumbnailImageRepository.save(thumbnailImage);
 	}

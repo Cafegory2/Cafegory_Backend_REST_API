@@ -15,7 +15,7 @@ public class StudyOnceSaveHelper {
 
 	private final StudyOnceRepository studyOnceRepository;
 
-	public StudyOnce saveDefaultStudyOnce(Cafe cafe, Member leader) {
+	public StudyOnce saveStudyOnce(Cafe cafe, Member leader) {
 		StudyOnce studyOnce = TestStudyOnceFactory.createStudyOnce(cafe, leader);
 		return studyOnceRepository.save(studyOnce);
 	}

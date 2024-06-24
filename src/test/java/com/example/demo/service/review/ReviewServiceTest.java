@@ -45,9 +45,9 @@ class ReviewServiceTest {
 	@DisplayName("리뷰 저장")
 	void saveReview() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
 		//when
 		reviewService.saveReview(member1.getId(), cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
 		List<Review> findReviews = reviewRepository.findAllByCafeId(cafe.getId());
@@ -59,8 +59,8 @@ class ReviewServiceTest {
 	@DisplayName("카페 아이디가 존재하지 않으면 예외가 터진다.")
 	void saveReview_cafe_exception() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
 		//then
 		assertThatThrownBy(() ->
 			reviewService.saveReview(member1.getId(), 10L, new ReviewSaveRequest("커피가 맛있어요", 4.5))
@@ -71,9 +71,9 @@ class ReviewServiceTest {
 	@DisplayName("멤버 아이디가 존재하지 않으면 예외가 터진다.")
 	void saveReview_member_exception() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
 		//when
 		reviewService.saveReview(member1.getId(), cafe.getId(), new ReviewSaveRequest("커피가 맛있어요", 4.5));
 		//then
@@ -86,9 +86,9 @@ class ReviewServiceTest {
 	@DisplayName("리뷰 수정")
 	void update_content() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
 		Long savedReviewId = reviewService.saveReview(member1.getId(), cafe.getId(),
 			new ReviewSaveRequest("커피가 맛있어요", 4.5));
 		//when
@@ -103,8 +103,8 @@ class ReviewServiceTest {
 	@DisplayName("없는 리뷰일경우 예외가 터진다.")
 	void update_content_review_exception() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
 		//then
 		assertThatThrownBy(() ->
 			reviewService.updateReview(member1.getId(), 100L, new ReviewUpdateRequest("주차하기 편해요!", 5))
@@ -115,10 +115,10 @@ class ReviewServiceTest {
 	@DisplayName("자신의 리뷰가 아닐경우 예외가 터진다.")
 	void update_content_member_exception() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
-		Member member2 = memberPersistHelper.saveDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
+		Member member2 = memberPersistHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
 
 		Long savedReviewId = reviewService.saveReview(member2.getId(), cafe.getId(),
 			new ReviewSaveRequest("커피가 맛있어요", 4.5));
@@ -132,9 +132,9 @@ class ReviewServiceTest {
 	@DisplayName("리뷰 삭제")
 	void delete_review() {
 		//given
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
-		Member member1 = memberPersistHelper.saveDefaultMember(thumbnailImage);
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberPersistHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
 
 		Long savedReviewId = reviewService.saveReview(member1.getId(), cafe.getId(),
 			new ReviewSaveRequest("커피가 맛있어요", 4.5));

@@ -16,7 +16,7 @@ public class CafeSaveHelper {
 
 	private final CafeRepository cafeRepository;
 
-	public Cafe saveDefaultCafe() {
+	public Cafe saveCafe() {
 		Cafe cafe = TestCafeFactory.createCafe();
 		return cafeRepository.save(cafe);
 	}

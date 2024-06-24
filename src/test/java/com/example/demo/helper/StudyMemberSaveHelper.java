@@ -13,7 +13,7 @@ public class StudyMemberSaveHelper {
 
 	private final StudyMemberRepository studyMemberRepository;
 
-	public StudyMember saveDefaultStudyMember(Member member, StudyOnce studyOnce) {
+	public StudyMember saveStudyMember(Member member, StudyOnce studyOnce) {
 		StudyMember studyMember = TestStudyMemberFactory.createStudyMember(member, studyOnce);
 		return studyMemberRepository.save(studyMember);
 	}

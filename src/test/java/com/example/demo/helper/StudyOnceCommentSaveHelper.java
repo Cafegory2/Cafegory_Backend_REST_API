@@ -13,7 +13,7 @@ public class StudyOnceCommentSaveHelper {
 
 	private final StudyOnceCommentRepository studyOnceCommentRepository;
 
-	public StudyOnceComment saveDefaultStudyOnceQuestion(Member member, StudyOnce studyOnce) {
+	public StudyOnceComment saveStudyOnceQuestion(Member member, StudyOnce studyOnce) {
 		StudyOnceComment studyOnceComment = TestStudyOnceCommentFactory.createStudyOnceQuestion(member, studyOnce);
 		return studyOnceCommentRepository.save(studyOnceComment);
 	}
@@ -29,6 +29,7 @@ public class StudyOnceCommentSaveHelper {
 		StudyOnceComment parent, String content) {
 		StudyOnceComment reply = TestStudyOnceCommentFactory.createStudyOnceReplyWithContent(member, studyOnce, parent,
 			content);
+		parent.getChildren().add(reply);
 		return studyOnceCommentRepository.save(reply);
 	}
 }

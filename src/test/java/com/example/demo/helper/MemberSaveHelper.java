@@ -12,7 +12,7 @@ public class MemberSaveHelper {
 
 	private final MemberRepository memberRepository;
 
-	public Member saveDefaultMember(ThumbnailImage thumbnailImage) {
+	public Member saveMember(ThumbnailImage thumbnailImage) {
 		Member member = TestMemberFactory.createMemberWithThumbnailImage(thumbnailImage);
 		return memberRepository.save(member);
 	}

@@ -47,11 +47,11 @@ class ReviewRepositoryTest {
 	@Test
 	void findAllByCafeId() {
 		//given
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
-		ThumbnailImage thumb = thumbnailImagePersistHelper.saveDefaultThumbnailImage();
-		Member member = memberPersistHelper.saveDefaultMember(thumb);
-		reviewPersistHelper.saveDefaultReview(cafe, member);
-		reviewPersistHelper.saveDefaultReview(cafe, member);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveThumbnailImage();
+		Member member = memberPersistHelper.saveMember(thumb);
+		reviewPersistHelper.saveReview(cafe, member);
+		reviewPersistHelper.saveReview(cafe, member);
 		em.flush();
 		em.clear();
 		//when
@@ -64,13 +64,13 @@ class ReviewRepositoryTest {
 	@DisplayName("페이징 기본값")
 	void findAllWithPagingByCafeId() {
 		//given
-		Cafe cafe = cafePersistHelper.saveDefaultCafe();
-		ThumbnailImage thumb = thumbnailImagePersistHelper.saveDefaultThumbnailImage();
-		Member member = memberPersistHelper.saveDefaultMember(thumb);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveThumbnailImage();
+		Member member = memberPersistHelper.saveMember(thumb);
 
 		for (int i = 0; i < 20; i++) {
-			reviewPersistHelper.saveDefaultReview(cafe, member);
-			reviewPersistHelper.saveDefaultReview(cafe, member);
+			reviewPersistHelper.saveReview(cafe, member);
+			reviewPersistHelper.saveReview(cafe, member);
 		}
 		em.flush();
 		em.clear();

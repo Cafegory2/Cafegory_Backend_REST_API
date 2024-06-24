@@ -43,12 +43,12 @@ class StudyOnceQAndAQueryServiceImplTest {
 	@Test
 	@DisplayName("카공 질문을 찾는다")
 	void searchQuestion() {
-		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveDefaultThumbnailImage();
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMemberWithName(thumbnailImage, "카공장");
 		Member otherPerson = memberSaveHelper.saveMemberWithName(thumbnailImage, "김동현");
-		Cafe cafe = cafeSaveHelper.saveDefaultCafe();
-		StudyOnce studyOnce = studyOnceSaveHelper.saveDefaultStudyOnce(cafe, leader);
-		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.saveDefaultStudyOnceQuestion(
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment studyOnceComment = studyOnceCommentSaveHelper.saveStudyOnceQuestion(
 			otherPerson, studyOnce);
 
 		StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(studyOnceComment.getId());
