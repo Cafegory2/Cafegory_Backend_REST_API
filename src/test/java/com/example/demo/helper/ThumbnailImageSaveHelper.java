@@ -2,7 +2,7 @@ package com.example.demo.helper;
 
 import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.factory.TestThumbnailImageFactory;
-import com.example.demo.repository.thumbnailImage.ThumbnailImageRepository;
+import com.example.demo.repository.thumbnailimage.ThumbnailImageRepository;
 
 import lombok.RequiredArgsConstructor;
 

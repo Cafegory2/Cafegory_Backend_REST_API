@@ -1,4 +1,4 @@
-package com.example.demo.repository.thumbnailImage;
+package com.example.demo.repository.thumbnailimage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -17,7 +17,7 @@ import com.example.demo.repository.review.ReviewRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
 import com.example.demo.repository.study.StudyOnceCommentRepository;
 import com.example.demo.repository.study.StudyOnceRepository;
-import com.example.demo.repository.thumbnailImage.ThumbnailImageRepository;
+import com.example.demo.repository.thumbnailimage.ThumbnailImageRepository;
 
 @TestConfiguration
 public class TestConfig {
