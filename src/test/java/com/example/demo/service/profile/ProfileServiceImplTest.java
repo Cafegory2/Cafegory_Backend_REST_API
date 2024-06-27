@@ -1,130 +1,139 @@
 package com.example.demo.service.profile;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.Assertions;
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
+import com.example.demo.config.TestConfig;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
-import com.example.demo.domain.study.StudyMember;
+import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.domain.study.StudyOnce;
+import com.example.demo.dto.profile.ProfileGetResponse;
 import com.example.demo.dto.profile.ProfileUpdateRequest;
 import com.example.demo.dto.profile.ProfileUpdateResponse;
-import com.example.demo.dto.study.StudyOnceCreateRequest;
-import com.example.demo.dto.study.StudyOnceCreateResponse;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.repository.cafe.InMemoryCafeRepository;
-import com.example.demo.repository.member.InMemoryMemberRepository;
-import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.study.InMemoryStudyMemberRepository;
-import com.example.demo.repository.study.InMemoryStudyOnceRepository;
-import com.example.demo.repository.study.StudyMemberRepository;
-import com.example.demo.repository.study.StudyOnceRepository;
-import com.example.demo.service.ServiceTest;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.StudyOnceSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.service.study.StudyOnceService;
-import com.example.demo.service.study.StudyOnceServiceImpl;
 
-class ProfileServiceImplTest extends ServiceTest {
-	private final StudyOnceRepository studyOnceRepository = InMemoryStudyOnceRepository.INSTANCE;
-	private final MemberRepository memberRepository = InMemoryMemberRepository.INSTANCE;
-	private final StudyMemberRepository studyMemberRepository = InMemoryStudyMemberRepository.INSTANCE;
-	private final InMemoryCafeRepository cafeRepository = InMemoryCafeRepository.INSTANCE;
+@SpringBootTest
+@Import({TestConfig.class})
+@Transactional
+class ProfileServiceImplTest {
 
-	private final ProfileService profileService = new ProfileServiceImpl(memberRepository, studyOnceRepository,
-		studyMemberRepository);
-	private final StudyOnceService studyOnceService = new StudyOnceServiceImpl(cafeRepository, studyOnceRepository,
-		memberRepository, studyMemberRepository, studyOnceMapper, studyMemberMapper);
+	private static final LocalDateTime NOW = LocalDateTime.now();
 
-	@Test
-	@DisplayName("자신이 스터디 장인 카공의 멤버면 프로필 조회 성공")
-	void successWhenRequestMemberIsLeaderWithTargetMember() {
-		long cafeId = cafePersistHelper.persistCafeWith24For7().getId();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		LocalDateTime start = LocalDateTime.now().plusHours(4);
-		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, start.plusHours(5), cafeId);
-		StudyOnceCreateResponse study = studyOnceService.createStudy(requestMemberId, studyOnceCreateRequest,
-			LocalDate.now());
-		studyOnceService.tryJoin(targetMemberId, study.getStudyOnceId());
-		Assertions.assertDoesNotThrow(() -> profileService.get(requestMemberId, targetMemberId));
-	}
+	@Autowired
+	private ProfileService sut;
+	@Autowired
+	private StudyOnceService studyOnceService;
+	@Autowired
+	private CafeSaveHelper cafeSaveHelper;
+	@Autowired
+	private MemberSaveHelper memberSaveHelper;
+	@Autowired
+	private StudyOnceSaveHelper studyOnceSaveHelper;
+	@Autowired
+	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 
 	@Test
-	@DisplayName("자신이 참여 확정 상태인 카공의 멤버면 프로필 조회 성공")
-	void successWhenRequestMemberAndTargetMemberJoinSameStudy() {
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		Member leader = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE);
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-
-		studyOnceService.tryJoin(targetMemberId, studyOnce.getId());
-		studyOnceService.tryJoin(requestMemberId, studyOnce.getId());
-
-		syncStudyOnceRepositoryAndStudyMemberRepository();
-		Assertions.assertDoesNotThrow(
-			() -> profileService.get(requestMemberId, targetMemberId, studyOnce.getStartDateTime()));
-	}
-
-	/**
-	 * JPA 의 Cascade 가 InMemory 구현체에서는 작동하지 않으므로 수동 동기화가 필요함.
-	 */
-	private void syncStudyOnceRepositoryAndStudyMemberRepository() {
-		List<StudyMember> allStudyMembers = studyOnceRepository.findAll().stream()
-			.map(StudyOnce::getStudyMembers)
-			.flatMap(Collection::stream)
-			.collect(Collectors.toList());
-		studyMemberRepository.saveAll(allStudyMembers);
-	}
-
-	private static StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
-		long cafeId) {
-		return new StudyOnceCreateRequest(cafeId, "테스트 카페", start, end, 4, true, "오픈채팅방 링크");
+	@DisplayName("카공장이 카공원의 프로필을 조회한다.")
+	void leader_can_view_member_profile() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMemberWithName(thumbnailImage, "회원");
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		studyOnceService.tryJoin(member.getId(), studyOnce.getId());
+		//when
+		ProfileGetResponse response = sut.get(leader.getId(), member.getId());
+		//then
+		assertThat(response.getName()).isEqualTo("회원");
 	}
 
 	@Test
-	@DisplayName("자신의 프로필 조회 성공")
-	void successWhenRequestSelf() {
-		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		Assertions.assertDoesNotThrow(
-			() -> profileService.get(requestMemberId, requestMemberId));
+	@DisplayName("카공이 시작되면 카공원은 참여자들의 프로필을 조회할 수 있다.")
+	void member_can_view_profiles_of_participants_when_study_begins() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMemberWithName(thumbnailImage, "카공장");
+		Member member = memberSaveHelper.saveMemberWithName(thumbnailImage, "카공원");
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnceWithTime(cafe, leader, NOW.plusHours(4),
+			NOW.plusHours(5));
+		studyOnceService.tryJoin(member.getId(), studyOnce.getId());
+		//when
+		ProfileGetResponse response = sut.get(member.getId(), leader.getId(), NOW.plusHours(4));
+		//then
+		assertThat(response.getName()).isEqualTo("카공장");
 	}
 
 	@Test
-	@DisplayName("프로필 조회 조건을 만족하지 않는 경우 실패")
-	void failWhenOtherCase() {
-		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
-			() -> profileService.get(requestMemberId, targetMemberId));
-		Assertions.assertEquals(cafegoryException.getMessage(), PROFILE_GET_PERMISSION_DENIED.getErrorMessage());
+	@DisplayName("카공이 시작되기전에는 카공원은 참여자들의 프로필을 조회할 수 없다.")
+	void member_cannot_view_profiles_of_participants_before_study_begins() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMemberWithName(thumbnailImage, "카공장");
+		Member member = memberSaveHelper.saveMemberWithName(thumbnailImage, "카공원");
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnceWithTime(cafe, leader, NOW.plusHours(4),
+			NOW.plusHours(5));
+		studyOnceService.tryJoin(member.getId(), studyOnce.getId());
+		//then
+		assertThatThrownBy(() -> sut.get(member.getId(), leader.getId(), NOW))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(PROFILE_GET_PERMISSION_DENIED.getErrorMessage());
 	}
 
 	@Test
-	@DisplayName("자신의 프로필을 수정하는 경우 성공")
-	void updateSuccessWhenSelf() {
-		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+	@DisplayName("자신의 프로필을 조회한다.")
+	void view_own_profile() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member = memberSaveHelper.saveMemberWithName(thumbnailImage, "멤버");
+		//when
+		ProfileGetResponse response = sut.get(member.getId(), member.getId());
+		//then
+		assertThat(response.getName()).isEqualTo("멤버");
+	}
+
+	@Test
+	@DisplayName("자신의 프로필을 수정한다.")
+	void update_own_profile() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
-		ProfileUpdateResponse update = profileService.update(requestMemberId, requestMemberId, profileUpdateRequest);
-		Assertions.assertEquals(update, new ProfileUpdateResponse("name", "testUrl", "introduction"));
+		//when
+		ProfileUpdateResponse response = sut.update(member.getId(), member.getId(), profileUpdateRequest);
+		//then
+		assertThat(response.getName()).isEqualTo("name");
 	}
 
 	@Test
-	@DisplayName("타인의 프로필을 수정하는 경우 실패")
-	void updateFailWhenOther() {
-		long requestMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
-		long targetMemberId = memberPersistHelper.persistDefaultMember(THUMBNAIL_IMAGE).getId();
+	@DisplayName("타인의 프로필을 수정할 수 없다.")
+	void member_can_not_update_another_members_profile() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member member1 = memberSaveHelper.saveMember(thumbnailImage);
+		Member member2 = memberSaveHelper.saveMember(thumbnailImage);
 		ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest("name", "introduction");
-		CafegoryException cafegoryException = Assertions.assertThrows(CafegoryException.class,
-			() -> profileService.update(requestMemberId, targetMemberId, profileUpdateRequest));
-		Assertions.assertEquals(cafegoryException.getMessage(), PROFILE_UPDATE_PERMISSION_DENIED.getErrorMessage());
+		//then
+		assertThatThrownBy(() -> sut.update(member1.getId(), member2.getId(), profileUpdateRequest))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(PROFILE_UPDATE_PERMISSION_DENIED.getErrorMessage());
 	}
 }

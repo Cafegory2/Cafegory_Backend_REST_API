@@ -1,323 +1,205 @@
 package com.example.demo.service.study;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
+import com.example.demo.config.TestConfig;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
+import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
 import com.example.demo.dto.study.StudyOnceCommentRequest;
-import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.repository.member.InMemoryMemberRepository;
-import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.study.InMemoryStudyOnceCommentRepository;
-import com.example.demo.repository.study.InMemoryStudyOnceRepository;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.StudyOnceCommentSaveHelper;
+import com.example.demo.helper.StudyOnceSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.repository.study.StudyOnceCommentRepository;
-import com.example.demo.repository.study.StudyOnceRepository;
-import com.example.demo.service.ServiceTest;
 
-class StudyOnceCommentServiceImplTest extends ServiceTest {
-	private final StudyOnceCommentRepository studyOnceCommentRepository = InMemoryStudyOnceCommentRepository.INSTANCE;
-	private final MemberRepository memberRepository = InMemoryMemberRepository.INSTANCE;
-	private final StudyOnceRepository studyOnceRepository = InMemoryStudyOnceRepository.INSTANCE;
-	private final StudyOnceCommentService studyOnceCommentService = new StudyOnceCommentServiceImpl(
-		studyOnceCommentRepository, memberRepository, studyOnceRepository);
+@SpringBootTest
+@Import({TestConfig.class})
+@Transactional
+class StudyOnceCommentServiceImplTest {
 
-	@Test
-	@DisplayName("카공 질문을 저장한다.")
-	void save_question() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		//when
-		studyOnceCommentService.saveQuestion(otherPerson.getId(), studyOnce.getId(),
-			new StudyOnceCommentSaveRequest("몇시까지 공부하시나요?"));
-		List<StudyOnceComment> questions = studyOnceCommentRepository.findAll();
-		//then
-		assertThat(questions.size()).isEqualTo(1);
-	}
+	@Autowired
+	private StudyOnceCommentService sut;
+	@Autowired
+	private StudyOnceCommentRepository studyOnceCommentRepository;
+	@Autowired
+	private CafeSaveHelper cafePersistHelper;
+	@Autowired
+	private MemberSaveHelper memberSaveHelper;
+	@Autowired
+	private StudyOnceSaveHelper studyOnceSaveHelper;
+	@Autowired
+	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
+	@Autowired
+	private StudyOnceCommentSaveHelper studyOnceCommentSaveHelper;
 
 	@Test
-	@DisplayName("카공장의 카공 질문을 저장한다.")
-	void save_question_by_leader() {
+	@DisplayName("답변이 달리지 않은 질문은 수정 가능하다.")
+	void question_without_replies_can_be_updated() {
 		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "질문");
 		//when
-		studyOnceCommentService.saveQuestion(leader.getId(), studyOnce.getId(),
-			new StudyOnceCommentSaveRequest("카페 끝날때까지 공부합니다."));
-		List<StudyOnceComment> questions = studyOnceCommentRepository.findAll();
-		//then
-		assertThat(questions.size()).isEqualTo(1);
-	}
-
-	@Test
-	@DisplayName("카공 질문을 수정한다.")
-	void update_question() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "등록내용");
-		//when
-		studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
-			new StudyOnceCommentUpdateRequest("수정내용"));
+		sut.updateQuestion(member.getId(), question.getId(),
+			new StudyOnceCommentUpdateRequest("수정"));
 		StudyOnceComment findQuestion = studyOnceCommentRepository.findById(question.getId()).get();
 		//then
-		assertThat(findQuestion.getContent()).isEqualTo("수정내용");
+		assertThat(findQuestion.getContent()).isEqualTo("수정");
 	}
 
 	@Test
-	@DisplayName("카공 질문은 질문한 회원 본인만 수정 할 수 있다.")
-	void update_question_by_member_who_asked_the_question() {
+	@DisplayName("답변이 달린 질문은 수정할 수 없다.")
+	void question_with_replies_can_not_be_updated() {
 		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "등록내용");
-		//when
-		assertDoesNotThrow(() ->
-			studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
-				new StudyOnceCommentUpdateRequest("수정내용"))
-		);
-	}
-
-	@Test
-	@DisplayName("카공 질문 수정은 질문한 회원 본인이 아니라면 예외가 터진다.")
-	void update_question_by_member_who_not_asked_the_question_exception() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "등록내용");
-		//when
-		assertThatThrownBy(() ->
-			studyOnceCommentService.updateQuestion(leader.getId(), question.getId(),
-				new StudyOnceCommentUpdateRequest("수정내용"))
-		).isInstanceOf(CafegoryException.class)
-			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
-	}
-
-	@Test
-	@DisplayName("답변(대댓글)이 작성된 질문(댓글)을 수정 할 경우 예외가 터진다.")
-	void update_question_when_reply_already_existed_then_exception() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "댓글");
-		StudyOnceComment studyOnceComment = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "대댓글");
-
-		//when
-		assertThatThrownBy(() -> studyOnceCommentService.updateQuestion(otherPerson.getId(), question.getId(),
-			new StudyOnceCommentUpdateRequest("수정내용")))
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "질문");
+		studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
+			studyOnce, question, "답변");
+		//then
+		assertThatThrownBy(() -> sut.updateQuestion(member.getId(), question.getId(),
+			new StudyOnceCommentUpdateRequest("수정")))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(ExceptionType.STUDY_ONCE_PARENT_COMMENT_MODIFICATION_BLOCKED.getErrorMessage());
 	}
 
 	@Test
-	@DisplayName("카공 질문을 삭제한다.")
-	void delete_question() {
+	@DisplayName("자신이 작성한 댓글만 수정 가능하다.")
+	void member_can_update_own_comment_only() {
 		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistDefaultStudyOnceQuestion(
-			otherPerson, studyOnce);
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment comment = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "댓글");
 		//when
-		studyOnceCommentService.deleteQuestion(question.getId());
-		StudyOnceComment findQuestion = studyOnceCommentRepository.findById(question.getId()).orElse(null);
+		sut.updateQuestion(member.getId(), comment.getId(),
+			new StudyOnceCommentUpdateRequest("수정"));
 		//then
-		assertThat(findQuestion).isNull();
+		StudyOnceComment findComment = studyOnceCommentRepository.findById(comment.getId()).get();
+		assertThat(findComment.getContent()).isEqualTo("수정");
 	}
 
 	@Test
-	@DisplayName("답변(대댓글)이 작성된 질문(댓글)을 삭제 할 경우 예외가 터진다.")
-	void delete_question_when_reply_already_existed_then_exception() {
+	@DisplayName("다른 사람의 댓글을 수정할 수 없다.")
+	void member_can_not_update_another_members_comment() {
 		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "댓글");
-		studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "대댓글");
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment comment = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "댓글");
+		//then
+		assertThatThrownBy(() ->
+			sut.updateQuestion(leader.getId(), comment.getId(), new StudyOnceCommentUpdateRequest("수정"))
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("답변이 달리지 않은 질문은 삭제 가능하다.")
+	void question_without_replies_can_be_deleted() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "질문");
 		//when
-		assertThatThrownBy(() -> studyOnceCommentService.deleteQuestion(question.getId()))
+		sut.deleteQuestion(question.getId());
+		//then
+		List<StudyOnceComment> comments = studyOnceCommentRepository.findAll();
+		assertThat(comments.isEmpty()).isTrue();
+	}
+
+	@Test
+	@DisplayName("답변이 달린 질문은 삭제할 수 없다.")
+	void question_with_replies_can_not_be_deleted() {
+		//given
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "질문");
+		studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
+			studyOnce, question, "답변");
+		//then
+		assertThatThrownBy(() -> sut.deleteQuestion(question.getId()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(ExceptionType.STUDY_ONCE_PARENT_COMMENT_REMOVAL_BLOCKED.getErrorMessage());
 	}
 
 	@Test
-	@DisplayName("카공 답변(대댓글)을 생성한다.")
-	void save_reply() {
+	@DisplayName("카공장만 답변할 수 있다.")
+	void only_leader_can_reply_to_questions() {
 		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		//when
-		Long savedReplyId = studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
-			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다."));
-		StudyOnceComment savedReply = studyOnceCommentRepository.findById(savedReplyId).get();
-		//then
-		assertThat(savedReply.getParent().getId()).isEqualTo(question.getId());
-	}
-
-	@Test
-	@DisplayName("카공장만이 질문에 답변을 할 수 있다.")
-	void save_reply_by_leader() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		//then
-		assertDoesNotThrow(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
-			new StudyOnceCommentRequest("카페 끝날때까지 공부합니다.")));
-	}
-
-	@Test
-	@DisplayName("카공장이 아닌 다른 사람이 질문을 할 경우, 예외가 터진다.")
-	void save_reply_by_not_leader_then_exception() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "언제까지 공부하시나요?");
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member1 = memberSaveHelper.saveMember(thumbnailImage);
+		Member member2 = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member1, studyOnce, "질문");
 		//then
 		assertThatThrownBy(
-			() -> studyOnceCommentService.saveReply(otherPerson.getId(), studyOnce.getId(), question.getId(),
-				new StudyOnceCommentRequest("카페 끝날때까지 공부합니다.")))
+			() -> sut.saveReply(member2.getId(), studyOnce.getId(), question.getId(),
+				new StudyOnceCommentRequest("답변")))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(ExceptionType.STUDY_ONCE_REPLY_PERMISSION_DENIED.getErrorMessage());
 	}
 
 	@Test
-	@DisplayName("한개의 질문(댓글)에 한개의 답변(대댓글)이 존재할때, 한개의 답변(대대댓글)을 생성하면 예외가 터진다.")
-	void save_reply_second_times_then_exception() {
+	@DisplayName("한개의 질문에 한개의 답변만 존재한다.")
+	void only_one_reply_allowed_per_question() {
 		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "카페 끝날때 까지 공부할것 같아요");
+		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
+		Member leader = memberSaveHelper.saveMember(thumbnailImage);
+		Member member = memberSaveHelper.saveMember(thumbnailImage);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question = studyOnceCommentSaveHelper.saveStudyOnceQuestionWithContent(
+			member, studyOnce, "질문1");
+		StudyOnceComment reply = studyOnceCommentSaveHelper.saveStudyOnceReplyWithContent(leader,
+			studyOnce, question, "답변");
 		//then
 		assertThatThrownBy(
-			() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), reply.getId(),
-				new StudyOnceCommentRequest("카페 23시까지 운영해요")))
+			() -> sut.saveReply(leader.getId(), studyOnce.getId(), reply.getId(),
+				new StudyOnceCommentRequest("질문2")))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(ExceptionType.STUDY_ONCE_SINGLE_REPLY_PER_QUESTION.getErrorMessage());
 	}
-
-	@Test
-	@DisplayName("부모댓글이 없는 최상위 댓글이 자식댓글을 두개이상 가지면 예외가 터진다.")
-	void save_reply_when_top_level_comment_try_to_have_two_replies() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "언제까지 공부하시나요?");
-		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "최상위 댓글을 참조로 가지는 첫번째 댓글");
-		//then
-		assertThatThrownBy(() -> studyOnceCommentService.saveReply(leader.getId(), studyOnce.getId(), question.getId(),
-			new StudyOnceCommentRequest("최상위 댓글을 참조로 가지는 두번째 댓글")))
-			.isInstanceOf(CafegoryException.class)
-			.hasMessage(ExceptionType.STUDY_ONCE_SINGLE_REPLY_PER_QUESTION.getErrorMessage());
-	}
-
-	@Test
-	@DisplayName("답변(대댓글)을 수정한다.")
-	void update_reply() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "댓글");
-		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "대댓글");
-		//when
-		studyOnceCommentService.updateReply(leader.getId(), reply.getId(),
-			new StudyOnceCommentUpdateRequest("대댓글수정"));
-		StudyOnceComment updatedComment = studyOnceCommentRepository.findById(reply.getId()).get();
-		//then
-		assertThat(updatedComment.getContent()).isEqualTo("대댓글수정");
-	}
-
-	@Test
-	@DisplayName("답변(대댓글)을 삭제한다.")
-	void remove_reply() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "댓글");
-		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "대댓글");
-		//when
-		studyOnceCommentService.deleteReply(reply.getId());
-		StudyOnceComment removedComment = studyOnceCommentRepository.findById(reply.getId()).orElse(null);
-		//then
-		assertThat(removedComment).isNull();
-	}
-
-	@Test
-	@DisplayName("카공 답변(대댓글) 수정은 답변한 회원 본인이 아니라면 예외가 터진다.")
-	void update_reply_by_member_who_not_asked_the_reply_exception() {
-		//given
-		Member leader = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(THUMBNAIL_IMAGE, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
-			otherPerson, studyOnce, "댓글");
-		StudyOnceComment reply = studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
-			studyOnce, question, "대댓글");
-		//when
-		assertThatThrownBy(() ->
-			studyOnceCommentService.updateReply(otherPerson.getId(), reply.getId(),
-				new StudyOnceCommentUpdateRequest("수정내용"))
-		).isInstanceOf(CafegoryException.class)
-			.hasMessage(ExceptionType.STUDY_ONCE_COMMENT_PERMISSION_DENIED.getErrorMessage());
-	}
-
 }

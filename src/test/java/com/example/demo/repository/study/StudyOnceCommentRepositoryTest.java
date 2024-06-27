@@ -20,11 +20,11 @@ import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.domain.study.StudyOnce;
 import com.example.demo.domain.study.StudyOnceComment;
-import com.example.demo.helper.CafePersistHelper;
-import com.example.demo.helper.MemberPersistHelper;
-import com.example.demo.helper.StudyOnceCommentPersistHelper;
-import com.example.demo.helper.StudyOncePersistHelper;
-import com.example.demo.helper.ThumbnailImagePersistHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.StudyOnceCommentSaveHelper;
+import com.example.demo.helper.StudyOnceSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 
 @DataJpaTest
 @Import({TestConfig.class, QueryDslConfig.class})
@@ -34,15 +34,15 @@ class StudyOnceCommentRepositoryTest {
 	@Autowired
 	private StudyOnceCommentRepository studyOnceCommentRepository;
 	@Autowired
-	private MemberPersistHelper memberPersistHelper;
+	private MemberSaveHelper memberPersistHelper;
 	@Autowired
-	private ThumbnailImagePersistHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
 	@Autowired
-	private StudyOncePersistHelper studyOncePersistHelper;
+	private StudyOnceSaveHelper studyOncePersistHelper;
 	@Autowired
-	private CafePersistHelper cafePersistHelper;
+	private CafeSaveHelper cafePersistHelper;
 	@Autowired
-	private StudyOnceCommentPersistHelper studyOnceCommentPersistHelper;
+	private StudyOnceCommentSaveHelper studyOnceCommentPersistHelper;
 	@Autowired
 	private EntityManager em;
 
@@ -50,18 +50,18 @@ class StudyOnceCommentRepositoryTest {
 	@DisplayName("studyOnceCommentId로 오름차순 정렬된, studyOnceId로 댓글목록 조회")
 	void findAllByStudyOnceId() {
 		//given
-		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member leader = memberPersistHelper.persistMemberWithName(thumb, "카공장");
-		Member otherPerson = memberPersistHelper.persistMemberWithName(thumb, "김동현");
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		StudyOnce studyOnce = studyOncePersistHelper.persistDefaultStudyOnce(cafe, leader);
-		StudyOnceComment question1 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveThumbnailImage();
+		Member leader = memberPersistHelper.saveMemberWithName(thumb, "카공장");
+		Member otherPerson = memberPersistHelper.saveMemberWithName(thumb, "김동현");
+		Cafe cafe = cafePersistHelper.saveCafe();
+		StudyOnce studyOnce = studyOncePersistHelper.saveStudyOnce(cafe, leader);
+		StudyOnceComment question1 = studyOnceCommentPersistHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글1");
-		StudyOnceComment question2 = studyOnceCommentPersistHelper.persistStudyOnceQuestionWithContent(
+		StudyOnceComment question2 = studyOnceCommentPersistHelper.saveStudyOnceQuestionWithContent(
 			otherPerson, studyOnce, "댓글2");
-		studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+		studyOnceCommentPersistHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question2, "대댓글2");
-		studyOnceCommentPersistHelper.persistStudyOnceReplyWithContent(leader,
+		studyOnceCommentPersistHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question1, "대댓글1");
 
 		em.flush();

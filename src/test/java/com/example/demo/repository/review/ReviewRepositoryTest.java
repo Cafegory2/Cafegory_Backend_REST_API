@@ -20,10 +20,10 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
 import com.example.demo.domain.review.Review;
-import com.example.demo.helper.CafePersistHelper;
-import com.example.demo.helper.MemberPersistHelper;
-import com.example.demo.helper.ReviewPersistHelper;
-import com.example.demo.helper.ThumbnailImagePersistHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.ReviewSaveHelper;
+import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.util.PageRequestCustom;
 
 @DataJpaTest
@@ -36,22 +36,22 @@ class ReviewRepositoryTest {
 	@Autowired
 	private ReviewRepository reviewRepository;
 	@Autowired
-	private CafePersistHelper cafePersistHelper;
+	private CafeSaveHelper cafePersistHelper;
 	@Autowired
-	private ThumbnailImagePersistHelper thumbnailImagePersistHelper;
+	private ThumbnailImageSaveHelper thumbnailImagePersistHelper;
 	@Autowired
-	private MemberPersistHelper memberPersistHelper;
+	private MemberSaveHelper memberPersistHelper;
 	@Autowired
-	private ReviewPersistHelper reviewPersistHelper;
+	private ReviewSaveHelper reviewPersistHelper;
 
 	@Test
 	void findAllByCafeId() {
 		//given
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member member = memberPersistHelper.persistDefaultMember(thumb);
-		reviewPersistHelper.persistDefaultReview(cafe, member);
-		reviewPersistHelper.persistDefaultReview(cafe, member);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveThumbnailImage();
+		Member member = memberPersistHelper.saveMember(thumb);
+		reviewPersistHelper.saveReview(cafe, member);
+		reviewPersistHelper.saveReview(cafe, member);
 		em.flush();
 		em.clear();
 		//when
@@ -64,13 +64,13 @@ class ReviewRepositoryTest {
 	@DisplayName("페이징 기본값")
 	void findAllWithPagingByCafeId() {
 		//given
-		Cafe cafe = cafePersistHelper.persistDefaultCafe();
-		ThumbnailImage thumb = thumbnailImagePersistHelper.persistDefaultThumbnailImage();
-		Member member = memberPersistHelper.persistDefaultMember(thumb);
+		Cafe cafe = cafePersistHelper.saveCafe();
+		ThumbnailImage thumb = thumbnailImagePersistHelper.saveThumbnailImage();
+		Member member = memberPersistHelper.saveMember(thumb);
 
 		for (int i = 0; i < 20; i++) {
-			reviewPersistHelper.persistDefaultReview(cafe, member);
-			reviewPersistHelper.persistDefaultReview(cafe, member);
+			reviewPersistHelper.saveReview(cafe, member);
+			reviewPersistHelper.saveReview(cafe, member);
 		}
 		em.flush();
 		em.clear();
