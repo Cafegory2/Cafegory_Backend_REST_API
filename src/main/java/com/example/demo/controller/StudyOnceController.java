@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import static com.example.demo.exception.ExceptionType.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
@@ -85,8 +84,7 @@ public class StudyOnceController {
 		@RequestBody @Validated StudyOnceCreateRequest studyOnceCreateRequest,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		StudyOnceCreateResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest,
-			LocalDate.now());
+		StudyOnceCreateResponse response = studyOnceService.createStudy(memberId, studyOnceCreateRequest);
 		return ResponseEntity.ok(response);
 	}
 

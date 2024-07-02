@@ -87,9 +87,11 @@ public class StudyOnce {
 		validateEmptyOrWhiteSpace(openChatUrl, STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE);
 		this.openChatUrl = openChatUrl;
 		this.leader = leader;
-		validateConflictJoin(leader);
+		validateStudyScheduleConflict(leader);
 		studyMembers = new ArrayList<>();
-		studyMembers.add(new StudyMember(leader, this));
+		StudyMember studyMember = new StudyMember(leader, this);
+		studyMembers.add(studyMember);
+		leader.addStudyMember(studyMember);
 		this.nowMemberCount = 1;
 	}
 
@@ -131,15 +133,15 @@ public class StudyOnce {
 		}
 	}
 
-	public void tryJoin(Member memberThatExpectedToJoin, LocalDateTime requestTime) {
+	public void tryJoin(Member member, LocalDateTime requestTime) {
 		validateJoinRequestTime(requestTime);
-		validateDuplicateJoin(memberThatExpectedToJoin);
-		validateConflictJoin(memberThatExpectedToJoin);
+		validateDuplicateJoin(member);
+		validateStudyScheduleConflict(member);
 		validateStudyMemberIsFull();
-		StudyMember studyMember = new StudyMember(memberThatExpectedToJoin, this);
-		studyMembers.add(studyMember);
-		memberThatExpectedToJoin.addStudyMember(studyMember);
-		nowMemberCount = studyMembers.size();
+		StudyMember studyMember = new StudyMember(member, this);
+		this.studyMembers.add(studyMember);
+		member.addStudyMember(studyMember);
+		this.nowMemberCount = this.studyMembers.size();
 	}
 
 	private void validateStudyMemberIsFull() {
@@ -148,11 +150,9 @@ public class StudyOnce {
 		}
 	}
 
-	private void validateConflictJoin(Member memberThatExpectedToJoin) {
-		boolean joinFail = memberThatExpectedToJoin.getStudyMembers()
-			.stream()
-			.anyMatch(studyMember -> studyMember.isConflictWith(startDateTime, endDateTime));
-		if (joinFail) {
+	private void validateStudyScheduleConflict(Member member) {
+		boolean isStudyConflict = member.hasStudyScheduleConflict(this.startDateTime, this.endDateTime);
+		if (isStudyConflict) {
 			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
 		}
 	}
