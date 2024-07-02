@@ -6,7 +6,6 @@ import static com.example.demo.factory.TestBusinessHourFactory.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -14,8 +13,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +23,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.TestConfig;
 import com.example.demo.domain.cafe.BusinessHour;
@@ -57,7 +55,6 @@ import com.example.demo.repository.study.StudyOnceRepository;
 class StudyOnceServiceImplTest {
 
 	private static final LocalDateTime NOW = LocalDateTime.now();
-
 	@Autowired
 	private StudyOnceService sut;
 	@Autowired
@@ -102,8 +99,7 @@ class StudyOnceServiceImplTest {
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		long leaderId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-		StudyOnceCreateResponse result = sut.createStudy(leaderId, studyOnceCreateRequest,
-			LocalDate.now());
+		StudyOnceCreateResponse result = sut.createStudy(leaderId, studyOnceCreateRequest);
 
 		StudyOnceSearchResponse studyOnceSearchResponse = sut.searchByStudyId(result.getStudyOnceId());
 
@@ -120,8 +116,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		long leaderId = memberSaveHelper.saveMember(thumbnailImage).getId();
-		StudyOnceCreateResponse searchResponse = sut.createStudy(leaderId, studyOnceCreateRequest,
-			LocalDate.now());
+		StudyOnceCreateResponse searchResponse = sut.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long memberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		sut.tryJoin(memberId, studyOnceId);
@@ -143,8 +138,7 @@ class StudyOnceServiceImplTest {
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		long leaderId = memberSaveHelper.saveMember(thumbnailImage).getId();
-		StudyOnceCreateResponse searchResponse = sut.createStudy(leaderId, studyOnceCreateRequest,
-			LocalDate.now());
+		StudyOnceCreateResponse searchResponse = sut.createStudy(leaderId, studyOnceCreateRequest);
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long memberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 
@@ -165,7 +159,7 @@ class StudyOnceServiceImplTest {
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest, LocalDate.now()));
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest));
 	}
 
 	@Test
@@ -180,7 +174,7 @@ class StudyOnceServiceImplTest {
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest, LocalDate.now()));
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest));
 	}
 
 	@Test
@@ -194,7 +188,7 @@ class StudyOnceServiceImplTest {
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		StudyOnceCreateRequest request = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertThatThrownBy(() -> sut.createStudy(leader.getId(), request, LocalDate.now()))
+		assertThatThrownBy(() -> sut.createStudy(leader.getId(), request))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_SHORT_DURATION.getErrorMessage());
 	}
@@ -211,7 +205,7 @@ class StudyOnceServiceImplTest {
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		StudyOnceCreateRequest request = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertThatThrownBy(() -> sut.createStudy(leader.getId(), request, LocalDate.now()))
+		assertThatThrownBy(() -> sut.createStudy(leader.getId(), request))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LONG_DURATION.getErrorMessage());
 	}
@@ -228,7 +222,7 @@ class StudyOnceServiceImplTest {
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest, LocalDate.now()));
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest));
 	}
 
 	@ParameterizedTest
@@ -249,7 +243,7 @@ class StudyOnceServiceImplTest {
 			cafe2.getId());
 		//then
 		assertThatThrownBy(
-			() -> sut.createStudy(leader.getId(), request, LocalDate.now()))
+			() -> sut.createStudy(leader.getId(), request))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CONFLICT_TIME.getErrorMessage());
 	}
@@ -309,7 +303,7 @@ class StudyOnceServiceImplTest {
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertThatThrownBy(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest, LocalDate.now()))
+		assertThatThrownBy(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
 	}
@@ -346,7 +340,7 @@ class StudyOnceServiceImplTest {
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest, LocalDate.now()));
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest));
 	}
 
 	static Stream<Arguments> provideStartAndEndDateTime2() {

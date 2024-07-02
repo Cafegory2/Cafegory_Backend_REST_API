@@ -3,7 +3,6 @@ package com.example.demo.service.study;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -58,11 +57,10 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	private final BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
 
 	@Override
-	public void tryJoin(long memberIdThatExpectedToJoin, long studyId) {
+	public void tryJoin(long memberId, long studyId) {
 		StudyOnce studyOnce = studyOnceRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
-		LocalDateTime startDateTime = studyOnce.getStartDateTime();
-		Member member = getMember(memberIdThatExpectedToJoin, startDateTime);
+		Member member = findMemberById(memberId);
 		studyOnce.tryJoin(member, LocalDateTime.now());
 	}
 
@@ -195,15 +193,23 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest request, LocalDate nowDate) {
+	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest request) {
 		Cafe cafe = findCafeById(request.getCafeId());
-		BusinessHour businessHour = cafe.findBusinessHour(nowDate.getDayOfWeek());
+		BusinessHour businessHour = cafe.findBusinessHour(request.getStartDateTime().getDayOfWeek());
 		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
 			businessHour);
-		Member leader = getMember(leaderId, request.getStartDateTime());
+		Member leader = findMemberById(leaderId);
+		validateStudyScheduleConflict(request.getStartDateTime(), request.getEndDateTime(), leader);
 		StudyOnce studyOnce = studyOnceMapper.toNewEntity(request, cafe, leader);
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
 		return studyOnceMapper.toStudyOnceCreateResponse(saved, true);
+	}
+
+	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member leader) {
+		boolean isScheduleConflict = leader.hasStudyScheduleConflict(start, end);
+		if (isScheduleConflict) {
+			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
+		}
 	}
 
 	private void validateBetweenBusinessHour(LocalTime studyOnceStartTime, LocalTime studyOnceEndTime,
@@ -303,7 +309,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		Member leader = memberRepository.findById(leaderId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 		var studyMembers = studyMemberRepository.findByMemberAndStudyDate(leader, startDateTime.toLocalDate());
-		leader.setStudyMembers(studyMembers);
+		// leader.setStudyMembers(studyMembers);
 		return leader;
 	}
 }
