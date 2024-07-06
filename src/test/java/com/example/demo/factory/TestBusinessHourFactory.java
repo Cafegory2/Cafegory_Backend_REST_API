@@ -15,6 +15,25 @@ public class TestBusinessHourFactory {
 			.build();
 	}
 
+	public static BusinessHour createBusinessHourWithDayAnd24For7(Cafe cafe, String day) {
+		return BusinessHour.builder()
+			.cafe(cafe)
+			.startTime(LocalTime.MIN)
+			.endTime(LocalTime.MAX)
+			.day(day)
+			.build();
+	}
+
+	public static BusinessHour createBusinessHourWithDayAndTime(Cafe cafe, String day, LocalTime startTime,
+		LocalTime endTime) {
+		return BusinessHour.builder()
+			.cafe(cafe)
+			.startTime(startTime)
+			.endTime(endTime)
+			.day(day)
+			.build();
+	}
+
 	public static BusinessHour createBusinessHourWithDayAndTime(String day, LocalTime startTime, LocalTime endTime) {
 		return BusinessHour.builder()
 			.startTime(startTime)
