@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -54,7 +55,7 @@ public class Cafe {
 	private boolean isAbleToStudy;
 	private int minBeveragePrice;
 
-	@OneToMany(mappedBy = "cafe")
+	@OneToMany(mappedBy = "cafe", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
 	private List<BusinessHour> businessHours = new ArrayList<>();
 
@@ -97,5 +98,9 @@ public class Cafe {
 			.filter(businessHour -> businessHour.matchesDayOfWeek(dayOfWeek))
 			.findFirst()
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND_DAY_OF_WEEK));
+	}
+
+	public void changeBusinessHours(List<BusinessHour> businessHours) {
+		this.businessHours = businessHours;
 	}
 }
