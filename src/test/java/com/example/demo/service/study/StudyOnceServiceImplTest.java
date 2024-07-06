@@ -9,9 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +19,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.config.TestConfig;
 import com.example.demo.domain.cafe.BusinessHour;
@@ -48,11 +44,10 @@ import com.example.demo.helper.StudyOnceSaveHelper;
 import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.repository.study.StudyMemberRepository;
 import com.example.demo.repository.study.StudyOnceRepository;
+import com.example.demo.service.ServiceTest;
 
-@SpringBootTest
 @Import({TestConfig.class})
-@Transactional
-class StudyOnceServiceImplTest {
+class StudyOnceServiceImplTest extends ServiceTest {
 
 	private static final LocalDateTime NOW = LocalDateTime.now();
 	@Autowired
@@ -79,14 +74,6 @@ class StudyOnceServiceImplTest {
 	private StudyOnceCreateRequest makeStudyOnceCreateRequest(LocalDateTime start, LocalDateTime end,
 		long cafeId) {
 		return new StudyOnceCreateRequest(cafeId, "테스트 스터디", start, end, 4, true, "오픈채팅방 링크");
-	}
-
-	private void syncStudyOnceRepositoryAndStudyMemberRepository() {
-		List<StudyMember> allStudyMembers = studyOnceRepository.findAll().stream()
-			.map(StudyOnce::getStudyMembers)
-			.flatMap(Collection::stream)
-			.collect(Collectors.toList());
-		studyMemberRepository.saveAll(allStudyMembers);
 	}
 
 	@Test
@@ -120,7 +107,6 @@ class StudyOnceServiceImplTest {
 		long studyOnceId = searchResponse.getStudyOnceId();
 		long memberId = memberSaveHelper.saveMember(thumbnailImage).getId();
 		sut.tryJoin(memberId, studyOnceId);
-		syncStudyOnceRepositoryAndStudyMemberRepository();
 
 		StudyOnceSearchResponse response = sut.searchStudyOnceWithMemberParticipation(
 			studyOnceId, memberId);
@@ -603,8 +589,8 @@ class StudyOnceServiceImplTest {
 	@DisplayName("카공 시간 변경시 카공 시간은 카페 영업시간내에 포함된다.")
 	void study_time_is_within_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		Cafe cafe = cafeSaveHelper.saveCafeWithBusinessHour(businessHours);
+		// List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
+		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnceWithTime(cafe, leader,

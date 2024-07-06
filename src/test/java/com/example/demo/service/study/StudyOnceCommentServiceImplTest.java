@@ -4,12 +4,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 import com.example.demo.config.TestConfig;
@@ -28,12 +25,11 @@ import com.example.demo.helper.StudyOnceCommentSaveHelper;
 import com.example.demo.helper.StudyOnceSaveHelper;
 import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.repository.study.StudyOnceCommentRepository;
+import com.example.demo.service.ServiceTest;
 
-@SpringBootTest
 @Import({TestConfig.class})
-@Transactional
-class StudyOnceCommentServiceImplTest {
-
+class StudyOnceCommentServiceImplTest extends ServiceTest {
+	
 	@Autowired
 	private StudyOnceCommentService sut;
 	@Autowired
