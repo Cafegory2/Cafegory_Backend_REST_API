@@ -2,13 +2,10 @@ package com.example.demo.service.study;
 
 import static com.example.demo.domain.study.Attendance.*;
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.factory.TestBusinessHourFactory.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -22,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import com.example.demo.config.TestConfig;
-import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -283,8 +279,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	@DisplayName("카페 영업시간 밖의 시간에 카공을 만들 수 없다.")
 	void study_can_not_start_outside_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		Cafe cafe = cafeSaveHelper.saveCafeWithBusinessHour(businessHours);
+		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
@@ -320,8 +315,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	@DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
 	void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		Cafe cafe = cafeSaveHelper.saveCafeWithBusinessHour(businessHours);
+		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
@@ -340,17 +334,6 @@ class StudyOnceServiceImplTest extends ServiceTest {
 				LocalDateTime.of(2999, 1, 1, 21, 0)
 			)
 		);
-	}
-
-	private List<BusinessHour> makeBusinessHourWith7daysFrom9To21() {
-		List<String> daysOfWeek = List.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
-		List<BusinessHour> businessHours = new ArrayList<>();
-		for (String day : daysOfWeek) {
-			businessHours.add(
-				createBusinessHourWithDayAndTime(day, LocalTime.of(9, 0), LocalTime.of(21, 0))
-			);
-		}
-		return businessHours;
 	}
 
 	@Test
@@ -546,8 +529,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	@DisplayName("카공 시간 변경시 카공 시간은 카페 영업시간내에 포함되어야 한다.")
 	void study_time_must_be_within_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
-		Cafe cafe = cafeSaveHelper.saveCafeWithBusinessHour(businessHours);
+		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnceWithTime(cafe, leader,
@@ -589,7 +571,6 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	@DisplayName("카공 시간 변경시 카공 시간은 카페 영업시간내에 포함된다.")
 	void study_time_is_within_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		// List<BusinessHour> businessHours = makeBusinessHourWith7daysFrom9To21();
 		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);

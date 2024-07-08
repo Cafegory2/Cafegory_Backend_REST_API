@@ -1,6 +1,7 @@
 package com.example.demo.domain.study;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.util.MicroTimeUtils.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -116,7 +117,7 @@ public class StudyOnce {
 	}
 
 	private void validateStartAndEndTime(LocalTime startLocalTime, LocalTime endLocalTime) {
-		if (!(startLocalTime.equals(LocalTime.of(23, 0)) && endLocalTime.equals(LocalTime.MAX))) {
+		if (!(startLocalTime.equals(LocalTime.of(23, 0)) && endLocalTime.equals(MAX_LOCAL_TIME))) {
 			throw new CafegoryException(STUDY_ONCE_SHORT_DURATION);
 		}
 	}

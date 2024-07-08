@@ -1,6 +1,7 @@
 package com.example.demo.service.study;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.util.MicroTimeUtils.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -196,10 +197,15 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	public StudyOnceCreateResponse createStudy(long leaderId, StudyOnceCreateRequest request) {
 		Cafe cafe = findCafeById(request.getCafeId());
 		BusinessHour businessHour = cafe.findBusinessHour(request.getStartDateTime().getDayOfWeek());
-		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
+		validateBetweenBusinessHour(
+			toMicroTime(request.getStartDateTime().toLocalTime()),
+			toMicroTime(request.getEndDateTime().toLocalTime()),
 			businessHour);
 		Member leader = findMemberById(leaderId);
-		validateStudyScheduleConflict(request.getStartDateTime(), request.getEndDateTime(), leader);
+		validateStudyScheduleConflict(
+			toMicroDateTime(request.getStartDateTime()),
+			toMicroDateTime(request.getEndDateTime()),
+			leader);
 		StudyOnce studyOnce = studyOnceMapper.toNewEntity(request, cafe, leader);
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
 		return studyOnceMapper.toStudyOnceCreateResponse(saved, true);

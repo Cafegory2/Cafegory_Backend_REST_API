@@ -1,6 +1,7 @@
 package com.example.demo.domain.cafe;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.util.MicroTimeUtils.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -80,7 +81,7 @@ public class CafeSearchCondition {
 
 		private LocalTime calcLocalTime(int time) {
 			if (time == END_TIME) {
-				return LocalTime.MAX;
+				return MAX_LOCAL_TIME;
 			}
 			return LocalTime.of(time, 0);
 		}

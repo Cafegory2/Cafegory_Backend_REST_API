@@ -14,5 +14,4 @@ public class MicroTimeUtils {
 	public static LocalDateTime toMicroDateTime(LocalDateTime dateTime) {
 		return dateTime.withNano((dateTime.getNano() / 1000) * 1000);
 	}
-
 }

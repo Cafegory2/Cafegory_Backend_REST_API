@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
+import com.example.demo.util.MicroTimeUtils;
 
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 
@@ -40,7 +41,7 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 	}
 
 	private boolean is24HourBusiness(LocalTime startTime, LocalTime endTime) {
-		return startTime.equals(LocalTime.MIN) && endTime.equals(LocalTime.MAX);
+		return startTime.equals(LocalTime.MIN) && endTime.equals(MicroTimeUtils.MAX_LOCAL_TIME);
 	}
 
 	private boolean isOpenOvernight(LocalTime startTime, LocalTime endTime) {

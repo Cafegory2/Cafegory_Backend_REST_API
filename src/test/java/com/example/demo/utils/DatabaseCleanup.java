@@ -51,14 +51,13 @@ public class DatabaseCleanup {
 	public void execute() {
 		em.flush();
 		afterPropertiesSet();
-		em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
+		// em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 0").executeUpdate();
 
 		for (String tableName : tableNames) {
-			System.out.println("tableName = " + tableName);
 			em.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
 		}
 
-		em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
+		// em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
 	}
 
 	private static String convertCamelCaseToSnakeCase(String input) {

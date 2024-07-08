@@ -1,6 +1,7 @@
 package com.example.demo.domain.cafe;
 
 import static com.example.demo.factory.TestBusinessHourFactory.*;
+import static com.example.demo.util.MicroTimeUtils.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -67,10 +68,14 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("24시간 영업한다.")
 	void open_24Hours(LocalDateTime now) {
 		List<BusinessHour> businessHours = List.of(
+			// createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(0, 0),
+			// 	LocalTime.MAX),
+			// createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(0, 0),
+			// 	LocalTime.MAX)
 			createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(0, 0),
-				LocalTime.MAX),
+				MAX_LOCAL_TIME),
 			createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(0, 0),
-				LocalTime.MAX)
+				MAX_LOCAL_TIME)
 		);
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();
 		//when
@@ -122,11 +127,11 @@ public class BusinessHourOpenCheckerTest {
 			createBusinessHourWithDayAndTime("MONDAY",
 				LocalTime.of(9, 0), LocalTime.of(22, 0)),
 			createBusinessHourWithDayAndTime("TUESDAY",
-				LocalTime.of(9, 0), LocalTime.MAX),
+				LocalTime.of(9, 0), MAX_LOCAL_TIME),
 			createBusinessHourWithDayAndTime("FRIDAY",
-				LocalTime.of(9, 0), LocalTime.MAX),
+				LocalTime.of(9, 0), MAX_LOCAL_TIME),
 			createBusinessHourWithDayAndTime("SATURDAY",
-				LocalTime.of(0, 0), LocalTime.MAX),
+				LocalTime.of(0, 0), MAX_LOCAL_TIME),
 			createBusinessHourWithDayAndTime("SUNDAY",
 				LocalTime.of(0, 0), LocalTime.of(22, 0))
 		);
@@ -151,15 +156,15 @@ public class BusinessHourOpenCheckerTest {
 			 3일 : 토
 			 4일 : 일
 			*/
-			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59, 999_999_999), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59, 999_999), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 22, 0), false),
-			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_999_998), true),
-			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_999_999), false),
-			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_998), true),
-			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_999), false),
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_998), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_999), false),
+			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_998), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999), false),
 			Arguments.of(LocalDateTime.of(2024, 2, 3, 0, 0), true),
 			Arguments.of(LocalDateTime.of(2024, 2, 4, 0, 0), true),
-			Arguments.of(LocalDateTime.of(2024, 2, 4, 21, 59, 59, 999_999_999), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 4, 21, 59, 59, 999_999), true),
 			Arguments.of(LocalDateTime.of(2024, 2, 4, 22, 0, 0), false)
 		);
 	}
@@ -225,9 +230,9 @@ public class BusinessHourOpenCheckerTest {
 	void check_if_chosen_time_is_within_24hour_business_hours() {
 		//given
 		LocalTime businessStartTime = LocalTime.of(0, 0);
-		LocalTime businessEndTime = LocalTime.MAX;
+		LocalTime businessEndTime = MAX_LOCAL_TIME;
 		LocalTime chosenStartTime = LocalTime.of(0, 0);
-		LocalTime chosenEndTime = LocalTime.MAX;
+		LocalTime chosenEndTime = MAX_LOCAL_TIME;
 		BusinessHourOpenChecker sut = new BusinessHourOpenChecker();
 		//when
 		boolean isBetween = sut.checkBetweenBusinessHours(businessStartTime, businessEndTime,
@@ -267,7 +272,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(23, 0),
-				LocalTime.MAX,
+				MAX_LOCAL_TIME,
 				true
 			),
 			Arguments.of(
