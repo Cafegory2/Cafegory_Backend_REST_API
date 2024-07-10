@@ -107,9 +107,8 @@ public class StudyOnceController {
 	public ResponseEntity<StudyOnceJoinResult> tryJoin(@PathVariable Long studyOnceId,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-		LocalDateTime requestTime = LocalDateTime.now();
 		studyOnceService.tryJoin(memberId, studyOnceId);
-		return ResponseEntity.ok(new StudyOnceJoinResult(toMicroDateTime(requestTime), true));
+		return ResponseEntity.ok(new StudyOnceJoinResult(MICRO_LOCAL_DATE_TIME_NOW, true));
 	}
 
 	@DeleteMapping("/{studyOnceId:[0-9]+}")

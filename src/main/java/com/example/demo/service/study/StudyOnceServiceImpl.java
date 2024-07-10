@@ -159,26 +159,27 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
 		LocalDateTime now) {
+		LocalDateTime microNow = toMicroDateTime(now);
 		StudyOnce searched = findStudyOnceById(studyOnceId);
+
 		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
 			throw new CafegoryException(STUDY_ONCE_INVALID_LEADER);
 		}
-		validateEarlyToTakeAttendance(now, searched.getStartDateTime());
-		validateLateToTakeAttendance(now, searched.getStartDateTime(), searched.getEndDateTime());
+		validateEarlyToTakeAttendance(microNow, searched.getStartDateTime());
+		validateLateToTakeAttendance(microNow, searched.getStartDateTime(), searched.getEndDateTime());
 
 		StudyMember findStudyMember = studyMemberRepository.findById(new StudyMemberId(memberId, studyOnceId))
 			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
 		findStudyMember.setAttendance(attendance);
-		findStudyMember.setLastModifiedDate(now);
+		findStudyMember.setLastModifiedDate(microNow);
 	}
 
 	private void validateLateToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime,
 		LocalDateTime endDateTime) {
-		LocalDateTime microNow = toMicroDateTime(now);
 		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
 		LocalDateTime midTime = startDateTime.plus(halfDuration);
 
-		if (microNow.isAfter(midTime)) {
+		if (now.isAfter(midTime)) {
 			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
 		}
 	}
@@ -199,8 +200,8 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		Cafe cafe = findCafeById(request.getCafeId());
 		BusinessHour businessHour = cafe.findBusinessHour(request.getStartDateTime().getDayOfWeek());
 		validateBetweenBusinessHour(
-			toMicroTime(request.getStartDateTime().toLocalTime()),
-			toMicroTime(request.getEndDateTime().toLocalTime()),
+			request.getStartDateTime().toLocalTime(),
+			request.getEndDateTime().toLocalTime(),
 			businessHour);
 		Member leader = findMemberById(leaderId);
 		validateStudyScheduleConflict(

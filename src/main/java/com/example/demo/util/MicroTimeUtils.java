@@ -10,10 +10,10 @@ public class MicroTimeUtils {
 	public static final LocalDateTime MICRO_LOCAL_DATE_TIME_NOW = LocalDateTime.now().truncatedTo(ChronoUnit.MICROS);
 
 	public static LocalTime toMicroTime(LocalTime time) {
-		return time.withNano((time.getNano() / 1000) * 1000);
+		return time == null ? null : time.withNano((time.getNano() / 1000) * 1000);
 	}
 
 	public static LocalDateTime toMicroDateTime(LocalDateTime dateTime) {
-		return dateTime.withNano((dateTime.getNano() / 1000) * 1000);
+		return dateTime == null ? null : dateTime.withNano((dateTime.getNano() / 1000) * 1000);
 	}
 }

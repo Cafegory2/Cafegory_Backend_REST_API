@@ -169,7 +169,7 @@ public class StudyOnce {
 	}
 
 	private void validateJoinRequestTime(LocalDateTime requestTime) {
-		Duration between = Duration.between(toMicroDateTime(requestTime), startDateTime);
+		Duration between = Duration.between(requestTime, startDateTime);
 		if (between.toSeconds() < 3600) {
 			throw new CafegoryException(STUDY_ONCE_TOO_LATE_JOIN);
 		}
@@ -186,7 +186,7 @@ public class StudyOnce {
 	}
 
 	private void validateQuitRequestTime(LocalDateTime requestTime) {
-		Duration between = Duration.between(toMicroDateTime(requestTime), startDateTime);
+		Duration between = Duration.between(requestTime, startDateTime);
 		if (between.toSeconds() < 3600) {
 			throw new CafegoryException(STUDY_ONCE_TOO_LATE_QUIT);
 		}

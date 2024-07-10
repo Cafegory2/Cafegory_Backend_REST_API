@@ -562,11 +562,11 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 8, 0),
-				LocalDateTime.of(2999, 1, 1, 9, 0, 0, 1)
+				LocalDateTime.of(2999, 1, 1, 9, 0, 0, 100_000_000)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 20, 0),
-				LocalDateTime.of(2999, 1, 1, 21, 0, 0, 1)
+				LocalDateTime.of(2999, 1, 1, 21, 0, 0, 100_000_000)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 20, 59, 59, 999_999_999),

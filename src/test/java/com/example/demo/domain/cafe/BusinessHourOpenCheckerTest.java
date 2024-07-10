@@ -193,7 +193,7 @@ public class BusinessHourOpenCheckerTest {
 				true
 			),
 			Arguments.of(
-				LocalTime.of(9, 0, 0, 1),
+				LocalTime.of(9, 0, 0, 100_000_000),
 				LocalTime.of(21, 0),
 				true
 			),
@@ -203,7 +203,7 @@ public class BusinessHourOpenCheckerTest {
 				true
 			),
 			Arguments.of(
-				LocalTime.of(9, 0, 0, 1),
+				LocalTime.of(9, 0, 0, 100_000_000),
 				LocalTime.of(20, 59, 59, 999_999_999),
 				true
 			),
@@ -214,12 +214,12 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(9, 0, 0),
-				LocalTime.of(21, 0, 0, 1),
+				LocalTime.of(21, 0, 0, 100_000_000),
 				false
 			),
 			Arguments.of(
 				LocalTime.of(8, 59, 59, 999_999_999),
-				LocalTime.of(21, 0, 0, 1),
+				LocalTime.of(21, 0, 0, 100_000_000),
 				false
 			)
 		);
@@ -287,7 +287,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(23, 0),
-				LocalTime.of(2, 0, 0, 1),
+				LocalTime.of(2, 0, 0, 100_000_000),
 				false
 			),
 			Arguments.of(
@@ -302,7 +302,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(0, 0),
-				LocalTime.of(2, 0, 0, 1),
+				LocalTime.of(2, 0, 0, 100_000_000),
 				false
 			),
 			Arguments.of(
@@ -317,7 +317,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(7, 0),
-				LocalTime.of(2, 0, 0, 1),
+				LocalTime.of(2, 0, 0, 100_000_000),
 				false
 			)
 		);
