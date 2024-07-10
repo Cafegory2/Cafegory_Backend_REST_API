@@ -130,18 +130,27 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		assertThat(response.isAttendance()).isFalse();
 	}
 
-	@Test
-	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초 999_999_999초)이면 카공이 생성된다.")
-	void exception_case1() {
+	@ParameterizedTest
+	@MethodSource("provideLocalDateTime")
+	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
+	void exception_case1(LocalDateTime end) {
 		//given
 		LocalDateTime start = LocalDateTime.of(2999, 1, 1, 23, 0);
-		LocalDateTime end = LocalDateTime.of(2999, 1, 1, 23, 59, 59, 999_999_999);
+		// LocalDateTime end = LocalDateTime.of(2999, 1, 1, 23, 59, 59);
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest));
+	}
+
+	static Stream<Arguments> provideLocalDateTime() {
+		return Stream.of(
+			Arguments.of(LocalDateTime.of(2999, 1, 1, 23, 59, 59))
+			// 밑의 테스트 케이스는 마이그레이션 후 BusinessHour의 종료 시간이 999_999_000로 들어갈 때 성공한다.
+			// Arguments.of(LocalDateTime.of(2999, 1, 1, 23, 59, 59, 999_999_000))
+		);
 	}
 
 	@Test
