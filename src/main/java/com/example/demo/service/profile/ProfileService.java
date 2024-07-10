@@ -14,7 +14,7 @@ public interface ProfileService {
 
 	@Transactional
 	default ProfileGetResponse get(Long requestMemberId, Long targetMemberId) {
-		return get(requestMemberId, targetMemberId, toMicroDateTime(LocalDateTime.now()));
+		return get(requestMemberId, targetMemberId, MICRO_LOCAL_DATE_TIME_NOW);
 	}
 
 	ProfileGetResponse get(Long requestMemberId, Long targetMemberId, LocalDateTime baseDateTime);

@@ -97,7 +97,7 @@ public class StudyOnce {
 	}
 
 	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = toMicroDateTime(LocalDateTime.now());
+		LocalDateTime now = MICRO_LOCAL_DATE_TIME_NOW;
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < 3 * 60 * 60) {
 			throw new CafegoryException(ExceptionType.STUDY_ONCE_WRONG_START_TIME);

@@ -41,7 +41,7 @@ public class CafeSearchCondition {
 		private MinMenuPrice minMenuPrice;
 		private LocalTime startTime;
 		private LocalTime endTime;
-		private LocalDateTime now = toMicroDateTime(LocalDateTime.now());
+		private LocalDateTime now = MICRO_LOCAL_DATE_TIME_NOW;
 
 		public Builder(boolean isAbleToStudy, String region) {
 			this.isAbleToStudy = isAbleToStudy;

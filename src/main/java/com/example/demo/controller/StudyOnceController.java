@@ -127,7 +127,7 @@ public class StudyOnceController {
 		@RequestBody UpdateAttendanceRequest request) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyOnceId,
-			request, toMicroDateTime(LocalDateTime.now()));
+			request, MICRO_LOCAL_DATE_TIME_NOW);
 		return ResponseEntity.ok(response);
 	}
 

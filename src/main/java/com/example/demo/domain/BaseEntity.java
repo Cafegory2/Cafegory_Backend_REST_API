@@ -23,13 +23,13 @@ public class BaseEntity {
 
 	@PrePersist
 	public void prePersist() {
-		LocalDateTime now = toMicroDateTime(LocalDateTime.now());
+		LocalDateTime now = MICRO_LOCAL_DATE_TIME_NOW;
 		createdDate = now;
 		lastModifiedDate = now;
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		lastModifiedDate = toMicroDateTime(LocalDateTime.now());
+		lastModifiedDate = MICRO_LOCAL_DATE_TIME_NOW;
 	}
 }
