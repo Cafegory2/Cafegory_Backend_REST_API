@@ -310,7 +310,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 20, 0),
-				LocalDateTime.of(2999, 1, 1, 21, 0, 0, 1)
+				LocalDateTime.of(2999, 1, 1, 21, 0, 0, 100_000_000)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 20, 59, 59, 999_999_999),
@@ -360,8 +360,8 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		//when
 		sut.tryQuit(member.getId(), studyOnce.getId());
 		//then
-		StudyOnce result = studyOnceRepository.findById(studyOnce.getId()).get();
-		assertThat(result.getStudyMembers().size()).isEqualTo(1);
+		List<StudyMember> result = studyMemberRepository.findAll();
+		assertThat(result.size()).isEqualTo(1);
 	}
 
 	@Test
@@ -398,7 +398,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		Member member = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnceWithTime(cafe, leader, start, end);
 		sut.tryJoin(member.getId(), studyOnce.getId());
-		LocalDateTime attendanceUpdateTime = start.plusMinutes(10).minusNanos(1);
+		LocalDateTime attendanceUpdateTime = start.plusMinutes(10).minusNanos(100_000_000);
 		//when
 		assertThatThrownBy(
 			() -> sut.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), NO, attendanceUpdateTime))
@@ -440,7 +440,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		Member member = memberSaveHelper.saveMember(thumbnailImage);
 		StudyOnce studyOnce = studyOnceSaveHelper.saveStudyOnceWithTime(cafe, leader, start, end);
 		sut.tryJoin(member.getId(), studyOnce.getId());
-		LocalDateTime attendanceUpdateTime = start.plusHours(2).plusNanos(1);
+		LocalDateTime attendanceUpdateTime = start.plusHours(2).plusNanos(100_000_000);
 		//when
 		assertThatThrownBy(
 			() -> sut.updateAttendance(leader.getId(), studyOnce.getId(), member.getId(), NO, attendanceUpdateTime))

@@ -174,10 +174,11 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 
 	private void validateLateToTakeAttendance(LocalDateTime now, LocalDateTime startDateTime,
 		LocalDateTime endDateTime) {
+		LocalDateTime microNow = toMicroDateTime(now);
 		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
 		LocalDateTime midTime = startDateTime.plus(halfDuration);
-
-		if (now.isAfter(midTime)) {
+		
+		if (microNow.isAfter(midTime)) {
 			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
 		}
 	}
