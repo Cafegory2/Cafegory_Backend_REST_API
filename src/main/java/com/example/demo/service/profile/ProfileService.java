@@ -1,5 +1,7 @@
 package com.example.demo.service.profile;
 
+import static com.example.demo.util.MicroTimeUtils.*;
+
 import java.time.LocalDateTime;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +14,7 @@ public interface ProfileService {
 
 	@Transactional
 	default ProfileGetResponse get(Long requestMemberId, Long targetMemberId) {
-		return get(requestMemberId, targetMemberId, LocalDateTime.now());
+		return get(requestMemberId, targetMemberId, toMicroDateTime(LocalDateTime.now()));
 	}
 
 	ProfileGetResponse get(Long requestMemberId, Long targetMemberId, LocalDateTime baseDateTime);

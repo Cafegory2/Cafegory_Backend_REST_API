@@ -177,7 +177,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		LocalDateTime microNow = toMicroDateTime(now);
 		Duration halfDuration = Duration.between(startDateTime, endDateTime).dividedBy(2);
 		LocalDateTime midTime = startDateTime.plus(halfDuration);
-		
+
 		if (microNow.isAfter(midTime)) {
 			throw new CafegoryException(STUDY_ONCE_LATE_TAKE_ATTENDANCE);
 		}
@@ -244,7 +244,8 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 		if (request.getStartDateTime() != null && request.getEndDateTime() != null) {
 			Cafe cafe = studyOnce.getCafe();
 			validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-				request.getEndDateTime().toLocalTime(), cafe.findBusinessHour(now.getDayOfWeek()));
+				request.getEndDateTime().toLocalTime(),
+				cafe.findBusinessHour(toMicroDateTime(now).getDayOfWeek()));
 			studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
 		}
 		if (request.getOpenChatUrl() != null) {
@@ -255,8 +256,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	}
 
 	@Override
-	public void updateStudyOncePartially(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request,
-		LocalDateTime now) {
+	public void updateStudyOncePartially(long requestedMemberId, long studyOnceId, StudyOnceUpdateRequest request) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
 		if (!isStudyOnceLeader(requestedMemberId, studyOnceId)) {
 			throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
@@ -287,7 +287,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyOnceResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
-		return studyOnceMapper.toStudyOnceResponse(studyOnce, studyOnce.canJoin(now));
+		return studyOnceMapper.toStudyOnceResponse(studyOnce, studyOnce.canJoin(toMicroDateTime(now)));
 	}
 
 	@Override

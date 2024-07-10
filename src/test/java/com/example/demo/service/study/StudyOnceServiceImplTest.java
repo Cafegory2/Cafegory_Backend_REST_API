@@ -622,7 +622,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 		StudyOnceUpdateRequest request = new StudyOnceUpdateRequest(cafeId2, "변경된카공이름", start.plusHours(5),
 			start.plusHours(6), 5, false, "오픈채팅방 링크");
 		//when
-		sut.updateStudyOncePartially(leader.getId(), studyOnce.getId(), request, LocalDateTime.now());
+		sut.updateStudyOncePartially(leader.getId(), studyOnce.getId(), request);
 		//then
 		StudyOnce result = studyOnceRepository.findById(studyOnce.getId()).get();
 		assertAll(
@@ -649,7 +649,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 			null, 5, true, null);
 		//then
 		assertThatThrownBy(
-			() -> sut.updateStudyOncePartially(member.getId(), studyOnce.getId(), request, LocalDateTime.now()))
+			() -> sut.updateStudyOncePartially(member.getId(), studyOnce.getId(), request))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_LEADER_PERMISSION_DENIED.getErrorMessage());
 	}

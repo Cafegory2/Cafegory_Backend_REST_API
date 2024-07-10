@@ -97,7 +97,7 @@ public class StudyOnce {
 	}
 
 	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = toMicroDateTime(LocalDateTime.now());
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < 3 * 60 * 60) {
 			throw new CafegoryException(ExceptionType.STUDY_ONCE_WRONG_START_TIME);
@@ -169,7 +169,7 @@ public class StudyOnce {
 	}
 
 	private void validateJoinRequestTime(LocalDateTime requestTime) {
-		Duration between = Duration.between(requestTime, startDateTime);
+		Duration between = Duration.between(toMicroDateTime(requestTime), startDateTime);
 		if (between.toSeconds() < 3600) {
 			throw new CafegoryException(STUDY_ONCE_TOO_LATE_JOIN);
 		}
@@ -186,7 +186,7 @@ public class StudyOnce {
 	}
 
 	private void validateQuitRequestTime(LocalDateTime requestTime) {
-		Duration between = Duration.between(requestTime, startDateTime);
+		Duration between = Duration.between(toMicroDateTime(requestTime), startDateTime);
 		if (between.toSeconds() < 3600) {
 			throw new CafegoryException(STUDY_ONCE_TOO_LATE_QUIT);
 		}
@@ -202,7 +202,7 @@ public class StudyOnce {
 	}
 
 	public boolean canJoin(LocalDateTime baseDateTime) {
-		Duration between = Duration.between(baseDateTime, startDateTime);
+		Duration between = Duration.between(toMicroDateTime(baseDateTime), startDateTime);
 		return between.toSeconds() >= 60 * 60;
 	}
 
