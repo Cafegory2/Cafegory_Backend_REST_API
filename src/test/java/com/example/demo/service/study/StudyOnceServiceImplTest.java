@@ -16,9 +16,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
-import com.example.demo.config.TestConfig;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -42,7 +40,6 @@ import com.example.demo.repository.study.StudyMemberRepository;
 import com.example.demo.repository.study.StudyOnceRepository;
 import com.example.demo.service.ServiceTest;
 
-@Import({TestConfig.class})
 class StudyOnceServiceImplTest extends ServiceTest {
 
 	private static final LocalDateTime NOW = LocalDateTime.now();

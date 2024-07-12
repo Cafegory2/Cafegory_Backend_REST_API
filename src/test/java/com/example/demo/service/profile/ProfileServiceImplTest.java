@@ -8,9 +8,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 
-import com.example.demo.config.TestConfig;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -26,7 +24,6 @@ import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.service.ServiceTest;
 import com.example.demo.service.study.StudyOnceService;
 
-@Import({TestConfig.class})
 class ProfileServiceImplTest extends ServiceTest {
 
 	private static final LocalDateTime NOW = LocalDateTime.now();
