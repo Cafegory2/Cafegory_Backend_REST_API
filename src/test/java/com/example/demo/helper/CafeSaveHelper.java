@@ -27,11 +27,6 @@ public class CafeSaveHelper {
 		return cafeRepository.save(cafe);
 	}
 
-	public Cafe saveCafeWithBusinessHour(List<BusinessHour> businessHours) {
-		Cafe cafe = TestCafeFactory.createCafeWithBusinessHours(businessHours);
-		return cafeRepository.save(cafe);
-	}
-
 	public Cafe saveCafeWith7daysFrom9To21() {
 		Cafe cafe = TestCafeFactory.createCafe();
 		List<BusinessHour> businessHours = createBusinessHoursWith7daysFrom9To21(cafe);
