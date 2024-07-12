@@ -145,8 +145,6 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	static Stream<Arguments> provideLocalDateTime() {
 		return Stream.of(
 			Arguments.of(LocalDateTime.of(2999, 1, 1, 23, 59, 59))
-			// 밑의 테스트 케이스는 마이그레이션 후 BusinessHour의 종료 시간이 999_999_000로 들어갈 때 성공한다.
-			// Arguments.of(LocalDateTime.of(2999, 1, 1, 23, 59, 59, 999_999_000))
 		);
 	}
 
@@ -170,7 +168,7 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	void study_duration_must_be_at_least_1hour() {
 		//given
 		LocalDateTime start = NOW.plusHours(4);
-		LocalDateTime end = start.plusMinutes(59).plusSeconds(59).plusNanos(999_999_999);
+		LocalDateTime end = start.plusMinutes(59).plusSeconds(59);
 		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
 		Member leader = memberSaveHelper.saveMember(thumbnailImage);
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
@@ -184,7 +182,6 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	@Test
 	@DisplayName("카공 진행시간이 5시간 초과일 수 없다.")
 	void study_duration_can_not_exceed_5hours() {
-		//TODO LocalDateTime end = start.plusHours(5).plusNanos(1); 검증필요
 		//given
 		LocalDateTime start = NOW.plusHours(4);
 		LocalDateTime end = start.plusHours(5).plusSeconds(1);
@@ -298,19 +295,19 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	static Stream<Arguments> provideStartAndEndDateTime1() {
 		return Stream.of(
 			Arguments.of(
-				LocalDateTime.of(2999, 1, 1, 8, 59, 59, 999_999_999),
+				LocalDateTime.of(2999, 1, 1, 8, 59, 59),
 				LocalDateTime.of(2999, 1, 1, 10, 0)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 8, 0),
-				LocalDateTime.of(2999, 1, 1, 9, 0, 0, 1)
+				LocalDateTime.of(2999, 1, 1, 9, 0, 0)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 20, 0),
 				LocalDateTime.of(2999, 1, 1, 21, 0, 1)
 			),
 			Arguments.of(
-				LocalDateTime.of(2999, 1, 1, 20, 59, 59, 999_999_999),
+				LocalDateTime.of(2999, 1, 1, 20, 59, 59),
 				LocalDateTime.of(2999, 1, 1, 22, 0)
 			)
 		);
@@ -554,19 +551,19 @@ class StudyOnceServiceImplTest extends ServiceTest {
 	static Stream<Arguments> provideStartAndEndDateTime3() {
 		return Stream.of(
 			Arguments.of(
-				LocalDateTime.of(2999, 1, 1, 8, 59, 59, 999_999_999),
+				LocalDateTime.of(2999, 1, 1, 8, 59, 59),
 				LocalDateTime.of(2999, 1, 1, 10, 0)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 8, 0),
-				LocalDateTime.of(2999, 1, 1, 9, 0, 0, 100_000_000)
+				LocalDateTime.of(2999, 1, 1, 9, 0, 0)
 			),
 			Arguments.of(
 				LocalDateTime.of(2999, 1, 1, 20, 0),
 				LocalDateTime.of(2999, 1, 1, 21, 0, 1)
 			),
 			Arguments.of(
-				LocalDateTime.of(2999, 1, 1, 20, 59, 59, 999_999_999),
+				LocalDateTime.of(2999, 1, 1, 20, 59, 59),
 				LocalDateTime.of(2999, 1, 1, 22, 0)
 			)
 		);

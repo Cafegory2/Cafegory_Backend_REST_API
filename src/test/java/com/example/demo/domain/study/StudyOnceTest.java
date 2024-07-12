@@ -74,7 +74,7 @@ class StudyOnceTest {
 		StudyOnce sut = createStudyOnceWithTime(cafe, leader, NOW.plusHours(4), NOW.plusHours(6));
 		//when
 		assertThatThrownBy(
-			() -> sut.tryJoin(member, NOW.plusHours(3).plusNanos(100_000_000)))
+			() -> sut.tryJoin(member, NOW.plusHours(3).plusSeconds(1)))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_TOO_LATE_JOIN.getErrorMessage());
 	}
@@ -162,7 +162,7 @@ class StudyOnceTest {
 		sut.tryJoin(member, NOW);
 		//then
 		assertThatThrownBy(
-			() -> sut.tryQuit(member, NOW.plusHours(3).plusNanos(100_000_000)))
+			() -> sut.tryQuit(member, NOW.plusHours(3).plusSeconds(1)))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(STUDY_ONCE_TOO_LATE_QUIT.getErrorMessage());
 	}

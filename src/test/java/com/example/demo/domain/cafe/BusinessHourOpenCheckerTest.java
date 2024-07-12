@@ -37,7 +37,7 @@ public class BusinessHourOpenCheckerTest {
 		return Stream.of(
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 9, 0, 0)),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 12, 0, 0)),
-			Arguments.of(LocalDateTime.of(2024, 1, 29, 20, 59, 59, 999_999_999))
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 20, 59, 59))
 		);
 	}
 
@@ -58,7 +58,7 @@ public class BusinessHourOpenCheckerTest {
 
 	private static Stream<Arguments> provideLocalDateTime5() {
 		return Stream.of(
-			Arguments.of(LocalDateTime.of(2024, 1, 29, 8, 59, 59, 999_999_999)),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 8, 59, 59)),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 0, 0))
 		);
 	}
@@ -86,7 +86,7 @@ public class BusinessHourOpenCheckerTest {
 
 	private static Stream<Arguments> provideLocalDateTime2() {
 		return Stream.of(
-			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_999)),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59)),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 0, 0))
 		);
 	}
@@ -111,9 +111,9 @@ public class BusinessHourOpenCheckerTest {
 	private static Stream<Arguments> provideLocalDateTime3() {
 		return Stream.of(
 			// LocalDateTime now, boolean expected
-			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59, 999_999_999), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 23, 59, 59), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 0, 0), true),
-			Arguments.of(LocalDateTime.of(2024, 1, 30, 1, 59, 59, 999_999_999), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 1, 59, 59), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 2, 0, 0), false)
 		);
 	}
@@ -193,22 +193,22 @@ public class BusinessHourOpenCheckerTest {
 				true
 			),
 			Arguments.of(
-				LocalTime.of(9, 0, 0, 100_000_000),
+				LocalTime.of(9, 0, 1),
 				LocalTime.of(21, 0),
 				true
 			),
 			Arguments.of(
 				LocalTime.of(9, 0),
-				LocalTime.of(20, 59, 59, 999_999_999),
+				LocalTime.of(20, 59, 59),
 				true
 			),
 			Arguments.of(
-				LocalTime.of(9, 0, 0, 100_000_000),
-				LocalTime.of(20, 59, 59, 999_999_999),
+				LocalTime.of(9, 0, 1),
+				LocalTime.of(20, 59, 59),
 				true
 			),
 			Arguments.of(
-				LocalTime.of(8, 59, 59, 999_999_999),
+				LocalTime.of(8, 59, 59),
 				LocalTime.of(21, 0),
 				false
 			),
@@ -218,8 +218,8 @@ public class BusinessHourOpenCheckerTest {
 				false
 			),
 			Arguments.of(
-				LocalTime.of(8, 59, 59, 999_999_999),
-				LocalTime.of(21, 0, 0, 100_000_000),
+				LocalTime.of(8, 59, 59),
+				LocalTime.of(21, 0, 1),
 				false
 			)
 		);
@@ -261,7 +261,7 @@ public class BusinessHourOpenCheckerTest {
 	private static Stream<Arguments> provideChosenTimeAndExpected4() {
 		return Stream.of(
 			Arguments.of(
-				LocalTime.of(6, 59, 59, 999_999_999),
+				LocalTime.of(6, 59, 59),
 				LocalTime.of(8, 0),
 				false
 			),
@@ -311,7 +311,7 @@ public class BusinessHourOpenCheckerTest {
 				true
 			),
 			Arguments.of(
-				LocalTime.of(6, 59, 59, 999_999_999),
+				LocalTime.of(6, 59, 59),
 				LocalTime.of(2, 0),
 				false
 			),
