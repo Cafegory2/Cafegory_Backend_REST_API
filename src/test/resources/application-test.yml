@@ -1,0 +1,53 @@
+server:
+  port: 8080
+spring:
+  datasource: #연결할 디비의 이름
+    driver-class-name: org.mariadb.jdbc.Driver #디비 종류
+    url: jdbc:mariadb://localhost:3306/cafegory_test
+    #    username: cafegory
+    username: cafegory_test
+    #    password: cafegory!Q@W#E
+    password: 1234
+  jpa: #jpa 종류
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true #이쁘게 해줌
+        dialect: org.hibernate.dialect.MariaDBDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: test-cafegory@gmail.com
+    password: test cafe gory pass
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+logging:
+  level:
+    org.hibernate.SQL: trace #콘솔에 남기는게 아니라 로그로 남음.
+    org.hibernate.type: trace #바인딩된 파라미터까지 볼 수 있음
+
+oauth:
+  kakao:
+    client-id: test-kakao-client-id
+    url:
+      auth: https://kauth.kakao.com
+      api: https://kapi.kakao.com
+  naver:
+    client-id: test-naver-client-id
+    client-secret: test-naver-client-secret
+    url:
+      auth: https://nid.naver.com
+      api: https://openapi.naver.com
+
+jwt:
+  secret: 01234567890123456789012345678901234567890123456789
+
+mail:
+  from: cafegory@gmail.com
