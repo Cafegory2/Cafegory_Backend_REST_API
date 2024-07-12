@@ -1,7 +1,7 @@
 package com.example.demo.domain.cafe;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -41,7 +41,7 @@ public class CafeSearchCondition {
 		private MinMenuPrice minMenuPrice;
 		private LocalTime startTime;
 		private LocalTime endTime;
-		private LocalDateTime now = MICRO_LOCAL_DATE_TIME_NOW;
+		private LocalDateTime now = LOCAL_DATE_TIME_NOW;
 
 		public Builder(boolean isAbleToStudy, String region) {
 			this.isAbleToStudy = isAbleToStudy;

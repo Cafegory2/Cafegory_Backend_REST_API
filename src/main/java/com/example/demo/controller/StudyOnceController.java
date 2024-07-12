@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.LocalDateTime;
 
@@ -108,7 +108,7 @@ public class StudyOnceController {
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		studyOnceService.tryJoin(memberId, studyOnceId);
-		return ResponseEntity.ok(new StudyOnceJoinResult(MICRO_LOCAL_DATE_TIME_NOW, true));
+		return ResponseEntity.ok(new StudyOnceJoinResult(LOCAL_DATE_TIME_NOW, true));
 	}
 
 	@DeleteMapping("/{studyOnceId:[0-9]+}")
@@ -117,7 +117,8 @@ public class StudyOnceController {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
 		LocalDateTime requestTime = LocalDateTime.now();
 		studyOnceService.tryQuit(memberId, studyOnceId);
-		return ResponseEntity.ok(new StudyOnceQuitResponse(toMicroDateTime(requestTime), true));
+		return ResponseEntity.ok(
+			new StudyOnceQuitResponse(truncateDateTimeToSecond(requestTime), true));
 	}
 
 	@PatchMapping("/{studyOnceId:[0-9]+}/attendance")
@@ -126,7 +127,7 @@ public class StudyOnceController {
 		@RequestBody UpdateAttendanceRequest request) {
 		long leaderId = cafegoryTokenManager.getIdentityId(authorization);
 		UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyOnceId,
-			request, MICRO_LOCAL_DATE_TIME_NOW);
+			request, LOCAL_DATE_TIME_NOW);
 		return ResponseEntity.ok(response);
 	}
 

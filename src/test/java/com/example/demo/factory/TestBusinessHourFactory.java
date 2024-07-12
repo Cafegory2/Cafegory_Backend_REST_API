@@ -1,6 +1,6 @@
 package com.example.demo.factory;
 
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.LocalTime;
 

@@ -1,7 +1,7 @@
 package com.example.demo.domain.cafe;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class Cafe {
 	}
 
 	public boolean isOpen(OpenChecker<BusinessHour> openChecker) {
-		return openChecker.checkWithBusinessHours(this.businessHours, MICRO_LOCAL_DATE_TIME_NOW);
+		return openChecker.checkWithBusinessHours(this.businessHours, LOCAL_DATE_TIME_NOW);
 	}
 
 	public OptionalDouble calcAverageRating() {

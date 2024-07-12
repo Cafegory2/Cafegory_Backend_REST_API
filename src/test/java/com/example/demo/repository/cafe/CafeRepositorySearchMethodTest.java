@@ -2,7 +2,7 @@ package com.example.demo.repository.cafe;
 
 import static com.example.demo.factory.TestBusinessHourFactory.*;
 import static com.example.demo.factory.TestCafeFactory.*;
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.sql.Time;

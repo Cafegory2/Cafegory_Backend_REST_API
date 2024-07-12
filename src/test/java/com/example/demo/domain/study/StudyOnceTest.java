@@ -46,7 +46,7 @@ class StudyOnceTest {
 		LocalDateTime start = NOW.plusHours(4);
 		return Stream.of(
 			Arguments.of(start.minusHours(1), start, true),
-			Arguments.of(start.minusHours(1).plusNanos(100_000_000), start, false)
+			Arguments.of(start.minusHours(1).plusSeconds(1), start, false)
 		);
 	}
 

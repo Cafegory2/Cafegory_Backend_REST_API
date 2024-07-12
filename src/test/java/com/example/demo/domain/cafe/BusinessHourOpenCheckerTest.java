@@ -1,7 +1,7 @@
 package com.example.demo.domain.cafe;
 
 import static com.example.demo.factory.TestBusinessHourFactory.*;
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -158,9 +158,9 @@ public class BusinessHourOpenCheckerTest {
 			*/
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59, 999_999_000), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 22, 0), false),
-			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_998_000), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 58), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_999_000), false),
-			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_998_000), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 58), true),
 			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_000), false),
 			Arguments.of(LocalDateTime.of(2024, 2, 3, 0, 0), true),
 			Arguments.of(LocalDateTime.of(2024, 2, 4, 0, 0), true),
@@ -214,7 +214,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(9, 0, 0),
-				LocalTime.of(21, 0, 0, 100_000_000),
+				LocalTime.of(21, 0, 1),
 				false
 			),
 			Arguments.of(
@@ -287,7 +287,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(23, 0),
-				LocalTime.of(2, 0, 0, 100_000_000),
+				LocalTime.of(2, 0, 1),
 				false
 			),
 			Arguments.of(
@@ -302,7 +302,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(0, 0),
-				LocalTime.of(2, 0, 0, 100_000_000),
+				LocalTime.of(2, 0, 1),
 				false
 			),
 			Arguments.of(
@@ -317,7 +317,7 @@ public class BusinessHourOpenCheckerTest {
 			),
 			Arguments.of(
 				LocalTime.of(7, 0),
-				LocalTime.of(2, 0, 0, 100_000_000),
+				LocalTime.of(2, 0, 1),
 				false
 			)
 		);

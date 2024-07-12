@@ -1,6 +1,6 @@
 package com.example.demo.domain;
 
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.LocalDateTime;
 
@@ -23,13 +23,13 @@ public class BaseEntity {
 
 	@PrePersist
 	public void prePersist() {
-		LocalDateTime now = MICRO_LOCAL_DATE_TIME_NOW;
+		LocalDateTime now = LOCAL_DATE_TIME_NOW;
 		createdDate = now;
 		lastModifiedDate = now;
 	}
 
 	@PreUpdate
 	public void preUpdate() {
-		lastModifiedDate = MICRO_LOCAL_DATE_TIME_NOW;
+		lastModifiedDate = LOCAL_DATE_TIME_NOW;
 	}
 }

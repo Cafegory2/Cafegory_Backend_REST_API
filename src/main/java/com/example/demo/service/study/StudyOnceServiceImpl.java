@@ -1,7 +1,7 @@
 package com.example.demo.service.study;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -159,7 +159,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance,
 		LocalDateTime now) {
-		LocalDateTime microNow = toMicroDateTime(now);
+		LocalDateTime microNow = truncateDateTimeToSecond(now);
 		StudyOnce searched = findStudyOnceById(studyOnceId);
 
 		if (!studyOnceRepository.existsByLeaderId(leaderId)) {
@@ -205,8 +205,8 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			businessHour);
 		Member leader = findMemberById(leaderId);
 		validateStudyScheduleConflict(
-			toMicroDateTime(request.getStartDateTime()),
-			toMicroDateTime(request.getEndDateTime()),
+			truncateDateTimeToSecond(request.getStartDateTime()),
+			truncateDateTimeToSecond(request.getEndDateTime()),
 			leader);
 		StudyOnce studyOnce = studyOnceMapper.toNewEntity(request, cafe, leader);
 		StudyOnce saved = studyOnceRepository.save(studyOnce);
@@ -246,7 +246,7 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 			Cafe cafe = studyOnce.getCafe();
 			validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
 				request.getEndDateTime().toLocalTime(),
-				cafe.findBusinessHour(toMicroDateTime(now).getDayOfWeek()));
+				cafe.findBusinessHour(truncateDateTimeToSecond(now).getDayOfWeek()));
 			studyOnce.changeStudyOnceTime(request.getStartDateTime(), request.getEndDateTime());
 		}
 		if (request.getOpenChatUrl() != null) {
@@ -288,7 +288,8 @@ public class StudyOnceServiceImpl implements StudyOnceService {
 	@Override
 	public StudyOnceResponse findStudyOnce(Long studyOnceId, LocalDateTime now) {
 		StudyOnce studyOnce = findStudyOnceById(studyOnceId);
-		return studyOnceMapper.toStudyOnceResponse(studyOnce, studyOnce.canJoin(toMicroDateTime(now)));
+		return studyOnceMapper.toStudyOnceResponse(studyOnce,
+			studyOnce.canJoin(truncateDateTimeToSecond(now)));
 	}
 
 	@Override

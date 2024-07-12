@@ -1,6 +1,6 @@
 package com.example.demo.repository.study;
 
-import static com.example.demo.util.MicroTimeUtils.*;
+import static com.example.demo.util.TruncatedTimeUtil.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,7 +56,7 @@ public class StudyOnceRepositoryImpl implements StudyOnceRepositoryCustom {
 	}
 
 	private BooleanExpression studyJoinAbleFilter(boolean onlyJoinAble) {
-		LocalDateTime base = MICRO_LOCAL_DATE_TIME_NOW.plusHours(3);
+		LocalDateTime base = LOCAL_DATE_TIME_NOW.plusHours(3);
 		if (onlyJoinAble) {
 			return qStudyOnce.startDateTime.after(base)
 				.or(qStudyOnce.startDateTime.eq(base));
