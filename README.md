@@ -1,4 +1,5 @@
 # Cafegory
+[1차로 진행한 카페고리 프로젝트 이슈 확인](https://github.com/Cafegory/Cafegory_Backend_REST_API)
 
 ## 📖 목차
 
