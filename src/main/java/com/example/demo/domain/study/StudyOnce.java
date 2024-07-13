@@ -117,8 +117,8 @@ public class StudyOnce {
 	}
 
 	private void validateStartAndEndTime(LocalTime startLocalTime, LocalTime endLocalTime) {
-		if (!(startLocalTime.equals(LocalTime.of(23, 0)) &&
-			(endLocalTime.equals(MAX_LOCAL_TIME) || endLocalTime.equals(LocalTime.of(23, 59, 59))))
+		if (!(startLocalTime.equals(LocalTime.of(23, 0))
+			&& (endLocalTime.equals(MAX_LOCAL_TIME) || endLocalTime.equals(LocalTime.of(23, 59, 59))))
 		) {
 			throw new CafegoryException(STUDY_ONCE_SHORT_DURATION);
 		}
