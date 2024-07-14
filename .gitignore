@@ -37,10 +37,10 @@ out/
 .vscode/
 
 ###security###
-application-dev.yml
-application-pub.yml
-application-local.yml
-application-*.yml
-application_log
+#application-dev.yml
+#application-pub.yml
+#application-local.yml
+#application-*.yml
+#application_log
 *.gz
 !**/src/test/resources/application-test.yml
