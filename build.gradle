@@ -61,6 +61,16 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+//서브모듈 시작
+processResources.dependsOn('copySecret')
+
+tasks.register('copySecret', Copy) {
+    from "./Cafegory_Backend_Settings/main"
+    include 'application*.yml', 'logback-spring.xml'  // 복사할 파일들
+    into "./src/main/resources"  // 복사 위치
+}
+//서브모듈 끝
+
 jar {
     enabled = false
 }
@@ -100,13 +110,3 @@ compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
 }
 //querydsl 추가 끝
-
-//서브모듈 시작
-processResources.dependsOn('copySecret')
-
-tasks.register('copySecret', Copy) {
-    from './Cafegory_Backend_Settings'
-    include 'application*.yml', 'logback-spring.xml'  // 복사할 파일들
-    into 'src/main/resources'  // 복사 위치
-}
-//서브모듈 끝
