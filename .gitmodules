@@ -1,3 +1,3 @@
 [submodule "Cafegory_Backend_Settings"]
 	path = Cafegory_Backend_Settings
-	url = https://github.com/Cafegory2/Cafegory_Backend_Settings.git
+	url = git@github.com:Cafegory2/Cafegory_Backend_Settings.git
