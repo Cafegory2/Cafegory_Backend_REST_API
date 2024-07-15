@@ -1,6 +1,0 @@
-spring:
-  datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: cafegory
-    password: y7zripx34yLu
-    url: jdbc:mariadb://cafegory-be-db.cviioyg0y1on.ap-northeast-2.rds.amazonaws.com:3306/cafegory

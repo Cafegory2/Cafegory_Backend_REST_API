@@ -1,5 +1,0 @@
-logging:
-  level:
-    root: debug
-    sql: debug
-    web: debug
