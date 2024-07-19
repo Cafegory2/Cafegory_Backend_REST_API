@@ -97,11 +97,6 @@ jar {
     enabled = false
 }
 
-// 배포하고 DB연결하고 지워야함
-test {
-    ignoreFailures = true
-}
-
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
