@@ -67,6 +67,10 @@ tasks.named('test') {
 }
 
 //서브모듈 시작
+tasks.named('processTestResources') {
+    dependsOn 'copyTestSecret'
+}
+
 processResources.dependsOn('copySecret')
 
 tasks.register('copyMainSecret', Copy) {
