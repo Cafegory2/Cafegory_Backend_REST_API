@@ -4,18 +4,12 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.config.QueryDslConfig;
-import com.example.demo.config.TestConfig;
+import com.example.demo.config.JpaTest;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -26,13 +20,8 @@ import com.example.demo.helper.ReviewSaveHelper;
 import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.util.PageRequestCustom;
 
-@DataJpaTest
-@Import({QueryDslConfig.class, TestConfig.class})
-@Transactional
-class ReviewRepositoryTest {
+class ReviewRepositoryTest extends JpaTest {
 
-	@Autowired
-	private EntityManager em;
 	@Autowired
 	private ReviewRepository reviewRepository;
 	@Autowired
@@ -52,8 +41,6 @@ class ReviewRepositoryTest {
 		Member member = memberPersistHelper.saveMember(thumb);
 		reviewPersistHelper.saveReview(cafe, member);
 		reviewPersistHelper.saveReview(cafe, member);
-		em.flush();
-		em.clear();
 		//when
 		List<Review> reviews = reviewRepository.findAllByCafeId(cafe.getId());
 		//then
@@ -72,8 +59,6 @@ class ReviewRepositoryTest {
 			reviewPersistHelper.saveReview(cafe, member);
 			reviewPersistHelper.saveReview(cafe, member);
 		}
-		em.flush();
-		em.clear();
 		//when
 		Page<Review> pagedReviews = reviewRepository.findAllWithPagingByCafeId(cafe.getId(),
 			PageRequestCustom.createByDefault());

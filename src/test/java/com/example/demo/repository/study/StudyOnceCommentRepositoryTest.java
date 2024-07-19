@@ -4,17 +4,11 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.config.QueryDslConfig;
-import com.example.demo.config.TestConfig;
+import com.example.demo.config.JpaTest;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -26,10 +20,7 @@ import com.example.demo.helper.StudyOnceCommentSaveHelper;
 import com.example.demo.helper.StudyOnceSaveHelper;
 import com.example.demo.helper.ThumbnailImageSaveHelper;
 
-@DataJpaTest
-@Import({TestConfig.class, QueryDslConfig.class})
-@Transactional
-class StudyOnceCommentRepositoryTest {
+class StudyOnceCommentRepositoryTest extends JpaTest {
 
 	@Autowired
 	private StudyOnceCommentRepository studyOnceCommentRepository;
@@ -43,8 +34,6 @@ class StudyOnceCommentRepositoryTest {
 	private CafeSaveHelper cafePersistHelper;
 	@Autowired
 	private StudyOnceCommentSaveHelper studyOnceCommentPersistHelper;
-	@Autowired
-	private EntityManager em;
 
 	@Test
 	@DisplayName("studyOnceCommentId로 오름차순 정렬된, studyOnceId로 댓글목록 조회")
@@ -64,8 +53,8 @@ class StudyOnceCommentRepositoryTest {
 		studyOnceCommentPersistHelper.saveStudyOnceReplyWithContent(leader,
 			studyOnce, question1, "대댓글1");
 
-		em.flush();
-		em.clear();
+		// em.flush();
+		// em.clear();
 		//when
 		List<StudyOnceComment> comments = studyOnceCommentRepository.findAllByStudyOnceId(studyOnce.getId());
 		//then

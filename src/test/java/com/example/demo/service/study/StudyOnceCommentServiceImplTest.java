@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.config.ServiceTest;
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.ThumbnailImage;
@@ -23,7 +24,6 @@ import com.example.demo.helper.StudyOnceCommentSaveHelper;
 import com.example.demo.helper.StudyOnceSaveHelper;
 import com.example.demo.helper.ThumbnailImageSaveHelper;
 import com.example.demo.repository.study.StudyOnceCommentRepository;
-import com.example.demo.service.ServiceTest;
 
 class StudyOnceCommentServiceImplTest extends ServiceTest {
 

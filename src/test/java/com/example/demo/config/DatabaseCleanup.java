@@ -1,4 +1,4 @@
-package com.example.demo.utils;
+package com.example.demo.config;
 
 import java.util.List;
 import java.util.stream.Collectors;

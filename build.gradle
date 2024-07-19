@@ -55,6 +55,11 @@ dependencies {
 
     //spring boot starter mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // test container
+    testImplementation "org.testcontainers:testcontainers:1.20.0"
+    testImplementation "org.testcontainers:junit-jupiter:1.20.0"
+    testImplementation "org.testcontainers:mariadb:1.20.0"
 }
 
 tasks.named('test') {

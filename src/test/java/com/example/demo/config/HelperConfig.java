@@ -20,7 +20,7 @@ import com.example.demo.repository.study.StudyOnceRepository;
 import com.example.demo.repository.thumbnailimage.ThumbnailImageRepository;
 
 @TestConfiguration
-public class TestConfig {
+public class HelperConfig {
 
 	@Autowired
 	private CafeRepository cafeRepository;
