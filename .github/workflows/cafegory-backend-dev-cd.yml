@@ -55,4 +55,4 @@ jobs:
     steps:
       - name: 배포 스크립트 실행
         run: |
-          sh /home/ubuntu/cafegory_backend/scripts/deploy.sh
+          sh /home/ubuntu/cafegory_project/scripts/deploy.sh
