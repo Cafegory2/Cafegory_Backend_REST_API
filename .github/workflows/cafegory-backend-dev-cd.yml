@@ -1,4 +1,4 @@
-name: Cafegory_Backend_Dev_CD
+name: Cafegory-Backend-Dev-CD
 
 env:
   PROFILE: dev
@@ -43,15 +43,15 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./
-          file: ./Dockerfile-dev
+          file: ./docker/Dockerfile-dev
           push: true
           platforms: linux/arm64
           tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
 
   backend-docker-pull-and-run:
-    runs-on: [self-hosted, dev]
+    runs-on: [ self-hosted, dev ]
     if: ${{ needs.backend-docker-build-and-push.result == 'success' }}
-    needs: [backend-docker-build-and-push]
+    needs: [ backend-docker-build-and-push ]
     steps:
       - name: 배포 스크립트 실행
         run: |
