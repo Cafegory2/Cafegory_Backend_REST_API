@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,10 +128,5 @@ class ProfileServiceImplTest extends ServiceTest {
 		assertThatThrownBy(() -> sut.update(member1.getId(), member2.getId(), profileUpdateRequest))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(PROFILE_UPDATE_PERMISSION_DENIED.getErrorMessage());
-	}
-
-	@Test
-	void 실패하는테스트() {
-		Assertions.assertThat(1 == 1).isFalse();
 	}
 }
