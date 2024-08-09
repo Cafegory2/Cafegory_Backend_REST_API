@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.example.demo.domain.member.Member;
-import com.example.demo.domain.study.StudyMember;
+import com.example.demo.domain.study.CafeStudyMember;
 
 public interface StudyMemberRepositoryCustom {
-	List<StudyMember> findByMemberAndStudyDate(Member member, LocalDate studyDate);
+	List<CafeStudyMember> findByMemberAndStudyDate(Member member, LocalDate studyDate);
 }

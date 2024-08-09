@@ -31,7 +31,7 @@ public class Menu {
 	private Long id;
 
 	private String name;
-	private int price;
+	private String price;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
