@@ -1,5 +1,8 @@
 package com.example.demo.domain.study;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Embedded;
@@ -12,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.demo.domain.BaseEntity;
@@ -58,6 +62,9 @@ public class CafeStudy extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private RecruitmentStatus recruitmentStatus;
+
+	@OneToMany(mappedBy = "cafe_study")
+	private List<CafeStudyMember> cafeStudyMembers = new ArrayList<>();
 
 	// TODO: 기획 확정 후 enum 생성하기
 	// @Transient

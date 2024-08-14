@@ -20,6 +20,7 @@ public class BaseEntity {
 	@Column(updatable = false)
 	private LocalDateTime createdDate;
 	private LocalDateTime lastModifiedDate;
+	private LocalDateTime deletedDate;
 
 	@PrePersist
 	public void prePersist() {
@@ -31,5 +32,9 @@ public class BaseEntity {
 	@PreUpdate
 	public void preUpdate() {
 		lastModifiedDate = LOCAL_DATE_TIME_NOW;
+	}
+
+	public void softDelete() {
+		deletedDate = LOCAL_DATE_TIME_NOW;
 	}
 }

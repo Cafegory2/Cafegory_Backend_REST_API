@@ -12,6 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import com.example.demo.domain.BaseEntity;
+import com.example.demo.domain.member.Member;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,8 +24,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "cafe_study_member")
-public class CafeStudyMember {
+@Table(name = "cafe_study_member",
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "unique_cafe_study_member",
+			columnNames = {"cafe_study_id", "member_id"}
+		)})
+public class CafeStudyMember extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -30,11 +39,11 @@ public class CafeStudyMember {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	// @MapsId("cafestudyId")
 	private CafeStudy cafeStudy;
 
-	// 복합키면 지워야함
-	private Long id2;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private Member member;
 
 	@Enumerated(EnumType.STRING)
 	private StudyRole studyRole;

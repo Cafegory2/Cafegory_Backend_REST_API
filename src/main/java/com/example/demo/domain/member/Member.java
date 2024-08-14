@@ -1,11 +1,16 @@
 package com.example.demo.domain.member;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.demo.domain.BaseEntity;
@@ -38,8 +43,9 @@ public class Member extends BaseEntity {
 	private String bio;
 	private int participationCount;
 
-	// TODO: 기획 확정 후 Entity 생성해야됨
-	// private BeverageSize beverageSize;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "beverage_size_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private BeverageSize beverageSize;
 
 	// public void addStudyMember(StudyMember studyMember) {
 	// 	this.studyMembers.add(studyMember);

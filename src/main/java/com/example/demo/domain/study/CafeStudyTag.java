@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.demo.domain.BaseEntity;
 import com.example.demo.domain.cafe.Tag;
 
 import lombok.AccessLevel;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cafe_study_tag")
-public class CafeStudyTag {
+public class CafeStudyTag extends BaseEntity {
 
 	@Id
 	@GeneratedValue
