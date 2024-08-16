@@ -1,7 +1,9 @@
 package com.example.demo.domain.study;
 
 public enum Attendance {
-	YES(true), NO(false);
+	
+	YES(true),
+	NO(false);
 
 	private final boolean isPresent;
 
