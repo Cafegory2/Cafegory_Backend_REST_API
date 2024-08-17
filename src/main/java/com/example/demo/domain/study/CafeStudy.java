@@ -63,7 +63,7 @@ public class CafeStudy extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private RecruitmentStatus recruitmentStatus;
 
-	@OneToMany(mappedBy = "cafe_study")
+	@OneToMany(mappedBy = "cafeStudy")
 	private List<CafeStudyMember> cafeStudyMembers = new ArrayList<>();
 
 	// TODO: 기획 확정 후 enum 생성하기
