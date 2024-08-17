@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'checkstyle'
-    //querydsl 추가
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
@@ -27,8 +26,6 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
     implementation 'commons-io:commons-io:2.11.0'
     compileOnly 'org.projectlombok:lombok'
@@ -36,7 +33,6 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // progresql
     runtimeOnly 'org.postgresql:postgresql'
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -78,7 +74,7 @@ processResources.dependsOn('copySecret')
 
 tasks.register('copyMainSecret', Copy) {
     from("./Cafegory_Backend_Settings/main") {
-        include 'application*.yml', 'logback-spring.xml'  // 복사할 파일들
+        include 'application*.yml'  // 복사할 파일들
     }
     into "./src/main/resources"  // 복사 위치
 }
