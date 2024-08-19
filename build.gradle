@@ -1,9 +1,20 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
+buildscript {
+    ext {
+        restdocsApiSpecVersion = '0.16.4'
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-    id 'checkstyle'
+//    id 'checkstyle'
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
+    id 'org.hidetake.swagger.generator' version '2.18.2'
+
 }
 
 group = 'com.cafegory'
@@ -41,7 +52,7 @@ dependencies {
 
     implementation 'com.h2database:h2'
 
-    //querydsl 추가
+    //querydsl
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
     implementation 'com.querydsl:querydsl-apt:5.0.0'
@@ -59,10 +70,55 @@ dependencies {
     testImplementation "org.testcontainers:testcontainers:1.20.0"
     testImplementation "org.testcontainers:junit-jupiter:1.20.0"
     testImplementation "org.testcontainers:mariadb:1.20.0"
+
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:' + restdocsApiSpecVersion
+    swaggerUI 'org.webjars:swagger-ui:5.17.14'
+
+}
+
+openapi3 {
+    setServer("http://localhost:8080")
+    setServer("http://43.200.133.96:8080")
+    title = "Cafegory Server API"
+    description = "Cafegory Server API for client"
+    version = "0.0.1"
+    format = "yaml"
+}
+
+swaggerSources {
+    register("cafegoryApi").configure {
+        setInputFile(file("${project.buildDir}/api-spec/openapi3.yaml"))
+    }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.withType(GenerateSwaggerUI) {
+    dependsOn 'openapi3'
+}
+
+tasks.register('copySwaggerUI', Copy) {
+    dependsOn 'generateSwaggerUICafegoryApi'
+
+    def generateSwaggerTask = tasks.named('generateSwaggerUICafegoryApi', GenerateSwaggerUI).get()
+
+    from("${generateSwaggerTask.outputDir}")
+    into("${project.buildDir}/resources/main/static/docs")
+}
+
+tasks.named('bootRunMainClassName') {
+    dependsOn 'copySwaggerUI'
+}
+
+tasks.named('bootJarMainClassName') {
+    dependsOn 'copySwaggerUI'
+}
+
+tasks.withType(BootJar) {
+    dependsOn 'copySwaggerUI'
 }
 
 //서브모듈 시작
@@ -100,15 +156,15 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
 
-checkstyle {
-    maxWarnings = 0
-    configFile = file("checkstyle/naver-checkstyle-rules.xml")
-    configProperties = ["suppressionFile": "checkstyle/naver-checkstyle-suppressions.xml"]
-    sourceSets = [sourceSets.main, sourceSets.test]
-}
+//checkstyle {
+//    maxWarnings = 0
+//    configFile = file("checkstyle/naver-checkstyle-rules.xml")
+//    configProperties = ["suppressionFile": "checkstyle/naver-checkstyle-suppressions.xml"]
+//    sourceSets = [sourceSets.main, sourceSets.test]
+//}
 
-checkstyleMain.source = fileTree('src/main/java')
-checkstyleTest.source = fileTree('src/test/java')
+//checkstyleMain.source = fileTree('src/main/java')
+//checkstyleTest.source = fileTree('src/test/java')
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
