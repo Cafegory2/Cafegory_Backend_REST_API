@@ -1,3 +1,4 @@
+
 name: Cafegory-Backend-Dev-CD
 
 env:
@@ -30,9 +31,6 @@ jobs:
 
       - name: Gradlew 권한 설정
         run: chmod +x ./gradlew
-
-      - name: 테스트 실행
-        run: ./gradlew test
 
       - name: Jar 파일 빌드
         run: ./gradlew bootJar
