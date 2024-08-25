@@ -15,7 +15,7 @@ public enum ExceptionType {
 	TOKEN_NOT_FOUND(UNAUTHORIZED, "토큰이 없습니다."),
 	TOKEN_REFRESH_REJECT(UNAUTHORIZED, "토큰을 재발행할 수 없습니다."),
 	STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS(BAD_REQUEST, "카공 생성시 시작시간과 종료시간은 카페 영업시간내에 포함되어야 합니다."),
-	STUDY_ONCE_WRONG_START_TIME(BAD_REQUEST, "카공 시작 시간은 현재 시간보다 최소 3시간 이후여야 합니다."),
+	STUDY_ONCE_WRONG_START_TIME(BAD_REQUEST, "카공 시작 시간은 현재 시간보다 최소 1시간 이후여야 합니다."),
 	STUDY_ONCE_SHORT_DURATION(BAD_REQUEST, "카공 시간은 1시간 이상이어야 합니다."),
 	STUDY_ONCE_LONG_DURATION(BAD_REQUEST, "카공 시간은 5시간 미만이어야 합니다."),
 	STUDY_ONCE_TOO_MUCH_STUDY_IN_CAFE(BAD_REQUEST, "이 카페에 이 인원의 카공을 더이상 생성할 수 없습니다."),
