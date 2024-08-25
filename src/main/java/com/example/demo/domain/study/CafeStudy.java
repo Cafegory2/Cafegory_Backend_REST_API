@@ -32,8 +32,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "cafe_study")
 public class CafeStudy extends BaseEntity {
 
-	private static final int LIMIT_MEMBER_CAPACITY = 5;
-	private static final int MIN_LIMIT_MEMBER_CAPACITY = 1;
+	private static final int LIMIT_MEMBER_CAPACITY = 6;
+	private static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
 
 	@Id
 	@GeneratedValue
