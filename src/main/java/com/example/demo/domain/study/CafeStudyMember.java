@@ -1,5 +1,7 @@
 package com.example.demo.domain.study;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.EmbeddedId;
@@ -56,13 +58,13 @@ public class CafeStudyMember extends BaseEntity {
 		this.studyRole = studyRole;
 	}
 
-	// public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
-	// 	LocalDateTime studyStartDateTime = study.getStartDateTime();
-	// 	LocalDateTime studyEndDateTime = study.getEndDateTime();
-	// 	return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (studyStartDateTime.isBefore(
-	// 		end) || studyStartDateTime.isEqual(end));
-	// }
-	//
+	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
+		LocalDateTime studyStartDateTime = cafeStudy.getStudyPeriod().getStartDateTime();
+		LocalDateTime studyEndDateTime = cafeStudy.getStudyPeriod().getEndDateTime();
+		return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (
+			studyStartDateTime.isBefore(end) || studyStartDateTime.isEqual(end));
+	}
+
 	// public boolean isLeader(Member member) {
 	// 	return this.id.getMemberId().equals(member.getId());
 	// }
