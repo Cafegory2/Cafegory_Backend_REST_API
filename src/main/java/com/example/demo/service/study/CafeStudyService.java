@@ -1,5 +1,8 @@
 package com.example.demo.service.study;
 
+import com.example.demo.dto.study.CafeStudyCreateRequest;
+import com.example.demo.dto.study.CafeStudyCreateResponse;
+
 public interface CafeStudyService {
 	// void tryJoin(long memberIdThatExpectedToJoin, long studyId);
 	//
@@ -16,7 +19,7 @@ public interface CafeStudyService {
 	//
 	// void updateAttendance(long leaderId, long studyOnceId, long memberId, Attendance attendance, LocalDateTime now);
 
-	// CafeStudyCreateResponse createStudy(long leaderId, CafeStudyCreateRequest cafeStudyCreateRequest);
+	CafeStudyCreateResponse createStudy(long leaderId, CafeStudyCreateRequest cafeStudyCreateRequest);
 
 	// Long changeCafe(Long requestMemberId, Long studyOnceId, Long changingCafeId);
 	//
