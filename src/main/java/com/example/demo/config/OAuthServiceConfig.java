@@ -5,8 +5,6 @@
  import org.springframework.context.annotation.Configuration;
  import org.springframework.web.client.RestTemplate;
 
- import com.example.demo.domain.auth.CafegoryTokenManager;
- import com.example.demo.domain.auth.JwtCafegoryTokenManager;
  import com.example.demo.domain.auth.JwtManager;
  import com.example.demo.domain.oauth2.KakaoOAuth2ProfileRequester;
  import com.example.demo.domain.oauth2.KakaoOAuth2TokenRequester;
@@ -57,11 +55,6 @@
 
  	@Bean
  	public JwtManager jwtManager() {
- 		return new JwtManager(jwtSecret);
- 	}
-
- 	@Bean
- 	public CafegoryTokenManager cafegoryTokenManager() {
- 		return new JwtCafegoryTokenManager(jwtManager());
+ 		return new JwtManager(this.jwtSecret);
  	}
  }

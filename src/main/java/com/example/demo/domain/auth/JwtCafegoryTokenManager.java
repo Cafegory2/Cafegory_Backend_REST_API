@@ -1,77 +1,49 @@
- package com.example.demo.domain.auth;
+package com.example.demo.domain.auth;
 
- import java.time.Instant;
- import java.util.Date;
- import java.util.Map;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Map;
 
- import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;
 
- import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.dto.auth.CafegoryToken;
 
- import io.jsonwebtoken.Claims;
- import lombok.RequiredArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
- @Component
- @RequiredArgsConstructor
- public class JwtCafegoryTokenManager implements CafegoryTokenManager {
- 	private static final int accessTokenLifeAsSeconds = 3600;
- 	private static final int refreshTokenLifeAsSeconds = 3600 * 24 * 7;
- 	private final JwtManager jwtManager;
+import static com.example.demo.domain.auth.TokenClaims.*;
 
- 	@Override
- 	public CafegoryToken createToken(Map<String, Object> memberInformation) {
- 		Date issuedAt = Date.from(Instant.now());
- 		String accessToken = makeAccessToken(memberInformation, issuedAt);
- 		String refreshToken = makeRefreshToken(accessToken, memberInformation, issuedAt);
- 		return new CafegoryToken(accessToken, refreshToken);
- 	}
+@Component
+@RequiredArgsConstructor
+public class JwtCafegoryTokenManager {
 
- 	@Override
- 	public long getIdentityId(String accessToken) {
- 		Claims claims = jwtManager.decode(accessToken);
- 		return claims.get("memberId", Long.class);
- 	}
+    private static final int ACCESS_TOKEN_LIFETIME_SECONDS = 3600;
+    private static final int REFRESH_TOKEN_LIFETIME_SECONDS = 3600 * 24 * 7;
 
- 	@Override
- 	public boolean canRefresh(String refreshToken) {
- 		try {
- 			Claims claims = jwtManager.decode(refreshToken);
- 			String tokenType = claims.get("tokenType", String.class);
- 			if (!tokenType.equals("refresh")) {
- 				return false;
- 			}
- 			String accessToken = claims.get("accessToken", String.class);
- 			return jwtManager.isExpired(accessToken);
- 		} catch (IllegalArgumentException e) {
- 			return false;
- 		}
- 	}
+    private final JwtManager jwtManager;
 
- 	@Override
- 	public boolean isAccessToken(String token) {
- 		Claims claims = jwtManager.decode(token);
- 		String tokenType = claims.get("tokenType", String.class);
- 		return tokenType.equals("access");
- 	}
+    public CafegoryToken createToken(final Map<String, Object> memberInformation) {
+        Date issuedAt = Date.from(Instant.now());
+        String accessToken = createAccessToken(memberInformation, issuedAt);
+        String refreshToken = createRefreshToken(memberInformation, issuedAt);
 
- 	private String makeAccessToken(Map<String, Object> memberInformation, Date issuedAt) {
- 		jwtManager.setLife(issuedAt, accessTokenLifeAsSeconds);
- 		for (String key : memberInformation.keySet()) {
- 			Object value = memberInformation.get(key);
- 			jwtManager.claim(key, value);
- 		}
- 		jwtManager.claim("tokenType", "access");
- 		return jwtManager.make();
- 	}
+        return new CafegoryToken(accessToken, refreshToken);
+    }
 
- 	private String makeRefreshToken(String accessToken, Map<String, Object> memberInformation, Date issuedAt) {
- 		jwtManager.setLife(issuedAt, refreshTokenLifeAsSeconds);
- 		for (String key : memberInformation.keySet()) {
- 			Object value = memberInformation.get(key);
- 			jwtManager.claim(key, value);
- 		}
- 		jwtManager.claim("accessToken", accessToken);
- 		jwtManager.claim("tokenType", "refresh");
- 		return jwtManager.make();
- 	}
- }
+    private String createAccessToken(final Map<String, Object> claims, final Date issuedAt) {
+        return jwtManager.newTokenBuilder()
+                .issuedAt(issuedAt)
+                .lifeTimeAsSeconds(ACCESS_TOKEN_LIFETIME_SECONDS)
+                .addAllClaims(claims)
+                .addClaim(TOKEN_TYPE.getValue(), ACCESS.getValue())
+                .build();
+    }
+
+    private String createRefreshToken(final Map<String, Object> claims, final Date issuedAt) {
+        return jwtManager.newTokenBuilder()
+                .issuedAt(issuedAt)
+                .lifeTimeAsSeconds(REFRESH_TOKEN_LIFETIME_SECONDS)
+                .addAllClaims(claims)
+                .addClaim(TOKEN_TYPE.getValue(), REFRESH.getValue())
+                .build();
+    }
+}

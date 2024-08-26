@@ -1,9 +1,12 @@
 package com.example.demo.dto.auth;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class CafegoryToken {
+
 	private final String accessToken;
 	private final String refreshToken;
 }

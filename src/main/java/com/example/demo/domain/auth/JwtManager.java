@@ -30,7 +30,7 @@ public final class JwtManager {
     public static final class JwtBuilder {
 
         private final String secretKey;
-        private String type = "JWT";
+        private final String type = "JWT";
         private final Map<String, Object> claims = new HashMap<>();
         private Date issuedAt = new Date();
         private int lifeTimeAsSeconds;
@@ -44,7 +44,7 @@ public final class JwtManager {
             return this;
         }
 
-        public JwtManager.JwtBuilder addAllClaims(Map<String, Object> claims) {
+        public JwtManager.JwtBuilder addAllClaims(final Map<String, Object> claims) {
             this.claims.putAll(claims);
             return this;
         }
@@ -70,7 +70,7 @@ public final class JwtManager {
         }
     }
 
-    public Claims decode(String jwt) {
+    public Claims decode(final String jwt) {
         try {
             Jws<Claims> jws = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
@@ -85,12 +85,17 @@ public final class JwtManager {
         }
     }
 
-    public boolean isExpired(String jwt) {
+    public boolean isExpired(final String jwt) {
         try {
             decode(jwt);
             return false;
         } catch (CafegoryException e) {
             return e.getExceptionType() == JWT_EXPIRED;
         }
+    }
+
+    public String getSubject(final String jwt) {
+        Claims decoded = decode(jwt);
+        return decoded.get(TokenClaims.SUBJECT.getValue(), String.class);
     }
 }
