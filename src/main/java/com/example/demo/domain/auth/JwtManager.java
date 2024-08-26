@@ -3,66 +3,99 @@ package com.example.demo.domain.auth;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.example.demo.exception.CafegoryException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-public class JwtManager {
-    private final String secret;
-    private JwtBuilder jwtBuilder;
+@RequiredArgsConstructor
+@Slf4j
+public final class JwtManager {
 
-    public JwtManager(String secret) {
-        this.secret = secret;
-        this.jwtBuilder = Jwts.builder();
-        jwtBuilder.header().type("JWT");
+    private final String secretKey;
+
+    public JwtManager.JwtBuilder newTokenBuilder() {
+        return new JwtManager.JwtBuilder(this.secretKey);
     }
 
-    void claim(String key, Object value) {
-        jwtBuilder.claim(key, value);
+    public static final class JwtBuilder {
+
+        private final String secretKey;
+        private String type;
+        private final Map<String, Object> claims = new HashMap<>();
+        private Date issuedAt = new Date();
+        private int lifeTimeAsSeconds;
+
+        public JwtBuilder(final String secretKey) {
+            this.secretKey = secretKey;
+        }
+
+        public JwtManager.JwtBuilder type(final String type) {
+            this.type = type;
+            return this;
+        }
+
+        public JwtManager.JwtBuilder addClaim(final String key, Object value) {
+            this.claims.put(key, value);
+            return this;
+        }
+
+        public JwtManager.JwtBuilder addAllClaims(Map<String, Object> claims) {
+            this.claims.putAll(claims);
+            return this;
+        }
+
+        public JwtManager.JwtBuilder issuedAt(final Date issuedAt) {
+            this.issuedAt = issuedAt;
+            return this;
+        }
+
+        public JwtManager.JwtBuilder lifeTimeAsSeconds(final int lifeTimeAsSeconds) {
+            this.lifeTimeAsSeconds = lifeTimeAsSeconds;
+            return this;
+        }
+
+        public String build() {
+            return Jwts.builder()
+                    .header().type(this.type).and()
+                    .claims(this.claims)
+                    .issuedAt(this.issuedAt)
+                    .expiration(Date.from(this.issuedAt.toInstant().plusSeconds(this.lifeTimeAsSeconds)))
+                    .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                    .compact();
+        }
     }
 
-    void setLife(Date issuedAt, int lifeTimeAsSeconds) {
-        jwtBuilder.issuedAt(issuedAt)
-                .expiration(Date.from(issuedAt.toInstant().plusSeconds(lifeTimeAsSeconds)));
-    }
-
-    String make() {
-        String jwt = jwtBuilder
-                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
-                .compact();
-        jwtBuilder = Jwts.builder();
-        return jwt;
-    }
-
-    public Claims decode(String jwtString) {
-        JwtParserBuilder parser = Jwts.parser();
+    public Claims decode(String jwt) {
         try {
-            Jws<Claims> claimsJws = parser.verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
+            Jws<Claims> jws = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
-                    .parseSignedClaims(jwtString);
-            return claimsJws.getPayload();
+                    .parseSignedClaims(jwt);
+            return jws.getPayload();
+
         } catch (ExpiredJwtException e) {
             throw new CafegoryException(JWT_EXPIRED);
         } catch (JwtException e) {
+            log.error("JWT decode parser error: {}", e.getMessage());
             throw new CafegoryException(JWT_DESTROYED);
         }
     }
 
-    public boolean isExpired(String jwtString) {
-        String errMessage = "";
+    public boolean isExpired(String jwt) {
         try {
-            decode(jwtString);
+            decode(jwt);
+            return false;
         } catch (CafegoryException e) {
-            errMessage = e.getMessage();
+            return e.getExceptionType() == JWT_EXPIRED;
         }
-        return errMessage.equals(JWT_EXPIRED.getErrorMessage());
     }
 }
