@@ -30,18 +30,13 @@ public final class JwtManager {
     public static final class JwtBuilder {
 
         private final String secretKey;
-        private String type;
+        private String type = "JWT";
         private final Map<String, Object> claims = new HashMap<>();
         private Date issuedAt = new Date();
         private int lifeTimeAsSeconds;
 
         public JwtBuilder(final String secretKey) {
             this.secretKey = secretKey;
-        }
-
-        public JwtManager.JwtBuilder type(final String type) {
-            this.type = type;
-            return this;
         }
 
         public JwtManager.JwtBuilder addClaim(final String key, Object value) {
