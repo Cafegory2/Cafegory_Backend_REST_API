@@ -1,18 +1,19 @@
-//package com.example.demo.factory;
-//
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.member.ThumbnailImage;
-//
-//public class TestMemberFactory {
-//
-//	public static Member createMember() {
-//		return Member.builder()
-//			.name("김동현")
-//			.email("cafegory@gmail.com")
-//			.thumbnailImage(ThumbnailImage.builder().thumbnailImage("testUrl").build())
-//			.build();
-//	}
-//
+package com.example.demo.factory;
+
+import com.example.demo.domain.member.Member;
+import com.example.demo.domain.member.Role;
+
+public class TestMemberFactory {
+
+    public static Member createMember() {
+        return Member.builder()
+                .nickname("테스트닉네임")
+                .email("test@gmail.com")
+                .profileUrl("testUrl")
+                .role(Role.USER)
+                .build();
+    }
+
 //	public static Member createMemberWithId(Long memberId) {
 //		return Member.builder()
 //			.id(memberId)
@@ -37,4 +38,4 @@
 //			.thumbnailImage(thumbnailImage)
 //			.build();
 //	}
-//}
+}
