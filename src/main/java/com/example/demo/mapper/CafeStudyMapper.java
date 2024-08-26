@@ -7,13 +7,17 @@ package com.example.demo.mapper;
 
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
 import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.study.CafeStudy;
 import com.example.demo.domain.study.StudyPeriod;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
+import com.example.demo.dto.study.CafeStudyCreateResponse;
 
-public class StudyOnceMapper {
+@Component
+public class CafeStudyMapper {
 	// public List<CafeSearchStudyOnceResponse> toCafeSearchStudyOnceResponse(Cafe findCafe) {
 	// 	return findCafe.getStudyOnceGroup().stream()
 	// 		.map(studyOnce ->
@@ -104,22 +108,21 @@ public class StudyOnceMapper {
 	// 		.isEnd(saved.isEnd())
 	// 		.build();
 	// }
-	//
-	// public StudyOnceCreateResponse toStudyOnceCreateResponse(CafeStudy saved, boolean canJoin) {
-	// 	return StudyOnceCreateResponse.builder()
-	// 		.cafeId(saved.getCafe().getId())
-	// 		.area(saved.getCafe().getRegion())
-	// 		.studyOnceId(saved.getId())
-	// 		.name(saved.getName())
-	// 		.startDateTime(saved.getStartDateTime())
-	// 		.endDateTime(saved.getEndDateTime())
-	// 		.maxMemberCount(saved.getMaxMemberCount())
-	// 		.nowMemberCount(saved.getStudyMembers().size())
-	// 		.canTalk(saved.isAbleToTalk())
-	// 		.canJoin(canJoin)
-	// 		.isEnd(saved.isEnd())
-	// 		.openChatUrl(saved.getOpenChatUrl())
-	// 		.build();
-	// }
-	//
+
+	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudy saved) {
+		return CafeStudyCreateResponse.builder()
+			.name(saved.getName())
+			.cafeId(saved.getCafe().getId())
+			.coordinatorId(saved.getCoordinator().getId())
+			.startDateTime(saved.getStudyPeriod().getStartDateTime())
+			.endDateTime(saved.getStudyPeriod().getEndDateTime())
+			.memberComms(saved.getMemberComms())
+			.maxParticipants(saved.getMaxParticipants())
+			.nowParticipants(saved.getCafeStudyMembers().size())
+			.introduction(saved.getIntroduction())
+			.views(saved.getViews())
+			.recruitmentStatus(saved.getRecruitmentStatus())
+			.build();
+	}
+
 }
