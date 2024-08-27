@@ -184,8 +184,7 @@ public class CafeStudyServiceImpl implements CafeStudyService {
 	// }
 
 	@Override
-	public CafeStudyCreateResponse createStudy(long leaderId, CafeStudyCreateRequest request) {
-		// TODO: dto 검증 로직 추가하기
+	public CafeStudyCreateResponse createStudy(long coordinatorId, CafeStudyCreateRequest request) {
 		validateNameLength(request.getName());
 		validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 		validateStartDateTime(request.getStartDateTime());
@@ -196,7 +195,7 @@ public class CafeStudyServiceImpl implements CafeStudyService {
 			request.getStartDateTime().getDayOfWeek());
 		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
 			businessHour);
-		Member coordinator = findMemberById(leaderId);
+		Member coordinator = findMemberById(coordinatorId);
 		validateStudyScheduleConflict(truncateDateTimeToSecond(request.getStartDateTime()),
 			truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
 		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
