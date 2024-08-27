@@ -8,6 +8,7 @@ import lombok.NonNull;
 
 @Data
 public class KakaoOAuth2TokenRequest implements OAuth2TokenRequest {
+
 	@NonNull
 	private final String code;
 
