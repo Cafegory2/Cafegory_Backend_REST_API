@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.facade.OauthFacade;
+import com.example.demo.service.facade.OAuthFacade;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.dto.oauth2.KakaoOAuth2TokenRequest;
-import com.example.demo.dto.oauth2.NaverOAuth2TokenRequest;
-import com.example.demo.service.oauth2.OAuth2Service;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuthController {
 
-    private final OauthFacade oauthFacade;
+    private final OAuthFacade oauthFacade;
 
     @GetMapping("/kakao")
     public CafegoryToken kakao(@RequestParam String code) {

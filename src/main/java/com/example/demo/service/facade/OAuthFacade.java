@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class OauthFacade {
+public class OAuthFacade {
 
     private final OAuth2Service oAuth2Service;
     private final MemberService memberService;
