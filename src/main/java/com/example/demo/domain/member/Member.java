@@ -15,11 +15,7 @@ import javax.persistence.Table;
 
 import com.example.demo.domain.BaseEntity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
@@ -46,6 +42,9 @@ public class Member extends BaseEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "beverage_size_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private BeverageSize beverageSize;
+
+	@Setter
+	private String refreshToken;
 
 	// public void addStudyMember(StudyMember studyMember) {
 	// 	this.studyMembers.add(studyMember);
