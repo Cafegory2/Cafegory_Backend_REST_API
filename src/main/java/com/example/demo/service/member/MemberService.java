@@ -5,6 +5,7 @@ import com.example.demo.domain.member.Role;
 import com.example.demo.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -12,6 +13,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Transactional
     public Long findOrCreateMember(String email, String nickname, String profileImgUrl) {
         return memberRepository.findByEmail(email)
                 .map(Member::getId)

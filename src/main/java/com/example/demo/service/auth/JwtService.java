@@ -36,7 +36,7 @@ public class JwtService {
                 .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 
         Map<String, Object> memberInfo = Map.of(
-                TokenClaims.SUBJECT.getValue(), member.getId(),
+                TokenClaims.SUBJECT.getValue(), String.valueOf(member.getId()),
                 TokenClaims.ROLE.getValue(), member.getRole().getValue()
         );
         return jwtCafegoryTokenManager.createToken(memberInfo);

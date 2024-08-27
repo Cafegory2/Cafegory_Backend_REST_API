@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import static com.example.demo.domain.auth.TokenClaims.*;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtCafegoryTokenManager {
 
