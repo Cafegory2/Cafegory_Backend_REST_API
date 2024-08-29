@@ -8,11 +8,7 @@ import java.util.Map;
 
 import com.example.demo.exception.CafegoryException;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,32 +66,17 @@ public final class JwtManager {
         }
     }
 
-    public Claims decode(final String jwt) {
+    public Claims verifyAndExtractClaims(final String jwt) {
         try {
             Jws<Claims> jws = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
                     .parseSignedClaims(jwt);
             return jws.getPayload();
-
         } catch (ExpiredJwtException e) {
             throw new CafegoryException(JWT_EXPIRED);
         } catch (JwtException e) {
             log.error("JWT decode parser error: {}", e.getMessage());
             throw new CafegoryException(JWT_DESTROYED);
         }
-    }
-
-    public boolean isExpired(final String jwt) {
-        try {
-            decode(jwt);
-            return false;
-        } catch (CafegoryException e) {
-            return e.getExceptionType() == JWT_EXPIRED;
-        }
-    }
-
-    public String getSubject(final String jwt) {
-        Claims decoded = decode(jwt);
-        return decoded.get(TokenClaims.SUBJECT.getValue(), String.class);
     }
 }

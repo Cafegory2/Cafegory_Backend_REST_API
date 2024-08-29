@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
 
 import com.example.demo.dto.auth.CafegoryToken;
 
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 
 import static com.example.demo.domain.auth.TokenClaims.*;
 
-//@Component
 @RequiredArgsConstructor
 public class JwtCafegoryTokenManager {
 
