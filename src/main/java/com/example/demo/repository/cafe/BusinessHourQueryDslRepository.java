@@ -18,8 +18,8 @@ public class BusinessHourQueryDslRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	public BusinessHour findWithCafeAndDayOfWeek(Cafe cafe, DayOfWeek dayOfWeek) {
-		return jpaQueryFactory.from(businessHour)
-			.select(businessHour)
+		return jpaQueryFactory.select(businessHour)
+			.from(businessHour)
 			.where(businessHour.cafe.eq(cafe).and(businessHour.dayOfWeek.eq(dayOfWeek)))
 			.fetchOne();
 	}
