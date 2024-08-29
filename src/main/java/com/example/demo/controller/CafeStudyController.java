@@ -16,7 +16,7 @@ import com.example.demo.service.study.CafeStudyService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/study/once")
+@RequestMapping("/cafe-study")
 @RequiredArgsConstructor
 public class CafeStudyController {
 	private final CafeStudyService cafeStudyService;
