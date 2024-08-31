@@ -9,9 +9,9 @@ import com.example.demo.domain.auth.JwtCafegoryTokenManager;
 import com.example.demo.domain.auth.JwtManager;
 import com.example.demo.domain.member.Member;
 import com.example.demo.dto.auth.JwtClaims;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
 import com.example.demo.repository.member.MemberRepository;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +42,9 @@ public class JwtService {
 
     public void verifyAccessAndRefreshToken(final String accessToken, final String refreshToken) {
         //TODO 토큰 재발급 API는 토큰 검증 인터셉터를 거치면 안된다. 토큰 검증 인터셉터는 액세스 토큰의 만료를 검증한다.
+        validateNullToken(accessToken, ExceptionType.JWT_ACCESS_TOKEN_MISSING);
+        validateNullToken(refreshToken, ExceptionType.JWT_REFRESH_TOKEN_MISSING);
+
         JwtClaims accessTokenClaims = verifyAndExtractAccessClaims(accessToken);
         JwtClaims refreshTokenClaims = verifyAndExtractRefreshClaims(refreshToken);
 
@@ -54,13 +57,19 @@ public class JwtService {
         validateMemberIdMatches(memberIdInClaim, memberInDb.getId(), refreshTokenClaims);
     }
 
+    private void validateNullToken(final String token, ExceptionType exceptionType) {
+        if(token == null) {
+            throw new JwtCustomException(exceptionType);
+        }
+    }
+
     private void validateMemberIdMatches(final Long memberIdInClaim, final Long memberIdInDb, final JwtClaims refreshTokenClaims) {
         if (!memberIdInClaim.equals(memberIdInDb)) {
             throw new JwtCustomException(JWT_REFRESH_MEMBER_ID_MISMATCH, refreshTokenClaims);
         }
     }
 
-    private void validateTokenSubjectMatch(@NonNull final JwtClaims accessTokenClaims, @NonNull final JwtClaims refreshTokenClaims) {
+    private void validateTokenSubjectMatch(final JwtClaims accessTokenClaims, final JwtClaims refreshTokenClaims) {
         String accessTokenSubject = accessTokenClaims.getClaim(SUBJECT.getValue());
         String refreshTokenSubject = refreshTokenClaims.getClaim(SUBJECT.getValue());
 

@@ -16,6 +16,8 @@ public enum ExceptionType {
 	JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED(UNAUTHORIZED, "JWT 액세스 토큰과 리프레시 토큰의 사용자 ID(sub)가 일치하지 않습니다."),
 	JWT_REFRESH_MEMBER_NOT_FOUND(NOT_FOUND, "JWT 리프레시 토큰의 memberId는 존재하나, DB에 해당 회원이 존재하지 않습니다."),
 	JWT_REFRESH_MEMBER_ID_MISMATCH(UNAUTHORIZED, "JWT 리프레시 토큰의 memberId는 존재하나 DB의 memberId와 일치하지 않음"),
+	JWT_ACCESS_TOKEN_MISSING(BAD_REQUEST,"액세스 토큰이 누락되었습니다."),
+	JWT_REFRESH_TOKEN_MISSING(BAD_REQUEST,"리프레시 토큰이 누락되었습니다."),
 	TOKEN_NOT_FOUND(UNAUTHORIZED, "토큰이 없습니다."),
 	TOKEN_REFRESH_REJECT(UNAUTHORIZED, "토큰을 재발행할 수 없습니다."),
 	STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS(BAD_REQUEST, "카공 생성시 시작시간과 종료시간은 카페 영업시간내에 포함되어야 합니다."),
