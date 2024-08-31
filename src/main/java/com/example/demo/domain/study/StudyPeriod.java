@@ -1,6 +1,6 @@
 package com.example.demo.domain.study;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import javax.persistence.Embeddable;
 
@@ -10,7 +10,7 @@ import lombok.Getter;
 @Getter
 public class StudyPeriod {
 
-	private LocalTime openingTime;
-	private LocalTime closingTime;
+	private LocalDateTime startDateTime;
+	private LocalDateTime endDateTime;
 
 }
