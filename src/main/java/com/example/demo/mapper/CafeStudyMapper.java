@@ -50,10 +50,7 @@ public class CafeStudyMapper {
 	}
 
 	private StudyPeriod toStudyPeriod(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-		return StudyPeriod.builder()
-			.startDateTime(startDateTime)
-			.endDateTime(endDateTime)
-			.build();
+		return StudyPeriod.builder().startDateTime(startDateTime).endDateTime(endDateTime).build();
 	}
 
 	// public StudyOnceResponse toStudyOnceResponse(CafeStudy saved, boolean canJoin) {
@@ -109,19 +106,19 @@ public class CafeStudyMapper {
 	// 		.build();
 	// }
 
-	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudy saved) {
+	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudy createdCafeStudy) {
 		return CafeStudyCreateResponse.builder()
-			.name(saved.getName())
-			.cafeId(saved.getCafe().getId())
-			.coordinatorId(saved.getCoordinator().getId())
-			.startDateTime(saved.getStudyPeriod().getStartDateTime())
-			.endDateTime(saved.getStudyPeriod().getEndDateTime())
-			.memberComms(saved.getMemberComms())
-			.maxParticipants(saved.getMaxParticipants())
-			.nowParticipants(saved.getCafeStudyMembers().size())
-			.introduction(saved.getIntroduction())
-			.views(saved.getViews())
-			.recruitmentStatus(saved.getRecruitmentStatus())
+			.name(createdCafeStudy.getName())
+			.cafeId(createdCafeStudy.getCafe().getId())
+			.coordinatorId(createdCafeStudy.getCoordinator().getId())
+			.startDateTime(createdCafeStudy.getStudyPeriod().getStartDateTime())
+			.endDateTime(createdCafeStudy.getStudyPeriod().getEndDateTime())
+			.memberComms(createdCafeStudy.getMemberComms())
+			.maxParticipants(createdCafeStudy.getMaxParticipants())
+			.nowParticipants(createdCafeStudy.getCafeStudyMembers().size())
+			.introduction(createdCafeStudy.getIntroduction())
+			.views(createdCafeStudy.getViews())
+			.recruitmentStatus(createdCafeStudy.getRecruitmentStatus())
 			.build();
 	}
 
