@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 	//
 	//	private boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,

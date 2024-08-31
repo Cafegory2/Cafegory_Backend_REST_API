@@ -43,7 +43,7 @@ public class CafeStudyServiceImpl implements CafeStudyService {
 	private final CafeStudyMapper cafeStudyMapper;
 	// private final StudyMemberMapper studyMemberMapper;
 	// private final StudyPeriodMapper studyPeriodMapper;
-	private final BusinessHourOpenChecker openChecker = new BusinessHourOpenChecker();
+	private final BusinessHourOpenChecker openChecker;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
