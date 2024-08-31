@@ -57,4 +57,17 @@ class JwtServiceTest extends ServiceTest {
                 .isInstanceOf(JwtCustomException.class)
                 .hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
     }
+
+    @Test
+    @DisplayName("만료되지 않은 액세스 토큰과 만료된 리프레시 토큰을 검증한다.")
+    void verify_unexpired_access_and_expired_refresh_token() {
+        //given
+        Member member = memberSaveHelper.saveMember();
+        String accessToken = TestJwtFactory.createAccessToken(member.getId(), testSecret);
+        String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
+        //then
+        assertThatThrownBy(() -> sut.verifyAccessAndRefreshToken(accessToken, refreshToken))
+                .isInstanceOf(JwtCustomException.class)
+                .hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
+    }
 }
