@@ -43,7 +43,7 @@ public class JwtService {
         );
     }
 
-    public void verifyAccessAndRefreshToken(final String accessToken, final String refreshToken) {
+    public Long verifyAccessAndRefreshToken(final String accessToken, final String refreshToken) {
         //TODO 토큰 재발급 API는 토큰 검증 인터셉터를 거치면 안된다. 토큰 검증 인터셉터는 액세스 토큰의 만료를 검증한다.
         validateNullToken(accessToken, ExceptionType.JWT_ACCESS_TOKEN_MISSING);
         validateNullToken(refreshToken, ExceptionType.JWT_REFRESH_TOKEN_MISSING);
@@ -58,6 +58,8 @@ public class JwtService {
                 .orElseThrow(() -> new JwtCustomException(JWT_REFRESH_MEMBER_NOT_FOUND, refreshTokenClaims));
 
         validateMemberIdMatches(memberIdInClaim, memberInDb.getId(), refreshTokenClaims);
+
+        return memberIdInClaim;
     }
 
     private void validateNullToken(final String token, ExceptionType exceptionType) {
