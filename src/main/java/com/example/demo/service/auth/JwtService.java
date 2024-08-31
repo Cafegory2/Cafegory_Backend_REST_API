@@ -29,7 +29,7 @@ public class JwtService {
     private final JwtManager jwtManager;
     private final MemberRepository memberRepository;
 
-    public CafegoryToken createToken(final Long memberId) {
+    public CafegoryToken createAccessAndRefreshToken(final Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 

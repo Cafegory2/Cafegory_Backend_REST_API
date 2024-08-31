@@ -33,7 +33,7 @@ public class OAuthFacade {
                 profile.getProfileImgUrl()
         );
 
-        CafegoryToken token = jwtService.createAccessToken(memberId);
+        CafegoryToken token = jwtService.createAccessAndRefreshToken(memberId);
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
