@@ -9,8 +9,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.cafe.BusinessHour;
 import com.example.demo.domain.cafe.BusinessHourOpenChecker;
@@ -33,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CafeStudyServiceImpl implements CafeStudyService {
 	private final CafeRepository cafeRepository;
 	private final CafeStudyRepository cafeStudyRepository;
@@ -184,6 +184,7 @@ public class CafeStudyServiceImpl implements CafeStudyService {
 	// }
 
 	@Override
+	@Transactional
 	public CafeStudyCreateResponse createStudy(long coordinatorId, CafeStudyCreateRequest request) {
 		validateNameLength(request.getName());
 		validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
@@ -242,7 +243,7 @@ public class CafeStudyServiceImpl implements CafeStudyService {
 		}
 	}
 
-	public boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
+	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
 		List<CafeStudyMember> participatedStudies = studyMemberRepository.findByMember(member);
 		return participatedStudies.stream().anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}
