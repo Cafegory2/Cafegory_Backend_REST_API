@@ -5,8 +5,6 @@ public enum TokenClaims {
     TOKEN_TYPE("tokenType"),
     ACCESS_TOKEN("accessToken"),
     REFRESH_TOKEN("refreshToken"),
-    ACCESS("access"),
-    REFRESH("refresh"),
     SUBJECT("sub"),
     ISSUED_AT("iat"),
     EXPIRATION_TIME("exp"),

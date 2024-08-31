@@ -6,8 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.dto.auth.JwtClaims;
 
+import com.example.demo.exception.JwtCustomException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -66,17 +67,35 @@ public final class JwtManager {
         }
     }
 
-    public Claims verifyAndExtractClaims(final String jwt) {
+    public JwtClaims verifyAndExtractClaims(final String jwt) {
         try {
-            Jws<Claims> jws = Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+            Jws<Claims> jws = Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
                     .build()
                     .parseSignedClaims(jwt);
-            return jws.getPayload();
+            return convertClaimsToJwtClaims(jws.getPayload());
         } catch (ExpiredJwtException e) {
-            throw new CafegoryException(JWT_EXPIRED);
+            throw new JwtCustomException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
         } catch (JwtException e) {
-            log.error("JWT decode parser error: {}", e.getMessage());
-            throw new CafegoryException(JWT_DESTROYED);
+            throw new JwtCustomException(JWT_DESTROYED, e);
+        }
+    }
+
+    private JwtClaims convertClaimsToJwtClaims(Claims claims) {
+        return new JwtClaims(claims);
+    }
+
+    public void validateClaim(final String jwt, final String key, final String value) {
+        try {
+            Jwts.parser()
+                    .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                    .require(key, value)
+                    .build()
+                    .parse(jwt);
+        } catch (ExpiredJwtException e) {
+            throw new JwtCustomException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
+        } catch (InvalidClaimException e) {
+            throw new JwtCustomException(JWT_CLAIM_INVALID, e, convertClaimsToJwtClaims(e.getClaims()));
         }
     }
 }

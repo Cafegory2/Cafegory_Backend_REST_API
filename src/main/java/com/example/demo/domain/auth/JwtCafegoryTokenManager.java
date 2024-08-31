@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import static com.example.demo.domain.auth.TokenClaims.*;
 
 @RequiredArgsConstructor
-public class JwtCafegoryTokenManager {
+public final class JwtCafegoryTokenManager {
 
     private static final int ACCESS_TOKEN_LIFETIME_SECONDS = 3600;
     private static final int REFRESH_TOKEN_LIFETIME_SECONDS = 3600 * 24 * 7;
@@ -32,7 +32,7 @@ public class JwtCafegoryTokenManager {
                 .issuedAt(issuedAt)
                 .lifeTimeAsSeconds(ACCESS_TOKEN_LIFETIME_SECONDS)
                 .addAllClaims(claims)
-                .addClaim(TOKEN_TYPE.getValue(), ACCESS.getValue())
+                .addClaim(TOKEN_TYPE.getValue(), ACCESS_TOKEN.getValue())
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class JwtCafegoryTokenManager {
                 .issuedAt(issuedAt)
                 .lifeTimeAsSeconds(REFRESH_TOKEN_LIFETIME_SECONDS)
                 .addAllClaims(claims)
-                .addClaim(TOKEN_TYPE.getValue(), REFRESH.getValue())
+                .addClaim(TOKEN_TYPE.getValue(), REFRESH_TOKEN.getValue())
                 .build();
     }
 }
