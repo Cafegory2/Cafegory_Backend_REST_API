@@ -18,7 +18,8 @@ import lombok.NoArgsConstructor;
 public class CafeStudyCreateRequest {
 	@NotBlank
 	private String name;
-	private long cafeId;
+	@NotBlank
+	private Long cafeId;
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
 	private MemberComms memberComms;
