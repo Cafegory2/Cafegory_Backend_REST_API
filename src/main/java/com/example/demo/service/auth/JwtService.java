@@ -30,14 +30,17 @@ public class JwtService {
     private final MemberRepository memberRepository;
 
     public CafegoryToken createAccessAndRefreshToken(final Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-
-        Map<String, Object> memberInfo = Map.of(
-                SUBJECT.getValue(), String.valueOf(member.getId()),
-                ROLE.getValue(), member.getRole().getValue()
+        Member member = findMember(memberId);
+        return jwtCafegoryTokenManager.createAccessAndRefreshToken(
+                convertMemberToMap(member)
         );
-        return jwtCafegoryTokenManager.createToken(memberInfo);
+    }
+
+    public String createAccessToken(final Long memberId) {
+        Member member = findMember(memberId);
+        return jwtCafegoryTokenManager.createAccessToken(
+                convertMemberToMap(member)
+        );
     }
 
     public void verifyAccessAndRefreshToken(final String accessToken, final String refreshToken) {
@@ -92,5 +95,17 @@ public class JwtService {
             }
             throw e;
         }
+    }
+
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+    }
+
+    private Map<String, Object> convertMemberToMap(Member member) {
+        return Map.of(
+                SUBJECT.getValue(), String.valueOf(member.getId()),
+                ROLE.getValue(), member.getRole().getValue()
+        );
     }
 }

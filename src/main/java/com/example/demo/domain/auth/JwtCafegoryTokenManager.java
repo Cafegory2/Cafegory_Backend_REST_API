@@ -19,12 +19,17 @@ public final class JwtCafegoryTokenManager {
 
     private final JwtManager jwtManager;
 
-    public CafegoryToken createToken(final Map<String, Object> memberInformation) {
+    public CafegoryToken createAccessAndRefreshToken(final Map<String, Object> memberInformation) {
         Date issuedAt = Date.from(Instant.now());
         String accessToken = createAccessToken(memberInformation, issuedAt);
         String refreshToken = createRefreshToken(memberInformation, issuedAt);
 
         return new CafegoryToken(accessToken, refreshToken);
+    }
+
+    public String createAccessToken(final Map<String, Object> memberInformation) {
+        Date issuedAt = Date.from(Instant.now());
+        return createAccessToken(memberInformation, issuedAt);
     }
 
     private String createAccessToken(final Map<String, Object> claims, final Date issuedAt) {
