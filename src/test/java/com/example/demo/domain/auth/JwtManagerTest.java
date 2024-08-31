@@ -10,8 +10,7 @@ import java.util.Map;
 import com.example.demo.dto.auth.JwtClaims;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import com.example.demo.factory.TestJwtFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,14 +23,12 @@ class JwtManagerTest {
 	@DisplayName("JWT 토큰을 검증한다.")
 	void verify_jwt() {
 		//given
-		Date issuedAt = Date.from(Instant.now());
-		String jwt = Jwts.builder()
-				.header().type("JWT").and()
-				.claims(Map.of("a", "a", "b", "b"))
-				.issuedAt(issuedAt)
-				.expiration(Date.from(issuedAt.toInstant().plusSeconds(3600)))
-				.signWith(Keys.hmacShaKeyFor(testSecret.getBytes()))
-				.compact();
+		String jwt = TestJwtFactory.createAccessToken(
+				Map.of("a", "a", "b", "b"),
+				Date.from(Instant.now()),
+				3600,
+				testSecret
+		);
 		//when
 		JwtClaims claims = sut.verifyAndExtractClaims(jwt);
 		//then
@@ -45,14 +42,12 @@ class JwtManagerTest {
 	@DisplayName("JWT의 Claim이 유효하다.")
 	void claim_is_valid() {
 		//given
-		Date issuedAt = Date.from(Instant.now());
-		String jwt = Jwts.builder()
-				.header().type("JWT").and()
-				.claim("tokenType", "access")
-				.issuedAt(issuedAt)
-				.expiration(Date.from(issuedAt.toInstant().plusSeconds(3600)))
-				.signWith(Keys.hmacShaKeyFor(testSecret.getBytes()))
-				.compact();
+		String jwt = TestJwtFactory.createAccessToken(
+				Map.of("tokenType", "access"),
+				Date.from(Instant.now()),
+				3600,
+				testSecret
+		);
 		//then
 		assertDoesNotThrow(() -> sut.validateClaim(jwt, "tokenType", "access"));
 	}
@@ -61,14 +56,12 @@ class JwtManagerTest {
 	@DisplayName("JWT의 Claim이 유효하지 않다.")
 	void claim_is_invalid() {
 		//given
-		Date issuedAt = Date.from(Instant.now());
-		String jwt = Jwts.builder()
-				.header().type("JWT").and()
-				.claim("tokenType", "access")
-				.issuedAt(issuedAt)
-				.expiration(Date.from(issuedAt.toInstant().plusSeconds(3600)))
-				.signWith(Keys.hmacShaKeyFor(testSecret.getBytes()))
-				.compact();
+		String jwt = TestJwtFactory.createAccessToken(
+				Map.of("tokenType", "access"),
+				Date.from(Instant.now()),
+				3600,
+				testSecret
+		);
 		//then
 		assertThatThrownBy(() -> sut.validateClaim(jwt, "tokenType", "refreshToken"))
 				.isInstanceOf(JwtCustomException.class)
