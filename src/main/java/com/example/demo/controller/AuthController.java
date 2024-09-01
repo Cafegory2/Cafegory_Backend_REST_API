@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.auth.CafegoryAccessToken;
 import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.service.auth.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/refresh")
-    public CafegoryToken refreshToken(@RequestBody CafegoryToken cafegoryToken) {
-        Long memberId = jwtService.verifyAccessAndRefreshToken(cafegoryToken.getAccessToken(), cafegoryToken.getRefreshToken());
-        String accessToken = jwtService.createAccessToken(memberId);
-        return new CafegoryToken(accessToken, null);
+    public CafegoryAccessToken refreshToken(@RequestBody CafegoryToken cafegoryToken) {
+        return jwtService.verifyAndRefreshAccessToken(cafegoryToken.getAccessToken(), cafegoryToken.getRefreshToken());
     }
 }

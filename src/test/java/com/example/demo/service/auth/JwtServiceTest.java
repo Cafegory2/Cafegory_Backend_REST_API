@@ -31,7 +31,7 @@ class JwtServiceTest extends ServiceTest {
         String accessToken = TestJwtFactory.createAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createRefreshToken(member.getId(), testSecret);
         //then
-        assertDoesNotThrow(() -> sut.verifyAccessAndRefreshToken(accessToken, refreshToken));
+        assertDoesNotThrow(() -> sut.verifyAndRefreshAccessToken(accessToken, refreshToken));
     }
 
     @Test
@@ -42,7 +42,7 @@ class JwtServiceTest extends ServiceTest {
         String accessToken = TestJwtFactory.createExpiredAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createRefreshToken(member.getId(), testSecret);
         //then
-        assertDoesNotThrow(() -> sut.verifyAccessAndRefreshToken(accessToken, refreshToken));
+        assertDoesNotThrow(() -> sut.verifyAndRefreshAccessToken(accessToken, refreshToken));
     }
 
     @Test
@@ -53,7 +53,7 @@ class JwtServiceTest extends ServiceTest {
         String accessToken = TestJwtFactory.createExpiredAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
         //then
-        assertThatThrownBy(() -> sut.verifyAccessAndRefreshToken(accessToken, refreshToken))
+        assertThatThrownBy(() -> sut.verifyAndRefreshAccessToken(accessToken, refreshToken))
                 .isInstanceOf(JwtCustomException.class)
                 .hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
     }
@@ -66,7 +66,7 @@ class JwtServiceTest extends ServiceTest {
         String accessToken = TestJwtFactory.createAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
         //then
-        assertThatThrownBy(() -> sut.verifyAccessAndRefreshToken(accessToken, refreshToken))
+        assertThatThrownBy(() -> sut.verifyAndRefreshAccessToken(accessToken, refreshToken))
                 .isInstanceOf(JwtCustomException.class)
                 .hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
     }
