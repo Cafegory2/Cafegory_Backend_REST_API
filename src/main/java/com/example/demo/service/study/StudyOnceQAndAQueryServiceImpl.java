@@ -5,7 +5,7 @@
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.study.StudyOnceComment;
+// import com.example.demo.implement.study.StudyOnceComment;
 // import com.example.demo.dto.study.StudyOnceCommentResponse;
 // import com.example.demo.dto.study.StudyOnceSearchCommentWriterResponse;
 // import com.example.demo.exception.CafegoryException;

@@ -3,7 +3,7 @@
 // import java.util.List;
 // import java.util.stream.Collectors;
 //
-// import com.example.demo.domain.cafe.SnsDetail;
+// import com.example.demo.implement.cafe.SnsDetail;
 // import com.example.demo.dto.cafe.CafeSearchSnsResponse;
 //
 // public class SnsDetailMapper {

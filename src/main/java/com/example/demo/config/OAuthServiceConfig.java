@@ -5,13 +5,13 @@
 // import org.springframework.context.annotation.Configuration;
 // import org.springframework.web.client.RestTemplate;
 //
-// import com.example.demo.domain.auth.CafegoryTokenManager;
-// import com.example.demo.domain.auth.JwtCafegoryTokenManager;
-// import com.example.demo.domain.auth.JwtManager;
-// import com.example.demo.domain.oauth2.KakaoOAuth2ProfileRequester;
-// import com.example.demo.domain.oauth2.KakaoOAuth2TokenRequester;
-// import com.example.demo.domain.oauth2.NaverOAuth2ProfileRequester;
-// import com.example.demo.domain.oauth2.NaverOAuth2TokenRequester;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
+// import com.example.demo.implement.auth.JwtCafegoryTokenManager;
+// import com.example.demo.implement.auth.JwtManager;
+// import com.example.demo.implement.oauth2.KakaoOAuth2ProfileRequester;
+// import com.example.demo.implement.oauth2.KakaoOAuth2TokenRequester;
+// import com.example.demo.implement.oauth2.NaverOAuth2ProfileRequester;
+// import com.example.demo.implement.oauth2.NaverOAuth2TokenRequester;
 // import com.example.demo.service.oauth2.OAuth2ServiceImpl;
 //
 // @Configuration

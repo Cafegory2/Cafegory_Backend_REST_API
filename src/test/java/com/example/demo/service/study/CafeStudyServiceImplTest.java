@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.domain.cafe.Cafe;
-import com.example.demo.domain.member.Member;
-import com.example.demo.domain.study.MemberComms;
+import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.member.Member;
+import com.example.demo.implement.study.MemberComms;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;

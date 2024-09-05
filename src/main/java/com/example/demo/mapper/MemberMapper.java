@@ -1,6 +1,6 @@
 // package com.example.demo.mapper;
 //
-// import com.example.demo.domain.member.Member;
+// import com.example.demo.implement.member.Member;
 // import com.example.demo.dto.study.StudyOnceSearchCommentWriterResponse;
 //
 // public class MemberMapper {

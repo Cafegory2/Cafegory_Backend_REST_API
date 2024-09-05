@@ -9,7 +9,7 @@
 // import org.springframework.web.bind.annotation.RequestHeader;
 // import org.springframework.web.bind.annotation.RestController;
 //
-// import com.example.demo.domain.auth.CafegoryTokenManager;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
 // import com.example.demo.dto.PagedResponse;
 // import com.example.demo.dto.cafe.CafeSearchListRequest;
 // import com.example.demo.dto.cafe.CafeSearchListResponse;

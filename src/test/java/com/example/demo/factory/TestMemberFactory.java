@@ -1,8 +1,8 @@
 package com.example.demo.factory;
 
-import com.example.demo.domain.member.BeverageSize;
-import com.example.demo.domain.member.Member;
-import com.example.demo.domain.member.Role;
+import com.example.demo.implement.member.BeverageSize;
+import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.Role;
 
 public class TestMemberFactory {
 

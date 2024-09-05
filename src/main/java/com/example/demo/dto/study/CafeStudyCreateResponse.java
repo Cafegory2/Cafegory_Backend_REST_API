@@ -2,8 +2,8 @@ package com.example.demo.dto.study;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.domain.study.MemberComms;
-import com.example.demo.domain.study.RecruitmentStatus;
+import com.example.demo.implement.study.MemberComms;
+import com.example.demo.implement.study.RecruitmentStatus;
 
 import lombok.Builder;
 import lombok.Getter;

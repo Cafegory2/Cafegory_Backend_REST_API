@@ -5,9 +5,9 @@
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.member.Member;
-// import com.example.demo.domain.study.CafeStudy;
-// import com.example.demo.domain.study.StudyOnceComment;
+// import com.example.demo.implement.member.Member;
+// import com.example.demo.implement.study.CafeStudy;
+// import com.example.demo.implement.study.StudyOnceComment;
 // import com.example.demo.dto.study.StudyOnceCommentRequest;
 // import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
 // import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;

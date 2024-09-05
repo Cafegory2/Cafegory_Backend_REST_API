@@ -1,6 +1,6 @@
 // package com.example.demo.mapper;
 //
-// import com.example.demo.domain.study.StudyOnceComment;
+// import com.example.demo.implement.study.StudyOnceComment;
 // import com.example.demo.dto.study.StudyOnceCommentInfo;
 // import com.example.demo.dto.study.StudyOnceCommentResponse;
 // import com.example.demo.dto.study.StudyOnceReplyResponse;

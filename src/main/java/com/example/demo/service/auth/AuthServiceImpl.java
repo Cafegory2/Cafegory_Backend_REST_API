@@ -6,7 +6,7 @@
 //
 // import org.springframework.stereotype.Service;
 //
-// import com.example.demo.domain.auth.CafegoryTokenManager;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
 // import com.example.demo.dto.auth.CafegoryToken;
 // import com.example.demo.exception.CafegoryException;
 //

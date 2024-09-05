@@ -9,7 +9,7 @@
 // import org.springframework.web.bind.annotation.RequestMapping;
 // import org.springframework.web.bind.annotation.RestController;
 //
-// import com.example.demo.domain.auth.CafegoryTokenManager;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
 // import com.example.demo.dto.profile.ProfileGetResponse;
 // import com.example.demo.dto.profile.ProfileUpdateRequest;
 // import com.example.demo.dto.profile.ProfileUpdateResponse;

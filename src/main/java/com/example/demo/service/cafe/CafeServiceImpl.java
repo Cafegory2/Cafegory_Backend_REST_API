@@ -4,16 +4,16 @@
 //
 // import java.util.List;
 //
-// import org.springframework.data.domain.Page;
-// import org.springframework.data.domain.Pageable;
+// import org.springframework.data.implement.Page;
+// import org.springframework.data.implement.Pageable;
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.cafe.BusinessHour;
-// import com.example.demo.domain.cafe.BusinessHourOpenChecker;
-// import com.example.demo.domain.cafe.Cafe;
-// import com.example.demo.domain.cafe.CafeSearchCondition;
-// import com.example.demo.domain.cafe.OpenChecker;
+// import com.example.demo.implement.cafe.BusinessHour;
+// import com.example.demo.implement.cafe.BusinessHourOpenChecker;
+// import com.example.demo.implement.cafe.Cafe;
+// import com.example.demo.implement.cafe.CafeSearchCondition;
+// import com.example.demo.implement.cafe.OpenChecker;
 // import com.example.demo.dto.PagedResponse;
 // import com.example.demo.dto.cafe.CafeSearchListRequest;
 // import com.example.demo.dto.cafe.CafeSearchListResponse;

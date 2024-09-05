@@ -1,6 +1,6 @@
 package com.example.demo.service.study;
 
-import static com.example.demo.domain.study.CafeStudy.*;
+import static com.example.demo.implement.study.CafeStudy.*;
 import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.util.TruncatedTimeUtil.*;
 
@@ -13,12 +13,12 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.cafe.BusinessHour;
-import com.example.demo.domain.cafe.BusinessHourOpenChecker;
-import com.example.demo.domain.cafe.Cafe;
-import com.example.demo.domain.member.Member;
-import com.example.demo.domain.study.CafeStudy;
-import com.example.demo.domain.study.CafeStudyMember;
+import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.BusinessHourOpenChecker;
+import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.member.Member;
+import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyMember;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.exception.CafegoryException;

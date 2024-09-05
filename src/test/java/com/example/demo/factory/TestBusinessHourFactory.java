@@ -5,8 +5,8 @@ import static com.example.demo.util.TruncatedTimeUtil.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import com.example.demo.domain.cafe.BusinessHour;
-import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.Cafe;
 
 public class TestBusinessHourFactory {
 	//

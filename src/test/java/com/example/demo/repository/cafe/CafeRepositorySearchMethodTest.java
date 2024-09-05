@@ -19,14 +19,14 @@
 //import org.junit.jupiter.params.provider.Arguments;
 //import org.junit.jupiter.params.provider.MethodSource;
 //import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Page;
+//import org.springframework.data.implement.Page;
 //import org.springframework.jdbc.core.JdbcTemplate;
 //
 //import com.example.demo.config.JpaTest;
-//import com.example.demo.domain.cafe.BusinessHour;
-//import com.example.demo.domain.cafe.Cafe;
-//import com.example.demo.domain.cafe.CafeSearchCondition;
-//import com.example.demo.domain.cafe.MaxAllowableStay;
+//import com.example.demo.implement.cafe.BusinessHour;
+//import com.example.demo.implement.cafe.Cafe;
+//import com.example.demo.implement.cafe.CafeSearchCondition;
+//import com.example.demo.implement.cafe.MaxAllowableStay;
 //import com.example.demo.util.PageRequestCustom;
 //
 //class CafeRepositorySearchMethodTest extends JpaTest {

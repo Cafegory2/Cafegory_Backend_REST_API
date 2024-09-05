@@ -1,7 +1,7 @@
 package com.example.demo.factory;
 
-import com.example.demo.domain.cafe.Address;
-import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.implement.cafe.Address;
+import com.example.demo.implement.cafe.Cafe;
 
 public class TestCafeFactory {
 

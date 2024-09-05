@@ -1,22 +1,22 @@
 // package com.example.demo.repository.cafe;
 //
-// import static com.example.demo.domain.cafe.QBusinessHour.*;
-// import static com.example.demo.domain.cafe.QCafe.*;
+// import static com.example.demo.implement.cafe.QBusinessHour.*;
+// import static com.example.demo.implement.cafe.QCafe.*;
 // import static io.hypersistence.utils.hibernate.util.StringUtils.*;
 //
 // import java.time.LocalDateTime;
 // import java.time.LocalTime;
 // import java.util.List;
 //
-// import org.springframework.data.domain.Page;
-// import org.springframework.data.domain.Pageable;
+// import org.springframework.data.implement.Page;
+// import org.springframework.data.implement.Pageable;
 // import org.springframework.data.support.PageableExecutionUtils;
 // import org.springframework.stereotype.Repository;
 //
-// import com.example.demo.domain.cafe.Cafe;
-// import com.example.demo.domain.cafe.CafeSearchCondition;
-// import com.example.demo.domain.cafe.MaxAllowableStay;
-// import com.example.demo.domain.cafe.MinMenuPrice;
+// import com.example.demo.implement.cafe.Cafe;
+// import com.example.demo.implement.cafe.CafeSearchCondition;
+// import com.example.demo.implement.cafe.MaxAllowableStay;
+// import com.example.demo.implement.cafe.MinMenuPrice;
 // import com.querydsl.core.types.dsl.BooleanExpression;
 // import com.querydsl.jpa.JPAExpressions;
 // import com.querydsl.jpa.impl.JPAQuery;

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
 
-import com.example.demo.domain.study.MemberComms;
+import com.example.demo.implement.study.MemberComms;
 import com.sun.istack.NotNull;
 
 import lombok.AccessLevel;

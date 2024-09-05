@@ -5,8 +5,8 @@
 // import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 // import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //
-// import com.example.demo.domain.auth.AuthenticationManager;
-// import com.example.demo.domain.auth.CafegoryTokenManager;
+// import com.example.demo.implement.auth.AuthenticationManager;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
 //
 // import lombok.RequiredArgsConstructor;
 //

@@ -4,12 +4,12 @@
 //
 // import java.util.List;
 //
-// import org.springframework.data.domain.Page;
-// import org.springframework.data.domain.Pageable;
+// import org.springframework.data.implement.Page;
+// import org.springframework.data.implement.Pageable;
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.review.Review;
+// import com.example.demo.implement.review.Review;
 // import com.example.demo.dto.PagedResponse;
 // import com.example.demo.dto.review.ReviewResponse;
 // import com.example.demo.dto.review.ReviewSearchListRequest;

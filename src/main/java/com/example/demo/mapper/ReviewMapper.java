@@ -3,8 +3,8 @@
 // import java.util.List;
 // import java.util.stream.Collectors;
 //
-// import com.example.demo.domain.member.Member;
-// import com.example.demo.domain.review.Review;
+// import com.example.demo.implement.member.Member;
+// import com.example.demo.implement.review.Review;
 // import com.example.demo.dto.cafe.CafeSearchReviewResponse;
 // import com.example.demo.dto.cafe.CafeSearchWriterResponse;
 // import com.example.demo.dto.review.ReviewResponse;
