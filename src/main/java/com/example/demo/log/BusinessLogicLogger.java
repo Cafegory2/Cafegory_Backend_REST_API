@@ -23,7 +23,7 @@ public class BusinessLogicLogger {
 
 	@Around("execution(* com.example.demo.controller.*Controller.*(..)) "
 		+ "|| execution(* com.example.demo.service.*Service.*(..)) "
-		+ "|| execution(* com.example.demo.domain.*.*(..)) "
+		+ "|| execution(* com.example.demo.implement.*.*(..)) "
 		+ "|| execution(* com.example.demo.repository.*Repository.*(..)) ")
 	public Object printLog(ProceedingJoinPoint joinPoint) throws Throwable {
 		String className = joinPoint.getSignature().getDeclaringTypeName();

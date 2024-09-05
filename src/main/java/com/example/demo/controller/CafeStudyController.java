@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.auth.CafegoryTokenManager;
+import com.example.demo.implement.auth.CafegoryTokenManager;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.service.study.CafeStudyService;

@@ -5,11 +5,11 @@
 //
 // import org.springframework.beans.factory.annotation.Autowired;
 //
-// import com.example.demo.domain.auth.CafegoryTokenManager;
-// import com.example.demo.domain.member.Member;
-// import com.example.demo.domain.member.ThumbnailImage;
-// import com.example.demo.domain.oauth2.OAuth2ProfileRequester;
-// import com.example.demo.domain.oauth2.OAuth2TokenRequester;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
+// import com.example.demo.implement.member.Member;
+// import com.example.demo.implement.member.ThumbnailImage;
+// import com.example.demo.implement.oauth2.OAuth2ProfileRequester;
+// import com.example.demo.implement.oauth2.OAuth2TokenRequester;
 // import com.example.demo.dto.auth.CafegoryToken;
 // import com.example.demo.dto.oauth2.OAuth2Profile;
 // import com.example.demo.dto.oauth2.OAuth2Token;

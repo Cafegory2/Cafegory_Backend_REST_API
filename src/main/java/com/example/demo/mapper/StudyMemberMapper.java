@@ -3,7 +3,7 @@
 // import java.util.List;
 // import java.util.stream.Collectors;
 //
-// import com.example.demo.domain.study.CafeStudyMember;
+// import com.example.demo.implement.study.CafeStudyMember;
 // import com.example.demo.dto.member.MemberResponse;
 //
 // public class StudyMemberMapper {

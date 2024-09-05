@@ -1,14 +1,14 @@
 // package com.example.demo.repository.study;
 //
-// import static com.example.demo.domain.study.QStudyMember.*;
+// import static com.example.demo.implement.study.QStudyMember.*;
 //
 // import java.time.LocalDate;
 // import java.util.List;
 //
 // import org.springframework.stereotype.Repository;
 //
-// import com.example.demo.domain.member.Member;
-// import com.example.demo.domain.study.CafeStudyMember;
+// import com.example.demo.implement.member.Member;
+// import com.example.demo.implement.study.CafeStudyMember;
 // import com.querydsl.core.types.dsl.BooleanExpression;
 // import com.querydsl.jpa.impl.JPAQueryFactory;
 //

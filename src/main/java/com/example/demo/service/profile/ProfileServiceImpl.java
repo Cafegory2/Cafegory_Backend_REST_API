@@ -12,9 +12,9 @@
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.member.Member;
-// import com.example.demo.domain.study.CafeStudy;
-// import com.example.demo.domain.study.CafeStudyMember;
+// import com.example.demo.implement.member.Member;
+// import com.example.demo.implement.study.CafeStudy;
+// import com.example.demo.implement.study.CafeStudyMember;
 // import com.example.demo.dto.profile.ProfileGetResponse;
 // import com.example.demo.dto.profile.ProfileUpdateRequest;
 // import com.example.demo.dto.profile.ProfileUpdateResponse;

@@ -3,7 +3,7 @@
 // import java.util.List;
 // import java.util.stream.Collectors;
 //
-// import com.example.demo.domain.cafe.BusinessHour;
+// import com.example.demo.implement.cafe.BusinessHour;
 // import com.example.demo.dto.cafe.CafeSearchBusinessHourResponse;
 //
 // public class BusinessHourMapper {

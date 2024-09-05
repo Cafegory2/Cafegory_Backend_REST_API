@@ -6,7 +6,7 @@
 // import org.springframework.data.jpa.repository.Query;
 // import org.springframework.data.repository.query.Param;
 //
-// import com.example.demo.domain.study.StudyOnceComment;
+// import com.example.demo.implement.study.StudyOnceComment;
 //
 // public interface StudyOnceCommentRepository extends JpaRepository<StudyOnceComment, Long> {
 //

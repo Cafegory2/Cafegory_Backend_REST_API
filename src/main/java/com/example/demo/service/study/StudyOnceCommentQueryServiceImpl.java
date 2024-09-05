@@ -9,8 +9,8 @@
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.study.CafeStudy;
-// import com.example.demo.domain.study.StudyOnceComment;
+// import com.example.demo.implement.study.CafeStudy;
+// import com.example.demo.implement.study.StudyOnceComment;
 // import com.example.demo.dto.study.StudyOnceCommentSearchListResponse;
 // import com.example.demo.dto.study.StudyOnceCommentSearchResponse;
 // import com.example.demo.exception.CafegoryException;

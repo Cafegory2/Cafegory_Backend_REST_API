@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.domain.cafe.Cafe;
-import com.example.demo.domain.member.Member;
-import com.example.demo.domain.study.CafeStudy;
-import com.example.demo.domain.study.StudyPeriod;
+import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.member.Member;
+import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.StudyPeriod;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 

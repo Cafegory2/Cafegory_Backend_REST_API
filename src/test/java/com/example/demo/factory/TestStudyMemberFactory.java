@@ -1,8 +1,8 @@
 //package com.example.demo.factory;
 //
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.study.StudyMember;
-//import com.example.demo.domain.study.StudyOnce;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.study.StudyMember;
+//import com.example.demo.implement.study.StudyOnce;
 //
 //public class TestStudyMemberFactory {
 //

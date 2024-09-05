@@ -9,11 +9,11 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //
 //import com.example.demo.config.ServiceTest;
-//import com.example.demo.domain.cafe.Cafe;
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.member.ThumbnailImage;
-//import com.example.demo.domain.study.StudyOnce;
-//import com.example.demo.domain.study.StudyOnceComment;
+//import com.example.demo.implement.cafe.Cafe;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.member.ThumbnailImage;
+//import com.example.demo.implement.study.StudyOnce;
+//import com.example.demo.implement.study.StudyOnceComment;
 //import com.example.demo.dto.study.StudyOnceCommentRequest;
 //import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
 //import com.example.demo.exception.CafegoryException;

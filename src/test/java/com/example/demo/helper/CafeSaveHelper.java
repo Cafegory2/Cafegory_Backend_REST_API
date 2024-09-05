@@ -5,8 +5,8 @@ import java.time.DayOfWeek;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.cafe.BusinessHour;
-import com.example.demo.domain.cafe.Cafe;
+import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.factory.TestBusinessHourFactory;
 import com.example.demo.factory.TestCafeFactory;
 import com.example.demo.repository.cafe.BusinessHourRepository;

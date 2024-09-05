@@ -3,7 +3,7 @@ package com.example.demo.helper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.member.Member;
+import com.example.demo.implement.member.Member;
 import com.example.demo.factory.TestMemberFactory;
 import com.example.demo.repository.member.MemberRepository;
 

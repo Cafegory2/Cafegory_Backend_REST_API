@@ -2,9 +2,9 @@
 //
 //import org.springframework.transaction.annotation.Transactional;
 //
-//import com.example.demo.domain.cafe.Cafe;
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.review.Review;
+//import com.example.demo.implement.cafe.Cafe;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.review.Review;
 //import com.example.demo.factory.TestReviewFactory;
 //import com.example.demo.repository.cafe.CafeRepository;
 //import com.example.demo.repository.member.MemberRepository;

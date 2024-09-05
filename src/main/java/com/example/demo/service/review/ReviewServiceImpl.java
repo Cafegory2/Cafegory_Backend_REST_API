@@ -5,9 +5,9 @@
 // import org.springframework.stereotype.Service;
 // import org.springframework.transaction.annotation.Transactional;
 //
-// import com.example.demo.domain.cafe.Cafe;
-// import com.example.demo.domain.member.Member;
-// import com.example.demo.domain.review.Review;
+// import com.example.demo.implement.cafe.Cafe;
+// import com.example.demo.implement.member.Member;
+// import com.example.demo.implement.review.Review;
 // import com.example.demo.dto.review.ReviewSaveRequest;
 // import com.example.demo.dto.review.ReviewUpdateRequest;
 // import com.example.demo.exception.CafegoryException;
