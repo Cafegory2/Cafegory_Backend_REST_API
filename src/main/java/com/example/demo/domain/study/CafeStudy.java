@@ -23,6 +23,7 @@ import com.example.demo.domain.cafe.Cafe;
 import com.example.demo.domain.member.Member;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,9 +32,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "cafe_study")
 public class CafeStudy extends BaseEntity {
-
-	private static final int LIMIT_MEMBER_CAPACITY = 5;
-	private static final int MIN_LIMIT_MEMBER_CAPACITY = 1;
+	public static final int LIMIT_MEMBER_CAPACITY = 6;
+	public static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
+	public static final int MIN_DELAY_BEFORE_START = 1 * 60 * 60;
 
 	@Id
 	@GeneratedValue
@@ -70,34 +71,32 @@ public class CafeStudy extends BaseEntity {
 	// @Transient
 	// private Category category;
 
-	// @Builder
-	// private CafeStudy(Long id, String name, Cafe cafe, LocalDateTime startDateTime, LocalDateTime endDateTime,
-	// 	int maxMemberCount, int nowMemberCount, boolean isEnd, boolean ableToTalk, String openChatUrl, Member leader) {
-	// 	validateStartDateTime(startDateTime);
-	// 	validateStudyOnceTime(startDateTime, endDateTime);
-	// 	validateMaxMemberCount(maxMemberCount);
-	// 	this.id = id;
-	// 	validateEmptyOrWhiteSpace(name, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-	// 	this.name = name;
-	// 	this.cafe = cafe;
-	// 	this.startDateTime = startDateTime;
-	// 	this.endDateTime = endDateTime;
-	// 	validateNowMemberCountOverMaxLimit(nowMemberCount, maxMemberCount);
-	// 	this.maxMemberCount = maxMemberCount;
-	// 	this.nowMemberCount = nowMemberCount;
-	// 	this.isEnd = isEnd;
-	// 	this.ableToTalk = ableToTalk;
-	// 	validateEmptyOrWhiteSpace(openChatUrl, STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE);
-	// 	this.openChatUrl = openChatUrl;
-	// 	this.leader = leader;
-	// 	validateStudyScheduleConflict(leader);
-	// 	studyMembers = new ArrayList<>();
-	// 	StudyMember studyMember = new StudyMember(leader, this);
-	// 	studyMembers.add(studyMember);
-	// 	leader.addStudyMember(studyMember);
-	// 	this.nowMemberCount = 1;
-	// }
-	//
+	@Builder
+	private CafeStudy(Long id, String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
+		MemberComms memberComms, int maxParticipants, String introduction) {
+		this.id = id;
+		this.name = name;
+		this.cafe = cafe;
+		this.coordinator = coordinator;
+		this.studyPeriod = studyPeriod;
+		this.memberComms = memberComms;
+		this.maxParticipants = maxParticipants;
+		this.introduction = introduction;
+		this.views = 0;
+		this.recruitmentStatus = RecruitmentStatus.OPEN;
+
+		addCoordinatorToStudy(coordinator);
+	}
+
+	private void addCoordinatorToStudy(Member coordinator) {
+		CafeStudyMember cafeStudyMember = CafeStudyMember.builder()
+			.cafeStudy(this)
+			.member(coordinator)
+			.studyRole(StudyRole.COORDINATOR)
+			.build();
+		cafeStudyMembers.add(cafeStudyMember);
+	}
+
 	// private void validateStartDateTime(LocalDateTime startDateTime) {
 	// 	LocalDateTime now = LOCAL_DATE_TIME_NOW;
 	// 	Duration between = Duration.between(now, startDateTime);

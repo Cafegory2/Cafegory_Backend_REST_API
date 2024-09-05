@@ -1,5 +1,6 @@
 package com.example.demo.domain.member;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -43,7 +44,7 @@ public class Member extends BaseEntity {
 	private String bio;
 	private int participationCount;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "beverage_size_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private BeverageSize beverageSize;
 
