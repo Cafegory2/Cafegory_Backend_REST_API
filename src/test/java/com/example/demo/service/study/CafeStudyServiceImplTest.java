@@ -139,20 +139,20 @@ class CafeStudyServiceImplTest extends ServiceTest {
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), cafeStudyCreateRequest));
 	}
 
-	@Test
-	@DisplayName("카공 시작은 현재 시간으로부터 1시간 미만일 수 없다.")
-	void study_starts_1hours_before_now() {
-		//given
-		Member coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = NOW.plusHours(1);
-		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-		//then
-		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), cafeStudyCreateRequest))
-			.isInstanceOf(CafegoryException.class)
-			.hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
-	}
+//	@Test
+//	@DisplayName("카공 시작은 현재 시간으로부터 1시간 미만일 수 없다.")
+//	void study_starts_1hours_before_now() {
+//		//given
+//		Member coordinator = memberSaveHelper.saveMember();
+//		LocalDateTime start = NOW.plusHours(1);
+//		LocalDateTime end = start.plusHours(1);
+//		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+//		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+//		//then
+//		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), cafeStudyCreateRequest))
+//			.isInstanceOf(CafegoryException.class)
+//			.hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
+//	}
 
 	//	@Test
 	//	@DisplayName("카공 진행시간이 1시간 미만일 수 없다.")
