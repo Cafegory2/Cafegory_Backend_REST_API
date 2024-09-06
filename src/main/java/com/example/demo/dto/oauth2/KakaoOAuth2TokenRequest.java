@@ -1,12 +1,15 @@
 package com.example.demo.dto.oauth2;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import lombok.Data;
 import lombok.NonNull;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class KakaoOAuth2TokenRequest implements OAuth2TokenRequest {
 
 	@NonNull
