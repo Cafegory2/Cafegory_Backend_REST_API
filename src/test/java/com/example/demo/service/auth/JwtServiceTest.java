@@ -1,11 +1,11 @@
 package com.example.demo.service.auth;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.domain.member.Member;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.implement.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@
 //
 //import org.springframework.transaction.annotation.Transactional;
 //
-//import com.example.demo.domain.member.ThumbnailImage;
+//import com.example.demo.implement.member.ThumbnailImage;
 //import com.example.demo.factory.TestThumbnailImageFactory;
 //import com.example.demo.repository.thumbnailimage.ThumbnailImageRepository;
 //

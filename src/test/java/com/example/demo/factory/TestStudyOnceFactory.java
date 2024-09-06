@@ -2,9 +2,9 @@
 //
 //import java.time.LocalDateTime;
 //
-//import com.example.demo.domain.cafe.Cafe;
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.study.StudyOnce;
+//import com.example.demo.implement.cafe.Cafe;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.study.StudyOnce;
 //
 //public class TestStudyOnceFactory {
 //

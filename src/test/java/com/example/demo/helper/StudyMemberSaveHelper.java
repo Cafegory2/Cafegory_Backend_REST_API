@@ -2,9 +2,9 @@
 //
 //import org.springframework.transaction.annotation.Transactional;
 //
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.study.StudyMember;
-//import com.example.demo.domain.study.StudyOnce;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.study.StudyMember;
+//import com.example.demo.implement.study.StudyOnce;
 //import com.example.demo.factory.TestStudyMemberFactory;
 //import com.example.demo.repository.member.MemberRepository;
 //import com.example.demo.repository.study.StudyMemberRepository;

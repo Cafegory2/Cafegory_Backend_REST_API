@@ -11,10 +11,10 @@
 //import org.springframework.beans.factory.annotation.Autowired;
 //
 //import com.example.demo.config.ServiceTest;
-//import com.example.demo.domain.cafe.Cafe;
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.member.ThumbnailImage;
-//import com.example.demo.domain.review.Review;
+//import com.example.demo.implement.cafe.Cafe;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.member.ThumbnailImage;
+//import com.example.demo.implement.review.Review;
 //import com.example.demo.dto.review.ReviewUpdateRequest;
 //import com.example.demo.exception.CafegoryException;
 //import com.example.demo.helper.CafeSaveHelper;

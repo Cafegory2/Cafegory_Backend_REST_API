@@ -1,17 +1,17 @@
 package com.example.demo.service.auth;
 
-import static com.example.demo.domain.auth.TokenClaims.*;
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.implement.auth.TokenClaims.*;
 
 import java.util.Map;
 
-import com.example.demo.domain.auth.JwtCafegoryTokenManager;
-import com.example.demo.domain.auth.JwtManager;
-import com.example.demo.domain.member.Member;
+import com.example.demo.implement.auth.JwtCafegoryTokenManager;
+import com.example.demo.implement.auth.JwtManager;
 import com.example.demo.dto.auth.CafegoryAccessToken;
 import com.example.demo.dto.auth.JwtClaims;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
+import com.example.demo.implement.member.Member;
 import com.example.demo.repository.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -64,6 +64,8 @@ public class JwtService {
             throw new JwtCustomException(exceptionType);
         }
     }
+
+
 
     private void validateMemberIdMatches(final Long memberIdInClaim, final Long memberIdInDb, final JwtClaims refreshTokenClaims) {
         if (!memberIdInClaim.equals(memberIdInDb)) {

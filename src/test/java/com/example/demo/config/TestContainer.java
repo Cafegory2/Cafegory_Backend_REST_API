@@ -2,21 +2,21 @@ package com.example.demo.config;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MariaDBContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 public abstract class TestContainer {
 
-	protected static MariaDBContainer mariadbContainer;
+	protected static PostgreSQLContainer postgreSQLContainer;
 
 	static {
-		mariadbContainer = new MariaDBContainer("mariadb:10.11");
-		mariadbContainer.start();
+		postgreSQLContainer = new PostgreSQLContainer<>("postgres:16-alpine");
+		postgreSQLContainer.start();
 	}
 
 	@DynamicPropertySource
 	protected static void registerDynamicProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", mariadbContainer::getJdbcUrl);
-		registry.add("spring.datasource.username", mariadbContainer::getUsername);
-		registry.add("spring.datasource.password", mariadbContainer::getPassword);
+		registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
+		registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
+		registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
 	}
 }

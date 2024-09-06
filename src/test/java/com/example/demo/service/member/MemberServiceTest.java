@@ -1,10 +1,9 @@
 package com.example.demo.service.member;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.domain.member.Member;
 import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.implement.member.Member;
 import com.example.demo.repository.member.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 //package com.example.demo.factory;
 //
-//import com.example.demo.domain.cafe.Cafe;
-//import com.example.demo.domain.member.Member;
-//import com.example.demo.domain.review.Review;
+//import com.example.demo.implement.cafe.Cafe;
+//import com.example.demo.implement.member.Member;
+//import com.example.demo.implement.review.Review;
 //
 //public class TestReviewFactory {
 //

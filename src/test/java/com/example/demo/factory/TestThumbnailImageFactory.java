@@ -1,6 +1,6 @@
 //package com.example.demo.factory;
 //
-//import com.example.demo.domain.member.ThumbnailImage;
+//import com.example.demo.implement.member.ThumbnailImage;
 //
 //public class TestThumbnailImageFactory {
 //

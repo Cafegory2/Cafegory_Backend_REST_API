@@ -4,10 +4,10 @@
 // import java.util.List;
 // import java.util.stream.Collectors;
 //
-// import com.example.demo.domain.cafe.BusinessHour;
-// import com.example.demo.domain.cafe.Cafe;
-// import com.example.demo.domain.cafe.CafeSearchCondition;
-// import com.example.demo.domain.cafe.OpenChecker;
+// import com.example.demo.implement.cafe.BusinessHour;
+// import com.example.demo.implement.cafe.Cafe;
+// import com.example.demo.implement.cafe.CafeSearchCondition;
+// import com.example.demo.implement.cafe.OpenChecker;
 // import com.example.demo.dto.cafe.BusinessHourResponse;
 // import com.example.demo.dto.cafe.CafeSearchBasicInfoResponse;
 // import com.example.demo.dto.cafe.CafeSearchBusinessHourResponse;

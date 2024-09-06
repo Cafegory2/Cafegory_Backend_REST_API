@@ -1,12 +1,12 @@
 package com.example.demo.service.oauth2;
 
-import com.example.demo.domain.oauth2.OAuth2ProfileRequester;
-import com.example.demo.domain.oauth2.OAuth2TokenRequester;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2Provider;
 import com.example.demo.dto.oauth2.OAuth2Token;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 
+import com.example.demo.implement.oauth2.OAuth2ProfileRequester;
+import com.example.demo.implement.oauth2.OAuth2TokenRequester;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

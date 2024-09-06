@@ -2,7 +2,7 @@ package com.example.demo.helper;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.member.Member;
+import com.example.demo.implement.member.Member;
 import com.example.demo.factory.TestMemberFactory;
 import com.example.demo.repository.member.MemberRepository;
 
@@ -19,9 +19,9 @@ public class MemberSaveHelper {
 		return memberRepository.save(member);
 	}
 
-//	public Member saveMemberWithName(ThumbnailImage thumbnailImage, String name) {
-////		ThumbnailImage mergedThumbnailImage = thumbnailImageRepository.save(thumbnailImage);
-//		Member member = TestMemberFactory.createMemberWithThumbAndName(mergedThumbnailImage, name);
-//		return memberRepository.save(member);
-//	}
+	// public Member saveMemberWithName(ThumbnailImage thumbnailImage, String name) {
+	// 	ThumbnailImage mergedThumbnailImage = thumbnailImageRepository.save(thumbnailImage);
+	// 	Member member = TestMemberFactory.createMemberWithThumbAndName(mergedThumbnailImage, name);
+	// 	return memberRepository.save(member);
+	// }
 }

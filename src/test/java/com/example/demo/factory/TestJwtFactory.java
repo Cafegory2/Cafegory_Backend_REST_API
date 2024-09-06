@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
-import static com.example.demo.domain.auth.TokenClaims.*;
+import static com.example.demo.implement.auth.TokenClaims.*;
 
 public class TestJwtFactory {
 

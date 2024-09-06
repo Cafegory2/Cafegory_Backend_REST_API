@@ -1,11 +1,11 @@
 package com.example.demo.service.facade;
 
-import com.example.demo.domain.member.Member;
 import com.example.demo.dto.auth.CafegoryToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
+import com.example.demo.implement.member.Member;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.service.auth.JwtService;
 import com.example.demo.service.member.MemberService;

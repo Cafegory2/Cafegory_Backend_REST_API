@@ -7,8 +7,8 @@
 //
 // import org.springframework.stereotype.Repository;
 //
-// import com.example.demo.domain.study.CafeStudy;
-// import com.example.demo.domain.study.QStudyOnce;
+// import com.example.demo.implement.study.CafeStudy;
+// import com.example.demo.implement.study.QStudyOnce;
 // import com.example.demo.dto.study.StudyOnceSearchRequest;
 // import com.example.demo.dto.study.TalkAbleState;
 // import com.querydsl.core.types.dsl.BooleanExpression;

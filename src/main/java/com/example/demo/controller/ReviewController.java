@@ -12,7 +12,7 @@
 // import org.springframework.web.bind.annotation.RequestBody;
 // import org.springframework.web.bind.annotation.RequestHeader;
 //
-// import com.example.demo.domain.auth.CafegoryTokenManager;
+// import com.example.demo.implement.auth.CafegoryTokenManager;
 // import com.example.demo.dto.PagedResponse;
 // import com.example.demo.dto.review.ReviewResponse;
 // import com.example.demo.dto.review.ReviewSaveRequest;

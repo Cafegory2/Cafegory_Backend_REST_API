@@ -4,7 +4,7 @@
 //
 //import org.springframework.stereotype.Service;
 //
-//import com.example.demo.domain.member.Member;
+//import com.example.demo.implement.member.Member;
 //import com.example.demo.dto.email.CustomEmailSendRequest;
 //import com.example.demo.dto.email.EmailSendCustomTemplateResponse;
 //import com.example.demo.dto.email.EmailSendRequest;
