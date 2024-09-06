@@ -5,8 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CafegoryToken {
+public class CafegoryAccessToken {
 
-	private final String accessToken;
-	private final String refreshToken;
+    private final String accessToken;
 }

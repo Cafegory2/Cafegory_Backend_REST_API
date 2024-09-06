@@ -1,12 +1,15 @@
 package com.example.demo.dto.oauth2;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import lombok.Data;
 import lombok.NonNull;
 
-@Data
+@Getter
+@RequiredArgsConstructor
 public class NaverOAuth2TokenRequest implements OAuth2TokenRequest {
 	@NonNull
 	private final String code;

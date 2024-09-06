@@ -19,4 +19,6 @@ public class CafegoryException extends RuntimeException {
 	public HttpStatus getHttpStatus() {
 		return exceptionType.getErrStatus();
 	}
+
+	public ExceptionType getExceptionType() {return exceptionType;}
 }

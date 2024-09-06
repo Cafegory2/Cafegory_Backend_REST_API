@@ -190,14 +190,19 @@ public class CafeStudyService {
 		validateStartDateTime(request.getStartDateTime());
 		validateStartDate(request.getStartDateTime());
 		validateMaxParticipants(request.getMaxParticipants());
+
 		Cafe cafe = findCafeById(request.getCafeId());
 		BusinessHour businessHour = businessHourQueryDslRepository.findWithCafeAndDayOfWeek(cafe,
 			request.getStartDateTime().getDayOfWeek());
+
 		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
 			businessHour);
+
 		Member coordinator = findMemberById(coordinatorId);
+
 		validateStudyScheduleConflict(truncateDateTimeToSecond(request.getStartDateTime()),
 			truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
+
 		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
 		CafeStudy saved = cafeStudyRepository.save(cafeStudy);
 		return cafeStudyMapper.toStudyOnceCreateResponse(saved);

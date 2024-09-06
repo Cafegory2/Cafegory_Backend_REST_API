@@ -17,12 +17,16 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class KakaoOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
+
 	private final RestTemplate restTemplate;
 	private static final String GRANT_TYPE = "authorization_code";
+
 	@Value("${oauth.kakao.url.auth}")
 	private String authUrl;
 	@Value("${oauth.kakao.client-id}")
 	private String clientId;
+	@Value("${oauth.kakao.client-secret}")
+	private String clientSecret;
 
 	@Override
 	protected OAuth2Provider getOAuth2Provider() {
@@ -43,6 +47,7 @@ public class KakaoOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
 		MultiValueMap<String, String> httpBody = oAuth2TokenRequest.getParameters();
 		httpBody.add("grant_type", GRANT_TYPE);
 		httpBody.add("client_id", clientId);
+		httpBody.add("client_secret", clientSecret);
 		return httpBody;
 	}
 

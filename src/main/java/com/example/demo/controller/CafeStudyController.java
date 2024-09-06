@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.implement.auth.JwtManager;
+import com.example.demo.implement.auth.TokenClaims;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.implement.auth.CafegoryTokenManager;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.service.study.CafeStudyService;
@@ -19,8 +20,10 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/cafe-study")
 @RequiredArgsConstructor
 public class CafeStudyController {
+
 	private final CafeStudyService cafeStudyService;
-	private final CafegoryTokenManager cafegoryTokenManager;
+	private final JwtManager jwtManager;
+
 	// private final CafeService cafeService;
 	// private final StudyOnceCommentService studyOnceCommentService;
 	// private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
@@ -48,9 +51,9 @@ public class CafeStudyController {
 
 	@PostMapping("")
 	public ResponseEntity<CafeStudyCreateResponse> create(
-		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
-		@RequestHeader("Authorization") String authorization) {
-		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+			@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
+			@RequestHeader("Authorization") String authorization) {
+		long memberId = Long.parseLong(jwtManager.verifyAndExtractClaims(authorization).getClaim(TokenClaims.SUBJECT.getValue()));
 		CafeStudyCreateResponse response = cafeStudyService.createStudy(memberId, cafeStudyCreateRequest);
 		return ResponseEntity.ok(response);
 	}
