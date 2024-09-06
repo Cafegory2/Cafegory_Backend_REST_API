@@ -3,7 +3,6 @@ package com.example.demo.config;
 import com.example.demo.domain.auth.JwtCafegoryTokenManager;
 import com.example.demo.domain.oauth2.*;
 import com.example.demo.dto.oauth2.OAuth2Provider;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +34,6 @@ public class AuthConfig {
     }
 
     @Bean
-    @Qualifier("")
     public KakaoOAuth2ProfileRequester kakaoOAuth2ProfileRequester() {
         return new KakaoOAuth2ProfileRequester(restTemplate());
     }
