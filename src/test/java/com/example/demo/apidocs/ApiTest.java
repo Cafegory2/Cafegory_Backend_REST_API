@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.apidocs;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.epages.restdocs.apispec.Schema;
@@ -37,37 +37,35 @@ public class ApiTest {
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
-                .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation)
-                        .operationPreprocessors()
-                        .withResponseDefaults(Preprocessors.prettyPrint())
-                )
-                .build();
+            .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation)
+                .operationPreprocessors()
+                .withResponseDefaults(Preprocessors.prettyPrint())
+            )
+            .build();
     }
 
     @Test
     void documentHelloEndpoint() throws Exception {
         mockMvc.perform(
-                        RestDocumentationRequestBuilders.get("/hello?name={name}", "JDriven")
-                                .accept(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andDo(
-                        document("hello-controller",
-                                resource(
-                                        ResourceSnippetParameters.builder()
-                                                .summary("Greets a user.")
-                                                .description("test")
-                                                .responseSchema(Schema.schema("get-hello-response"))
-                                                .tag("Greeting")
-                                                .requestParameters(
-                                                        parameterWithName("name").optional()
-                                                                .description("Name of the User.")
-                                                )
-                                                .build()
-                                ))
-                );
+                RestDocumentationRequestBuilders.get("/hello?name={name}", "JDriven")
+                    .accept(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+            .andDo(
+                document("hello-controller",
+                    resource(
+                        ResourceSnippetParameters.builder()
+                            .summary("Greets a user.")
+                            .description("test")
+                            .responseSchema(Schema.schema("get-hello-response"))
+                            .tag("Greeting")
+                            .requestParameters(
+                                parameterWithName("name").optional()
+                                    .description("Name of the User.")
+                            )
+                            .build()
+                    ))
+            );
 
     }
-
-
 }
