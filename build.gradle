@@ -69,6 +69,9 @@ dependencies {
     //spring boot starter mail
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
+//    implementation 'software.amazon.awssdk:s3:2.25.64'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     // test container
     testImplementation "org.testcontainers:testcontainers:1.20.0"
     testImplementation "org.testcontainers:junit-jupiter:1.20.0"
