@@ -13,7 +13,6 @@ import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
-import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.implement.cafe.BusinessHour;
@@ -178,14 +177,14 @@ public class CafeStudyService {
 	// 		throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
 	// 	}
 	// }
-	//
-	// private CafeStudy findStudyOnceById(long studyOnceId) {
-	// 	return studyOnceRepository.findById(studyOnceId)
-	// 		.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
-	// }
+
+	public CafeStudy findCafeStudyById(long cafeStudyId) {
+		return cafeStudyRepository.findById(cafeStudyId)
+			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
+	}
 
 	@Transactional
-	public CafeStudyCreateResponse createStudy(long coordinatorId, CafeStudyCreateRequest request) {
+	public Long createStudy(long coordinatorId, CafeStudyCreateRequest request) {
 		validateNameLength(request.getName());
 		validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 		validateStartDateTime(request.getStartDateTime());
@@ -201,7 +200,7 @@ public class CafeStudyService {
 			timeUtil.toSecond(request.getEndDateTime()), coordinator);
 		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
 		CafeStudy saved = cafeStudyRepository.save(cafeStudy);
-		return cafeStudyMapper.toStudyOnceCreateResponse(saved);
+		return saved.getId();
 	}
 
 	private void validateStartDate(LocalDateTime startDateTime) {
