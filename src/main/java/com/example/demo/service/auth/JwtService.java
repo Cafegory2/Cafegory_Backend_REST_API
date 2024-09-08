@@ -53,10 +53,7 @@ public class JwtService {
 
         validateMemberIdMatches(memberIdInClaim, memberInDb.getId(), refreshTokenClaims);
 
-        String newAccessToken = jwtCafegoryTokenManager.createAccessToken(
-                convertMemberToMap(memberInDb)
-        );
-        return new JwtAccessToken(newAccessToken);
+        return jwtCafegoryTokenManager.createAccessToken(convertMemberToMap(memberInDb));
     }
 
     private void validateNullToken(final String token, ExceptionType exceptionType) {

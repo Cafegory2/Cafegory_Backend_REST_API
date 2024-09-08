@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 
+import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtToken;
 
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public final class JwtCafegoryTokenManager {
         return new JwtToken(accessToken, refreshToken);
     }
 
-    public String createAccessToken(final Map<String, Object> memberInformation) {
+    public JwtAccessToken createAccessToken(final Map<String, Object> memberInformation) {
         Date issuedAt = Date.from(Instant.now());
-        return createAccessToken(memberInformation, issuedAt);
+        return new JwtAccessToken(createAccessToken(memberInformation, issuedAt));
     }
 
     private String createAccessToken(final Map<String, Object> claims, final Date issuedAt) {
