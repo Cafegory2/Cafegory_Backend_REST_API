@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 import com.example.demo.implement.cafe.BusinessHour;
 import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.util.TruncatedTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 public class TestBusinessHourFactory {
 	//
@@ -18,11 +18,11 @@ public class TestBusinessHourFactory {
 	//	}
 
 	public static BusinessHour createBusinessHourWithDayAnd24For7(Cafe cafe, DayOfWeek day,
-		TruncatedTimeUtil truncatedTimeUtil) {
+		TimeUtil timeUtil) {
 		return BusinessHour.builder()
 			.dayOfWeek(day)
 			.openingTime(LocalTime.MIN)
-			.closingTime(truncatedTimeUtil.maxLocalTime())
+			.closingTime(timeUtil.maxLocalTime())
 			.cafe(cafe)
 			.build();
 	}

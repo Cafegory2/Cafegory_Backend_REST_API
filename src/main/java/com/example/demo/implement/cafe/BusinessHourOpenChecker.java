@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.util.TruncatedTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BusinessHourOpenChecker {
 
-	private final TruncatedTimeUtil truncatedTime;
+	private final TimeUtil truncatedTime;
 
 	//
 	//	private boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,

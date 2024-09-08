@@ -22,7 +22,7 @@ import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.MemberComms;
-import com.example.demo.util.TruncatedTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 class CafeStudyServiceTest extends ServiceTest {
 
@@ -35,7 +35,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	@Autowired
 	private MemberSaveHelper memberSaveHelper;
 	@Autowired
-	private TruncatedTimeUtil truncatedTimeUtil;
+	private TimeUtil timeUtil;
 
 	//	@Autowired
 	//	private StudyOnceRepository studyOnceRepository;
@@ -141,7 +141,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	void study_starts_1hours_after_now() {
 		//given
 		Member coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = truncatedTimeUtil.now().plusHours(1).plusMinutes(1);
+		LocalDateTime start = timeUtil.now().plusHours(1).plusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());

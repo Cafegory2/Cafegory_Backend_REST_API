@@ -12,7 +12,7 @@ import com.example.demo.implement.cafe.BusinessHour;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.repository.cafe.BusinessHourRepository;
 import com.example.demo.repository.cafe.CafeRepository;
-import com.example.demo.util.TruncatedTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +25,7 @@ public class CafeSaveHelper {
 
 	private final BusinessHourRepository businessHourRepository;
 
-	private final TruncatedTimeUtil truncatedTimeUtil;
+	private final TimeUtil timeUtil;
 
 	//	public Cafe saveCafe() {
 	//		Cafe cafe = TestCafeFactory.createCafe();
@@ -55,7 +55,7 @@ public class CafeSaveHelper {
 	private void makeBusinessHourWith24For7(Cafe cafe) {
 		for (DayOfWeek day : DayOfWeek.values()) {
 			BusinessHour businessHour = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day,
-				truncatedTimeUtil);
+				timeUtil);
 			businessHourRepository.save(businessHour);
 		}
 	}

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Profile("!test")
 @Component
-public class TruncatedTimeImpl implements TruncatedTimeUtil {
+public class DefaultTimeUtil implements TimeUtil {
 
 	@Override
 	public LocalTime maxLocalTime() {

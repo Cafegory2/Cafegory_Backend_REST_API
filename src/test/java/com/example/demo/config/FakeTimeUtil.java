@@ -7,11 +7,11 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.util.TruncatedTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 @Component
 @Profile("test")
-public class TestTruncatedTimeUtilImpl implements TruncatedTimeUtil {
+public class FakeTimeUtil implements TimeUtil {
 
 	@Override
 	public LocalTime maxLocalTime() {

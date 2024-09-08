@@ -28,7 +28,7 @@ import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
-import com.example.demo.util.TruncatedTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +44,7 @@ public class CafeStudyService {
 	// private final StudyMemberMapper studyMemberMapper;
 	// private final StudyPeriodMapper studyPeriodMapper;
 	private final BusinessHourOpenChecker openChecker;
-	private final TruncatedTimeUtil truncatedTimeUtil;
+	private final TimeUtil timeUtil;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -197,15 +197,15 @@ public class CafeStudyService {
 		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
 			businessHour);
 		Member coordinator = findMemberById(coordinatorId);
-		validateStudyScheduleConflict(truncatedTimeUtil.toSecond(request.getStartDateTime()),
-			truncatedTimeUtil.toSecond(request.getEndDateTime()), coordinator);
+		validateStudyScheduleConflict(timeUtil.toSecond(request.getStartDateTime()),
+			timeUtil.toSecond(request.getEndDateTime()), coordinator);
 		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
 		CafeStudy saved = cafeStudyRepository.save(cafeStudy);
 		return cafeStudyMapper.toStudyOnceCreateResponse(saved);
 	}
 
 	private void validateStartDate(LocalDateTime startDateTime) {
-		LocalDateTime plusMonths = truncatedTimeUtil.now().plusMonths(1);
+		LocalDateTime plusMonths = timeUtil.now().plusMonths(1);
 		if (startDateTime.isAfter(plusMonths)) {
 			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
 		}
@@ -218,7 +218,7 @@ public class CafeStudyService {
 	}
 
 	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = truncatedTimeUtil.now();
+		LocalDateTime now = timeUtil.now();
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
 			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
