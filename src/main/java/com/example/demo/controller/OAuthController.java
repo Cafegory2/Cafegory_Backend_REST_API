@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.KakaoOAuth2TokenRequest;
 
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class OAuthController {
     private final OAuthFacade oauthFacade;
 
     @GetMapping("/kakao")
-    public CafegoryToken kakao(@RequestParam String code) {
+    public JwtToken kakao(@RequestParam String code) {
         KakaoOAuth2TokenRequest kakaoOAuth2LoginRequest = new KakaoOAuth2TokenRequest(code);
         return oauthFacade.handleOauthLogin(kakaoOAuth2LoginRequest);
     }

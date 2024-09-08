@@ -1,6 +1,6 @@
 package com.example.demo.service.facade;
 
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.exception.CafegoryException;
@@ -30,7 +30,7 @@ public class OAuthFacade {
     private final AwsService awsService;
 
     @Transactional
-    public CafegoryToken handleOauthLogin(OAuth2TokenRequest oAuth2TokenRequest) {
+    public JwtToken handleOauthLogin(OAuth2TokenRequest oAuth2TokenRequest) {
         OAuth2Profile profile = oAuth2Service.fetchMemberProfile(oAuth2TokenRequest);
         String email = profile.getEmailAddress();
 
@@ -41,7 +41,7 @@ public class OAuthFacade {
             member = saveMember(email, profile.getNickName());
         }
 
-        CafegoryToken token = jwtService.createAccessAndRefreshToken(member.getId());
+        JwtToken token = jwtService.createAccessAndRefreshToken(member.getId());
         member.setRefreshToken(token.getRefreshToken());
 
         ImageData imageData = ImageDownloadUtil.downloadImage(profile.getProfileImgUrl());

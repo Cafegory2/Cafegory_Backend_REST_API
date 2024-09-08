@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.auth.CafegoryAccessToken;
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 import com.example.demo.service.auth.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/refresh")
-    public CafegoryAccessToken refreshToken(@RequestBody CafegoryToken cafegoryToken) {
-        return jwtService.verifyAndRefreshAccessToken(cafegoryToken.getAccessToken(), cafegoryToken.getRefreshToken());
+    public CafegoryAccessToken refreshToken(@RequestBody JwtToken jwtToken) {
+        return jwtService.verifyAndRefreshAccessToken(jwtToken.getAccessToken(), jwtToken.getRefreshToken());
     }
 }

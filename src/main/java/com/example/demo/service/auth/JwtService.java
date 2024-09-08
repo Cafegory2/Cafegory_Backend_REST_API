@@ -16,7 +16,7 @@ import com.example.demo.repository.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 import com.example.demo.exception.CafegoryException;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class JwtService {
     private final JwtTokenManager jwtTokenManager;
     private final MemberRepository memberRepository;
 
-    public CafegoryToken createAccessAndRefreshToken(final Long memberId) {
+    public JwtToken createAccessAndRefreshToken(final Long memberId) {
         Member member = findMember(memberId);
         return jwtCafegoryTokenManager.createAccessAndRefreshToken(
                 convertMemberToMap(member)

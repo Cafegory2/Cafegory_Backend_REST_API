@@ -1,7 +1,7 @@
 package com.example.demo.service.facade;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.*;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.member.Member;
@@ -54,7 +54,7 @@ class OAuthFacadeTest extends ServiceTest {
             mockedStatic.when(() -> ImageDownloadUtil.downloadImage("testImageUrl")).thenReturn(mock(ImageData.class));
             doNothing().when(mockAwsService).uploadImageToS3(anyString(), any());
             //when
-            CafegoryToken token = sut.handleOauthLogin(request);
+            JwtToken token = sut.handleOauthLogin(request);
             //then
             List<Member> members = memberRepository.findAll();
 
@@ -80,7 +80,7 @@ class OAuthFacadeTest extends ServiceTest {
             mockedStatic.when(() -> ImageDownloadUtil.downloadImage("testImageUrl")).thenReturn(mock(ImageData.class));
             doNothing().when(mockAwsService).uploadImageToS3(anyString(), any());
             //when
-            CafegoryToken token = sut.handleOauthLogin(request);
+            JwtToken token = sut.handleOauthLogin(request);
             //then
             List<Member> members = memberRepository.findAll();
 

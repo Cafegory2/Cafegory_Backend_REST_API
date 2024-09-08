@@ -3,7 +3,7 @@ package com.example.demo.apidocs;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.example.demo.controller.AuthController;
 import com.example.demo.dto.auth.CafegoryAccessToken;
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 import com.example.demo.service.auth.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ public class AuthControllerApiTest {
     void refresh() throws Exception {
         when(jwtService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new CafegoryAccessToken("access-token-value"));
 
-        CafegoryToken token = new CafegoryToken("Bearer existing-access-token", "existing-refresh-token");
+        JwtToken token = new JwtToken("Bearer existing-access-token", "existing-refresh-token");
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = objectMapper.writeValueAsString(token);

@@ -11,7 +11,7 @@
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
 //
-//import com.example.demo.dto.auth.CafegoryToken;
+//import com.example.demo.implement.token.CafegoryToken;
 //import com.example.demo.exception.CafegoryException;
 //
 //class JwtCafegoryTokenManagerTest {

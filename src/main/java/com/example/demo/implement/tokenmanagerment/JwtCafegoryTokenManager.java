@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 
-import com.example.demo.dto.auth.CafegoryToken;
+import com.example.demo.implement.token.JwtToken;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,12 +18,12 @@ public final class JwtCafegoryTokenManager {
 
     private final JwtTokenManager jwtTokenManager;
 
-    public CafegoryToken createAccessAndRefreshToken(final Map<String, Object> memberInformation) {
+    public JwtToken createAccessAndRefreshToken(final Map<String, Object> memberInformation) {
         Date issuedAt = Date.from(Instant.now());
         String accessToken = createAccessToken(memberInformation, issuedAt);
         String refreshToken = createRefreshToken(memberInformation, issuedAt);
 
-        return new CafegoryToken(accessToken, refreshToken);
+        return new JwtToken(accessToken, refreshToken);
     }
 
     public String createAccessToken(final Map<String, Object> memberInformation) {
