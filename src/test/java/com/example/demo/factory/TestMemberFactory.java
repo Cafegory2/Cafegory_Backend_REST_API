@@ -17,6 +17,17 @@ public class TestMemberFactory {
 			.build();
 	}
 
+	public static Member createmember(String email) {
+		return Member.builder()
+			.role(Role.USER)
+			.nickname("김동현")
+			.email(email)
+			.profileUrl("프로필 이미지")
+			.bio("자기 소개글")
+			.beverageSize(BeverageSize.builder().name("tall").build())
+			.build();
+	}
+
 	//	public static Member createMemberWithId(Long memberId) {
 	//		return Member.builder()
 	//			.id(memberId)

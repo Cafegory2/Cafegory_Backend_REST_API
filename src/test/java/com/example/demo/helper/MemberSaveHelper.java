@@ -19,6 +19,11 @@ public class MemberSaveHelper {
 		return memberRepository.save(member);
 	}
 
+	public Member saveMember(String email) {
+		Member member = TestMemberFactory.createmember(email);
+		return memberRepository.save(member);
+	}
+
 	// public Member saveMemberWithName(ThumbnailImage thumbnailImage, String name) {
 	// 	ThumbnailImage mergedThumbnailImage = thumbnailImageRepository.save(thumbnailImage);
 	// 	Member member = TestMemberFactory.createMemberWithThumbAndName(mergedThumbnailImage, name);

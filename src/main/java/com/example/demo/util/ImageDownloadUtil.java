@@ -7,8 +7,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
-
 @RequiredArgsConstructor
 public class ImageDownloadUtil {
 

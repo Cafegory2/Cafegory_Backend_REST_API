@@ -16,7 +16,7 @@ import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class KakaoOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
+public class  KakaoOAuth2TokenRequester extends AbstractOAuth2TokenRequester {
 
 	private final RestTemplate restTemplate;
 	private static final String GRANT_TYPE = "authorization_code";
