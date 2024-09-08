@@ -52,7 +52,16 @@ class CafeStudyServiceTest extends ServiceTest {
 	//	}
 
 	private CafeStudyCreateRequest makeCafeStudyCreateRequest(LocalDateTime start, LocalDateTime end, long cafeId) {
-		return new CafeStudyCreateRequest("테스트 스터디,", cafeId, start, end, MemberComms.POSSIBLE, 4, "스터디 소개글");
+		return CafeStudyCreateRequest.builder()
+			.name("테스트 스터디")
+			.cafeId(cafeId)
+			.startDateTime(start)
+			.endDateTime(end)
+			.memberComms(MemberComms.POSSIBLE)
+			.maxParticipants(4)
+			.introduction("스터디 소개글")
+			.build();
+
 	}
 
 	//	@Test

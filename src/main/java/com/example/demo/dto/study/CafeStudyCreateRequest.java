@@ -8,6 +8,7 @@ import com.example.demo.implement.study.MemberComms;
 import com.sun.istack.NotNull;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,5 +26,17 @@ public class CafeStudyCreateRequest {
 	private int maxParticipants;
 	@NotBlank
 	private String introduction;
+
+	@Builder
+	private CafeStudyCreateRequest(String name, Long cafeId, LocalDateTime startDateTime, LocalDateTime endDateTime,
+		MemberComms memberComms, int maxParticipants, String introduction) {
+		this.name = name;
+		this.cafeId = cafeId;
+		this.startDateTime = startDateTime;
+		this.endDateTime = endDateTime;
+		this.memberComms = memberComms;
+		this.maxParticipants = maxParticipants;
+		this.introduction = introduction;
+	}
 }
 
