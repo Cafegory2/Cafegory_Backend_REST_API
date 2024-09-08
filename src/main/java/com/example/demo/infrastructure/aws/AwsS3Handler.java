@@ -1,4 +1,4 @@
-package com.example.demo.service.aws;
+package com.example.demo.infrastructure.aws;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -6,13 +6,11 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.example.demo.util.ImageData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 
-@Service
 @RequiredArgsConstructor
-public class AwsService {
+public class AwsS3Handler {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
