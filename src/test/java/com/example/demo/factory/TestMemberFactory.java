@@ -1,6 +1,7 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.member.BeverageSize;
+import static com.example.demo.implement.member.BeverageSize.*;
+
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.Role;
 
@@ -13,7 +14,7 @@ public class TestMemberFactory {
 			.email("cafegory@gmail.com")
 			.profileUrl("프로필 이미지")
 			.bio("자기 소개글")
-			.beverageSize(BeverageSize.builder().name("tall").build())
+			.beverageSize(TALL)
 			.build();
 	}
 
