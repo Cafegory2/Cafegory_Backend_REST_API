@@ -7,7 +7,7 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.Role;
 import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.service.auth.JwtTokenService;
+import com.example.demo.service.auth.JwtTokenManagementService;
 import com.example.demo.service.aws.AwsService;
 import com.example.demo.service.oauth2.OAuth2Service;
 import com.example.demo.util.ImageData;
@@ -25,7 +25,7 @@ import static com.example.demo.exception.ExceptionType.*;
 public class OAuthFacade {
 
     private final OAuth2Service oAuth2Service;
-    private final JwtTokenService jwtTokenService;
+    private final JwtTokenManagementService jwtTokenManagementService;
     private final MemberRepository memberRepository;
     private final AwsService awsService;
 
@@ -41,7 +41,7 @@ public class OAuthFacade {
             member = saveMember(email, profile.getNickName());
         }
 
-        JwtToken token = jwtTokenService.createAccessAndRefreshToken(member.getId());
+        JwtToken token = jwtTokenManagementService.createAccessAndRefreshToken(member.getId());
         member.setRefreshToken(token.getRefreshToken());
 
         ImageData imageData = ImageDownloadUtil.downloadImage(profile.getProfileImgUrl());

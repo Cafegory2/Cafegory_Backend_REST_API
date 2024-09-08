@@ -13,13 +13,13 @@ import org.springframework.beans.factory.annotation.Value;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class JwtTokenServiceTest extends ServiceTest {
+class JwtTokenManagementServiceTest extends ServiceTest {
 
     @Value(("${jwt.secret}"))
     private String testSecret;
 
     @Autowired
-    private JwtTokenService sut;
+    private JwtTokenManagementService sut;
     @Autowired
     private MemberSaveHelper memberSaveHelper;
 

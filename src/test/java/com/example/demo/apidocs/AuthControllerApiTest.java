@@ -4,7 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.example.demo.controller.AuthController;
 import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtToken;
-import com.example.demo.service.auth.JwtTokenService;
+import com.example.demo.service.auth.JwtTokenManagementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class AuthControllerApiTest {
     private WebApplicationContext context;
 
     @MockBean
-    private JwtTokenService jwtTokenService;
+    private JwtTokenManagementService jwtTokenManagementService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -55,7 +55,7 @@ public class AuthControllerApiTest {
 
     @Test
     void refresh() throws Exception {
-        when(jwtTokenService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new JwtAccessToken("access-token-value"));
+        when(jwtTokenManagementService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new JwtAccessToken("access-token-value"));
 
         JwtToken token = new JwtToken("Bearer existing-access-token", "existing-refresh-token");
 
