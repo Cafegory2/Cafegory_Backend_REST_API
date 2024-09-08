@@ -6,7 +6,7 @@ import static com.example.demo.implement.auth.TokenClaims.*;
 import java.util.Map;
 
 import com.example.demo.implement.auth.JwtCafegoryTokenManager;
-import com.example.demo.implement.auth.JwtManager;
+import com.example.demo.implement.auth.JwtTokenManager;
 import com.example.demo.dto.auth.CafegoryAccessToken;
 import com.example.demo.dto.auth.JwtClaims;
 import com.example.demo.exception.ExceptionType;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtService {
 
     private final JwtCafegoryTokenManager jwtCafegoryTokenManager;
-    private final JwtManager jwtManager;
+    private final JwtTokenManager jwtTokenManager;
     private final MemberRepository memberRepository;
 
     public CafegoryToken createAccessAndRefreshToken(final Long memberId) {
@@ -83,13 +83,13 @@ public class JwtService {
     }
 
     private JwtClaims verifyAndExtractRefreshClaims(final String refreshToken) {
-        jwtManager.validateClaim(refreshToken, TOKEN_TYPE.getValue(), REFRESH_TOKEN.getValue());
-        return jwtManager.verifyAndExtractClaims(refreshToken);
+        jwtTokenManager.validateClaim(refreshToken, TOKEN_TYPE.getValue(), REFRESH_TOKEN.getValue());
+        return jwtTokenManager.verifyAndExtractClaims(refreshToken);
     }
 
     private JwtClaims verifyAndExtractAccessClaims(final String accessToken) {
         try {
-            return jwtManager.verifyAndExtractClaims(accessToken);
+            return jwtTokenManager.verifyAndExtractClaims(accessToken);
         } catch (JwtCustomException e) {
             if (e.getExceptionType() == JWT_EXPIRED) {
                 return e.getClaims();

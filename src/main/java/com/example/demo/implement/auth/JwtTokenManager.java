@@ -16,12 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @Slf4j
-public final class JwtManager {
+public final class JwtTokenManager {
 
     private final String secretKey;
 
-    public JwtManager.JwtBuilder newTokenBuilder() {
-        return new JwtManager.JwtBuilder(this.secretKey);
+    public JwtTokenManager.JwtBuilder newTokenBuilder() {
+        return new JwtTokenManager.JwtBuilder(this.secretKey);
     }
 
     public static final class JwtBuilder {
@@ -36,22 +36,22 @@ public final class JwtManager {
             this.secretKey = secretKey;
         }
 
-        public JwtManager.JwtBuilder addClaim(final String key, Object value) {
+        public JwtTokenManager.JwtBuilder addClaim(final String key, Object value) {
             this.claims.put(key, value);
             return this;
         }
 
-        public JwtManager.JwtBuilder addAllClaims(final Map<String, Object> claims) {
+        public JwtTokenManager.JwtBuilder addAllClaims(final Map<String, Object> claims) {
             this.claims.putAll(claims);
             return this;
         }
 
-        public JwtManager.JwtBuilder issuedAt(final Date issuedAt) {
+        public JwtTokenManager.JwtBuilder issuedAt(final Date issuedAt) {
             this.issuedAt = issuedAt;
             return this;
         }
 
-        public JwtManager.JwtBuilder lifeTimeAsSeconds(final int lifeTimeAsSeconds) {
+        public JwtTokenManager.JwtBuilder lifeTimeAsSeconds(final int lifeTimeAsSeconds) {
             this.lifeTimeAsSeconds = lifeTimeAsSeconds;
             return this;
         }

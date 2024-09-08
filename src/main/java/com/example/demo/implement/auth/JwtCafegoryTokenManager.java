@@ -18,7 +18,7 @@ public final class JwtCafegoryTokenManager {
     private static final int ACCESS_TOKEN_LIFETIME_SECONDS = 3600;
     private static final int REFRESH_TOKEN_LIFETIME_SECONDS = 3600 * 24 * 7;
 
-    private final JwtManager jwtManager;
+    private final JwtTokenManager jwtTokenManager;
 
     public CafegoryToken createAccessAndRefreshToken(final Map<String, Object> memberInformation) {
         Date issuedAt = Date.from(Instant.now());
@@ -34,7 +34,7 @@ public final class JwtCafegoryTokenManager {
     }
 
     private String createAccessToken(final Map<String, Object> claims, final Date issuedAt) {
-        return jwtManager.newTokenBuilder()
+        return jwtTokenManager.newTokenBuilder()
                 .issuedAt(issuedAt)
                 .lifeTimeAsSeconds(ACCESS_TOKEN_LIFETIME_SECONDS)
                 .addAllClaims(claims)
@@ -43,7 +43,7 @@ public final class JwtCafegoryTokenManager {
     }
 
     private String createRefreshToken(final Map<String, Object> claims, final Date issuedAt) {
-        return jwtManager.newTokenBuilder()
+        return jwtTokenManager.newTokenBuilder()
                 .issuedAt(issuedAt)
                 .lifeTimeAsSeconds(REFRESH_TOKEN_LIFETIME_SECONDS)
                 .addAllClaims(claims)

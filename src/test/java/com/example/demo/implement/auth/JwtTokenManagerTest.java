@@ -14,10 +14,10 @@ import com.example.demo.factory.TestJwtFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class JwtManagerTest {
+class JwtTokenManagerTest {
 
 	private final String testSecret = "01234567890123456789012345678901234567890123456789";
-	private final JwtManager sut = new JwtManager(testSecret);
+	private final JwtTokenManager sut = new JwtTokenManager(testSecret);
 
 	@Test
 	@DisplayName("JWT 토큰을 검증한다.")

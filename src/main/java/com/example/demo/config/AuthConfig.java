@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.implement.auth.JwtManager;
+import com.example.demo.implement.auth.JwtTokenManager;
 
 import java.util.Map;
 
@@ -19,8 +19,8 @@ public class AuthConfig {
     private String jwtSecret;
 
     @Bean
-    public JwtManager jwtManager() {
-        return new JwtManager(jwtSecret);
+    public JwtTokenManager jwtManager() {
+        return new JwtTokenManager(jwtSecret);
     }
 
     @Bean

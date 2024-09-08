@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.implement.auth.JwtManager;
+import com.example.demo.implement.auth.JwtTokenManager;
 import com.example.demo.implement.auth.TokenClaims;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
-	private final JwtManager jwtManager;
+	private final JwtTokenManager jwtTokenManager;
 
 	// private final CafeService cafeService;
 	// private final StudyOnceCommentService studyOnceCommentService;
@@ -53,7 +53,7 @@ public class CafeStudyController {
 	public ResponseEntity<CafeStudyCreateResponse> create(
 			@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
 			@RequestHeader("Authorization") String authorization) {
-		long memberId = Long.parseLong(jwtManager.verifyAndExtractClaims(authorization).getClaim(TokenClaims.SUBJECT.getValue()));
+		long memberId = Long.parseLong(jwtTokenManager.verifyAndExtractClaims(authorization).getClaim(TokenClaims.SUBJECT.getValue()));
 		CafeStudyCreateResponse response = cafeStudyService.createStudy(memberId, cafeStudyCreateRequest);
 		return ResponseEntity.ok(response);
 	}
