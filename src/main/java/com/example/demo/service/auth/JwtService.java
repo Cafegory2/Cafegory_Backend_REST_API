@@ -8,7 +8,7 @@ import java.util.Map;
 import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import com.example.demo.dto.auth.CafegoryAccessToken;
-import com.example.demo.dto.auth.JwtClaims;
+import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
 import com.example.demo.implement.member.Member;

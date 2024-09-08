@@ -1,4 +1,4 @@
-package com.example.demo.dto.auth;
+package com.example.demo.implement.token;
 
 import com.example.demo.implement.tokenmanagerment.TokenClaims;
 import io.jsonwebtoken.Claims;

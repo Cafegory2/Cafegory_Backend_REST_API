@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.demo.dto.auth.JwtClaims;
+import com.example.demo.implement.token.JwtClaims;
 
 import com.example.demo.exception.JwtCustomException;
 import io.jsonwebtoken.*;
