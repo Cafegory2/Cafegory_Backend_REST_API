@@ -1,8 +1,7 @@
 package com.example.demo.service.study;
 
-import static com.example.demo.implement.study.CafeStudy.*;
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.util.TruncatedTimeUtil.*;
+import static com.example.demo.implement.study.CafeStudy.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,22 +12,23 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.study.CafeStudyCreateRequest;
+import com.example.demo.dto.study.CafeStudyCreateResponse;
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.implement.cafe.BusinessHour;
 import com.example.demo.implement.cafe.BusinessHourOpenChecker;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyMember;
-import com.example.demo.dto.study.CafeStudyCreateRequest;
-import com.example.demo.dto.study.CafeStudyCreateResponse;
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.repository.cafe.BusinessHourQueryDslRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
+import com.example.demo.util.TruncatedTimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +44,7 @@ public class CafeStudyService {
 	// private final StudyMemberMapper studyMemberMapper;
 	// private final StudyPeriodMapper studyPeriodMapper;
 	private final BusinessHourOpenChecker openChecker;
+	private final TruncatedTimeUtil truncatedTimeUtil;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -196,15 +197,15 @@ public class CafeStudyService {
 		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
 			businessHour);
 		Member coordinator = findMemberById(coordinatorId);
-		validateStudyScheduleConflict(truncateDateTimeToSecond(request.getStartDateTime()),
-			truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
+		validateStudyScheduleConflict(truncatedTimeUtil.toSecond(request.getStartDateTime()),
+			truncatedTimeUtil.toSecond(request.getEndDateTime()), coordinator);
 		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
 		CafeStudy saved = cafeStudyRepository.save(cafeStudy);
 		return cafeStudyMapper.toStudyOnceCreateResponse(saved);
 	}
 
 	private void validateStartDate(LocalDateTime startDateTime) {
-		LocalDateTime plusMonths = LOCAL_DATE_TIME_NOW.plusMonths(1);
+		LocalDateTime plusMonths = truncatedTimeUtil.now().plusMonths(1);
 		if (startDateTime.isAfter(plusMonths)) {
 			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
 		}
@@ -217,7 +218,7 @@ public class CafeStudyService {
 	}
 
 	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = LOCAL_DATE_TIME_NOW;
+		LocalDateTime now = truncatedTimeUtil.now();
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
 			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
