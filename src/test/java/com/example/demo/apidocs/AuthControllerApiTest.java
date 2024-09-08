@@ -1,9 +1,11 @@
 package com.example.demo.apidocs;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.example.demo.controller.OAuthController;
+import com.example.demo.controller.AuthController;
+import com.example.demo.dto.auth.CafegoryAccessToken;
 import com.example.demo.dto.auth.CafegoryToken;
-import com.example.demo.service.facade.OAuthFacade;
+import com.example.demo.service.auth.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,23 +22,23 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.*;
-import static com.epages.restdocs.apispec.ResourceDocumentation.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
-@WebMvcTest(OAuthController.class)
-public class OAuthControllerApiTest {
+@WebMvcTest(AuthController.class)
+public class AuthControllerApiTest {
 
     @Autowired
     private WebApplicationContext context;
+
     @MockBean
-    private OAuthFacade oAuthFacade;
+    private JwtService jwtService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -52,22 +54,31 @@ public class OAuthControllerApiTest {
     }
 
     @Test
-    void kakao() throws Exception {
-        when(oAuthFacade.handleOauthLogin(any())).thenReturn(new CafegoryToken("access-token-value", "refresh-token-value"));
+    void refresh() throws Exception {
+        when(jwtService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new CafegoryAccessToken("access-token-value"));
+
+        CafegoryToken token = new CafegoryToken("Bearer existing-access-token", "existing-refresh-token");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(token);
 
         this.mockMvc.perform(
-                get("/oauth2/kakao?code={code}", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIU")
-                    .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                post("/auth/refresh")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(requestBody)
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
             .andDo(
-                document("카카오 로그인",
+                document("액세스 토큰 재발급",
                     resource(ResourceSnippetParameters.builder()
-                        .description("로그인이 성공하면 JWT 액세스 토큰과 리프레시 토큰을 발급 받는다. https://kauth.kakao.com/oauth/authorize?client_id=dd715e41cd41949dc316c0243b964c44&redirect_uri=http:///oauth2/kakao&response_type=code")
-                        .tag("OAuth")
-                        .requestParameters(parameterWithName("code").optional()
-                            .description("카카오 인증 코드"))
-                        .responseFields(
+                        .description("액세스 토큰을 재발급 받는다.")
+                        .tag("Token")
+                        .requestFields(
                             fieldWithPath("accessToken").description("JWT 액세스 토큰"),
-                            fieldWithPath("refreshToken").description("JWT 리프레시 토큰")
+                            fieldWithPath("refreshToken").description("JWT 리프레시 토큰, 리프레시 토큰 앞에는 Bearer을 붙이지 않는다.")
+                        )
+                        .responseFields(
+                            fieldWithPath("accessToken").description("JWT 액세스 토큰")
                         )
                         .build())));
     }
