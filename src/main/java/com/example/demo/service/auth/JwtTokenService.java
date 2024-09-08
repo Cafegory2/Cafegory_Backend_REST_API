@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class JwtService {
+public class JwtTokenService {
 
     private final JwtCafegoryTokenManager jwtCafegoryTokenManager;
     private final JwtTokenManager jwtTokenManager;
