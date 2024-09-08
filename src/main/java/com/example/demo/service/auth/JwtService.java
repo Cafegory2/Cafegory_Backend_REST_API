@@ -1,12 +1,12 @@
 package com.example.demo.service.auth;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.implement.auth.TokenClaims.*;
+import static com.example.demo.implement.tokenmanagerment.TokenClaims.*;
 
 import java.util.Map;
 
-import com.example.demo.implement.auth.JwtCafegoryTokenManager;
-import com.example.demo.implement.auth.JwtTokenManager;
+import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
+import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import com.example.demo.dto.auth.CafegoryAccessToken;
 import com.example.demo.dto.auth.JwtClaims;
 import com.example.demo.exception.ExceptionType;

@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.implement.auth.JwtCafegoryTokenManager;
+import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import com.example.demo.dto.oauth2.OAuth2Provider;
 import com.example.demo.implement.oauth2.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.implement.auth.JwtTokenManager;
+import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 
 import java.util.Map;
 

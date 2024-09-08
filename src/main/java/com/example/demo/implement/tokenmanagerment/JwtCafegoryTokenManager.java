@@ -1,4 +1,4 @@
-package com.example.demo.implement.auth;
+package com.example.demo.implement.tokenmanagerment;
 
 import java.time.Instant;
 import java.util.Date;
@@ -8,8 +8,6 @@ import java.util.Map;
 import com.example.demo.dto.auth.CafegoryToken;
 
 import lombok.RequiredArgsConstructor;
-
-import static com.example.demo.implement.auth.TokenClaims.*;
 
 
 @RequiredArgsConstructor
@@ -38,7 +36,7 @@ public final class JwtCafegoryTokenManager {
                 .issuedAt(issuedAt)
                 .lifeTimeAsSeconds(ACCESS_TOKEN_LIFETIME_SECONDS)
                 .addAllClaims(claims)
-                .addClaim(TOKEN_TYPE.getValue(), ACCESS_TOKEN.getValue())
+                .addClaim(TokenClaims.TOKEN_TYPE.getValue(), TokenClaims.ACCESS_TOKEN.getValue())
                 .build();
     }
 
@@ -47,7 +45,7 @@ public final class JwtCafegoryTokenManager {
                 .issuedAt(issuedAt)
                 .lifeTimeAsSeconds(REFRESH_TOKEN_LIFETIME_SECONDS)
                 .addAllClaims(claims)
-                .addClaim(TOKEN_TYPE.getValue(), REFRESH_TOKEN.getValue())
+                .addClaim(TokenClaims.TOKEN_TYPE.getValue(), TokenClaims.REFRESH_TOKEN.getValue())
                 .build();
     }
 }

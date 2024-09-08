@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.implement.auth.JwtTokenManager;
-import com.example.demo.implement.auth.TokenClaims;
+import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.implement.tokenmanagerment.TokenClaims;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;

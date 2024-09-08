@@ -1,6 +1,6 @@
 package com.example.demo.dto.auth;
 
-import com.example.demo.implement.auth.TokenClaims;
+import com.example.demo.implement.tokenmanagerment.TokenClaims;
 import io.jsonwebtoken.Claims;
 
 import java.util.Date;
