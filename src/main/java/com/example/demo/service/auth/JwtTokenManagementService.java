@@ -11,8 +11,6 @@ import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
-import com.example.demo.implement.member.Member;
-import com.example.demo.repository.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,6 @@ public class JwtTokenManagementService {
 
     private final JwtCafegoryTokenManager jwtCafegoryTokenManager;
     private final JwtTokenManager jwtTokenManager;
-    private final MemberRepository memberRepository;
 
     public JwtToken createAccessAndRefreshToken(final Long memberId) {
         return jwtCafegoryTokenManager.createAccessAndRefreshToken(
@@ -45,26 +42,14 @@ public class JwtTokenManagementService {
 
         validateTokenSubjectMatch(accessTokenClaims, refreshTokenClaims);
 
-        Long memberIdInClaim = Long.parseLong(refreshTokenClaims.getSubject());
-        Member memberInDb = memberRepository.findById(memberIdInClaim)
-                .orElseThrow(() -> new JwtCustomException(JWT_REFRESH_MEMBER_NOT_FOUND, refreshTokenClaims));
-
-        validateMemberIdMatches(memberIdInClaim, memberInDb.getId(), refreshTokenClaims);
-
-        return jwtCafegoryTokenManager.createAccessToken(convertMemberToMap(memberInDb));
+        return jwtCafegoryTokenManager.createAccessToken(
+            Map.of(SUBJECT.getValue(), refreshTokenClaims.getSubject())
+        );
     }
 
     private void validateNullToken(final String token, ExceptionType exceptionType) {
-        if(token == null) {
+        if (token == null) {
             throw new JwtCustomException(exceptionType);
-        }
-    }
-
-
-
-    private void validateMemberIdMatches(final Long memberIdInClaim, final Long memberIdInDb, final JwtClaims refreshTokenClaims) {
-        if (!memberIdInClaim.equals(memberIdInDb)) {
-            throw new JwtCustomException(JWT_REFRESH_MEMBER_ID_MISMATCH, refreshTokenClaims);
         }
     }
 
@@ -72,7 +57,7 @@ public class JwtTokenManagementService {
         String accessTokenSubject = accessTokenClaims.getClaim(SUBJECT.getValue());
         String refreshTokenSubject = refreshTokenClaims.getClaim(SUBJECT.getValue());
 
-        if(!accessTokenSubject.equals(refreshTokenSubject)) {
+        if (!accessTokenSubject.equals(refreshTokenSubject)) {
             throw new JwtCustomException(JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED);
         }
     }
@@ -91,12 +76,5 @@ public class JwtTokenManagementService {
             }
             throw e;
         }
-    }
-
-    private Map<String, Object> convertMemberToMap(Member member) {
-        return Map.of(
-                SUBJECT.getValue(), String.valueOf(member.getId()),
-                ROLE.getValue(), member.getRole().getValue()
-        );
     }
 }
