@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenManagementService {
+    //TODO 이 클래스는 제거되어야 함.
 
     private final JwtCafegoryTokenManager jwtCafegoryTokenManager;
     private final JwtTokenManager jwtTokenManager;
@@ -62,11 +63,14 @@ public class JwtTokenManagementService {
         }
     }
 
+
+    //TODO 이 코드도 서비스 레이어로 빼자. validateClaim은 비즈니스 검증이 아니라 토큰 무결성에 대한 검증이라 jwtTokenManger가 맞다.
     private JwtClaims verifyAndExtractRefreshClaims(final String refreshToken) {
         jwtTokenManager.validateClaim(refreshToken, TOKEN_TYPE.getValue(), REFRESH_TOKEN.getValue());
         return jwtTokenManager.verifyAndExtractClaims(refreshToken);
     }
 
+    //TODO 서비스 레이어로 빼야할듯. 검증만하는 방법이 존재하지 않음. 항상 검증하고 추출이 같이 다님.
     private JwtClaims verifyAndExtractAccessClaims(final String accessToken) {
         try {
             return jwtTokenManager.verifyAndExtractClaims(accessToken);

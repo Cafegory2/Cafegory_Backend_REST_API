@@ -1,4 +1,4 @@
-package com.example.demo.service.facade;
+package com.example.demo.service.login;
 
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
@@ -22,7 +22,7 @@ import static com.example.demo.exception.ExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
-public class OAuthFacade {
+public class LoginService {
 
     private final OAuth2Service oAuth2Service;
     private final JwtTokenManagementService jwtTokenManagementService;

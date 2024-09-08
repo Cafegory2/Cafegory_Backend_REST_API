@@ -3,7 +3,7 @@ package com.example.demo.apidocs;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.example.demo.controller.OAuthController;
 import com.example.demo.implement.token.JwtToken;
-import com.example.demo.service.facade.OAuthFacade;
+import com.example.demo.service.login.LoginService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +36,7 @@ public class OAuthControllerApiTest {
     @Autowired
     private WebApplicationContext context;
     @MockBean
-    private OAuthFacade oAuthFacade;
+    private LoginService loginService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,7 +53,7 @@ public class OAuthControllerApiTest {
 
     @Test
     void kakao() throws Exception {
-        when(oAuthFacade.handleOauthLogin(any())).thenReturn(new JwtToken("access-token-value", "refresh-token-value"));
+        when(loginService.handleOauthLogin(any())).thenReturn(new JwtToken("access-token-value", "refresh-token-value"));
 
         this.mockMvc.perform(
                 get("/oauth2/kakao?code={code}", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIU")

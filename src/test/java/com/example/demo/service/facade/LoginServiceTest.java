@@ -7,6 +7,7 @@ import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.member.Member;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.service.aws.AwsService;
+import com.example.demo.service.login.LoginService;
 import com.example.demo.service.oauth2.OAuth2Service;
 import com.example.demo.util.ImageData;
 import com.example.demo.util.ImageDownloadUtil;
@@ -24,10 +25,10 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class OAuthFacadeTest extends ServiceTest {
+class LoginServiceTest extends ServiceTest {
 
     @Autowired
-    private OAuthFacade sut;
+    private LoginService sut;
     @Autowired
     private MemberSaveHelper memberSaveHelper;
     @Autowired

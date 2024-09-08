@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.facade.OAuthFacade;
+import com.example.demo.service.login.LoginService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuthController {
 
-    private final OAuthFacade oauthFacade;
+    private final LoginService oauthFacade;
 
     @GetMapping("/kakao")
     public JwtToken kakao(@RequestParam String code) {
