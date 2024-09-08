@@ -2,7 +2,7 @@ package com.example.demo.apidocs;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.example.demo.controller.AuthController;
-import com.example.demo.dto.auth.CafegoryAccessToken;
+import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.service.auth.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +55,7 @@ public class AuthControllerApiTest {
 
     @Test
     void refresh() throws Exception {
-        when(jwtService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new CafegoryAccessToken("access-token-value"));
+        when(jwtService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new JwtAccessToken("access-token-value"));
 
         JwtToken token = new JwtToken("Bearer existing-access-token", "existing-refresh-token");
 

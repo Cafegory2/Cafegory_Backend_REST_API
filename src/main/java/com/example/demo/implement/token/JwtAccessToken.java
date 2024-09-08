@@ -1,11 +1,11 @@
-package com.example.demo.dto.auth;
+package com.example.demo.implement.token;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CafegoryAccessToken {
+public class JwtAccessToken {
 
     private final String accessToken;
 }
