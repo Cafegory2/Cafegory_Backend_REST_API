@@ -26,8 +26,6 @@ import com.example.demo.util.TimeUtil;
 
 class CafeStudyServiceTest extends ServiceTest {
 
-	private static final LocalDateTime NOW = LocalDateTime.now();
-
 	@Autowired
 	private CafeStudyService sut;
 	@Autowired
@@ -141,7 +139,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	void study_starts_1hours_after_now() {
 		//given
 		Member coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = timeUtil.now().plusHours(1).plusMinutes(1);
+		LocalDateTime start = timeUtil.now().plusHours(1);
 		LocalDateTime end = start.plusHours(1);
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
@@ -154,7 +152,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	void study_starts_1hours_before_now() {
 		//given
 		Member coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = NOW.plusHours(1);
+		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
