@@ -40,6 +40,22 @@ class JwtTokenManagerTest {
 	}
 
 	@Test
+	@DisplayName("JWT 토큰이 만료되었는지 검증한다.")
+	void verify_expired_jwt() {
+		//given
+		String jwt = TestJwtFactory.createAccessToken(
+			Map.of("a", "a"),
+			Date.from(Instant.now()),
+			0,
+			testSecret
+		);
+		//when
+		assertThatThrownBy(() -> sut.verifyAndExtractClaims(jwt))
+			.isInstanceOf(JwtCustomException.class)
+			.hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
+	}
+
+	@Test
 	@DisplayName("JWT의 Claim이 유효하다.")
 	void claim_is_valid() {
 		//given
