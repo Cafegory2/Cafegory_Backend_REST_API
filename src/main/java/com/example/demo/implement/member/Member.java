@@ -35,7 +35,10 @@ public class Member extends BaseEntity {
 	private Role role;
 
 	private String nickname;
+
+	@Column(unique = true)
 	private String email;
+
 	private String profileUrl;
 	private String bio;
 	private int participationCount;

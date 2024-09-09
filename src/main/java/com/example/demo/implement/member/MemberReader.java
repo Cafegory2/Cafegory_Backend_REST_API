@@ -10,7 +10,7 @@ import static com.example.demo.exception.ExceptionType.MEMBER_NOT_FOUND;
 @Component
 @RequiredArgsConstructor
 public class MemberReader {
-    //TODO MemberReader와 MemeberAppender 로 나눠야할까? 합쳐야할까? 합치면 MemberManager?
+
     private final MemberRepository memberRepository;
 
     public boolean exists(String email) {

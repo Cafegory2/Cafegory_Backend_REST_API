@@ -20,7 +20,6 @@ public class SignupProcessor {
 
     @Transactional
     public Long signup(String email, String nickname) {
-        //TODO 이메일에 유니크 제약조건 필수
         if (memberReader.exists(email)) {
             throw new CafegoryException(MEMBER_ALREADY_EXISTS);
         }
