@@ -1,4 +1,4 @@
-package com.example.demo.implement.oauth2;
+package com.example.demo.infrastructure.oauth2;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

@@ -1,15 +1,16 @@
 package com.example.demo.service.login;
 
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.implement.login.LoginProcessor;
+import com.example.demo.implement.member.MemberAppender;
+import com.example.demo.implement.member.MemberReader;
+import com.example.demo.implement.signup.SignupProcessor;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
-import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.member.Role;
-import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.service.auth.JwtTokenManagementService;
-import com.example.demo.service.aws.AwsService;
-import com.example.demo.service.oauth2.OAuth2Service;
+import com.example.demo.infrastructure.aws.AwsS3Handler;
+import com.example.demo.infrastructure.oauth2.OAuth2Client;
 import com.example.demo.util.ImageData;
 import com.example.demo.util.ImageDownloadUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,55 +19,49 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
-import static com.example.demo.exception.ExceptionType.*;
-
 @Service
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final OAuth2Service oAuth2Service;
-    private final JwtTokenManagementService jwtTokenManagementService;
-    private final MemberRepository memberRepository;
-    private final AwsService awsService;
+    private final OAuth2Client oAuth2Client;
+    private final AwsS3Handler awsS3Handler;
+
+    private final MemberReader memberReader;
+
+    private final LoginProcessor loginProcessor;
+    private final SignupProcessor signupProcessor;
 
     @Transactional
-    public JwtToken handleOauthLogin(OAuth2TokenRequest oAuth2TokenRequest) {
-        OAuth2Profile profile = oAuth2Service.fetchMemberProfile(oAuth2TokenRequest);
-        String email = profile.getEmailAddress();
-
-        Member member;
-        if(memberRepository.existsByEmail(email)) {
-            member = findMember(email);
-        } else {
-            member = saveMember(email, profile.getNickName());
-        }
-
-        JwtToken token = jwtTokenManagementService.createAccessAndRefreshToken(member.getId());
-        member.setRefreshToken(token.getRefreshToken());
-
-        ImageData imageData = ImageDownloadUtil.downloadImage(profile.getProfileImgUrl());
-        String filename = UUID.randomUUID().toString();
-
-        awsService.uploadImageToS3(filename, imageData);
-        String profileUrl = awsService.getUrl(filename);
-
-        member.changeProfileUrl(profileUrl);
+    public JwtToken socialLogin(OAuth2TokenRequest oAuth2TokenRequest) {
+        OAuth2Profile profile = oAuth2Client.fetchMemberProfile(oAuth2TokenRequest);
+        JwtToken token = loginOrSignup(profile);
+        updateMemberRefreshTokenAndProfile(profile, token);
 
         return token;
     }
 
-    private Member findMember(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+    private JwtToken loginOrSignup(OAuth2Profile profile) {
+        try {
+            return loginProcessor.login(profile.getEmailAddress());
+        } catch (CafegoryException e) {
+            signupProcessor.signup(profile.getEmailAddress(), profile.getNickName());
+            return loginProcessor.login(profile.getEmailAddress());
+        }
     }
 
-    private Member saveMember(String email, String nickname) {
-        Member newMember = Member.builder()
-                .email(email)
-                .nickname(nickname)
-                .profileUrl(null)
-                .role(Role.USER)
-                .build();
-        return memberRepository.save(newMember);
+    private void updateMemberRefreshTokenAndProfile(OAuth2Profile profile, JwtToken token) {
+        Member member = memberReader.read(profile.getEmailAddress());
+        member.setRefreshToken(token.getRefreshToken());
+
+        String profileUrl = uploadProfileImageToS3(profile.getProfileImgUrl());
+        member.changeProfileUrl(profileUrl);
+    }
+
+    private String uploadProfileImageToS3(String imageUrl) {
+        ImageData imageData = ImageDownloadUtil.downloadImage(imageUrl);
+        String filename = UUID.randomUUID().toString();
+
+        awsS3Handler.uploadImageToS3(filename, imageData);
+        return awsS3Handler.getUrl(filename);
     }
 }

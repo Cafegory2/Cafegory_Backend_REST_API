@@ -1,4 +1,4 @@
-package com.example.demo.implement.oauth2;
+package com.example.demo.infrastructure.oauth2;
 
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2Token;

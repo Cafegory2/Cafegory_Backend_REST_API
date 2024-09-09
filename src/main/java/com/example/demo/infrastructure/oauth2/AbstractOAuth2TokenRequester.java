@@ -1,4 +1,4 @@
-package com.example.demo.implement.oauth2;
+package com.example.demo.infrastructure.oauth2;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
