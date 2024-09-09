@@ -56,7 +56,7 @@ public class LoginControllerApiTest {
         when(loginService.socialLogin(any())).thenReturn(new JwtToken("access-token-value", "refresh-token-value"));
 
         this.mockMvc.perform(
-                get("/oauth2/kakao?code={code}", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIU")
+                get("/login/kakao?code={code}", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIU")
                     .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
             .andDo(
                 document("카카오 로그인",
