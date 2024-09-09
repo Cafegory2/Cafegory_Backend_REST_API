@@ -5,6 +5,7 @@ import static com.example.demo.implement.tokenmanagerment.TokenClaims.*;
 
 import java.util.Map;
 
+import com.example.demo.implement.token.JwtTokenValidator;
 import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import com.example.demo.implement.token.JwtAccessToken;
@@ -14,7 +15,6 @@ import com.example.demo.exception.JwtCustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.implement.token.JwtToken;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,55 +22,31 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenManagementService {
-    //TODO 이 클래스는 제거되어야 함.
 
     private final JwtCafegoryTokenManager jwtCafegoryTokenManager;
     private final JwtTokenManager jwtTokenManager;
-
-    public JwtToken createAccessAndRefreshToken(final Long memberId) {
-        return jwtCafegoryTokenManager.createAccessAndRefreshToken(
-            Map.of(SUBJECT.getValue(), String.valueOf(memberId))
-        );
-    }
+    private final JwtTokenValidator jwtTokenValidator;
 
     public JwtAccessToken verifyAndRefreshAccessToken(final String accessToken, final String refreshToken) {
         //TODO 토큰 재발급 API는 토큰 검증 인터셉터를 거치면 안된다. 토큰 검증 인터셉터는 액세스 토큰의 만료를 검증한다.
-        validateNullToken(accessToken, ExceptionType.JWT_ACCESS_TOKEN_MISSING);
-        validateNullToken(refreshToken, ExceptionType.JWT_REFRESH_TOKEN_MISSING);
+        jwtTokenValidator.validateNullToken(accessToken, JWT_ACCESS_TOKEN_MISSING);
+        jwtTokenValidator.validateNullToken(refreshToken, ExceptionType.JWT_REFRESH_TOKEN_MISSING);
 
         JwtClaims accessTokenClaims = verifyAndExtractAccessClaims(accessToken);
         JwtClaims refreshTokenClaims = verifyAndExtractRefreshClaims(refreshToken);
 
-        validateTokenSubjectMatch(accessTokenClaims, refreshTokenClaims);
+        jwtTokenValidator.validateTokenSubjectMatch(accessTokenClaims, refreshTokenClaims);
 
         return jwtCafegoryTokenManager.createAccessToken(
             Map.of(SUBJECT.getValue(), refreshTokenClaims.getSubject())
         );
     }
 
-    private void validateNullToken(final String token, ExceptionType exceptionType) {
-        if (token == null) {
-            throw new JwtCustomException(exceptionType);
-        }
-    }
-
-    private void validateTokenSubjectMatch(final JwtClaims accessTokenClaims, final JwtClaims refreshTokenClaims) {
-        String accessTokenSubject = accessTokenClaims.getClaim(SUBJECT.getValue());
-        String refreshTokenSubject = refreshTokenClaims.getClaim(SUBJECT.getValue());
-
-        if (!accessTokenSubject.equals(refreshTokenSubject)) {
-            throw new JwtCustomException(JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED);
-        }
-    }
-
-
-    //TODO 이 코드도 서비스 레이어로 빼자. validateClaim은 비즈니스 검증이 아니라 토큰 무결성에 대한 검증이라 jwtTokenManger가 맞다.
     private JwtClaims verifyAndExtractRefreshClaims(final String refreshToken) {
         jwtTokenManager.validateClaim(refreshToken, TOKEN_TYPE.getValue(), REFRESH_TOKEN.getValue());
         return jwtTokenManager.verifyAndExtractClaims(refreshToken);
     }
 
-    //TODO 서비스 레이어로 빼야할듯. 검증만하는 방법이 존재하지 않음. 항상 검증하고 추출이 같이 다님.
     private JwtClaims verifyAndExtractAccessClaims(final String accessToken) {
         try {
             return jwtTokenManager.verifyAndExtractClaims(accessToken);

@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuthController {
 
-    private final LoginService oauthFacade;
+    private final LoginService loginService;
 
     @GetMapping("/kakao")
     public JwtToken kakao(@RequestParam String code) {
         KakaoOAuth2TokenRequest kakaoOAuth2LoginRequest = new KakaoOAuth2TokenRequest(code);
-        return oauthFacade.socialLogin(kakaoOAuth2LoginRequest);
+        return loginService.socialLogin(kakaoOAuth2LoginRequest);
     }
 //
 //    @GetMapping("/naver")
