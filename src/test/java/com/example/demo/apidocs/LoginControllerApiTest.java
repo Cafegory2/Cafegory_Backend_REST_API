@@ -62,7 +62,7 @@ public class LoginControllerApiTest {
                 document("카카오 로그인",
                     resource(ResourceSnippetParameters.builder()
                         .description("로그인이 성공하면 JWT 액세스 토큰과 리프레시 토큰을 발급 받는다. https://kauth.kakao.com/oauth/authorize?client_id=dd715e41cd41949dc316c0243b964c44&redirect_uri=http://{domain}/login/kakao&response_type=code")
-                        .tag("OAuth")
+                        .tag("Login")
                         .requestParameters(parameterWithName("code").optional()
                             .description("카카오 인증 코드"))
                         .responseFields(
