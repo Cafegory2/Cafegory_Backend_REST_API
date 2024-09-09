@@ -1,7 +1,7 @@
 package com.example.demo.apidocs;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
-import com.example.demo.controller.OAuthController;
+import com.example.demo.controller.LoginController;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.service.login.LoginService;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
-@WebMvcTest(OAuthController.class)
-public class OAuthControllerApiTest {
+@WebMvcTest(LoginController.class)
+public class LoginControllerApiTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -61,7 +61,7 @@ public class OAuthControllerApiTest {
             .andDo(
                 document("카카오 로그인",
                     resource(ResourceSnippetParameters.builder()
-                        .description("로그인이 성공하면 JWT 액세스 토큰과 리프레시 토큰을 발급 받는다. https://kauth.kakao.com/oauth/authorize?client_id=dd715e41cd41949dc316c0243b964c44&redirect_uri=http:///oauth2/kakao&response_type=code")
+                        .description("로그인이 성공하면 JWT 액세스 토큰과 리프레시 토큰을 발급 받는다. https://kauth.kakao.com/oauth/authorize?client_id=dd715e41cd41949dc316c0243b964c44&redirect_uri=http://{domain}/login/kakao&response_type=code")
                         .tag("OAuth")
                         .requestParameters(parameterWithName("code").optional()
                             .description("카카오 인증 코드"))
