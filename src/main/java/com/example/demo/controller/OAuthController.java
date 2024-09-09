@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.login.LoginService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,9 +20,10 @@ public class OAuthController {
     private final LoginService loginService;
 
     @GetMapping("/kakao")
-    public JwtToken kakao(@RequestParam String code) {
+    public ResponseEntity<JwtToken> kakao(@RequestParam String code) {
         KakaoOAuth2TokenRequest kakaoOAuth2LoginRequest = new KakaoOAuth2TokenRequest(code);
-        return loginService.socialLogin(kakaoOAuth2LoginRequest);
+        JwtToken jwtToken = loginService.socialLogin(kakaoOAuth2LoginRequest);
+        return ResponseEntity.ok(jwtToken);
     }
 //
 //    @GetMapping("/naver")

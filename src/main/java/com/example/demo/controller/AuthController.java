@@ -4,6 +4,7 @@ import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.service.auth.JwtTokenManagementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,9 @@ public class AuthController {
     private final JwtTokenManagementService jwtTokenManagementService;
 
     @PostMapping("/refresh")
-    public JwtAccessToken refreshToken(@RequestBody JwtToken jwtToken) {
-        return jwtTokenManagementService.verifyAndRefreshAccessToken(jwtToken.getAccessToken(), jwtToken.getRefreshToken());
+    public ResponseEntity<JwtAccessToken> refreshToken(@RequestBody JwtToken jwtToken) {
+        JwtAccessToken jwtAccessToken = jwtTokenManagementService.verifyAndRefreshAccessToken(
+            jwtToken.getAccessToken(), jwtToken.getRefreshToken());
+        return ResponseEntity.ok(jwtAccessToken);
     }
 }
