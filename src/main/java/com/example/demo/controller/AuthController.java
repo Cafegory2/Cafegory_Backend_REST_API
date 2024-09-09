@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtToken;
-import com.example.demo.service.auth.JwtTokenManagementService;
+import com.example.demo.service.token.JwtTokenManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

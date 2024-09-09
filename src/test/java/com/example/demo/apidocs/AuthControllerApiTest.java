@@ -4,7 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.example.demo.controller.AuthController;
 import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtToken;
-import com.example.demo.service.auth.JwtTokenManagementService;
+import com.example.demo.service.token.JwtTokenManagementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

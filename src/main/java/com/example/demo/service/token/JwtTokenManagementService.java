@@ -1,4 +1,4 @@
-package com.example.demo.service.auth;
+package com.example.demo.service.token;
 
 import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.implement.tokenmanagerment.TokenClaims.*;
