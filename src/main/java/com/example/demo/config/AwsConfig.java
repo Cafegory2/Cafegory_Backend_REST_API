@@ -6,7 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.example.demo.infrastructure.aws.AwsS3Handler;
+import com.example.demo.infrastructure.aws.AwsS3HandlerImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,8 +35,8 @@ public class AwsConfig {
     }
 
     @Bean
-    public AwsS3Handler awsS3Handler() {
-        return new AwsS3Handler(amazonS3());
+    public AwsS3HandlerImpl awsS3Handler() {
+        return new AwsS3HandlerImpl(amazonS3());
     }
 
 }

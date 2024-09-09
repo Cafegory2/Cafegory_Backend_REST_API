@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.ByteArrayInputStream;
 
 @RequiredArgsConstructor
-public class AwsS3Handler {
+public class AwsS3HandlerImpl implements AwsS3Client{
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;

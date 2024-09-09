@@ -8,7 +8,7 @@ import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.implement.member.Member;
-import com.example.demo.infrastructure.aws.AwsS3Handler;
+import com.example.demo.infrastructure.aws.AwsS3Client;
 import com.example.demo.infrastructure.oauth2.OAuth2Client;
 import com.example.demo.util.ImageData;
 import com.example.demo.util.ImageDownloadUtil;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class LoginService {
 
     private final OAuth2Client oAuth2Client;
-    private final AwsS3Handler awsS3Handler;
+    private final AwsS3Client awsS3Client;
 
     private final MemberReader memberReader;
 
@@ -60,7 +60,7 @@ public class LoginService {
         ImageData imageData = ImageDownloadUtil.downloadImage(imageUrl);
         String filename = UUID.randomUUID().toString();
 
-        awsS3Handler.uploadImageToS3(filename, imageData);
-        return awsS3Handler.getUrl(filename);
+        awsS3Client.uploadImageToS3(filename, imageData);
+        return awsS3Client.getUrl(filename);
     }
 }

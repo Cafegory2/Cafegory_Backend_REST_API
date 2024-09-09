@@ -6,7 +6,7 @@ import com.example.demo.dto.oauth2.*;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.member.Member;
 import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.infrastructure.aws.AwsS3Handler;
+import com.example.demo.infrastructure.aws.AwsS3HandlerImpl;
 import com.example.demo.infrastructure.oauth2.OAuth2HandlerImpl;
 import com.example.demo.util.ImageData;
 import com.example.demo.util.ImageDownloadUtil;
@@ -38,7 +38,7 @@ class LoginServiceTest extends ServiceTest {
     @MockBean
     private OAuth2Profile mockOauth2Profile;
     @MockBean
-    private AwsS3Handler mockAwsS3Handler;
+    private AwsS3HandlerImpl mockAwsS3HandlerImpl;
 
     @Test
     @DisplayName("새로운 회원이 카카오 로그인에 성공하면 회원가입이 되고 토큰을 발급 받는다.")
@@ -52,7 +52,7 @@ class LoginServiceTest extends ServiceTest {
 
         try (MockedStatic<ImageDownloadUtil> mockedStatic = mockStatic(ImageDownloadUtil.class)) {
             mockedStatic.when(() -> ImageDownloadUtil.downloadImage("testImageUrl")).thenReturn(mock(ImageData.class));
-            doNothing().when(mockAwsS3Handler).uploadImageToS3(anyString(), any());
+            doNothing().when(mockAwsS3HandlerImpl).uploadImageToS3(anyString(), any());
             //when
             JwtToken token = sut.socialLogin(request);
             //then
@@ -78,7 +78,7 @@ class LoginServiceTest extends ServiceTest {
 
         try (MockedStatic<ImageDownloadUtil> mockedStatic = mockStatic(ImageDownloadUtil.class)) {
             mockedStatic.when(() -> ImageDownloadUtil.downloadImage("testImageUrl")).thenReturn(mock(ImageData.class));
-            doNothing().when(mockAwsS3Handler).uploadImageToS3(anyString(), any());
+            doNothing().when(mockAwsS3HandlerImpl).uploadImageToS3(anyString(), any());
             //when
             JwtToken token = sut.socialLogin(request);
             //then
