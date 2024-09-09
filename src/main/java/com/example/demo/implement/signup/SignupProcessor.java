@@ -1,7 +1,6 @@
 package com.example.demo.implement.signup;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.MemberAppender;
 import com.example.demo.implement.member.MemberReader;
@@ -36,5 +35,4 @@ public class SignupProcessor {
             .role(Role.USER)
             .build();
     }
-
 }
