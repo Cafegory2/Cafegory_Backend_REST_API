@@ -18,13 +18,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudyValidator {
 
-	private final TimeUtil timeUtil;
+	private static final int MAX_STUDY_NAME_LENGTH = 20;
 
-	public void validateNameLength(String name) {
-		if (name.length() > 20) {
-			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
-		}
-	}
+	private final TimeUtil timeUtil;
 
 	public void validateEmptyOrWhiteSpace(String target, ExceptionType exceptionType) {
 		if (target.isBlank()) {
@@ -32,7 +28,20 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStartDateTime(LocalDateTime startDateTime) {
+	public void validateStudyCreation(String name, LocalDateTime startDateTime, int maxParticipants) {
+		validateNameLength(name);
+		validateStartDateTime(startDateTime);
+		validateStartDate(startDateTime);
+		validateMaxParticipants(maxParticipants);
+	}
+
+	private void validateNameLength(String name) {
+		if (name.length() > MAX_STUDY_NAME_LENGTH) {
+			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
+		}
+	}
+
+	private void validateStartDateTime(LocalDateTime startDateTime) {
 		LocalDateTime now = timeUtil.now();
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
@@ -40,14 +49,14 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStartDate(LocalDateTime startDateTime) {
+	private void validateStartDate(LocalDateTime startDateTime) {
 		LocalDateTime plusMonths = timeUtil.now().plusMonths(1);
 		if (startDateTime.isAfter(plusMonths)) {
 			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
 		}
 	}
 
-	public void validateMaxParticipants(int maxParticipants) {
+	private void validateMaxParticipants(int maxParticipants) {
 		if (maxParticipants > LIMIT_MEMBER_CAPACITY || maxParticipants < MIN_LIMIT_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}
