@@ -18,10 +18,10 @@ public class BusinessHourValidator {
 
 	private final BusinessHourOpenChecker openChecker;
 
-	public void validateBetweenBusinessHour(LocalTime studyOnceStartTime, LocalTime studyOnceEndTime,
+	public void validateBetweenBusinessHour(LocalTime cafeStudyStartTime, LocalTime cafeStudyEndTime,
 		BusinessHour businessHour) {
 		boolean isBetweenBusinessHour = openChecker.checkBetweenBusinessHours(businessHour.getOpeningTime(),
-			businessHour.getClosingTime(), studyOnceStartTime, studyOnceEndTime);
+			businessHour.getClosingTime(), cafeStudyStartTime, cafeStudyEndTime);
 		if (!isBetweenBusinessHour) {
 			throw new CafegoryException(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS);
 		}
