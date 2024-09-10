@@ -74,8 +74,8 @@ public class BusinessHourOpenChecker {
 
 	public boolean checkBetweenBusinessHours(LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalTime chosenStartTime, LocalTime chosenEndTime) {
-		LocalTime truncatedStartTime = truncatedTime.toSecond(chosenStartTime);
-		LocalTime truncatedEndTime = truncatedTime.toSecond(chosenEndTime);
+		LocalTime truncatedStartTime = truncatedTime.truncateTimeToSecond(chosenStartTime);
+		LocalTime truncatedEndTime = truncatedTime.truncateTimeToSecond(chosenEndTime);
 
 		// 영업 시작시간이 당일, 영업 종료시간이 당일
 		if (businessStartTime.isBefore(businessEndTime)) {

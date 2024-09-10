@@ -22,12 +22,12 @@ public class DefaultTimeUtil implements TimeUtil {
 	}
 
 	@Override
-	public LocalTime toSecond(LocalTime time) {
+	public LocalTime truncateTimeToSecond(LocalTime time) {
 		return time == null ? null : time.truncatedTo(ChronoUnit.SECONDS);
 	}
 
 	@Override
-	public LocalDateTime toSecond(LocalDateTime dateTime) {
+	public LocalDateTime truncateDateTimeToSecond(LocalDateTime dateTime) {
 		return dateTime == null ? null : dateTime.truncatedTo(ChronoUnit.SECONDS);
 	}
 }

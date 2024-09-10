@@ -9,7 +9,7 @@ public interface TimeUtil {
 
 	LocalDateTime now();
 
-	LocalTime toSecond(LocalTime time);
+	LocalTime truncateTimeToSecond(LocalTime time);
 
-	LocalDateTime toSecond(LocalDateTime dateTime);
+	LocalDateTime truncateDateTimeToSecond(LocalDateTime dateTime);
 }
