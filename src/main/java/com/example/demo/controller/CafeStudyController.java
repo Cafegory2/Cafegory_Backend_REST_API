@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import com.example.demo.implement.auth.CafegoryTokenManager;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyService;
+import com.example.demo.validator.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +31,7 @@ public class CafeStudyController {
 	// private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
 	// private final StudyOnceCommentQueryService studyOnceCommentQueryService;
 	private final CafeStudyMapper cafeStudyMapper;
+	private final StudyValidator studyValidator;
 
 	// @GetMapping("/{studyOnceId:[0-9]+}")
 	// public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId,
@@ -54,6 +58,8 @@ public class CafeStudyController {
 		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
 		@RequestHeader("Authorization") String authorization) {
 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+
 		Long cafeStudyId = cafeStudyService.createStudy(memberId, cafeStudyCreateRequest);
 		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
