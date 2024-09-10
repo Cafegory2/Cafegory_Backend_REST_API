@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeReader;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyMember;
-import com.example.demo.mapper.CafeStudyMapper;
-import com.example.demo.repository.cafe.BusinessHourQueryDslRepository;
-import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.implement.study.StudyEditor;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
@@ -31,17 +31,17 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CafeStudyService {
-	private final CafeRepository cafeRepository;
 	private final CafeStudyRepository cafeStudyRepository;
 	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
-	private final BusinessHourQueryDslRepository businessHourQueryDslRepository;
-	private final CafeStudyMapper cafeStudyMapper;
 	// private final StudyMemberMapper studyMemberMapper;
 	// private final StudyPeriodMapper studyPeriodMapper;
 	private final TimeUtil timeUtil;
 	private final StudyValidator studyValidator;
 	private final BusinessHourValidator businessHourValidator;
+	private final CafeReader cafeReader;
+	private final BusinessHourReader businessHourReader;
+	private final StudyEditor studyEditor;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -177,29 +177,25 @@ public class CafeStudyService {
 	// }
 
 	public CafeStudy findCafeStudyById(long cafeStudyId) {
-		return cafeStudyRepository.findById(cafeStudyId)
-			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
+		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 	}
 
 	@Transactional
 	public Long createStudy(long coordinatorId, CafeStudyCreateRequest request) {
-		studyValidator.validateNameLength(request.getName());
-		studyValidator.validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		studyValidator.validateStartDateTime(request.getStartDateTime());
-		studyValidator.validateStartDate(request.getStartDateTime());
-		studyValidator.validateMaxParticipants(request.getMaxParticipants());
-		Cafe cafe = findCafeById(request.getCafeId());
-		BusinessHour businessHour = businessHourQueryDslRepository.findWithCafeAndDayOfWeek(cafe,
+		studyValidator.validateStudyCreation(request.getName(), request.getStartDateTime(),
+			request.getMaxParticipants());
+
+		Cafe cafe = cafeReader.getById(request.getCafeId());
+		BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
 			request.getStartDateTime().getDayOfWeek());
 		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-			request.getEndDateTime().toLocalTime(),
-			businessHour);
+			request.getEndDateTime().toLocalTime(), businessHour);
 		Member coordinator = findMemberById(coordinatorId);
-		validateStudyScheduleConflict(timeUtil.toSecond(request.getStartDateTime()),
-			timeUtil.toSecond(request.getEndDateTime()), coordinator);
-		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
-		CafeStudy saved = cafeStudyRepository.save(cafeStudy);
-		return saved.getId();
+		validateStudyScheduleConflict(timeUtil.truncateDateTimeToSecond(request.getEndDateTime()),
+			timeUtil.truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
+
+		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
+			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
 	}
 
 	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member coordinator) {
@@ -290,9 +286,5 @@ public class CafeStudyService {
 
 	private Member findMemberById(Long memberId) {
 		return memberRepository.findById(memberId).orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-	}
-
-	private Cafe findCafeById(Long cafeId) {
-		return cafeRepository.findById(cafeId).orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
 }
