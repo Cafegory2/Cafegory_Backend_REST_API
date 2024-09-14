@@ -4,13 +4,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-
 import com.example.demo.util.TimeUtil;
 
-@Component
-@Profile("test")
 public class FakeTimeUtil implements TimeUtil {
 
 	@Override

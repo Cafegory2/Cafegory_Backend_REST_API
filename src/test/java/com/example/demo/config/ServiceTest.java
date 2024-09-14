@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
 @Import({HelperConfig.class})
 public class ServiceTest extends TestContainer {

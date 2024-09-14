@@ -19,14 +19,11 @@ public class StudyEditor {
 	private final CafeStudyMapper cafeStudyMapper;
 
 	public Long createAndSaveCafeStudy(String studyName, Cafe cafe, Member coordinator, LocalDateTime startDateTime,
-		LocalDateTime endDateTime,
-		MemberComms memberComms, int maxParticipants) {
-
+		LocalDateTime endDateTime, MemberComms memberComms, int maxParticipants) {
 		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(studyName, cafe, coordinator, startDateTime, endDateTime,
 			memberComms, maxParticipants);
 		CafeStudy savedStudy = cafeStudyRepository.save(cafeStudy);
 
 		return savedStudy.getId();
 	}
-
 }
