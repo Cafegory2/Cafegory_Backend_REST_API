@@ -28,7 +28,6 @@ public class JwtTokenManagementService {
     private final JwtTokenValidator jwtTokenValidator;
 
     public JwtAccessToken verifyAndRefreshAccessToken(final String accessToken, final String refreshToken) {
-        //TODO 토큰 재발급 API는 토큰 검증 인터셉터를 거치면 안된다. 토큰 검증 인터셉터는 액세스 토큰의 만료를 검증한다.
         jwtTokenValidator.validateNullToken(accessToken, JWT_ACCESS_TOKEN_MISSING);
         jwtTokenValidator.validateNullToken(refreshToken, ExceptionType.JWT_REFRESH_TOKEN_MISSING);
 

@@ -13,12 +13,14 @@ public enum ExceptionType {
 
 	JWT_EXPIRED(UNAUTHORIZED, "JWT 토큰이 만료되었습니다."),
 	JWT_DESTROYED(UNAUTHORIZED, "JWT 토큰이 잘못되었습니다."),
-	JWT_CLAIM_INVALID(INTERNAL_SERVER_ERROR, "JWT의 클레임이 유효하지 않습니다."),
+	JWT_CLAIM_INVALID(UNAUTHORIZED, "JWT의 클레임이 유효하지 않습니다."),
+	JWT_SUBJECT_NOT_FOUND(UNAUTHORIZED, "JWT 토큰의 사용자 ID(sub)가 DB에 존재하지 않습니다."),
 	JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED(UNAUTHORIZED, "JWT 액세스 토큰과 리프레시 토큰의 사용자 ID(sub)가 일치하지 않습니다."),
 	JWT_REFRESH_MEMBER_NOT_FOUND(NOT_FOUND, "JWT 리프레시 토큰의 memberId는 존재하나, DB에 해당 회원이 존재하지 않습니다."),
 	JWT_REFRESH_MEMBER_ID_MISMATCH(UNAUTHORIZED, "JWT 리프레시 토큰의 memberId는 존재하나 DB의 memberId와 일치하지 않음"),
 	JWT_ACCESS_TOKEN_MISSING(BAD_REQUEST,"액세스 토큰이 누락되었습니다."),
 	JWT_REFRESH_TOKEN_MISSING(BAD_REQUEST,"리프레시 토큰이 누락되었습니다."),
+	JWT_INVALID_FORMAT(UNAUTHORIZED, "JWT 토큰 포맷이 유효하지 않습니다."),
 
 	TOKEN_NOT_FOUND(UNAUTHORIZED, "토큰이 없습니다."),
 	TOKEN_REFRESH_REJECT(UNAUTHORIZED, "토큰을 재발행할 수 없습니다."),
