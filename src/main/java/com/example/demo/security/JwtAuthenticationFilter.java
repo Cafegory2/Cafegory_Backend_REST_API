@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
         try {
             if (isValidAuthorizationHeader(authorization)) {
-                String jwtToken = extractJwtToken(authorization);
+                String jwtToken = extractJwtAccessToken(authorization);
                 processTokenAuthentication(jwtToken);
             } else {
                 throw new BadCredentialsException(JWT_INVALID_FORMAT.getErrorMessage());
@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String extractJwtToken(String authorization) {
+    private String extractJwtAccessToken(String authorization) {
         return authorization.substring(BEARER.length());
     }
 
