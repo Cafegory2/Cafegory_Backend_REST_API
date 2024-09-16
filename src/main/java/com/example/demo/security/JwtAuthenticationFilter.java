@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -17,10 +16,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 import static com.example.demo.exception.ExceptionType.*;
 
-@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -29,11 +28,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenManager jwtTokenManager;
     private final JpaUserDetailsService jpaUserDetailsService;
 
+    // 토큰 검증을 하지 말아야할 url을 등록한다.
+    private final List<String> excludeUrls = List.of(
+        "/login",
+        "/docs",
+        "/auth/refresh"
+    );
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // 로그인 로직은 JWT 토큰 검증을 하면 안된다.
+        boolean matchesUrl = excludeUrls.stream()
+            .anyMatch(url -> request.getRequestURI().startsWith(url));
+        if (matchesUrl) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // JWT토큰이 유효하지 않거나 토큰이 만료된 경우 등 "인증"과 관련된 문제라면 AuthenticationException을 던져야한다.
         // 사용자는 인증이되었지만, 해당 요청에 필요한 권한이 부족한 경우 AccessDeniedException을 던져야한다.
+        //TODO 커스텀 예외 처리 필터가 만들어지면 위 두가지 예외처리를 하지 않는다.
         String authorization = request.getHeader("Authorization");
         try {
             if (isValidAuthorizationHeader(authorization)) {
@@ -43,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 throw new BadCredentialsException(JWT_INVALID_FORMAT.getErrorMessage());
             }
         } catch (JwtCustomException e) {
-            if(e.getExceptionType() == JWT_EXPIRED) {
+            if (e.getExceptionType() == JWT_EXPIRED) {
                 throw new AccountExpiredException(JWT_EXPIRED.getErrorMessage());
             }
         } catch (JwtException e) {

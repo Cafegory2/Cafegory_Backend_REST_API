@@ -17,6 +17,7 @@ public class AuthController {
 
     private final JwtTokenManagementService jwtTokenManagementService;
 
+    //TODO 요청 바디로 토큰값을 받으면 안되고, 헤더로 받아야한다.
     @PostMapping("/refresh")
     public ResponseEntity<JwtAccessToken> refreshToken(@RequestBody JwtToken jwtToken) {
         JwtAccessToken jwtAccessToken = jwtTokenManagementService.verifyAndRefreshAccessToken(

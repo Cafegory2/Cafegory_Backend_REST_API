@@ -8,8 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -21,15 +22,19 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // JWT 토큰을 검증하는 필터이다. anyMatchers에 등록된 url은 JWT토큰을 검증하지 않는다.
+        //TODO 커스텀 예외 처리 필터를 추가한다.
+        //JWT 토큰 검증을 하지 않으려면 anyMatchers에 url을 추가하고 JwtAuthenticationFilter 클래스 안에도 추가해야한다.
         http
-            .authorizeRequests(authorize -> authorize
+            .csrf().disable()
+            .authorizeHttpRequests(authorize -> authorize
                 .antMatchers("/docs/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/auth/refresh").permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager, jpaUserDetailsService), SecurityContextHolderFilter.class);
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager, jpaUserDetailsService), UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         return http.build();
     }
