@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private void processTokenAuthentication(String jwtToken) {
+    private void processTokenAuthentication(final String jwtToken) {
         JwtClaims jwtClaims = jwtTokenManager.verifyAndExtractClaims(jwtToken);
 
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -82,11 +82,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-    private String extractJwtAccessToken(String authorization) {
+    private String extractJwtAccessToken(final String authorization) {
         return authorization.substring(BEARER.length());
     }
 
-    private boolean isValidAuthorizationHeader(String authorization) {
+    private boolean isValidAuthorizationHeader(final String authorization) {
         return authorization != null && authorization.startsWith(BEARER);
     }
 }

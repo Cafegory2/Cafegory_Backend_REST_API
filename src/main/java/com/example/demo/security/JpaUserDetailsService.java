@@ -16,7 +16,7 @@ public class JpaUserDetailsService {
 
     private final MemberRepository memberRepository;
 
-    public CustomUserDetails loadUserByUserId(String claimSubjectValue) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUserId(final String claimSubjectValue) throws UsernameNotFoundException {
         Long memberId = Long.parseLong(claimSubjectValue);
 
         return memberRepository.findById(memberId)
