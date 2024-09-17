@@ -4,6 +4,7 @@ import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,6 +19,7 @@ import java.util.List;
 import static com.example.demo.exception.ExceptionType.*;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String BEARER = "Bearer ";
@@ -27,6 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // 토큰 검증을 하지 말아야할 url을 등록한다.
     private final List<String> excludeUrls = List.of(
+        "/favicon.ico",
         "/login",
         "/docs",
         "/auth/refresh"
@@ -35,24 +38,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 로그인 로직은 JWT 토큰 검증을 하면 안된다.
+        log.debug("Requested URI: {}", request.getRequestURI());
         boolean matchesUrl = excludeUrls.stream()
             .anyMatch(url -> request.getRequestURI().startsWith(url));
         if (matchesUrl) {
             filterChain.doFilter(request, response);
             return;
         }
-        //TODO 커스텀 토큰 예외도 분리하자.
+
         String authorization = request.getHeader("Authorization");
 
         if (isValidAuthorizationHeader(authorization)) {
             String jwtToken = extractJwtAccessToken(authorization);
             processTokenAuthentication(jwtToken);
+            filterChain.doFilter(request, response);
         } else {
             throw new JwtTokenAuthenticationException(JWT_INVALID_FORMAT);
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private void processTokenAuthentication(final String jwtToken) {
