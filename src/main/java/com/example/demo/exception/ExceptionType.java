@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum ExceptionType {
 
 	JWT_EXPIRED(UNAUTHORIZED, "JWT 토큰이 만료되었습니다."),
-	JWT_DESTROYED(UNAUTHORIZED, "JWT 토큰이 유효하지 않습니다."),
+	JWT_INVALID(UNAUTHORIZED, "JWT 토큰이 유효하지 않습니다."),
 	JWT_CLAIM_INVALID(UNAUTHORIZED, "JWT의 클레임이 유효하지 않습니다."),
 	JWT_SUBJECT_NOT_FOUND(UNAUTHORIZED, "JWT 토큰의 사용자 ID(sub)가 DB에 존재하지 않습니다."),
 	JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED(UNAUTHORIZED, "JWT 액세스 토큰과 리프레시 토큰의 사용자 ID(sub)가 일치하지 않습니다."),

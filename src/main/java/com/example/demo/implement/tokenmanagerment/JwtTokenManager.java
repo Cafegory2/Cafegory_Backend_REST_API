@@ -77,7 +77,7 @@ public final class JwtTokenManager {
         } catch (ExpiredJwtException e) {
             throw new JwtTokenAuthenticationException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
         } catch (JwtException e) {
-            throw new JwtTokenAuthenticationException(JWT_DESTROYED, e);
+            throw new JwtTokenAuthenticationException(JWT_INVALID, e);
         }
     }
 
