@@ -5,13 +5,13 @@ import static com.example.demo.implement.tokenmanagerment.TokenClaims.*;
 
 import java.util.Map;
 
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtTokenValidator;
 import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import com.example.demo.implement.token.JwtAccessToken;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtCustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +49,7 @@ public class JwtTokenManagementService {
     private JwtClaims verifyAndExtractAccessClaims(final String accessToken) {
         try {
             return jwtTokenManager.verifyAndExtractClaims(accessToken);
-        } catch (JwtCustomException e) {
+        } catch (JwtTokenAuthenticationException e) {
             if (e.getExceptionType() == JWT_EXPIRED) {
                 return e.getClaims();
             }

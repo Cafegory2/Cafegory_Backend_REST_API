@@ -14,4 +14,16 @@ public class JwtTokenExceptionHandler {
 		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
 		return ResponseEntity.status(exception.getHttpStatus()).body(errorResponse);
 	}
+
+	@ExceptionHandler(JwtTokenAuthenticationException.class)
+	public ResponseEntity<ErrorResponse> handle(JwtTokenAuthenticationException exception) {
+		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+		return ResponseEntity.status(exception.getHttpStatus()).body(errorResponse);
+	}
+
+	@ExceptionHandler(JwtTokenAccessDeniedException.class)
+	public ResponseEntity<ErrorResponse> handle(JwtTokenAccessDeniedException exception) {
+		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+		return ResponseEntity.status(exception.getHttpStatus()).body(errorResponse);
+	}
 }

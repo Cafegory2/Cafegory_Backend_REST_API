@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtCustomException;
@@ -51,7 +52,7 @@ class JwtTokenManagerTest {
 		);
 		//when
 		assertThatThrownBy(() -> sut.verifyAndExtractClaims(jwt))
-			.isInstanceOf(JwtCustomException.class)
+			.isInstanceOf(JwtTokenAuthenticationException.class)
 			.hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
 	}
 
@@ -81,7 +82,7 @@ class JwtTokenManagerTest {
 		);
 		//then
 		assertThatThrownBy(() -> sut.validateClaim(jwt, "tokenType", "refreshToken"))
-				.isInstanceOf(JwtCustomException.class)
+				.isInstanceOf(JwtTokenAuthenticationException.class)
 				.hasMessage(ExceptionType.JWT_CLAIM_INVALID.getErrorMessage());
 	}
 }
