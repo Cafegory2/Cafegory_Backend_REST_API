@@ -3,10 +3,7 @@ package com.example.demo.security;
 import com.example.demo.exception.JwtCustomException;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -45,23 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        // JWT토큰이 유효하지 않거나 토큰이 만료된 경우 등 "인증"과 관련된 문제라면 AuthenticationException을 던져야한다.
-        // 사용자는 인증이되었지만, 해당 요청에 필요한 권한이 부족한 경우 AccessDeniedException을 던져야한다.
-        //TODO 커스텀 예외 처리 필터가 만들어지면 위 두가지 예외처리를 하지 않는다.
+        //TODO 커스텀 토큰 예외도 분리하자.
         String authorization = request.getHeader("Authorization");
-        try {
-            if (isValidAuthorizationHeader(authorization)) {
-                String jwtToken = extractJwtAccessToken(authorization);
-                processTokenAuthentication(jwtToken);
-            } else {
-                throw new BadCredentialsException(JWT_INVALID_FORMAT.getErrorMessage());
-            }
-        } catch (JwtCustomException e) {
-            if (e.getExceptionType() == JWT_EXPIRED) {
-                throw new AccountExpiredException(JWT_EXPIRED.getErrorMessage());
-            }
-        } catch (JwtException e) {
-            throw new BadCredentialsException(JWT_DESTROYED.getErrorMessage());
+
+        if (isValidAuthorizationHeader(authorization)) {
+            String jwtToken = extractJwtAccessToken(authorization);
+            processTokenAuthentication(jwtToken);
+        } else {
+            throw new JwtCustomException(JWT_INVALID_FORMAT);
         }
 
         filterChain.doFilter(request, response);
