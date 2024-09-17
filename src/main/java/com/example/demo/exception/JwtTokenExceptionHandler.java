@@ -9,12 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 public class JwtTokenExceptionHandler {
 
-	@ExceptionHandler(JwtCustomException.class)
-	public ResponseEntity<ErrorResponse> handle(JwtCustomException exception) {
-		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-		return ResponseEntity.status(exception.getHttpStatus()).body(errorResponse);
-	}
-
 	@ExceptionHandler(JwtTokenAuthenticationException.class)
 	public ResponseEntity<ErrorResponse> handle(JwtTokenAuthenticationException exception) {
 		ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());

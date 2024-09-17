@@ -9,7 +9,6 @@ import java.util.Map;
 import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtClaims;
 
-import com.example.demo.exception.JwtCustomException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;

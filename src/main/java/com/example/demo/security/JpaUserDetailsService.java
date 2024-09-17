@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.exception.JwtCustomException;
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +21,6 @@ public class JpaUserDetailsService {
 
         return memberRepository.findById(memberId)
             .map(member -> new CustomUserDetails(member.getId(), List.of(member.getRole())))
-            .orElseThrow(() -> new JwtCustomException(JWT_SUBJECT_NOT_FOUND));
+            .orElseThrow(() -> new JwtTokenAuthenticationException(JWT_SUBJECT_NOT_FOUND));
     }
 }

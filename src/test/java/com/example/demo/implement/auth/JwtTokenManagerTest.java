@@ -10,7 +10,6 @@ import java.util.Map;
 import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtCustomException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import org.junit.jupiter.api.DisplayName;

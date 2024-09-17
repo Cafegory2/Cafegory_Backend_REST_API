@@ -11,6 +11,10 @@ public class JwtTokenAuthenticationException extends RuntimeException {
     private final ExceptionType exceptionType;
     private JwtClaims claims;
 
+    public JwtTokenAuthenticationException(ExceptionType exceptionType) {
+        this.exceptionType = exceptionType;
+    }
+
     public JwtTokenAuthenticationException(ExceptionType exceptionType, Throwable cause, JwtClaims claims) {
         super(cause);
         this.exceptionType = exceptionType;
@@ -30,6 +34,10 @@ public class JwtTokenAuthenticationException extends RuntimeException {
     @Override
     public String getMessage() {
         return exceptionType.getErrorMessage();
+    }
+
+    public String getCauseMessage() {
+        return getCause() != null ? getCause().getMessage() : "No cause available";
     }
 
     public HttpStatus getHttpStatus() {

@@ -1,6 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.exception.JwtCustomException;
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtClaims;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwtToken = extractJwtAccessToken(authorization);
             processTokenAuthentication(jwtToken);
         } else {
-            throw new JwtCustomException(JWT_INVALID_FORMAT);
+            throw new JwtTokenAuthenticationException(JWT_INVALID_FORMAT);
         }
 
         filterChain.doFilter(request, response);
