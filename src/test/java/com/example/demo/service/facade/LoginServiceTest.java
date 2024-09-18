@@ -8,6 +8,7 @@ import com.example.demo.implement.member.Member;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.infrastructure.aws.AwsS3HandlerImpl;
 import com.example.demo.infrastructure.oauth2.OAuth2HandlerImpl;
+import com.example.demo.service.login.LoginService;
 import com.example.demo.util.ImageData;
 import com.example.demo.util.ImageDownloadUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 class LoginServiceTest extends ServiceTest {
 
     @Autowired
-    private com.example.demo.service.login.LoginService sut;
+    private LoginService sut;
     @Autowired
     private MemberSaveHelper memberSaveHelper;
     @Autowired
