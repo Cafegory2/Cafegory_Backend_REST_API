@@ -35,7 +35,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        throw new IllegalArgumentException();
+        return String.valueOf(this.memberId);
     }
 
     @Override

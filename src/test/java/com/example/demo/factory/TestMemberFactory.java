@@ -28,6 +28,17 @@ public class TestMemberFactory {
 			.build();
 	}
 
+	public static Member createMember(String nickname, String profileUrl) {
+		return Member.builder()
+			.role(Role.USER)
+			.nickname(nickname)
+			.email("cafegory@gmail.com")
+			.profileUrl(profileUrl)
+			.bio("자기 소개글")
+			.beverageSize(BeverageSize.builder().name("tall").build())
+			.build();
+	}
+
 	//	public static Member createMemberWithId(Long memberId) {
 	//		return Member.builder()
 	//			.id(memberId)
