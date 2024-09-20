@@ -2,33 +2,33 @@ package com.example.demo.exception;
 
 import com.example.demo.implement.token.JwtClaims;
 import lombok.Getter;
+import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class JwtCustomException extends RuntimeException {
+public class JwtTokenAuthenticationException extends RuntimeException {
 
     private final ExceptionType exceptionType;
     private JwtClaims claims;
 
-    public JwtCustomException(ExceptionType exceptionType, Throwable cause, JwtClaims claims) {
+    public JwtTokenAuthenticationException(ExceptionType exceptionType) {
+        this.exceptionType = exceptionType;
+    }
+
+    public JwtTokenAuthenticationException(ExceptionType exceptionType, Throwable cause, JwtClaims claims) {
         super(cause);
         this.exceptionType = exceptionType;
         this.claims = claims;
     }
 
-    public JwtCustomException(ExceptionType exceptionType, Throwable cause) {
+    public JwtTokenAuthenticationException(ExceptionType exceptionType, Throwable cause) {
         super(cause);
         this.exceptionType = exceptionType;
     }
 
-    public JwtCustomException(ExceptionType exceptionType, JwtClaims claims) {
+    public JwtTokenAuthenticationException(ExceptionType exceptionType, JwtClaims claims) {
         this.exceptionType = exceptionType;
         this.claims = claims;
-
-    }
-
-    public JwtCustomException(ExceptionType exceptionType) {
-        this.exceptionType = exceptionType;
     }
 
     @Override
@@ -43,9 +43,4 @@ public class JwtCustomException extends RuntimeException {
     public HttpStatus getHttpStatus() {
         return exceptionType.getErrStatus();
     }
-
-    public Object getClaim(String key) {
-        return claims.getClaim(key);
-    }
-
 }

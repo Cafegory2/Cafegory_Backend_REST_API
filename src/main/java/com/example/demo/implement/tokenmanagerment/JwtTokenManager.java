@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.implement.token.JwtClaims;
 
-import com.example.demo.exception.JwtCustomException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -75,9 +75,9 @@ public final class JwtTokenManager {
                     .parseSignedClaims(jwt);
             return convertClaimsToJwtClaims(jws.getPayload());
         } catch (ExpiredJwtException e) {
-            throw new JwtCustomException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
+            throw new JwtTokenAuthenticationException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
         } catch (JwtException e) {
-            throw new JwtCustomException(JWT_DESTROYED, e);
+            throw new JwtTokenAuthenticationException(JWT_INVALID, e);
         }
     }
 
@@ -93,9 +93,11 @@ public final class JwtTokenManager {
                     .build()
                     .parse(jwt);
         } catch (ExpiredJwtException e) {
-            throw new JwtCustomException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
+            throw new JwtTokenAuthenticationException(JWT_EXPIRED, e, convertClaimsToJwtClaims(e.getClaims()));
         } catch (InvalidClaimException e) {
-            throw new JwtCustomException(JWT_CLAIM_INVALID, e, convertClaimsToJwtClaims(e.getClaims()));
+            throw new JwtTokenAuthenticationException(JWT_CLAIM_INVALID, e, convertClaimsToJwtClaims(e.getClaims()));
+        } catch (JwtException e) {
+            throw new JwtTokenAuthenticationException(JWT_INVALID, e);
         }
     }
 }

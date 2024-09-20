@@ -1,7 +1,7 @@
 package com.example.demo.implement.token;
 
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtCustomException;
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 import com.example.demo.implement.tokenmanagerment.TokenClaims;
@@ -48,7 +48,7 @@ class JwtTokenValidatorTest {
         JwtClaims jwtClaims2 = jwtTokenManager.verifyAndExtractClaims(jwtToken2);
         //then
         assertThatThrownBy(() -> sut.validateTokenSubjectMatch(jwtClaims1, jwtClaims2))
-            .isInstanceOf(JwtCustomException.class)
+            .isInstanceOf(JwtTokenAuthenticationException.class)
             .hasMessage(ExceptionType.JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED.getErrorMessage());
     }
 

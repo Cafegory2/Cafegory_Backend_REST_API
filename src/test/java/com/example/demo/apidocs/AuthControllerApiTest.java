@@ -3,9 +3,7 @@ package com.example.demo.apidocs;
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.example.demo.controller.AuthController;
 import com.example.demo.implement.token.JwtAccessToken;
-import com.example.demo.implement.token.JwtToken;
 import com.example.demo.service.token.JwtTokenManagementService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +23,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,15 +56,11 @@ public class AuthControllerApiTest {
     void refresh() throws Exception {
         when(jwtTokenManagementService.verifyAndRefreshAccessToken(any(), any())).thenReturn(new JwtAccessToken("access-token-value"));
 
-        JwtToken token = new JwtToken("Bearer existing-access-token", "existing-refresh-token");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(token);
-
         this.mockMvc.perform(
                 post("/auth/refresh")
+                    .header("Authorization", "Bearer existing-access-token")
+                    .header("Refresh-Token", "existing-refresh-token")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(requestBody)
                     .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(
@@ -73,9 +68,9 @@ public class AuthControllerApiTest {
                     resource(ResourceSnippetParameters.builder()
                         .description("액세스 토큰을 재발급 받는다.")
                         .tag("Token")
-                        .requestFields(
-                            fieldWithPath("accessToken").description("JWT 액세스 토큰"),
-                            fieldWithPath("refreshToken").description("JWT 리프레시 토큰, 리프레시 토큰 앞에는 Bearer을 붙이지 않는다.")
+                        .requestHeaders(
+                            headerWithName("Authorization").description("JWT 액세스 토큰"),
+                            headerWithName("Refresh-Token").description("JWT 리프레시 토큰, 리프레시 토큰 앞에는 Bearer을 붙이지 않는다.")
                         )
                         .responseFields(
                             fieldWithPath("accessToken").description("JWT 액세스 토큰")

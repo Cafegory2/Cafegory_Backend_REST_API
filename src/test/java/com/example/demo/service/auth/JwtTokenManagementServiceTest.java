@@ -2,7 +2,7 @@ package com.example.demo.service.auth;
 
 import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtCustomException;
+import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.member.Member;
@@ -55,7 +55,7 @@ class JwtTokenManagementServiceTest extends ServiceTest {
         String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
         //then
         assertThatThrownBy(() -> sut.verifyAndRefreshAccessToken(accessToken, refreshToken))
-                .isInstanceOf(JwtCustomException.class)
+                .isInstanceOf(JwtTokenAuthenticationException.class)
                 .hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
     }
 
@@ -68,7 +68,7 @@ class JwtTokenManagementServiceTest extends ServiceTest {
         String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
         //then
         assertThatThrownBy(() -> sut.verifyAndRefreshAccessToken(accessToken, refreshToken))
-                .isInstanceOf(JwtCustomException.class)
+                .isInstanceOf(JwtTokenAuthenticationException.class)
                 .hasMessage(ExceptionType.JWT_EXPIRED.getErrorMessage());
     }
 }
