@@ -1,49 +1,47 @@
 package com.example.demo.service.study;
 
-import static com.example.demo.implement.study.CafeStudy.*;
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.util.TruncatedTimeUtil.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.study.CafeStudyCreateRequest;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHour;
-import com.example.demo.implement.cafe.BusinessHourOpenChecker;
+import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeReader;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyMember;
-import com.example.demo.dto.study.CafeStudyCreateRequest;
-import com.example.demo.dto.study.CafeStudyCreateResponse;
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.mapper.CafeStudyMapper;
-import com.example.demo.repository.cafe.BusinessHourQueryDslRepository;
-import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.implement.study.StudyEditor;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
+import com.example.demo.util.TimeUtil;
+import com.example.demo.validator.BusinessHourValidator;
+import com.example.demo.validator.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CafeStudyService {
-	private final CafeRepository cafeRepository;
 	private final CafeStudyRepository cafeStudyRepository;
 	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
-	private final BusinessHourQueryDslRepository businessHourQueryDslRepository;
-	private final CafeStudyMapper cafeStudyMapper;
 	// private final StudyMemberMapper studyMemberMapper;
 	// private final StudyPeriodMapper studyPeriodMapper;
-	private final BusinessHourOpenChecker openChecker;
+	private final TimeUtil timeUtil;
+	private final StudyValidator studyValidator;
+	private final BusinessHourValidator businessHourValidator;
+	private final CafeReader cafeReader;
+	private final BusinessHourReader businessHourReader;
+	private final StudyEditor studyEditor;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -177,68 +175,27 @@ public class CafeStudyService {
 	// 		throw new CafegoryException(STUDY_ONCE_EARLY_TAKE_ATTENDANCE);
 	// 	}
 	// }
-	//
-	// private CafeStudy findStudyOnceById(long studyOnceId) {
-	// 	return studyOnceRepository.findById(studyOnceId)
-	// 		.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
-	// }
+
+	public CafeStudy findCafeStudyById(long cafeStudyId) {
+		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
+	}
 
 	@Transactional
-	public CafeStudyCreateResponse createStudy(long coordinatorId, CafeStudyCreateRequest request) {
-		validateNameLength(request.getName());
-		validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		validateStartDateTime(request.getStartDateTime());
-		validateStartDate(request.getStartDateTime());
-		validateMaxParticipants(request.getMaxParticipants());
+	public Long createStudy(long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
+		studyValidator.validateStudyCreation(request.getName(), request.getStartDateTime(), now,
+			request.getMaxParticipants());
 
-		Cafe cafe = findCafeById(request.getCafeId());
-		BusinessHour businessHour = businessHourQueryDslRepository.findWithCafeAndDayOfWeek(cafe,
+		Cafe cafe = cafeReader.getById(request.getCafeId());
+		BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
 			request.getStartDateTime().getDayOfWeek());
-
-		validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(), request.getEndDateTime().toLocalTime(),
-			businessHour);
-
+		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
+			request.getEndDateTime().toLocalTime(), businessHour);
 		Member coordinator = findMemberById(coordinatorId);
+		validateStudyScheduleConflict(timeUtil.truncateDateTimeToSecond(request.getEndDateTime()),
+			timeUtil.truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
 
-		validateStudyScheduleConflict(truncateDateTimeToSecond(request.getStartDateTime()),
-			truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
-
-		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(request, cafe, coordinator);
-		CafeStudy saved = cafeStudyRepository.save(cafeStudy);
-		return cafeStudyMapper.toStudyOnceCreateResponse(saved);
-	}
-
-	private void validateStartDate(LocalDateTime startDateTime) {
-		LocalDateTime plusMonths = LOCAL_DATE_TIME_NOW.plusMonths(1);
-		if (startDateTime.isAfter(plusMonths)) {
-			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
-		}
-	}
-
-	private void validateNameLength(String name) {
-		if (name.length() > 20) {
-			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
-		}
-	}
-
-	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = LOCAL_DATE_TIME_NOW;
-		Duration between = Duration.between(now, startDateTime);
-		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
-			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
-		}
-	}
-
-	private void validateMaxParticipants(int maxParticipants) {
-		if (maxParticipants > LIMIT_MEMBER_CAPACITY || maxParticipants < MIN_LIMIT_MEMBER_CAPACITY) {
-			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
-		}
-	}
-
-	private void validateEmptyOrWhiteSpace(String target, ExceptionType exceptionType) {
-		if (target.isBlank()) {
-			throw new CafegoryException(exceptionType);
-		}
+		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
+			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
 	}
 
 	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member coordinator) {
@@ -250,15 +207,6 @@ public class CafeStudyService {
 	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
 		List<CafeStudyMember> participatedStudies = studyMemberRepository.findByMember(member);
 		return participatedStudies.stream().anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
-	}
-
-	private void validateBetweenBusinessHour(LocalTime studyOnceStartTime, LocalTime studyOnceEndTime,
-		BusinessHour businessHour) {
-		boolean isBetweenBusinessHour = openChecker.checkBetweenBusinessHours(businessHour.getOpeningTime(),
-			businessHour.getClosingTime(), studyOnceStartTime, studyOnceEndTime);
-		if (!isBetweenBusinessHour) {
-			throw new CafegoryException(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS);
-		}
 	}
 
 	// @Override
@@ -338,9 +286,5 @@ public class CafeStudyService {
 
 	private Member findMemberById(Long memberId) {
 		return memberRepository.findById(memberId).orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-	}
-
-	private Cafe findCafeById(Long cafeId) {
-		return cafeRepository.findById(cafeId).orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
 }

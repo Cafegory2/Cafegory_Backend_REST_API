@@ -1,16 +1,18 @@
 package com.example.demo.helper;
 
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.implement.cafe.BusinessHour;
-import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.factory.TestBusinessHourFactory;
 import com.example.demo.factory.TestCafeFactory;
+import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.repository.cafe.BusinessHourRepository;
 import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,28 +24,26 @@ public class CafeSaveHelper {
 
 	private final BusinessHourRepository businessHourRepository;
 
+	private final TimeUtil timeUtil;
+
 	//	public Cafe saveCafe() {
 	//		Cafe cafe = TestCafeFactory.createCafe();
 	//		return cafeRepository.save(cafe);
 	//	}
-	//
-	//	public Cafe saveCafeWith7daysFrom9To21() {
-	//		Cafe cafe = TestCafeFactory.createCafe();
-	//		List<BusinessHour> businessHours = createBusinessHoursWith7daysFrom9To21(cafe);
-	//		cafe.changeBusinessHours(businessHours);
-	//		return cafeRepository.save(cafe);
-	//	}
-	//
-	//	private List<BusinessHour> createBusinessHoursWith7daysFrom9To21(Cafe cafe) {
-	//		List<BusinessHour> businessHours = new ArrayList<>();
-	//		List<String> daysOfWeek = generateDaysOfWeek();
-	//		for (String day : daysOfWeek) {
-	//			businessHours.add(
-	//				createBusinessHourWithDayAndTime(cafe, day, LocalTime.of(9, 0), LocalTime.of(21, 0))
-	//			);
-	//		}
-	//		return businessHours;
-	//	}
+
+	public Cafe saveCafeWith7daysFrom9To21() {
+		Cafe cafe = TestCafeFactory.createCafe();
+		makeBusinessHoursWith7daysFrom9To21(cafe);
+		return cafeRepository.save(cafe);
+	}
+
+	private void makeBusinessHoursWith7daysFrom9To21(Cafe cafe) {
+		for (DayOfWeek day : DayOfWeek.values()) {
+			BusinessHour businessHour = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafe, day,
+				LocalTime.of(9, 0), LocalTime.of(21, 0));
+			businessHourRepository.save(businessHour);
+		}
+	}
 
 	public Cafe saveCafeWith24For7() {
 		Cafe cafe = TestCafeFactory.createCafe();
@@ -53,7 +53,8 @@ public class CafeSaveHelper {
 
 	private void makeBusinessHourWith24For7(Cafe cafe) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHour businessHour = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day);
+			BusinessHour businessHour = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day,
+				timeUtil);
 			businessHourRepository.save(businessHour);
 		}
 	}

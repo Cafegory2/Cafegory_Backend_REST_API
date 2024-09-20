@@ -17,14 +17,11 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "business_hour")
@@ -47,6 +44,14 @@ public class BusinessHour extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Cafe cafe;
+
+	@Builder
+	private BusinessHour(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime, Cafe cafe) {
+		this.dayOfWeek = dayOfWeek;
+		this.openingTime = openingTime;
+		this.closingTime = closingTime;
+		this.cafe = cafe;
+	}
 
 	//	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
 	//		try {

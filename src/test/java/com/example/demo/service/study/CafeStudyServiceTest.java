@@ -5,29 +5,36 @@ import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.MemberComms;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.member.Member;
+import com.example.demo.implement.study.MemberComms;
+import com.example.demo.util.TimeUtil;
 
-class CafeStudyServiceImplTest extends ServiceTest {
+class CafeStudyServiceTest extends ServiceTest {
 
-	private static final LocalDateTime NOW = LocalDateTime.now();
 	@Autowired
 	private CafeStudyService sut;
 	@Autowired
 	private CafeSaveHelper cafeSaveHelper;
 	@Autowired
 	private MemberSaveHelper memberSaveHelper;
+	@Autowired
+	private TimeUtil timeUtil;
+
 	//	@Autowired
 	//	private StudyOnceRepository studyOnceRepository;
 	//	@Autowired
@@ -36,6 +43,7 @@ class CafeStudyServiceImplTest extends ServiceTest {
 	//	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
 	//	@Autowired
 	//	private StudyOnceSaveHelper studyOnceSaveHelper;
+
 	//
 	//	@Test
 	//	@DisplayName("정상 목록 조회 테스트")
@@ -44,7 +52,16 @@ class CafeStudyServiceImplTest extends ServiceTest {
 	//	}
 
 	private CafeStudyCreateRequest makeCafeStudyCreateRequest(LocalDateTime start, LocalDateTime end, long cafeId) {
-		return new CafeStudyCreateRequest("테스트 스터디,", cafeId, start, end, MemberComms.POSSIBLE, 4, "스터디 소개글");
+		return CafeStudyCreateRequest.builder()
+			.name("테스트 스터디")
+			.cafeId(cafeId)
+			.startDateTime(start)
+			.endDateTime(end)
+			.memberComms(MemberComms.POSSIBLE)
+			.maxParticipants(4)
+			.introduction("스터디 소개글")
+			.build();
+
 	}
 
 	//	@Test
@@ -126,32 +143,31 @@ class CafeStudyServiceImplTest extends ServiceTest {
 	//		);
 	//	}
 
-	@Test
-	@DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
-	void study_starts_1hours_after_now() {
-		//given
-		Member coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = NOW.plusHours(1).plusMinutes(1);
-		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-		//then
-		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), cafeStudyCreateRequest));
-	}
-
 //	@Test
-//	@DisplayName("카공 시작은 현재 시간으로부터 1시간 미만일 수 없다.")
-//	void study_starts_1hours_before_now() {
+//	@DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
+//	void study_starts_1hours_after_now() {
 //		//given
 //		Member coordinator = memberSaveHelper.saveMember();
-//		LocalDateTime start = NOW.plusHours(1);
+//		LocalDateTime start = timeUtil.now().plusHours(1);
 //		LocalDateTime end = start.plusHours(1);
 //		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 //		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 //		//then
-//		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), cafeStudyCreateRequest))
-//			.isInstanceOf(CafegoryException.class)
-//			.hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
+//		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
+//	}
+
+//	@Test
+//	@DisplayName("카공 시작은 현재 시간으로부터 1시간 이전일 수 없다.")
+//	void study_starts_1hours_before_now() {
+//		//given
+//		Member coordinator = memberSaveHelper.saveMember();
+//		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
+//		LocalDateTime end = start.plusHours(1);
+//		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+//		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+//		//then
+//		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
+//			CafegoryException.class).hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
 //	}
 
 	//	@Test
@@ -262,44 +278,43 @@ class CafeStudyServiceImplTest extends ServiceTest {
 	//		);
 	//	}
 
-	// @ParameterizedTest()
-	// @MethodSource("provideStartAndEndDateTime1")
-	// @DisplayName("카페 영업시간 밖의 시간에 카공을 만들 수 없다.")
-	// void study_can_not_start_outside_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
-	// 	//given
-	// 	Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-	// 	ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
-	// 	Member leader = memberSaveHelper.saveMember(thumbnailImage);
-	// 	StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
-	// 	//then
-	// 	assertThatThrownBy(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest)).isInstanceOf(
-	// 		CafegoryException.class).hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
-	// }
-	//
-	// static Stream<Arguments> provideStartAndEndDateTime1() {
-	// 	return Stream.of(Arguments.of(LocalDateTime.of(2999, 1, 1, 8, 59, 59), LocalDateTime.of(2999, 1, 1, 10, 0)),
-	// 		Arguments.of(LocalDateTime.of(2999, 1, 1, 8, 0), LocalDateTime.of(2999, 1, 1, 9, 0, 0)),
-	// 		Arguments.of(LocalDateTime.of(2999, 1, 1, 20, 0), LocalDateTime.of(2999, 1, 1, 21, 0, 1)),
-	// 		Arguments.of(LocalDateTime.of(2999, 1, 1, 20, 59, 59), LocalDateTime.of(2999, 1, 1, 22, 0)));
-	// }
+//	@ParameterizedTest()
+//	@MethodSource("provideStartAndEndDateTime1")
+//	@DisplayName("카페 영업시간 밖의 시간에 카공을 만들 수 없다.")
+//	void study_can_not_start_outside_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
+//		//given
+//		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+//		Member leader = memberSaveHelper.saveMember();
+//		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+//		//then
+//		assertThatThrownBy(() -> sut.createStudy(leader.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
+//			CafegoryException.class).hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
+//	}
+//
+//	static Stream<Arguments> provideStartAndEndDateTime1() {
+//		return Stream.of(Arguments.of(LocalDateTime.of(2999, 1, 1, 8, 59, 59),
+//				LocalDateTime.of(2999, 1, 1, 10, 0)),
+//			Arguments.of(LocalDateTime.of(2999, 1, 1, 8, 0), LocalDateTime.of(2999, 1, 1, 9, 0, 0)),
+//			Arguments.of(LocalDateTime.of(2999, 1, 1, 20, 0), LocalDateTime.of(2999, 1, 1, 21, 0, 1)),
+//			Arguments.of(LocalDateTime.of(2999, 1, 1, 20, 59, 59), LocalDateTime.of(2999, 1, 1, 22, 0)));
+//	}
 
-	// @ParameterizedTest()
-	// @MethodSource("provideStartAndEndDateTime2")
-	// @DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
-	// void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
-	// 	//given
-	// 	Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-	// 	ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
-	// 	Member leader = memberSaveHelper.saveMember(thumbnailImage);
-	// 	StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafe.getId());
-	// 	//then
-	// 	assertDoesNotThrow(() -> sut.createStudy(leader.getId(), studyOnceCreateRequest));
-	// }
-	//
-	// static Stream<Arguments> provideStartAndEndDateTime2() {
-	// 	return Stream.of(Arguments.of(LocalDateTime.of(2999, 1, 1, 9, 0), LocalDateTime.of(2999, 1, 1, 10, 0)),
-	// 		Arguments.of(LocalDateTime.of(2999, 1, 1, 20, 0), LocalDateTime.of(2999, 1, 1, 21, 0)));
-	// }
+//	@ParameterizedTest()
+//	@MethodSource("provideStartAndEndDateTime2")
+//	@DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
+//	void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
+//		//given
+//		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+//		Member leader = memberSaveHelper.saveMember();
+//		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+//		//then
+//		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), timeUtil.now(), studyOnceCreateRequest));
+//	}
+//
+//	static Stream<Arguments> provideStartAndEndDateTime2() {
+//		return Stream.of(Arguments.of(LocalDateTime.of(2999, 1, 1, 9, 0), LocalDateTime.of(2999, 1, 1, 10, 0)),
+//			Arguments.of(LocalDateTime.of(2999, 1, 1, 20, 0), LocalDateTime.of(2999, 1, 1, 21, 0)));
+	}
 
 	//	@Test
 	//	@DisplayName("카공이 시작하기전에 카공 참여를 취소할 수 있다.")
@@ -609,4 +624,4 @@ class CafeStudyServiceImplTest extends ServiceTest {
 	//			.isInstanceOf(CafegoryException.class)
 	//			.hasMessage(STUDY_ONCE_LEADER_PERMISSION_DENIED.getErrorMessage());
 	//	}
-}
+

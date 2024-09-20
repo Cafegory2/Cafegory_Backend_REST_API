@@ -1,15 +1,21 @@
 package com.example.demo.implement.cafe;
 
-import static com.example.demo.util.TruncatedTimeUtil.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.stereotype.Component;
 
+import com.example.demo.util.TimeUtil;
+
+import lombok.RequiredArgsConstructor;
+
 @Component
-public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
+@RequiredArgsConstructor
+public class BusinessHourOpenChecker {
+
+	private final TimeUtil truncatedTime;
+
 	//
 	//	private boolean checkByNowTime(DayOfWeek dayOfWeek, LocalTime businessStartTime, LocalTime businessEndTime,
 	//		LocalDateTime now) {
@@ -68,13 +74,12 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 
 	public boolean checkBetweenBusinessHours(LocalTime businessStartTime, LocalTime businessEndTime,
 		LocalTime chosenStartTime, LocalTime chosenEndTime) {
-		LocalTime truncatedStartTime = truncateTimeToSecond(chosenStartTime);
-		LocalTime truncatedEndTime = truncateTimeToSecond(chosenEndTime);
+		LocalTime truncatedStartTime = truncatedTime.truncateTimeToSecond(chosenStartTime);
+		LocalTime truncatedEndTime = truncatedTime.truncateTimeToSecond(chosenEndTime);
 
 		// 영업 시작시간이 당일, 영업 종료시간이 당일
 		if (businessStartTime.isBefore(businessEndTime)) {
-			return (businessStartTime.equals(truncatedStartTime) || businessStartTime.isBefore(truncatedStartTime))
-				&& (
+			return (businessStartTime.equals(truncatedStartTime) || businessStartTime.isBefore(truncatedStartTime)) && (
 				businessEndTime.equals(truncatedEndTime) || businessEndTime.isAfter(truncatedEndTime));
 		}
 		// 영업 시작시간이 당일, 영업 종료시간이 다음날
@@ -91,9 +96,8 @@ public class BusinessHourOpenChecker implements OpenChecker<BusinessHour> {
 				LocalDateTime chosenEndDateTime = LocalDateTime.of(date, truncatedEndTime);
 
 				return (businessStartDateTime.isBefore(chosenStartDateTime) || businessStartDateTime.equals(
-					chosenStartDateTime))
-					&& (businessEndDateTime.isAfter(chosenEndDateTime) || businessEndDateTime.equals(
-					chosenEndDateTime));
+					chosenStartDateTime)) && (businessEndDateTime.isAfter(chosenEndDateTime)
+					|| businessEndDateTime.equals(chosenEndDateTime));
 			}
 			// 선택된 시작시간이 당일, 선택된 종료시간이 다음날
 			if (truncatedStartTime.isAfter(truncatedEndTime)) {

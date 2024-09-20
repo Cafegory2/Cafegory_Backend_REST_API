@@ -1,12 +1,11 @@
 package com.example.demo.factory;
 
-import static com.example.demo.util.TruncatedTimeUtil.*;
-
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import com.example.demo.implement.cafe.BusinessHour;
 import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.util.TimeUtil;
 
 public class TestBusinessHourFactory {
 	//
@@ -18,25 +17,26 @@ public class TestBusinessHourFactory {
 	//			.build();
 	//	}
 
-	public static BusinessHour createBusinessHourWithDayAnd24For7(Cafe cafe, DayOfWeek day) {
+	public static BusinessHour createBusinessHourWithDayAnd24For7(Cafe cafe, DayOfWeek day,
+		TimeUtil timeUtil) {
 		return BusinessHour.builder()
 			.dayOfWeek(day)
 			.openingTime(LocalTime.MIN)
-			.closingTime(MAX_LOCAL_TIME)
+			.closingTime(timeUtil.maxLocalTime())
 			.cafe(cafe)
 			.build();
 	}
 
-	//	public static BusinessHour createBusinessHourWithDayAndTime(Cafe cafe, String day, LocalTime startTime,
-	//		LocalTime endTime) {
-	//		return BusinessHour.builder()
-	//			.cafe(cafe)
-	//			.startTime(startTime)
-	//			.endTime(endTime)
-	//			.day(day)
-	//			.build();
-	//	}
-	//
+	public static BusinessHour createBusinessHourWithDayAndTime(Cafe cafe, DayOfWeek day, LocalTime openingTime,
+		LocalTime closingTime) {
+		return BusinessHour.builder()
+			.dayOfWeek(day)
+			.openingTime(openingTime)
+			.closingTime(closingTime)
+			.cafe(cafe)
+			.build();
+	}
+
 	//	public static BusinessHour createBusinessHourWithDayAndTime(String day, LocalTime startTime, LocalTime endTime) {
 	//		return BusinessHour.builder()
 	//			.startTime(startTime)

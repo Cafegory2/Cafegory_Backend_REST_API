@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
-import com.example.demo.implement.tokenmanagerment.TokenClaims;
+import static com.example.demo.exception.ExceptionType.*;
+
+import com.example.demo.util.TimeUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
+import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyService;
+import com.example.demo.validator.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,12 +28,14 @@ import lombok.RequiredArgsConstructor;
 public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
-	private final JwtTokenManager jwtTokenManager;
+	private final TimeUtil timeUtil;
 
 	// private final CafeService cafeService;
 	// private final StudyOnceCommentService studyOnceCommentService;
 	// private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
 	// private final StudyOnceCommentQueryService studyOnceCommentQueryService;
+	private final CafeStudyMapper cafeStudyMapper;
+	private final StudyValidator studyValidator;
 
 	// @GetMapping("/{studyOnceId:[0-9]+}")
 	// public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId,
@@ -51,10 +59,16 @@ public class CafeStudyController {
 
 	@PostMapping("")
 	public ResponseEntity<CafeStudyCreateResponse> create(
-			@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
-			@RequestHeader("Authorization") String authorization) {
-		long memberId = Long.parseLong(jwtTokenManager.verifyAndExtractClaims(authorization).getClaim(TokenClaims.SUBJECT.getValue()));
-		CafeStudyCreateResponse response = cafeStudyService.createStudy(memberId, cafeStudyCreateRequest);
+		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
+		@AuthenticationPrincipal UserDetails userDetails) {
+		Long memberId = Long.parseLong(userDetails.getUsername());
+
+		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+
+		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);
+		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
+		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
+
 		return ResponseEntity.ok(response);
 	}
 

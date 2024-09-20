@@ -10,14 +10,11 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "cafe")
@@ -36,6 +33,14 @@ public class Cafe extends BaseEntity {
 	private Address address;
 
 	private String sns;
+
+	@Builder
+	private Cafe(String name, String mainImageUrl, Address address, String sns) {
+		this.name = name;
+		this.mainImageUrl = mainImageUrl;
+		this.address = address;
+		this.sns = sns;
+	}
 
 	//	public String showFullAddress() {
 	//		return address.showFullAddress();

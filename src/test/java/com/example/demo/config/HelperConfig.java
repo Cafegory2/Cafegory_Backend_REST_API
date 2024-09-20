@@ -22,6 +22,8 @@ public class HelperConfig {
     private MemberRepository memberRepository;
     @Autowired
     private BusinessHourRepository businessHourRepository;
+    @Autowired
+    private FakeTimeUtil fakeTimeUtil;
 //	@Autowired
 //	private StudyMemberRepository studyMemberRepository;
 //	@Autowired
@@ -33,7 +35,7 @@ public class HelperConfig {
 
 	@Bean
 	public CafeSaveHelper cafeSaveHelper() {
-		return new CafeSaveHelper(cafeRepository, businessHourRepository);
+        return new CafeSaveHelper(cafeRepository, businessHourRepository, fakeTimeUtil);
 	}
 
     @Bean
