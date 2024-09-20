@@ -10,15 +10,9 @@ import javax.persistence.Table;
 
 import com.example.demo.implement.BaseEntity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "member")
@@ -33,13 +27,36 @@ public class Member extends BaseEntity {
 	private Role role;
 
 	private String nickname;
+
+	@Column(unique = true)
 	private String email;
+
 	private String profileUrl;
 	private String bio;
 	private int participationCount;
 
 	@Enumerated(EnumType.STRING)
 	private BeverageSize beverageSize;
+
+	@Setter
+	private String refreshToken;
+
+	public void changeProfileUrl(String profileUrl) {
+		this.profileUrl = profileUrl;
+	}
+
+	//TODO 빌더 수정될 수 도 있음.
+	@Builder
+	public Member(Role role, String nickname, String email, String profileUrl, String bio, int participationCount, BeverageSize beverageSize, String refreshToken) {
+		this.role = role;
+		this.nickname = nickname;
+		this.email = email;
+		this.profileUrl = profileUrl;
+		this.bio = bio;
+		this.participationCount = participationCount;
+		this.beverageSize = beverageSize;
+		this.refreshToken = refreshToken;
+	}
 
 	// public void addStudyMember(StudyMember studyMember) {
 	// 	this.studyMembers.add(studyMember);

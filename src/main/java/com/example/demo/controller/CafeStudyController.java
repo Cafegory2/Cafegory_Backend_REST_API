@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import static com.example.demo.exception.ExceptionType.*;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
-import com.example.demo.implement.auth.CafegoryTokenManager;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyService;
@@ -24,8 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/cafe-study")
 @RequiredArgsConstructor
 public class CafeStudyController {
+
 	private final CafeStudyService cafeStudyService;
-	private final CafegoryTokenManager cafegoryTokenManager;
+
 	// private final CafeService cafeService;
 	// private final StudyOnceCommentService studyOnceCommentService;
 	// private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
@@ -56,13 +58,15 @@ public class CafeStudyController {
 	@PostMapping("")
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
-		@RequestHeader("Authorization") String authorization) {
-		long memberId = cafegoryTokenManager.getIdentityId(authorization);
+		@AuthenticationPrincipal UserDetails userDetails) {
+		Long memberId = Long.parseLong(userDetails.getUsername());
+
 		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
 		Long cafeStudyId = cafeStudyService.createStudy(memberId, cafeStudyCreateRequest);
 		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
+
 		return ResponseEntity.ok(response);
 	}
 

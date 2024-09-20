@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-@ToString
 public class KakaoOAuth2Token implements OAuth2Token {
+
 	@JsonProperty("access_token")
 	private String accessToken;
 

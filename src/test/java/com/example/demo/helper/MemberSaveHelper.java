@@ -1,6 +1,5 @@
 package com.example.demo.helper;
 
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.implement.member.Member;
@@ -11,13 +10,17 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Transactional
-@Component
 public class MemberSaveHelper {
 
 	private final MemberRepository memberRepository;
 
 	public Member saveMember() {
 		Member member = TestMemberFactory.createMember();
+		return memberRepository.save(member);
+	}
+
+	public Member saveMember(String email) {
+		Member member = TestMemberFactory.createmember(email);
 		return memberRepository.save(member);
 	}
 

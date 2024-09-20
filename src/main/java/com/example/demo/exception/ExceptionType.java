@@ -10,10 +10,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum ExceptionType {
+
 	JWT_EXPIRED(UNAUTHORIZED, "JWT 토큰이 만료되었습니다."),
-	JWT_DESTROYED(UNAUTHORIZED, "JWT 토큰이 잘못되었습니다."),
+	JWT_INVALID(UNAUTHORIZED, "JWT 토큰이 유효하지 않습니다."),
+	JWT_CLAIM_INVALID(UNAUTHORIZED, "JWT의 클레임이 유효하지 않습니다."),
+	JWT_SUBJECT_NOT_FOUND(UNAUTHORIZED, "JWT 토큰의 사용자 ID(sub)가 DB에 존재하지 않습니다."),
+	JWT_ACCESS_SUB_AND_REFRESH_SUB_NOT_MATCHED(UNAUTHORIZED, "JWT 액세스 토큰과 리프레시 토큰의 사용자 ID(sub)가 일치하지 않습니다."),
+	JWT_REFRESH_MEMBER_NOT_FOUND(NOT_FOUND, "JWT 리프레시 토큰의 memberId는 존재하나, DB에 해당 회원이 존재하지 않습니다."),
+	JWT_REFRESH_MEMBER_ID_MISMATCH(UNAUTHORIZED, "JWT 리프레시 토큰의 memberId는 존재하나 DB의 memberId와 일치하지 않음"),
+	JWT_ACCESS_TOKEN_MISSING(BAD_REQUEST,"액세스 토큰이 누락되었습니다."),
+	JWT_REFRESH_TOKEN_MISSING(BAD_REQUEST,"리프레시 토큰이 누락되었습니다."),
+	JWT_INVALID_FORMAT(UNAUTHORIZED, "JWT 토큰 포맷이 유효하지 않습니다."),
+
 	TOKEN_NOT_FOUND(UNAUTHORIZED, "토큰이 없습니다."),
 	TOKEN_REFRESH_REJECT(UNAUTHORIZED, "토큰을 재발행할 수 없습니다."),
+
 	CAFE_STUDY_INVALID_NAME(BAD_REQUEST, "카공 이름은 20자 이하로만 작성할 수 있습니다"),
 	STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS(BAD_REQUEST, "카공 생성시 시작시간과 종료시간은 카페 영업시간내에 포함되어야 합니다."),
 	STUDY_ONCE_WRONG_START_TIME(BAD_REQUEST, "카공 시작 시간은 현재 시간보다 최소 1시간 이후여야 합니다."),
@@ -44,16 +55,22 @@ public enum ExceptionType {
 	STUDY_ONCE_PARENT_COMMENT_REMOVAL_BLOCKED(FORBIDDEN, "답변이 존재하는 질문은 삭제 할 수 없습니다."),
 	STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디 이름은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디의 오픈채팅방 URL은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
+
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
+	MEMBER_ALREADY_EXISTS(BAD_REQUEST, "해당 이메일로 이미 회원가입이 되어 있습니다."),
+
 	REVIEW_NOT_FOUND(NOT_FOUND, "없는 리뷰입니다."),
 	REVIEW_OVER_CONTENT_SIZE(BAD_REQUEST, "리뷰 글자수가 최대 글자수 이하여야 합니다."),
 	REVIEW_INVALID_MEMBER(FORBIDDEN, "자신이 작성한 리뷰만 수정할 수 있습니다."),
 	REVIEW_CONTENT_EMPTY_OR_WHITESPACE(BAD_REQUEST, "리뷰 내용은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	REVIEW_INVALID_RATE_RANGE(BAD_REQUEST, "평점이 허용된 범위를 벗어났습니다."),
+
 	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
 	CAFE_INVALID_BUSINESS_TIME_RANGE(BAD_REQUEST, "영업시간이 허용된 범위를 벗어났습니다."),
 	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다."),
+
 	STUDY_MEMBER_NOT_FOUND(NOT_FOUND, "없는 스터디멤버입니다."),
+
 	PROFILE_GET_PERMISSION_DENIED(FORBIDDEN, "프로필을 조회할 권한이 없는 상대입니다."),
 	PROFILE_UPDATE_PERMISSION_DENIED(FORBIDDEN, "자신의 프로필만 조회할 수 있습니다."),
 	PROFILE_UPDATE_INVALID_INTRODUCTION(FORBIDDEN, "자기 소개글은 300자 이하로만 작성할 수 있습니다.");

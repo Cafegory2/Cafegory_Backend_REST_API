@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Transactional
-@Component
 public class CafeSaveHelper {
 
 	private final CafeRepository cafeRepository;

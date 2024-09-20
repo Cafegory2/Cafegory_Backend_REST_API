@@ -2,6 +2,7 @@ package com.example.demo.factory;
 
 import static com.example.demo.implement.member.BeverageSize.*;
 
+import com.example.demo.implement.member.BeverageSize;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.Role;
 
@@ -13,6 +14,28 @@ public class TestMemberFactory {
 			.nickname("김동현")
 			.email("cafegory@gmail.com")
 			.profileUrl("프로필 이미지")
+			.bio("자기 소개글")
+			.beverageSize(TALL)
+			.build();
+	}
+
+	public static Member createmember(String email) {
+		return Member.builder()
+			.role(Role.USER)
+			.nickname("김동현")
+			.email(email)
+			.profileUrl("프로필 이미지")
+			.bio("자기 소개글")
+			.beverageSize(TALL)
+			.build();
+	}
+
+	public static Member createMember(String nickname, String profileUrl) {
+		return Member.builder()
+			.role(Role.USER)
+			.nickname(nickname)
+			.email("cafegory@gmail.com")
+			.profileUrl(profileUrl)
 			.bio("자기 소개글")
 			.beverageSize(TALL)
 			.build();
