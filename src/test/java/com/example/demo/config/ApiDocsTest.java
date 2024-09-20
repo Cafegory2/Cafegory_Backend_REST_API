@@ -15,9 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @ExtendWith(RestDocumentationExtension.class)
-public class ApiDocsTest {
+public class ApiDocsTest extends TestContainer{
 
     @LocalServerPort
     private int port;

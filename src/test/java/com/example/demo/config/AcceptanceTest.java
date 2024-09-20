@@ -8,8 +8,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("local")
-public class AcceptanceTest {
+@ActiveProfiles("test")
+public class AcceptanceTest extends TestContainer{
 
     @LocalServerPort
     private int port;
