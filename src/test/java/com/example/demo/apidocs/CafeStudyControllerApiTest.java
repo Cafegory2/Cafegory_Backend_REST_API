@@ -4,7 +4,6 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 import io.restassured.RestAssured;
