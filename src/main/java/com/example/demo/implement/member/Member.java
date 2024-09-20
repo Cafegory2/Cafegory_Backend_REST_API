@@ -35,7 +35,10 @@ public class Member extends BaseEntity {
 	private Role role;
 
 	private String nickname;
+
+	@Column(unique = true)
 	private String email;
+
 	private String profileUrl;
 	private String bio;
 	private int participationCount;
@@ -46,6 +49,10 @@ public class Member extends BaseEntity {
 
 	@Setter
 	private String refreshToken;
+
+	public void changeProfileUrl(String profileUrl) {
+		this.profileUrl = profileUrl;
+	}
 
 	// public void addStudyMember(StudyMember studyMember) {
 	// 	this.studyMembers.add(studyMember);

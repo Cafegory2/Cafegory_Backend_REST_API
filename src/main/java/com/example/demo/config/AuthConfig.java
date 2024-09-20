@@ -1,14 +1,14 @@
 package com.example.demo.config;
 
-import com.example.demo.implement.auth.JwtCafegoryTokenManager;
+import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import com.example.demo.dto.oauth2.OAuth2Provider;
-import com.example.demo.implement.oauth2.*;
+import com.example.demo.infrastructure.oauth2.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.implement.auth.JwtManager;
+import com.example.demo.implement.tokenmanagerment.JwtTokenManager;
 
 import java.util.Map;
 
@@ -19,8 +19,8 @@ public class AuthConfig {
     private String jwtSecret;
 
     @Bean
-    public JwtManager jwtManager() {
-        return new JwtManager(jwtSecret);
+    public JwtTokenManager jwtManager() {
+        return new JwtTokenManager(jwtSecret);
     }
 
     @Bean
@@ -69,5 +69,15 @@ public class AuthConfig {
                 OAuth2Provider.KAKAO, kakaoOAuth2ProfileRequester(),
                 OAuth2Provider.NAVER, naverOAuth2ProfileRequester()
         );
+    }
+
+    @Bean
+    public OAuth2StrategyFactory oAuth2StrategyFactory() {
+        return new OAuth2StrategyFactory(tokenRequesterMap(), profileRequesterMap());
+    }
+
+    @Bean
+    public OAuth2HandlerImpl oAuth2Handler() {
+        return new OAuth2HandlerImpl(oAuth2StrategyFactory());
     }
 }
