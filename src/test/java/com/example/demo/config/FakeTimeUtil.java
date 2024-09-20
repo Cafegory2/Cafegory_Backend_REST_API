@@ -20,6 +20,7 @@ public class FakeTimeUtil implements TimeUtil {
 
 	@Override
 	public LocalDateTime now() {
+//		return truncateDateTimeToSecond(LocalDateTime.now());
 		return LocalDateTime.of(2999, 1, 1, 5, 59, 59);
 	}
 

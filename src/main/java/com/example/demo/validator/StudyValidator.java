@@ -6,6 +6,7 @@ import static com.example.demo.implement.study.CafeStudy.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class StudyValidator {
 
 	private static final int MAX_STUDY_NAME_LENGTH = 20;
@@ -28,9 +30,9 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStudyCreation(String name, LocalDateTime startDateTime, int maxParticipants) {
+	public void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime, int maxParticipants) {
 		validateNameLength(name);
-		validateStartDateTime(startDateTime);
+		validateStartDateTime(now, startDateTime);
 		validateStartDate(startDateTime);
 		validateMaxParticipants(maxParticipants);
 	}
@@ -41,10 +43,11 @@ public class StudyValidator {
 		}
 	}
 
-	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = timeUtil.now();
+	private void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
+//		LocalDateTime now = timeUtil.now();
 		Duration between = Duration.between(now, startDateTime);
 		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
+			log.info("between.toSeconds(): {}",between.toSeconds());
 			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
 		}
 	}

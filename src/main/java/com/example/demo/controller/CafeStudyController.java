@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import com.example.demo.util.TimeUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
+	private final TimeUtil timeUtil;
 
 	// private final CafeService cafeService;
 	// private final StudyOnceCommentService studyOnceCommentService;
@@ -63,7 +65,7 @@ public class CafeStudyController {
 
 		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
-		Long cafeStudyId = cafeStudyService.createStudy(memberId, cafeStudyCreateRequest);
+		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);
 		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
 
