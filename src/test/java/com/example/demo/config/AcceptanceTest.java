@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.helper.MemberSignupAcceptanceTestHelper;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import({HelperConfig.class})
+@Import({HelperConfig.class, SignupAcceptanceTestConfig.class})
 public class AcceptanceTest extends TestContainer {
 
     @LocalServerPort

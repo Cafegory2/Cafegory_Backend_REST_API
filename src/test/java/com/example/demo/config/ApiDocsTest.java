@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.helper.MemberSignupAcceptanceTestHelper;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
@@ -17,7 +18,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import({HelperConfig.class})
+@Import({HelperConfig.class, SignupAcceptanceTestConfig.class})
 @ExtendWith(RestDocumentationExtension.class)
 public class ApiDocsTest extends TestContainer{
 

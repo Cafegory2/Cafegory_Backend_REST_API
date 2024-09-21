@@ -1,11 +1,15 @@
 package com.example.demo.implement.token;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class JwtAccessToken {
 
-    private final String accessToken;
+    private String accessToken;
+
+    @Builder
+    private JwtAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

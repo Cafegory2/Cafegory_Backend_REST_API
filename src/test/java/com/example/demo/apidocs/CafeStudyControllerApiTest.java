@@ -38,7 +38,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
         params.put("maxParticipants", String.valueOf(4));
         params.put("introduction", "카페고리 스터디 소개글");
 
-        JwtToken jwtToken = memberSignupHelper.로그인_되어_있음("test@gmail.com", "testNickname");
+        JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
 
         RestAssured.given(spec).log().all()
             .filter(RestAssuredRestDocumentationWrapper.document(
@@ -51,7 +51,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
             .header("Authorization", "Bearer " + jwtToken.getAccessToken())
             .body(params)
             .when()
-            .post("/cafe-study/")
+            .post("/cafe-study")
             .then().log().all()
             .statusCode(200);
     }
