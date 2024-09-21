@@ -51,7 +51,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
             .header("Authorization", "Bearer " + jwtToken.getAccessToken())
             .body(params)
             .when()
-            .post("/cafe-study/")
+            .post("/cafe-study")
             .then().log().all()
             .statusCode(200);
     }
