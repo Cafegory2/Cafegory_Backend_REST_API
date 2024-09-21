@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.helper.MemberSignupAcceptanceTestHelper;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;

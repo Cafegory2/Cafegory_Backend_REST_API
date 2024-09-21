@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.helper;
 
 import com.example.demo.implement.token.JwtToken;
 import io.restassured.RestAssured;
@@ -29,6 +29,7 @@ public class MemberSignupAcceptanceTestHelper {
 
         return RestAssured.given().log().all()
             .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
             .queryParams(params)
             .when()
             .get("/login/kakao")

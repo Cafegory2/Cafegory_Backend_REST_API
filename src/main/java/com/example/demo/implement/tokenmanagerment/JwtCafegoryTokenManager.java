@@ -29,7 +29,9 @@ public final class JwtCafegoryTokenManager {
 
     public JwtAccessToken createAccessToken(final Map<String, Object> memberInformation) {
         Date issuedAt = Date.from(Instant.now());
-        return new JwtAccessToken(createAccessToken(memberInformation, issuedAt));
+        return JwtAccessToken.builder()
+            .accessToken(createAccessToken(memberInformation, issuedAt))
+            .build();
     }
 
     private String createAccessToken(final Map<String, Object> claims, final Date issuedAt) {
