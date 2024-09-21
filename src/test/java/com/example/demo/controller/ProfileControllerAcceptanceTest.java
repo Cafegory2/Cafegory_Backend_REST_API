@@ -21,11 +21,11 @@ class ProfileControllerAcceptanceTest extends AcceptanceTest {
     @Test
     @DisplayName("회원가입 환영 페이지에 알맞는 데이터를 조회한다.")
     void welcome() {
-        JwtToken jwtToken = memberSignupHelper.로그인_되어_있음("test@gmail.com", "testNickname");
+        JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
 
         ExtractableResponse<Response> welcomeResponse = 회원가입_환영_페이지_데이터_조회_요청(jwtToken.getAccessToken());
 
-        회원가입_환영_페이지_데이터_조회됨(welcomeResponse, "testNickname");
+        회원가입_환영_페이지_데이터_조회됨(welcomeResponse);
     }
 
     public static ExtractableResponse<Response> 회원가입_환영_페이지_데이터_조회_요청(String accessToken) {
@@ -39,10 +39,10 @@ class ProfileControllerAcceptanceTest extends AcceptanceTest {
             .extract();
     }
 
-    public static void 회원가입_환영_페이지_데이터_조회됨(ExtractableResponse<Response> response, String nickname) {
+    public static void 회원가입_환영_페이지_데이터_조회됨(ExtractableResponse<Response> response) {
         WelcomeProfileResponse welcomeProfileResponse = response.as(WelcomeProfileResponse.class);
 
-        assertThat(welcomeProfileResponse.getNickname()).isEqualTo(nickname);
-        assertThat(welcomeProfileResponse.getProfileUrl()).isNull();
+        assertThat(welcomeProfileResponse.getNickname()).isEqualTo("testNickname");
+        assertThat(welcomeProfileResponse.getProfileUrl()).isNotNull();
     }
 }

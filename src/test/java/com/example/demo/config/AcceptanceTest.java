@@ -10,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import({HelperConfig.class})
+@Import({HelperConfig.class, SignupAcceptanceTestConfig.class})
 public class AcceptanceTest extends TestContainer {
 
     @LocalServerPort
