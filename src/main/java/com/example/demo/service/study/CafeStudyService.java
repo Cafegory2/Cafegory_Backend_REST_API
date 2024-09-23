@@ -176,12 +176,12 @@ public class CafeStudyService {
 	// 	}
 	// }
 
-	public CafeStudy findCafeStudyById(long cafeStudyId) {
+	public CafeStudy findCafeStudyById(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 	}
 
 	@Transactional
-	public Long createStudy(long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
+	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
 		studyValidator.validateStudyCreation(request.getName(), now, request.getStartDateTime(),
 			request.getMaxParticipants());
 
