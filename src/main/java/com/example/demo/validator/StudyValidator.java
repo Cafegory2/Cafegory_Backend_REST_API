@@ -3,7 +3,6 @@ package com.example.demo.validator;
 import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.implement.study.CafeStudy.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
@@ -13,9 +12,11 @@ import com.example.demo.exception.ExceptionType;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class StudyValidator {
 
 	private static final int MAX_STUDY_NAME_LENGTH = 20;
@@ -28,9 +29,10 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStudyCreation(String name, LocalDateTime startDateTime, int maxParticipants) {
+	public void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime,
+		int maxParticipants) {
 		validateNameLength(name);
-		validateStartDateTime(startDateTime);
+		validateStartDateTime(now, startDateTime);
 		validateStartDate(startDateTime);
 		validateMaxParticipants(maxParticipants);
 	}
@@ -41,10 +43,10 @@ public class StudyValidator {
 		}
 	}
 
-	private void validateStartDateTime(LocalDateTime startDateTime) {
-		LocalDateTime now = timeUtil.now();
-		Duration between = Duration.between(now, startDateTime);
-		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
+	private void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
+		LocalDateTime nowPlusHour = now.plusSeconds(MIN_DELAY_BEFORE_START - 1);
+
+		if (!startDateTime.isAfter(nowPlusHour)) {
 			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
 		}
 	}
