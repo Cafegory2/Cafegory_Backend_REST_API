@@ -2,14 +2,12 @@ package com.example.demo.controller;
 
 import static com.example.demo.exception.ExceptionType.*;
 
-import com.example.demo.util.TimeUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,6 +16,7 @@ import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyService;
+import com.example.demo.util.TimeUtil;
 import com.example.demo.validator.StudyValidator;
 
 import lombok.RequiredArgsConstructor;

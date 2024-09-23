@@ -182,7 +182,7 @@ public class CafeStudyService {
 
 	@Transactional
 	public Long createStudy(long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
-		studyValidator.validateStudyCreation(request.getName(), request.getStartDateTime(), now,
+		studyValidator.validateStudyCreation(request.getName(), now, request.getStartDateTime(),
 			request.getMaxParticipants());
 
 		Cafe cafe = cafeReader.getById(request.getCafeId());
