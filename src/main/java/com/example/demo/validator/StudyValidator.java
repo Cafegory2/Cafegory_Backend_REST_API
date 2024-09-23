@@ -29,21 +29,13 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime,
-		int maxParticipants) {
-		validateNameLength(name);
-		validateStartDateTime(now, startDateTime);
-		validateStartDate(startDateTime);
-		validateMaxParticipants(maxParticipants);
-	}
-
-	private void validateNameLength(String name) {
+	public void validateNameLength(String name) {
 		if (name.length() > MAX_STUDY_NAME_LENGTH) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
 		}
 	}
 
-	private void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
+	public void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
 		LocalDateTime nowPlusHour = now.plusSeconds(MIN_DELAY_BEFORE_START - 1);
 
 		if (!startDateTime.isAfter(nowPlusHour)) {
@@ -51,14 +43,14 @@ public class StudyValidator {
 		}
 	}
 
-	private void validateStartDate(LocalDateTime startDateTime) {
+	public void validateStartDate(LocalDateTime startDateTime) {
 		LocalDateTime plusMonths = timeUtil.now().plusMonths(1);
 		if (startDateTime.isAfter(plusMonths)) {
 			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
 		}
 	}
 
-	private void validateMaxParticipants(int maxParticipants) {
+	public void validateMaxParticipants(int maxParticipants) {
 		if (maxParticipants > LIMIT_MEMBER_CAPACITY || maxParticipants < MIN_LIMIT_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}

@@ -182,8 +182,7 @@ public class CafeStudyService {
 
 	@Transactional
 	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
-		studyValidator.validateStudyCreation(request.getName(), now, request.getStartDateTime(),
-			request.getMaxParticipants());
+		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
 
 		Cafe cafe = cafeReader.getById(request.getCafeId());
 		BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
@@ -196,6 +195,14 @@ public class CafeStudyService {
 
 		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
 			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
+	}
+
+	private void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime,
+		int maxParticipants) {
+		studyValidator.validateNameLength(name);
+		studyValidator.validateStartDateTime(now, startDateTime);
+		studyValidator.validateStartDate(startDateTime);
+		studyValidator.validateMaxParticipants(maxParticipants);
 	}
 
 	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member coordinator) {
