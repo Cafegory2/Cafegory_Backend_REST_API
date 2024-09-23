@@ -145,8 +145,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() ->
-			sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
+		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
 	}
 
 	@Test
@@ -162,6 +161,34 @@ class CafeStudyServiceTest extends ServiceTest {
 		assertThatThrownBy(
 			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
 			CafegoryException.class).hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
+	}
+
+	@Test
+	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
+	void study_start_date_before_one_month() {
+		//given
+		Member coordinator = memberSaveHelper.saveMember();
+		LocalDateTime start = timeUtil.now().plusMonths(1);
+		LocalDateTime end = start.plusHours(1);
+		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+		//then
+		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
+	}
+
+	@Test
+	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
+	void study_start_date_after_one_month() {
+		//given
+		Member coordinator = memberSaveHelper.saveMember();
+		LocalDateTime start = timeUtil.now().plusMonths(1).plusDays(1);
+		LocalDateTime end = start.plusHours(1);
+		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+		//then
+		assertThatThrownBy(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
+			CafegoryException.class).hasMessage(CAFE_STUDY_WRONG_START_DATE.getErrorMessage());
 	}
 
 	//	@Test
@@ -286,8 +313,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	}
 
 	static Stream<Arguments> provideStartAndEndDateTime1() {
-		return Stream.of(
-			Arguments.of(LocalDateTime.of(2000, 1, 1, 8, 59, 59), LocalDateTime.of(2000, 1, 1, 10, 0)),
+		return Stream.of(Arguments.of(LocalDateTime.of(2000, 1, 1, 8, 59, 59), LocalDateTime.of(2000, 1, 1, 10, 0)),
 			Arguments.of(LocalDateTime.of(2000, 1, 1, 8, 0), LocalDateTime.of(2000, 1, 1, 9, 0, 0)),
 			Arguments.of(LocalDateTime.of(2000, 1, 1, 20, 0), LocalDateTime.of(2000, 1, 1, 21, 0, 1)),
 			Arguments.of(LocalDateTime.of(2000, 1, 1, 20, 59, 59), LocalDateTime.of(2000, 1, 1, 22, 0)));
