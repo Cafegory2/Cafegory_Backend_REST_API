@@ -3,10 +3,8 @@ package com.example.demo.validator;
 import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.implement.study.CafeStudy.*;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
@@ -14,6 +12,7 @@ import com.example.demo.exception.ExceptionType;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
@@ -30,36 +29,28 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime, int maxParticipants) {
-		validateNameLength(name);
-		validateStartDateTime(now, startDateTime);
-		validateStartDate(startDateTime);
-		validateMaxParticipants(maxParticipants);
-	}
-
-	private void validateNameLength(String name) {
+	public void validateNameLength(String name) {
 		if (name.length() > MAX_STUDY_NAME_LENGTH) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
 		}
 	}
 
-	private void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
-//		LocalDateTime now = timeUtil.now();
-		Duration between = Duration.between(now, startDateTime);
-		if (between.toSeconds() < MIN_DELAY_BEFORE_START) {
-			log.info("between.toSeconds(): {}",between.toSeconds());
+	public void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
+		LocalDateTime nowPlusHour = now.plusSeconds(MIN_DELAY_BEFORE_START - 1);
+
+		if (!startDateTime.isAfter(nowPlusHour)) {
 			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
 		}
 	}
 
-	private void validateStartDate(LocalDateTime startDateTime) {
+	public void validateStartDate(LocalDateTime startDateTime) {
 		LocalDateTime plusMonths = timeUtil.now().plusMonths(1);
 		if (startDateTime.isAfter(plusMonths)) {
 			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
 		}
 	}
 
-	private void validateMaxParticipants(int maxParticipants) {
+	public void validateMaxParticipants(int maxParticipants) {
 		if (maxParticipants > LIMIT_MEMBER_CAPACITY || maxParticipants < MIN_LIMIT_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}
