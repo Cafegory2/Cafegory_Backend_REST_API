@@ -75,7 +75,7 @@ public class CafeStudy extends BaseEntity {
 	@Builder
 	private CafeStudy(Long id, String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
 		MemberComms memberComms, int maxParticipants, String introduction) {
-		this.id = id;
+		//TODO Builder에서 id 제거
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;

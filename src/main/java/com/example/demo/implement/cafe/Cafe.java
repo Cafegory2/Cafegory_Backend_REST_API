@@ -1,18 +1,17 @@
 package com.example.demo.implement.cafe;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
 
+import com.example.demo.implement.study.CafeStudyMember;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,6 +32,9 @@ public class Cafe extends BaseEntity {
 	private Address address;
 
 	private String sns;
+
+	@OneToMany(mappedBy = "cafe")
+	private List<CafeKeyword> cafeKeywords = new ArrayList<>();
 
 	@Builder
 	private Cafe(String name, String mainImageUrl, Address address, String sns) {
