@@ -22,12 +22,15 @@ public class CafeStudySaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeRepository cafeRepository;
 
-//	public StudyOnce saveStudyOnce(Cafe cafe, Member leader) {
-//		Member mergedMember = memberRepository.save(leader);
-//		Cafe mergedCafe = cafeRepository.save(cafe);
-//		StudyOnce studyOnce = TestStudyOnceFactory.createStudyOnce(mergedCafe, mergedMember);
-//		return cafeStudyRepository.save(studyOnce);
-//	}
+	public CafeStudy saveCafeStudy(Cafe cafe, Member leader, LocalDateTime startDateTime,
+										   LocalDateTime endDateTime) {
+		Member mergedLeader = memberRepository.save(leader);
+		Cafe mergedCafe = cafeRepository.save(cafe);
+
+		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
+			endDateTime);
+		return cafeStudyRepository.save(cafeStudy);
+	}
 
 	public CafeStudy saveCafeStudyWithName(Cafe cafe, Member leader, LocalDateTime startDateTime,
 										   LocalDateTime endDateTime, String cafeStudyName) {

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -36,6 +37,12 @@ public class FakeTimeUtil implements TimeUtil {
 	public LocalDateTime now() {
 		return fixedLocalDateTime;
 	}
+
+	@Override
+	public LocalDate localDate(int year, int month, int day) {
+		return LocalDate.of(year, month, day);
+	}
+
 
 	@Override
 	public LocalTime truncateTimeToSecond(LocalTime time) {

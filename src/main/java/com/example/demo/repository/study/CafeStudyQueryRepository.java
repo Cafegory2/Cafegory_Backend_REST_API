@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
@@ -18,15 +19,25 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CafeStudy> findCafeStudies(String keyword) {
+    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date) {
         return queryFactory
             .select(cafeStudy).distinct()
             .from(cafeStudy)
             .join(cafeStudy.cafe, cafe).fetchJoin()
             .where(
-                keywordContains(keyword).or(cafeStudyNameContains(keyword))
+                keywordContains(keyword)
+                    .or(cafeStudyNameContains(keyword)),
+                dateEq(date)
             )
             .fetch();
+    }
+
+    private BooleanExpression dateEq(LocalDate date) {
+        if(date == null) return null;
+
+        return cafeStudy.studyPeriod.startDateTime.year().eq(date.getYear())
+            .and(cafeStudy.studyPeriod.startDateTime.month().eq(date.getMonthValue()))
+            .and(cafeStudy.studyPeriod.startDateTime.dayOfMonth().eq(date.getDayOfMonth()));
     }
 
     private BooleanExpression keywordContains(String keyword) {

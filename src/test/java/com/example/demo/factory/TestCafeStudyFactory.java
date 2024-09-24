@@ -11,6 +11,19 @@ import static com.example.demo.implement.study.MemberComms.POSSIBLE;
 
 public class TestCafeStudyFactory {
 
+	public static CafeStudy createCafeStudy(Cafe cafe, Member leader,
+													LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		return CafeStudy.builder()
+			.name("카페고리 스터디")
+			.cafe(cafe)
+			.coordinator(leader)
+			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
+			.memberComms(POSSIBLE)
+			.maxParticipants(5)
+			.introduction("카페고리 스터디입니다.")
+			.build();
+	}
+
 	public static CafeStudy createCafeStudyWithName(Cafe cafe, Member leader,
 													LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
 		return CafeStudy.builder()
@@ -30,20 +43,4 @@ public class TestCafeStudyFactory {
 			.endDateTime(endDateTime)
 			.build();
 	}
-
-//
-//	public static StudyOnce createStudyOnceWithTimeAndLeader(LocalDateTime startDateTime,
-//		LocalDateTime endDateTime, Member leader) {
-//		return StudyOnce.builder()
-//			.name("카페 스터디")
-//			.startDateTime(startDateTime)
-//			.endDateTime(endDateTime)
-//			.maxMemberCount(5)
-//			.nowMemberCount(0)
-//			.isEnd(false)
-//			.ableToTalk(true)
-//			.openChatUrl("오픈채팅방 링크")
-//			.leader(leader)
-//			.build();
-//	}
 }

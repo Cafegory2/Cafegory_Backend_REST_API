@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -17,6 +18,11 @@ public class DefaultTimeUtil implements TimeUtil {
 	@Override
 	public LocalDateTime now() {
 		return LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+	}
+
+	@Override
+	public LocalDate localDate(int year, int month, int day) {
+		return LocalDate.of(year, month, day);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -43,8 +44,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
     @ParameterizedTest
     @MethodSource("provideKeywords1")
-    @DisplayName("검색어로 카공을 조회한다.")
-    void find_cafe_by_keyword(String keyword, int expected) {
+    @DisplayName("검색어로 카공목록을 조회한다.")
+    void find_cafe_studies_by_keyword(String keyword, int expected) {
         //given
         Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
@@ -59,7 +60,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         Member member = memberSaveHelper.saveMember();
 
-        LocalDateTime startDateTime = timeUtil.truncateDateTimeToSecond(LocalDateTime.now().plusHours(2));
+        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
         LocalDateTime endDateTime = startDateTime.plusHours(2);
 
         cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime, endDateTime, "카페고리 스터디1");
@@ -67,16 +68,16 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2), "카페고리 스터디2");
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies(keyword);
+        List<CafeStudy> cafes = sut.findCafeStudies(keyword, null);
         //then
         assertThat(cafes.size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideKeywords1() {
-		return Stream.of(
+        return Stream.of(
             //Cafe1과 Cafe2 둘다 관련된 테스트
-			Arguments.of("강남", 3),
-			Arguments.of("강남 ", 3),
+            Arguments.of("강남", 3),
+            Arguments.of("강남 ", 3),
             Arguments.of("스타벅스", 3),
             Arguments.of("스타벅스 ", 3),
             Arguments.of("카페고리", 2),
@@ -92,11 +93,120 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
             //Cafe2와 관련된 테스트
             Arguments.of("신논현", 1),
-			Arguments.of("스타벅스 신논현역", 1),
-			Arguments.of("스타벅스 신논현역점", 1),
-			Arguments.of("스타벅스신논현역점", 1),
-			Arguments.of("반포동", 1),
-			Arguments.of("카페고리 스터디2", 1)
-		);
-	}
+            Arguments.of("스타벅스 신논현역", 1),
+            Arguments.of("스타벅스 신논현역점", 1),
+            Arguments.of("스타벅스신논현역점", 1),
+            Arguments.of("반포동", 1),
+            Arguments.of("카페고리 스터디2", 1)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideTime1")
+    @DisplayName("특정 날짜로 필터링한 카공 목록을 조회한다.")
+    void find_cafe_studies_by_start_date_time(
+        LocalDateTime startFor1, LocalDateTime endFor1,
+        LocalDateTime startFor2, LocalDateTime endFor2,
+        LocalDateTime startFor3, LocalDateTime endFor3,
+        LocalDate specificDate, int expected
+    ) {
+        //given
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith24For7();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+
+        Cafe cafe2 = cafeSaveHelper.saveCafeWith24For7();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+
+        Member member = memberSaveHelper.saveMember();
+
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startFor1, endFor1);
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startFor2, endFor2);
+
+        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
+        //when
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", specificDate);
+        //then
+        assertThat(cafes.size()).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideTime1() {
+        TimeUtil timeUtil = new FakeTimeUtil();
+
+        return Stream.of(
+            Arguments.of(
+                // 첫번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                // 두번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                // 세번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 1),
+                // 기댓값
+                2
+            ),
+            Arguments.of(
+                // 첫번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                // 두번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                // 세번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 2),
+                // 기댓값
+                1
+            ),
+            Arguments.of(
+                // 첫번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                // 두번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                // 세번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 3),
+                // 기댓값
+                0
+            ),
+            Arguments.of(
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 22, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 59, 59)),
+                // 두번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 1, 0, 0)),
+                // 세번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 0, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 2, 0, 0)),
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 1),
+                // 기댓값
+                2
+            ),
+            Arguments.of(
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 22, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 59, 59)),
+                // 두번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 1, 0, 0)),
+                // 세번째 카공 스터디
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 0, 0, 0)),
+                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 2, 0, 0)),
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 2),
+                // 기댓값
+                1
+            )
+        );
+    }
+
 }
