@@ -190,7 +190,7 @@ public class CafeStudyService {
 		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
 			request.getEndDateTime().toLocalTime(), businessHour);
 		Member coordinator = findMemberById(coordinatorId);
-		validateStudyScheduleConflict(timeUtil.truncateDateTimeToSecond(request.getEndDateTime()),
+		validateStudyScheduleConflict(timeUtil.truncateDateTimeToSecond(request.getStartDateTime()),
 			timeUtil.truncateDateTimeToSecond(request.getEndDateTime()), coordinator);
 
 		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
