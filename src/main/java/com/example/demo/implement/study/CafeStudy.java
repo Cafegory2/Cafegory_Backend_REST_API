@@ -55,10 +55,6 @@ public class CafeStudy extends BaseEntity {
 	@OneToMany(mappedBy = "cafeStudy")
 	private List<CafeStudyMember> cafeStudyMembers = new ArrayList<>();
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudyTag cafeStudyTag;
-
 	// TODO: 기획 확정 후 enum 생성하기
 	// @Transient
 	// private Category category;
