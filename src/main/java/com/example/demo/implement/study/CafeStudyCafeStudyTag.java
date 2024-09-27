@@ -2,6 +2,7 @@ package com.example.demo.implement.study;
 
 import com.example.demo.implement.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,10 @@ public class CafeStudyCafeStudyTag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CafeStudyTag cafeStudyTag;
+
+    @Builder
+    public CafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
+        this.cafeStudy = cafeStudy;
+        this.cafeStudyTag = cafeStudyTag;
+    }
 }

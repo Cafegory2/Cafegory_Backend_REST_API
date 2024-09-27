@@ -2,13 +2,12 @@ package com.example.demo.repository.study;
 
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
-import com.example.demo.helper.CafeKeywordSaveHelper;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyTag;
+import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,6 +39,10 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
     @Autowired
     private CafeKeywordSaveHelper cafeKeywordSaveHelper;
     @Autowired
+    private CafeStudyTagSaveHelper cafeStudyTagSaveHelper;
+    @Autowired
+    private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
+    @Autowired
     private TimeUtil timeUtil;
 
     @ParameterizedTest
@@ -68,7 +71,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2), "카페고리 스터디2");
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies(keyword, null);
+        List<CafeStudy> cafes = sut.findCafeStudies(keyword, null, null);
         //then
         assertThat(cafes.size()).isEqualTo(expected);
     }
@@ -124,7 +127,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", specificDate);
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", specificDate, null);
         //then
         assertThat(cafes.size()).isEqualTo(expected);
     }
@@ -206,6 +209,51 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
                 // 기댓값
                 1
             )
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideCafeStudyTag1")
+    @DisplayName("카공 태그로 필터링한 카공 목록을 조회한다.")
+    void find_cafe_studies_by_cafe_study_tag(CafeStudyTagType type, int expected) {
+        //given
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+
+        Cafe cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
+        LocalDateTime endDateTime = startDateTime.plusHours(2);
+
+        CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+        CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+
+        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime, endDateTime);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
+        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2));
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
+
+        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
+        //when
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, type);
+        //then
+        assertThat(cafes.size()).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideCafeStudyTag1() {
+        return Stream.of(
+            //CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+            Arguments.of(CafeStudyTagType.SALES, 0),
+
+            //CafeStudy1, CafeStudy3과 관련된 테스트
+            Arguments.of(CafeStudyTagType.DEVELOPMENT, 2),
+
+            //CafeStudy2과 관련된 테스트
+            Arguments.of(CafeStudyTagType.DESIGN, 1)
         );
     }
 

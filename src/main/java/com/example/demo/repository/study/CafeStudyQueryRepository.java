@@ -1,6 +1,8 @@
 package com.example.demo.repository.study;
 
 import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyTagType;
+import com.example.demo.implement.study.QCafeStudyCafeStudyTag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,6 +14,8 @@ import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
 import static com.example.demo.implement.study.QCafeStudy.*;
+import static com.example.demo.implement.study.QCafeStudyCafeStudyTag.*;
+import static com.example.demo.implement.study.QCafeStudyTag.cafeStudyTag;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,7 +23,7 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date) {
+    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType) {
         return queryFactory
             .select(cafeStudy).distinct()
             .from(cafeStudy)
@@ -27,9 +31,14 @@ public class CafeStudyQueryRepository {
             .where(
                 keywordContains(keyword)
                     .or(cafeStudyNameContains(keyword)),
-                dateEq(date)
+                dateEq(date),
+                cafeStudyTagTypeEq(cafeStudyTagType)
             )
             .fetch();
+    }
+
+    private BooleanExpression cafeStudyTagTypeEq(CafeStudyTagType cafeStudyTagType) {
+        return cafeStudyTagType == null ? null : cafeStudy.cafeStudyCafeStudyTags.any().cafeStudyTag.type.eq(cafeStudyTagType);
     }
 
     private BooleanExpression dateEq(LocalDate date) {
