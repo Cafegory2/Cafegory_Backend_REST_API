@@ -9,7 +9,7 @@ public interface TimeUtil {
 
 	LocalDateTime now();
 
-	LocalTime truncateTimeToSecond(LocalTime time);
+	LocalTime localTime(int hour, int minute, int second);
 
-	LocalDateTime truncateDateTimeToSecond(LocalDateTime dateTime);
+	LocalDateTime localDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second);
 }
