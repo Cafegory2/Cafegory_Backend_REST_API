@@ -9,7 +9,7 @@ public interface TimeUtil {
 	LocalTime maxLocalTime();
 
 	LocalDateTime now();
-	//TODO localDate메서드 처럼 리팩터링?
+
 	LocalDate localDate(int year, int month, int day);
 
 	LocalTime localTime(int hour, int minute, int second);

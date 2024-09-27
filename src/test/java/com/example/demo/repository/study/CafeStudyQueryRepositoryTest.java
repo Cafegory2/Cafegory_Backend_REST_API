@@ -135,14 +135,14 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         return Stream.of(
             Arguments.of(
                 // 첫번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                 // 두번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
                 // 세번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                 // 특정 시작일
                 timeUtil.localDate(2000, 1, 1),
                 // 기댓값
@@ -150,14 +150,14 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             ),
             Arguments.of(
                 // 첫번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                 // 두번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
                 // 세번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                 // 특정 시작일
                 timeUtil.localDate(2000, 1, 2),
                 // 기댓값
@@ -165,42 +165,42 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             ),
             Arguments.of(
                 // 첫번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                 // 두번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 12, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
                 // 세번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 12, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 14, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                 // 특정 시작일
                 timeUtil.localDate(2000, 1, 3),
                 // 기댓값
                 0
             ),
             Arguments.of(
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 22, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 59, 59)),
+                timeUtil.localDateTime(2000, 1, 1, 22, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 23, 59, 59),
                 // 두번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 1, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 23, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 1, 0, 0),
                 // 세번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 0, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 2, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 2, 0, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 2, 0, 0),
                 // 특정 시작일
                 timeUtil.localDate(2000, 1, 1),
                 // 기댓값
                 2
             ),
             Arguments.of(
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 22, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 59, 59)),
+                timeUtil.localDateTime(2000, 1, 1, 22, 0, 0),
+                timeUtil.localDateTime(2000, 1, 1, 23, 59, 59),
                 // 두번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 1, 23, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 1, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 1, 23, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 1, 0, 0),
                 // 세번째 카공 스터디
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 0, 0, 0)),
-                timeUtil.truncateDateTimeToSecond(LocalDateTime.of(2000, 1, 2, 2, 0, 0)),
+                timeUtil.localDateTime(2000, 1, 2, 0, 0, 0),
+                timeUtil.localDateTime(2000, 1, 2, 2, 0, 0),
                 // 특정 시작일
                 timeUtil.localDate(2000, 1, 2),
                 // 기댓값
