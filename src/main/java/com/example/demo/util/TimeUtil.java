@@ -12,7 +12,7 @@ public interface TimeUtil {
 	//TODO localDate메서드 처럼 리팩터링?
 	LocalDate localDate(int year, int month, int day);
 
-	LocalTime truncateTimeToSecond(LocalTime time);
+	LocalTime localTime(int hour, int minute, int second);
 
-	LocalDateTime truncateDateTimeToSecond(LocalDateTime dateTime);
+	LocalDateTime localDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second);
 }

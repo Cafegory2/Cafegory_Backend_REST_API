@@ -43,14 +43,13 @@ public class FakeTimeUtil implements TimeUtil {
 		return LocalDate.of(year, month, day);
 	}
 
-
 	@Override
-	public LocalTime truncateTimeToSecond(LocalTime time) {
-		return time == null ? null : time.truncatedTo(ChronoUnit.SECONDS);
+	public LocalTime localTime(int hour, int minute, int second) {
+		return LocalTime.of(hour, minute, second);
 	}
 
 	@Override
-	public LocalDateTime truncateDateTimeToSecond(LocalDateTime dateTime) {
-		return dateTime == null ? null : dateTime.truncatedTo(ChronoUnit.SECONDS);
+	public LocalDateTime localDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
+		return LocalDateTime.of(year, month, dayOfMonth, hour, minute);
 	}
 }
