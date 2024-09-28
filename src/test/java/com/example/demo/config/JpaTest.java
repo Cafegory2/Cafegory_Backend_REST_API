@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Import({HelperConfig.class, DataJpaConfig.class})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class JpaTest extends TestContainer {
+public abstract class JpaTest extends TestContainer {
 
 	@Autowired
 	private DatabaseCleanup databaseCleanup;

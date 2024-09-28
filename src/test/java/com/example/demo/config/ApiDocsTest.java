@@ -20,7 +20,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 @ActiveProfiles("test")
 @Import({HelperConfig.class, SignupAcceptanceTestConfig.class})
 @ExtendWith(RestDocumentationExtension.class)
-public class ApiDocsTest extends TestContainer{
+public abstract class ApiDocsTest extends TestContainer{
 
     @LocalServerPort
     private int port;

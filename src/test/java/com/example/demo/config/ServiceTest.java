@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = TestConfig.class)
 @ActiveProfiles("test")
 @Import({HelperConfig.class})
-public class ServiceTest extends TestContainer {
+public abstract class ServiceTest extends TestContainer {
 
 	@Autowired
 	private DatabaseCleanup databaseCleanup;
