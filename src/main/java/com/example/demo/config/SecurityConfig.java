@@ -38,6 +38,7 @@ public class SecurityConfig {
         //JWT 토큰 검증을 하지 않으려면 anyMatchers에 url을 추가하고 JwtAuthenticationFilter 클래스 안에도 추가해야한다.
         http
             .csrf().disable()
+            .cors().and()
             .authorizeHttpRequests(authorize -> authorize
                 .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/docs/**").permitAll()
