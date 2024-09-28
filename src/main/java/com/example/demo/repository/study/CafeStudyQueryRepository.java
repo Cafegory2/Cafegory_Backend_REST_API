@@ -2,6 +2,7 @@ package com.example.demo.repository.study;
 
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTagType;
+import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.QCafeStudyCafeStudyTag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
@@ -23,7 +25,7 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType) {
+    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, CafeTagType... cafeTagType) {
         return queryFactory
             .select(cafeStudy).distinct()
             .from(cafeStudy)
@@ -32,9 +34,23 @@ public class CafeStudyQueryRepository {
                 keywordContains(keyword)
                     .or(cafeStudyNameContains(keyword)),
                 dateEq(date),
-                cafeStudyTagTypeEq(cafeStudyTagType)
+                cafeStudyTagTypeEq(cafeStudyTagType),
+                hasAllCafeTagTypes(cafeTagType)
             )
             .fetch();
+    }
+
+//    private BooleanExpression cafeTagTypeEq(CafeTagType... cafeTagType) {
+//        return cafeTagType == null ? null : cafe.cafeCafeTags.any().cafeTag.type.eq(cafeTagType);
+//    }
+
+    private BooleanExpression hasAllCafeTagTypes(CafeTagType... cafeTagTypes) {
+        if(cafeTagTypes == null || cafeTagTypes.length == 0) return null;
+
+        return Arrays.stream(cafeTagTypes)
+            .map(type -> cafe.cafeCafeTags.any().cafeTag.type.eq(type))
+            .reduce(BooleanExpression::and)
+            .orElse(null);
     }
 
     private BooleanExpression cafeStudyTagTypeEq(CafeStudyTagType cafeStudyTagType) {

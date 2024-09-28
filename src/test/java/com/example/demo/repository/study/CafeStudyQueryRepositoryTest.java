@@ -4,10 +4,12 @@ import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
 import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeTag;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTag;
 import com.example.demo.implement.study.CafeStudyTagType;
+import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,6 +45,10 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
     @Autowired
     private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
     @Autowired
+    private CafeTagSaveHelper cafeTagSaveHelper;
+    @Autowired
+    private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
+    @Autowired
     private TimeUtil timeUtil;
 
     @ParameterizedTest
@@ -71,7 +77,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2), "카페고리 스터디2");
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies(keyword, null, null);
+        List<CafeStudy> cafes = sut.findCafeStudies(keyword, null, null, null);
         //then
         assertThat(cafes.size()).isEqualTo(expected);
     }
@@ -127,7 +133,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", specificDate, null);
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", specificDate, null, null);
         //then
         assertThat(cafes.size()).isEqualTo(expected);
     }
@@ -239,7 +245,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, type);
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, type, null);
         //then
         assertThat(cafes.size()).isEqualTo(expected);
     }
@@ -257,4 +263,94 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("provideCafeStudyTag2")
+    @DisplayName("하나의 카페 태그로 필터링한 카공 목록을 조회한다.")
+    void find_cafe_studies_by_cafe_tag(CafeTagType type, int expected) {
+        //given
+        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
+
+        Cafe cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag2);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
+        LocalDateTime endDateTime = startDateTime.plusHours(2);
+
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime, endDateTime);
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2));
+
+        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
+        //when
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, null, type);
+        //then
+        assertThat(cafes.size()).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideCafeStudyTag2() {
+        return Stream.of(
+            //CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+            Arguments.of(CafeTagType.WIFI, 3),
+            Arguments.of(CafeTagType.COMFORTABLE_SEATING, 0),
+
+            //CafeStudy3과 관련된 테스트
+            Arguments.of(CafeTagType.OUTLET, 1)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideCafeStudyTag3")
+    @DisplayName("여러개의 카페 태그들로 필터링한 카공 목록을 조회한다.")
+    void find_cafe_studies_by_cafe_tags(CafeTagType type1, CafeTagType type2, int expected) {
+        //given
+        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+        CafeTag cafeTag4 = cafeTagSaveHelper.saveCafeTag(CafeTagType.QUIET);
+
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag2);
+
+        Cafe cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag3);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
+        LocalDateTime endDateTime = startDateTime.plusHours(2);
+
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime, endDateTime);
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2));
+
+        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
+        //when
+        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, null, type1, type2);
+        //then
+        assertThat(cafes.size()).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideCafeStudyTag3() {
+        return Stream.of(
+            //CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+            Arguments.of(CafeTagType.WIFI, CafeTagType.QUIET, 0),
+
+            //CafeStudy1, CafeStudy2과 관련된 테스트
+            Arguments.of(CafeTagType.WIFI, CafeTagType.OUTLET, 2),
+
+            //CafeStudy3과 관련된 테스트
+            Arguments.of(CafeTagType.WIFI, CafeTagType.COMFORTABLE_SEATING, 1)
+        );
+    }
 }

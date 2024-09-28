@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,18 +24,25 @@ import lombok.NoArgsConstructor;
 @Table(name = "cafe_cafe_tag")
 public class CafeCafeTag extends BaseEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "cafe_cafe_tag_id")
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "cafe_cafe_tag_id")
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Cafe cafe;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Cafe cafe;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeTag cafeTag;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cafe_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private CafeTag cafeTag;
 
-	private int taggingCount;
+    private int taggingCount;
+
+    @Builder
+    public CafeCafeTag(Cafe cafe, CafeTag cafeTag) {
+        this.cafe = cafe;
+        this.cafeTag = cafeTag;
+        this.taggingCount = 0;
+    }
 }

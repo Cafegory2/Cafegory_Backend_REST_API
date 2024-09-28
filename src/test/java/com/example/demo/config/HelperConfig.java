@@ -1,7 +1,7 @@
 package com.example.demo.config;
 
 import com.example.demo.helper.*;
-import com.example.demo.repository.cafe.CafeKeywordRepository;
+import com.example.demo.repository.cafe.*;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.example.demo.repository.cafe.BusinessHourRepository;
-import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.util.TimeUtil;
 
@@ -81,6 +79,19 @@ public class HelperConfig {
         CafeStudyCafeStudyTagRepository cafeStudyCafeStudyTagRepository
     ) {
         return new CafeStudyCafeStudyTagSaveHelper(cafeStudyRepository, cafeStudyTagRepository, cafeStudyCafeStudyTagRepository);
+    }
+
+    @Bean
+    public CafeTagSaveHelper cafeTagSaveHelper(CafeTagRepository cafeTagRepository) {
+        return new CafeTagSaveHelper(cafeTagRepository);
+    }
+
+    @Bean
+    public CafeCafeTagSaveHelper cafeCafeTagSaveHelper(
+        CafeRepository cafeRepository, CafeTagRepository cafeTagRepository,
+        CafeCafeTagRepository cafeCafeTagRepository
+    ) {
+        return new CafeCafeTagSaveHelper(cafeRepository, cafeTagRepository, cafeCafeTagRepository);
     }
 
 //
