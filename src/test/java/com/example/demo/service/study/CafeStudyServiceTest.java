@@ -18,9 +18,11 @@ import com.example.demo.config.ServiceTest;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
+import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.util.TimeUtil;
 
@@ -34,6 +36,8 @@ class CafeStudyServiceTest extends ServiceTest {
 	private MemberSaveHelper memberSaveHelper;
 	@Autowired
 	private TimeUtil timeUtil;
+	@Autowired
+	private CafeStudySaveHelper cafeStudySaveHelper;
 
 	//	@Autowired
 	//	private StudyOnceRepository studyOnceRepository;
@@ -41,8 +45,6 @@ class CafeStudyServiceTest extends ServiceTest {
 	//	private StudyMemberRepository studyMemberRepository;
 	//	@Autowired
 	//	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
-	//	@Autowired
-	//	private StudyOnceSaveHelper studyOnceSaveHelper;
 
 	//
 	//	@Test
@@ -124,7 +126,7 @@ class CafeStudyServiceTest extends ServiceTest {
 
 	@Test
 	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
-	void exception_case1() {
+	void exception_case() {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
@@ -341,6 +343,38 @@ class CafeStudyServiceTest extends ServiceTest {
 	static Stream<Arguments> provideStartAndEndDateTime2() {
 		return Stream.of(Arguments.of(LocalDateTime.of(2000, 1, 1, 9, 0), LocalDateTime.of(2000, 1, 1, 10, 0)),
 			Arguments.of(LocalDateTime.of(2000, 1, 1, 20, 0), LocalDateTime.of(2000, 1, 1, 21, 0)));
+	}
+
+	@Test
+	@DisplayName("카공장은 카공을 삭제할 수 있다.")
+	void coordinator_can_delete_study() {
+		//given
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		Member coordinator = memberSaveHelper.saveMember();
+		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
+		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
+		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
+
+		//then
+		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId(), timeUtil.now()));
+	}
+
+	@Test
+	@DisplayName("카공장이 아니라면 카공을 삭제할 수 없다.")
+	void non_coordinator_can_not_delete_study() {
+		//given
+		Cafe cafe = cafeSaveHelper.saveCafe();
+		Member coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+		Member member = memberSaveHelper.saveMember("member@gmail.com");
+		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
+		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
+		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
+
+		//then
+		assertThatThrownBy(
+			() -> sut.deleteStudy(member.getId(), cafeStudy.getId(), timeUtil.now()))
+			.isInstanceOf(CafegoryException.class)
+			.hasMessage(CAFE_STUDY_INVALID_LEADER.getErrorMessage());
 	}
 }
 

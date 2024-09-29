@@ -26,4 +26,10 @@ public class StudyEditor {
 
 		return savedStudy.getId();
 	}
+
+	public Long deleteCafeStudy(CafeStudy cafeStudy, LocalDateTime now) {
+		cafeStudy.softDelete(now);
+
+		return cafeStudy.getId();
+	}
 }

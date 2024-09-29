@@ -5,11 +5,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import com.example.demo.util.TimeUtil;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.context.annotation.Primary;
+
+import com.example.demo.util.TimeUtil;
 
 @TestComponent
 @Primary

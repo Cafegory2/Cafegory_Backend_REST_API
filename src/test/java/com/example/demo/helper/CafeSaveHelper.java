@@ -3,7 +3,6 @@ package com.example.demo.helper;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.factory.TestBusinessHourFactory;
@@ -26,10 +25,10 @@ public class CafeSaveHelper {
 
 	private final TimeUtil timeUtil;
 
-	//	public Cafe saveCafe() {
-	//		Cafe cafe = TestCafeFactory.createCafe();
-	//		return cafeRepository.save(cafe);
-	//	}
+	public Cafe saveCafe() {
+		Cafe cafe = TestCafeFactory.createCafe();
+		return cafeRepository.save(cafe);
+	}
 
 	public Cafe saveCafeWith7daysFrom9To21() {
 		Cafe cafe = TestCafeFactory.createCafe();
