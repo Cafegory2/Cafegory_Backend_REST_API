@@ -6,9 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(classes = TestConfig.class)
+@SpringBootTest()
 @ActiveProfiles("test")
-@Import({HelperConfig.class})
+@Import({HelperConfig.class, DatabaseCleanup.class, FakeTimeUtil.class})
 public abstract class ServiceTest extends TestContainer {
 
 	@Autowired

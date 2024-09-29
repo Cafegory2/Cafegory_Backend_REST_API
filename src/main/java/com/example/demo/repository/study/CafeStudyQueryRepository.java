@@ -25,7 +25,7 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, CafeTagType... cafeTagType) {
+    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, CafeTagType... cafeTagTypes) {
         return queryFactory
             .select(cafeStudy).distinct()
             .from(cafeStudy)
@@ -35,8 +35,9 @@ public class CafeStudyQueryRepository {
                     .or(cafeStudyNameContains(keyword)),
                 dateEq(date),
                 cafeStudyTagTypeEq(cafeStudyTagType),
-                hasAllCafeTagTypes(cafeTagType)
+                hasAllCafeTagTypes(cafeTagTypes)
             )
+            .orderBy(cafeStudy.createdDate.desc())
             .fetch();
     }
 

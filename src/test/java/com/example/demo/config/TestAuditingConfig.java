@@ -1,13 +1,13 @@
 package com.example.demo.config;
 
 import com.example.demo.util.TimeUtil;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@Configuration
+@TestConfiguration
 @EnableJpaAuditing(dateTimeProviderRef = "currentDateTimeProvider")
-public class AuditingConfig {
+public class TestAuditingConfig {
 
     @Bean
     public CurrentDateTimeProvider currentDateTimeProvider(TimeUtil timeUtil) {

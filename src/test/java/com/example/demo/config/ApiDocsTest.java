@@ -18,7 +18,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import({HelperConfig.class, SignupAcceptanceTestConfig.class})
+@Import({HelperConfig.class, SignupAcceptanceTestConfig.class, DatabaseCleanup.class})
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class ApiDocsTest extends TestContainer{
 

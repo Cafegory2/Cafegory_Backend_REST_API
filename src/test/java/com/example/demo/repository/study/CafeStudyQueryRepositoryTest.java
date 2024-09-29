@@ -1,5 +1,6 @@
 package com.example.demo.repository.study;
 
+import com.example.demo.config.AuditingConfig;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
 import com.example.demo.helper.*;
@@ -12,6 +13,7 @@ import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -69,17 +71,16 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         Member member = memberSaveHelper.saveMember();
 
-        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
-        LocalDateTime endDateTime = startDateTime.plusHours(2);
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime, endDateTime, "카페고리 스터디1");
-        cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2), "카공하기 좋은 카페에서 스터디해요");
+        cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4), "카페고리 스터디1");
+        cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7), "카공하기 좋은 카페에서 스터디해요");
 
-        cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2), "카페고리 스터디2");
+        cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10), "카페고리 스터디2");
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies(keyword, null, null, null);
+        List<CafeStudy> result = sut.findCafeStudies(keyword, null, null, null);
         //then
-        assertThat(cafes.size()).isEqualTo(expected);
+        assertThat(result.size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideKeywords1() {
@@ -133,9 +134,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", specificDate, null, null);
+        List<CafeStudy> result = sut.findCafeStudies("강남", specificDate, null, null);
         //then
-        assertThat(cafes.size()).isEqualTo(expected);
+        assertThat(result.size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideTime1() {
@@ -231,23 +232,22 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         Member member = memberSaveHelper.saveMember();
 
-        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
-        LocalDateTime endDateTime = startDateTime.plusHours(2);
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
         CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime, endDateTime);
+        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2));
+        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
 
-        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
+        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, type, null);
+        List<CafeStudy> result = sut.findCafeStudies("강남", null, type, null);
         //then
-        assertThat(cafes.size()).isEqualTo(expected);
+        assertThat(result.size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag1() {
@@ -282,17 +282,16 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         Member member = memberSaveHelper.saveMember();
 
-        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
-        LocalDateTime endDateTime = startDateTime.plusHours(2);
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime, endDateTime);
-        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2));
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
 
-        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
+        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, null, type);
+        List<CafeStudy> result = sut.findCafeStudies("강남", null, null, type);
         //then
-        assertThat(cafes.size()).isEqualTo(expected);
+        assertThat(result.size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag2() {
@@ -328,17 +327,16 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         Member member = memberSaveHelper.saveMember();
 
-        LocalDateTime startDateTime = timeUtil.now().plusHours(2);
-        LocalDateTime endDateTime = startDateTime.plusHours(2);
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime, endDateTime);
-        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), endDateTime.plusHours(2));
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
 
-        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(9), endDateTime.plusHours(2));
+        cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         //when
-        List<CafeStudy> cafes = sut.findCafeStudies("강남", null, null, type1, type2);
+        List<CafeStudy> result = sut.findCafeStudies("강남", null, null, type1, type2);
         //then
-        assertThat(cafes.size()).isEqualTo(expected);
+        assertThat(result.size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag3() {
@@ -352,5 +350,29 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             //CafeStudy3과 관련된 테스트
             Arguments.of(CafeTagType.WIFI, CafeTagType.COMFORTABLE_SEATING, 1)
         );
+    }
+
+    @Test
+    @DisplayName("카공 목록 조회는 카공 생성시간이 가장 최근인 순으로 정렬한다.")
+    void find_newest_cafe_studies() throws InterruptedException {
+        //given
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+
+        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
+        Thread.sleep(10);
+        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        Thread.sleep(10);
+        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
+        //when
+        List<CafeStudy> result = sut.findCafeStudies("강남", null, null, null);
+        //then
+        assertThat(result)
+            .extracting("createdDate")
+            .containsExactly(cafeStudy1.getCreatedDate(), cafeStudy2.getCreatedDate(), cafeStudy3.getCreatedDate());
     }
 }

@@ -8,7 +8,11 @@ import java.time.temporal.ChronoUnit;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.test.context.TestComponent;
+import org.springframework.context.annotation.Primary;
 
+@TestComponent
+@Primary
 @RequiredArgsConstructor
 public class FakeTimeUtil implements TimeUtil {
 

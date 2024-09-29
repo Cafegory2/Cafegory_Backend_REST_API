@@ -37,6 +37,19 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
+	public static CafeStudy createCafeStudyWithCreatedDate(Cafe cafe, Member leader,
+											LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
+		return CafeStudy.builder()
+			.name("카페고리 스터디")
+			.cafe(cafe)
+			.coordinator(leader)
+			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
+			.memberComms(POSSIBLE)
+			.maxParticipants(5)
+			.introduction("카페고리 스터디입니다.")
+			.build();
+	}
+
 	private static StudyPeriod createStudyPeriod(LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		return StudyPeriod.builder()
 			.startDateTime(startDateTime)

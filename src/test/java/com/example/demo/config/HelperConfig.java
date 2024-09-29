@@ -5,7 +5,6 @@ import com.example.demo.repository.cafe.*;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -15,28 +14,10 @@ import com.example.demo.util.TimeUtil;
 @TestConfiguration
 public class HelperConfig {
 
-    @Autowired
-    private CafeRepository cafeRepository;
-    //	@Autowired
-    //	private ReviewRepository reviewRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private BusinessHourRepository businessHourRepository;
-    @Autowired
-    private TimeUtil fakeTimeUtil;
-    //	@Autowired
-    //	private StudyMemberRepository studyMemberRepository;
-    //	@Autowired
-    //	private StudyOnceCommentRepository studyOnceCommentRepository;
-    //	@Autowired
-    //	private StudyOnceRepository studyOnceRepository;
-    //	@Autowired
-    //	private ThumbnailImageRepository thumbnailImageRepository;
-
     @Bean
-    public CafeSaveHelper cafeSaveHelper() {
-        return new CafeSaveHelper(cafeRepository, businessHourRepository, fakeTimeUtil);
+    public CafeSaveHelper cafeSaveHelper(
+        CafeRepository cafeRepository, BusinessHourRepository businessHourRepository, TimeUtil timeUtil) {
+        return new CafeSaveHelper(cafeRepository, businessHourRepository, timeUtil);
     }
 
     @Bean
@@ -45,26 +26,13 @@ public class HelperConfig {
     }
 
     @Bean
-    public MemberSaveHelper memberSaveHelper() {
+    public MemberSaveHelper memberSaveHelper(MemberRepository memberRepository) {
         return new MemberSaveHelper(memberRepository);
     }
 
-    //	@Bean
-    //	public ReviewSaveHelper reviewSaveHelper() {
-    //		return new ReviewSaveHelper(reviewRepository, cafeRepository, memberRepository);
-    //	}
-    //	@Bean
-//	public StudyMemberSaveHelper studyMemberSaveHelper() {
-//		return new StudyMemberSaveHelper(studyMemberRepository, memberRepository, studyOnceRepository);
-//	}
-//
-//	@Bean
-//	public StudyOnceCommentSaveHelper studyOnceCommentSaveHelper() {
-//		return new StudyOnceCommentSaveHelper(studyOnceCommentRepository, memberRepository, studyOnceRepository);
-//	}
-//
     @Bean
-    public CafeStudySaveHelper cafeStudySaveHelper(CafeStudyRepository cafeStudyRepository) {
+    public CafeStudySaveHelper cafeStudySaveHelper(
+        CafeStudyRepository cafeStudyRepository, MemberRepository memberRepository, CafeRepository cafeRepository) {
         return new CafeStudySaveHelper(cafeStudyRepository, memberRepository, cafeRepository);
     }
 
@@ -93,10 +61,4 @@ public class HelperConfig {
     ) {
         return new CafeCafeTagSaveHelper(cafeRepository, cafeTagRepository, cafeCafeTagRepository);
     }
-
-//
-//	@Bean
-//	public ThumbnailImageSaveHelper thumbnailImageSaveHelper() {
-//		return new ThumbnailImageSaveHelper(thumbnailImageRepository);
-//	}
 }
