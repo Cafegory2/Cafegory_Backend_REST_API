@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
+import com.example.demo.implement.member.Member;
+import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -53,6 +55,18 @@ public class StudyValidator {
 	public void validateMaxParticipants(int maxParticipants) {
 		if (maxParticipants > LIMIT_MEMBER_CAPACITY || maxParticipants < MIN_LIMIT_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
+		}
+	}
+
+	public void validateCafeStudyCoordinator(Member coordinator, CafeStudy cafeStudy) {
+		if (!cafeStudy.getCoordinator().equals(coordinator)) {
+			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
+		}
+	}
+
+	public void validateCafeStudyMembersPresent(CafeStudy cafeStudy) {
+		if (!cafeStudy.getCafeStudyMembers().isEmpty()) {
+			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);
 		}
 	}
 }
