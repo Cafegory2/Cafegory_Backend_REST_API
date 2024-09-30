@@ -1,5 +1,6 @@
 package com.example.demo.util;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -22,12 +23,25 @@ public class PagingUtil {
         return org.springframework.data.domain.PageRequest.of(validatedPage - 1, validatedSize);
     }
 
-    public static <T> Slice<T> toSlice(Pageable pageable, List<T> contents) {
+    public static <T> Slice<T> toSlice(List<T> contents, Pageable pageable) {
         boolean hasNext = contents.size() > pageable.getPageSize();
         if (hasNext) {
             contents.remove(contents.size() - 1);
         }
 
         return new SliceImpl<>(contents, pageable, hasNext);
+    }
+
+    public static int limitToSlice(Pageable pageable) {
+        return pageable.getPageSize() + 1;
+    }
+
+    public static <T> Slice<T> toSlice(JPAQuery<T> query, Pageable pageable) {
+        List<T> contents = query
+            .offset(pageable.getOffset())
+            .limit(limitToSlice(pageable))
+            .fetch();
+
+        return toSlice(contents, pageable);
     }
 }

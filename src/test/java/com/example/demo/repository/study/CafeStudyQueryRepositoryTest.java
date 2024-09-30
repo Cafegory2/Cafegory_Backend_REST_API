@@ -376,4 +376,70 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             .containsExactly(cafeStudy1.getCreatedDate(), cafeStudy2.getCreatedDate(), cafeStudy3.getCreatedDate());
 //                .isSortedAccordingTo(Comparator.reverseOrder());
     }
+
+    @Test
+    @DisplayName("첫번째 페이지에 대한 카공목록 조회한다.")
+    void find_cafe_studies_with_first_page() {
+        //given
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith24For7();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+
+        for (int i = 0; i < 6; i++) {
+            cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(i), startDateTime.plusHours(i + 1));
+        }
+        //when
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, null, PagingUtil.of(1, 5), null);
+        //then
+        assertThat(result.getNumberOfElements()).isEqualTo(5);
+        assertThat(result.hasNext()).isTrue();
+        assertThat(result.hasPrevious()).isFalse();
+    }
+
+    @Test
+    @DisplayName("두번째 페이지에 대한 카공목록 조회한다.")
+    void find_cafe_studies_with_second_page() {
+        //given
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith24For7();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+
+        for (int i = 0; i < 11; i++) {
+            cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(i), startDateTime.plusHours(i + 1));
+        }
+        //when
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, null, PagingUtil.of(2, 5), null);
+        //then
+        assertThat(result.getNumberOfElements()).isEqualTo(5);
+        assertThat(result.hasNext()).isTrue();
+        assertThat(result.hasPrevious()).isTrue();
+    }
+
+    @Test
+    @DisplayName("마지막 페이지에 대한 카공목록 조회한다.")
+    void find_cafe_studies_with_last_page() {
+        //given
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith24For7();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+
+        Member member = memberSaveHelper.saveMember();
+
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+
+        for (int i = 0; i < 11; i++) {
+            cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(i), startDateTime.plusHours(i + 1));
+        }
+        //when
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, null, PagingUtil.of(3, 5), null);
+        //then
+        assertThat(result.getNumberOfElements()).isEqualTo(1);
+        assertThat(result.hasNext()).isFalse();
+        assertThat(result.hasPrevious()).isTrue();
+    }
 }
