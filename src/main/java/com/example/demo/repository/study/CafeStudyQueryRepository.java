@@ -80,39 +80,4 @@ public class CafeStudyQueryRepository {
         return cafeStudyName == null ? null : Expressions.stringTemplate("function('replace', {0}, ' ', '')", cafeStudy.name)
             .likeIgnoreCase("%" + cafeStudyName.replace(" ", "") + "%");
     }
-
-
-
-//    private BooleanExpression keywordContains(String keyword) {
-//        return keyword == null ? null : cafe.cafeKeywords.any().keyword.likeIgnoreCase("%" + keyword + "%");
-//    }
-
-//    public Page<Cafe> findWithDynamicFilter(CafeSearchCondition searchCondition, Pageable pageable) {
-// 		List<Cafe> content = queryFactory
-// 			.selectFrom(cafe)
-// 			.where(
-// 				isAbleToStudy(searchCondition.isAbleToStudy()),
-// 				regionContains(searchCondition.getRegion()),
-// 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-// 				minBeveragePriceLoe(searchCondition.getMinMenuPrice()),
-// 				businessHourBetween(searchCondition.getStartTime(), searchCondition.getEndTime(),
-// 					searchCondition.getNow())
-// 			)
-// 			.offset(pageable.getOffset())
-// 			.limit(pageable.getPageSize())
-// 			.fetch();
-//
-// 		JPAQuery<Long> countQuery = queryFactory
-// 			.select(cafe.count())
-// 			.from(cafe)
-// 			.where(
-// 				isAbleToStudy(searchCondition.isAbleToStudy()),
-// 				regionContains(searchCondition.getRegion()),
-// 				maxAllowableStayInLoe(searchCondition.getMaxAllowableStay()),
-// 				minBeveragePriceLoe(searchCondition.getMinMenuPrice()),
-// 				businessHourBetween(searchCondition.getStartTime(), searchCondition.getEndTime(),
-// 					searchCondition.getNow())
-// 			);
-// 		return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
-// 	}
 }
