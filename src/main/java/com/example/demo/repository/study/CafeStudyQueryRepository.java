@@ -4,10 +4,13 @@ import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.QCafeStudyCafeStudyTag;
+import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -25,8 +28,8 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, CafeTagType... cafeTagTypes) {
-        return queryFactory
+    public Slice<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, Pageable pageable, CafeTagType... cafeTagTypes) {
+        List<CafeStudy> contents = queryFactory
             .select(cafeStudy).distinct()
             .from(cafeStudy)
             .join(cafeStudy.cafe, cafe).fetchJoin()
@@ -38,8 +41,13 @@ public class CafeStudyQueryRepository {
                 hasAllCafeTagTypes(cafeTagTypes)
             )
             .orderBy(cafeStudy.createdDate.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
+
+        return PagingUtil.toSlice(pageable, contents);
     }
+
 
 //    private BooleanExpression cafeTagTypeEq(CafeTagType... cafeTagType) {
 //        return cafeTagType == null ? null : cafe.cafeCafeTags.any().cafeTag.type.eq(cafeTagType);

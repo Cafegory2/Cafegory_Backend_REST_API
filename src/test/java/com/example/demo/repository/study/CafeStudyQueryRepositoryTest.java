@@ -1,6 +1,5 @@
 package com.example.demo.repository.study;
 
-import com.example.demo.config.AuditingConfig;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
 import com.example.demo.helper.*;
@@ -11,6 +10,7 @@ import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTag;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
+import com.example.demo.util.PagingUtil;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +19,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
@@ -78,9 +78,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10), "카페고리 스터디2");
         //when
-        List<CafeStudy> result = sut.findCafeStudies(keyword, null, null, null);
+        Slice<CafeStudy> result = sut.findCafeStudies(keyword, null, null, PagingUtil.createByDefault(), null);
         //then
-        assertThat(result.size()).isEqualTo(expected);
+        assertThat(result.getNumberOfElements()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideKeywords1() {
@@ -134,9 +134,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
         //when
-        List<CafeStudy> result = sut.findCafeStudies("강남", specificDate, null, null);
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", specificDate, null, PagingUtil.createByDefault(), null);
         //then
-        assertThat(result.size()).isEqualTo(expected);
+        assertThat(result.getNumberOfElements()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideTime1() {
@@ -245,9 +245,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
         //when
-        List<CafeStudy> result = sut.findCafeStudies("강남", null, type, null);
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, type, PagingUtil.createByDefault(), null);
         //then
-        assertThat(result.size()).isEqualTo(expected);
+        assertThat(result.getNumberOfElements()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag1() {
@@ -289,9 +289,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         //when
-        List<CafeStudy> result = sut.findCafeStudies("강남", null, null, type);
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, null, PagingUtil.createByDefault(), type);
         //then
-        assertThat(result.size()).isEqualTo(expected);
+        assertThat(result.getNumberOfElements()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag2() {
@@ -334,9 +334,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         //when
-        List<CafeStudy> result = sut.findCafeStudies("강남", null, null, type1, type2);
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, null, PagingUtil.createByDefault(), type1, type2);
         //then
-        assertThat(result.size()).isEqualTo(expected);
+        assertThat(result.getNumberOfElements()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag3() {
@@ -369,10 +369,11 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         Thread.sleep(10);
         CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
         //when
-        List<CafeStudy> result = sut.findCafeStudies("강남", null, null, null);
+        Slice<CafeStudy> result = sut.findCafeStudies("강남", null, null, PagingUtil.createByDefault(), null);
         //then
         assertThat(result)
-            .extracting("createdDate")
+            .extracting(CafeStudy::getCreatedDate)
             .containsExactly(cafeStudy1.getCreatedDate(), cafeStudy2.getCreatedDate(), cafeStudy3.getCreatedDate());
+//                .isSortedAccordingTo(Comparator.reverseOrder());
     }
 }
