@@ -1,9 +1,10 @@
 package com.example.demo.repository.study;
 
+import com.example.demo.dto.SliceResponse;
+import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.implement.study.QCafeStudyCafeStudyTag;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -20,8 +21,6 @@ import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
 import static com.example.demo.implement.study.QCafeStudy.*;
-import static com.example.demo.implement.study.QCafeStudyCafeStudyTag.*;
-import static com.example.demo.implement.study.QCafeStudyTag.cafeStudyTag;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,27 +28,29 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Slice<CafeStudy> findCafeStudies(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, Pageable pageable, CafeTagType... cafeTagTypes) {
+    public SliceResponse<CafeStudy> findCafeStudies(CafeStudySearchListRequest request) {
+        Pageable pageable = PagingUtil.of(request.getPage(), request.getSizePerPage());
+
         JPAQuery<CafeStudy> query = queryFactory
             .select(cafeStudy).distinct()
             .from(cafeStudy)
             .join(cafeStudy.cafe, cafe).fetchJoin()
             .where(
-                keywordContains(keyword)
-                    .or(cafeStudyNameContains(keyword)),
-                dateEq(date),
-                cafeStudyTagTypeEq(cafeStudyTagType),
-                hasAllCafeTagTypes(cafeTagTypes)
+                keywordContains(request.getKeyword())
+                    .or(cafeStudyNameContains(request.getKeyword())),
+                dateEq(request.getDate()),
+                cafeStudyTagTypeEq(request.getCafeStudyTagType()),
+                hasAllCafeTagTypes(request.getCafeTagTypes())
             )
             .orderBy(cafeStudy.createdDate.desc());
 
-        return PagingUtil.toSlice(query, pageable);
+        return SliceResponse.of(PagingUtil.toSlice(query, pageable));
     }
 
-    private BooleanExpression hasAllCafeTagTypes(CafeTagType... cafeTagTypes) {
-        if(cafeTagTypes == null || cafeTagTypes.length == 0) return null;
+    private BooleanExpression hasAllCafeTagTypes(List<CafeTagType> cafeTagTypes) {
+        if(cafeTagTypes == null || cafeTagTypes.isEmpty()) return null;
 
-        return Arrays.stream(cafeTagTypes)
+        return cafeTagTypes.stream()
             .map(type -> cafe.cafeCafeTags.any().cafeTag.type.eq(type))
             .reduce(BooleanExpression::and)
             .orElse(null);

@@ -9,18 +9,19 @@ import java.util.List;
 
 public class PagingUtil {
 
-    private static final int DEFAULT_PAGE = 1;
+    private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_SIZE = 10;
     private static final int MAX_SIZE = 30;
 
     public static org.springframework.data.domain.Pageable createByDefault() {
-        return org.springframework.data.domain.PageRequest.of(DEFAULT_PAGE - 1, DEFAULT_SIZE);
+        return of(DEFAULT_PAGE, DEFAULT_SIZE);
+//        return org.springframework.data.domain.PageRequest.of(DEFAULT_PAGE, DEFAULT_SIZE);
     }
 
-    public static org.springframework.data.domain.Pageable of(int page, int size) {
-        int validatedPage = (page <= 0) ? 1 : page;
-        int validatedSize = (size > MAX_SIZE ? DEFAULT_SIZE : size);
-        return org.springframework.data.domain.PageRequest.of(validatedPage - 1, validatedSize);
+    public static org.springframework.data.domain.Pageable of(int page, int sizePerPage) {
+        int validatedPage = Math.max(page, DEFAULT_PAGE);
+        int validatedSize = (sizePerPage > MAX_SIZE ? DEFAULT_SIZE : sizePerPage);
+        return org.springframework.data.domain.PageRequest.of(validatedPage, validatedSize);
     }
 
     public static <T> Slice<T> toSlice(List<T> contents, Pageable pageable) {

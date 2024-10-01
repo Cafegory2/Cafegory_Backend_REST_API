@@ -72,29 +72,6 @@ public class CafeStudyService {
     // }
     //
     // @Override
-    // public PagedResponse<StudyOnceSearchListResponse> searchStudy(StudyOnceSearchRequest studyOnceSearchRequest) {
-    // 	int totalCount = Math.toIntExact(studyOnceRepository.count(studyOnceSearchRequest));
-    // 	int sizePerPage = studyOnceSearchRequest.getSizePerPage();
-    // 	int maxPage = calculateMaxPage(totalCount, sizePerPage);
-    // 	List<CafeStudy> allByCafeStudySearchRequest = studyOnceRepository.findAllByStudyOnceSearchRequest(
-    // 		studyOnceSearchRequest);
-    // 	List<StudyOnceSearchListResponse> searchResults = allByCafeStudySearchRequest
-    // 		.stream()
-    // 		.map(studyOnce -> studyOnceMapper.toStudyOnceSearchListResponse(studyOnce,
-    // 			studyOnce.canJoin(LocalDateTime.now())))
-    // 		.collect(Collectors.toList());
-    // 	return new PagedResponse<>(studyOnceSearchRequest.getPage(), maxPage, searchResults.size(), totalCount,
-    // 		searchResults);
-    // }
-    //
-    // private int calculateMaxPage(int totalCount, int sizePerPage) {
-    // 	if (totalCount % sizePerPage == 0) {
-    // 		return totalCount / sizePerPage;
-    // 	}
-    // 	return totalCount / sizePerPage + 1;
-    // }
-    //
-    // @Override
     // public StudyOnceSearchResponse searchByStudyId(long studyId) {
     // 	CafeStudy searched = studyOnceRepository.findById(studyId)
     // 		.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));

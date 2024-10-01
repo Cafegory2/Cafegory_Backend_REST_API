@@ -32,7 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/favicon.ico",
         "/login",
         "/docs",
-        "/auth/refresh"
+        "/auth/refresh",
+        "/cafe-study/list"
     );
 
 
