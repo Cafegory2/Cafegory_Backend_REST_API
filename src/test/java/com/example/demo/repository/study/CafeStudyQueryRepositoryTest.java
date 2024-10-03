@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -135,7 +136,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
         //when
         SliceResponse<CafeStudy> result = sut.findCafeStudies(
-            createCafeStudySearchListRequest("강남", specificDate, null, null, null,0, 10)
+            createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
         );
         //then
         assertThat(result.getCurrentContentSize()).isEqualTo(expected);
@@ -503,6 +504,136 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         assertThat(result.getCurrentContentSize()).isEqualTo(1);
         assertThat(result.isHasNext()).isFalse();
         assertThat(result.isHasPrevious()).isTrue();
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideMultipleFiltering1")
+    @DisplayName("다양한 필터링 조합으로 카공 목록을 조회한다.")
+    void find_cafe_studies_by_many_different_filtering(
+        LocalDate specificDate, List<CafeTagType> cafeTagTypes,
+        CafeStudyTagType cafeStudyTagType, MemberComms memberComms, int expected
+    ) {
+        //given
+        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+        CafeTag cafeTag4 = cafeTagSaveHelper.saveCafeTag(CafeTagType.QUIET);
+
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag2);
+
+        Cafe cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag3);
+
+        Member member = memberSaveHelper.saveMember();
+
+        CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+        CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+
+        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+            timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+            timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+            MemberComms.WELCOME
+        );
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
+
+        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
+            timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+            timeUtil.localDateTime(2000, 1, 2, 14, 0, 0),
+            MemberComms.AVOID
+        );
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
+
+        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+            timeUtil.localDateTime(2000, 1, 1, 15, 0, 0),
+            timeUtil.localDateTime(2000, 1, 1, 17, 0, 0),
+            MemberComms.WELCOME
+        );
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag2);
+        //when
+        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+            createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
+        );
+        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideMultipleFiltering1() {
+        /*
+        1번 카공 조회 가능 조건
+        카페 태그: CafeTagType.WIFI, CafeTagType.OUTLET
+        카공 태그: CafeStudyTagType.DEVELOPMENT
+        시작일: 2000년 1월 1일
+        소통 여부: MemberComms.WELCOME
+
+        2번 카공 조회 가능 조건
+        카페 태그: CafeTagType.WIFI, CafeTagType.COMFORTABLE_SEATING
+        카공 태그: CafeStudyTagType.DESIGN
+        시작일: 2000년 1월 2일
+        소통 여부: MemberComms.AVOID
+
+        3번 카공 조회 가능 조건
+        카페 태그: CafeTagType.WIFI, CafeTagType.OUTLET
+        카공 태그: CafeStudyTagType.DESIGN
+        시작일: 2000년 1월 1일
+        소통 여부: MemberComms.WELCOME
+         */
+
+        TimeUtil timeUtil = new FakeTimeUtil();
+
+        return Stream.of(
+            Arguments.of(
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 1),
+                // 카페 태그
+                List.of(CafeTagType.WIFI),
+                // 카공 태그
+                null,
+                // 소통 여부
+                null,
+                // 기댓값
+                2
+            ),
+            Arguments.of(
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 2),
+                // 카페 태그
+                Collections.EMPTY_LIST,
+                // 카공 태그
+                CafeStudyTagType.DESIGN,
+                // 소통 여부
+                null,
+                // 기댓값
+                1
+            ),
+            Arguments.of(
+                // 특정 시작일
+                timeUtil.localDate(2000, 1, 1),
+                // 카페 태그
+                List.of(CafeTagType.QUIET),
+                // 카공 태그
+                null,
+                // 소통 여부
+                null,
+                // 기댓값
+                0
+            ),
+            Arguments.of(
+                // 특정 시작일
+                null,
+                // 카페 태그
+                Collections.EMPTY_LIST,
+                // 카공 태그
+                null,
+                // 소통 여부
+                MemberComms.AVOID,
+                // 기댓값
+                1
+            )
+        );
     }
 
     private CafeStudySearchListRequest createCafeStudySearchListRequest(
