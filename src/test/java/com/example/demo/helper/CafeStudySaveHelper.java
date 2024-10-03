@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.demo.factory.TestCafeStudyFactory;
 import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.MemberComms;
 import com.example.demo.repository.study.CafeStudyRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,16 @@ public class CafeStudySaveHelper {
 
 		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudyWithName(mergedCafe, mergedLeader, startDateTime,
 			endDateTime, cafeStudyName);
+		return cafeStudyRepository.save(cafeStudy);
+	}
+
+	public CafeStudy saveCafeStudyWithMemberComms(Cafe cafe, Member leader, LocalDateTime startDateTime,
+												  LocalDateTime endDateTime, MemberComms memberComms) {
+		Member mergedLeader = memberRepository.save(leader);
+		Cafe mergedCafe = cafeRepository.save(cafe);
+
+		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudyWithMemberComms(mergedCafe, mergedLeader, startDateTime,
+			endDateTime, memberComms);
 		return cafeStudyRepository.save(cafeStudy);
 	}
 }

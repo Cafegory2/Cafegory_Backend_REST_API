@@ -57,7 +57,7 @@ class CafeStudyServiceTest extends ServiceTest {
 			.cafeId(cafeId)
 			.startDateTime(start)
 			.endDateTime(end)
-			.memberComms(MemberComms.POSSIBLE)
+			.memberComms(MemberComms.WELCOME)
 			.maxParticipants(4)
 			.introduction("스터디 소개글")
 			.build();

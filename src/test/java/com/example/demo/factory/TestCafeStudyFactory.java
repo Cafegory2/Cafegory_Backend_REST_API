@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;
 
-import static com.example.demo.implement.study.MemberComms.POSSIBLE;
+import static com.example.demo.implement.study.MemberComms.*;
 
 public class TestCafeStudyFactory {
 
@@ -18,7 +19,7 @@ public class TestCafeStudyFactory {
 			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
-			.memberComms(POSSIBLE)
+			.memberComms(WELCOME)
 			.maxParticipants(5)
 			.introduction("카페고리 스터디입니다.")
 			.build();
@@ -31,7 +32,7 @@ public class TestCafeStudyFactory {
 			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
-			.memberComms(POSSIBLE)
+			.memberComms(WELCOME)
 			.maxParticipants(5)
 			.introduction("카페고리 스터디입니다.")
 			.build();
@@ -44,7 +45,20 @@ public class TestCafeStudyFactory {
 			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
-			.memberComms(POSSIBLE)
+			.memberComms(WELCOME)
+			.maxParticipants(5)
+			.introduction("카페고리 스터디입니다.")
+			.build();
+	}
+
+	public static CafeStudy createCafeStudyWithMemberComms(Cafe cafe, Member leader,
+											LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
+		return CafeStudy.builder()
+			.name("카페고리 스터디")
+			.cafe(cafe)
+			.coordinator(leader)
+			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
+			.memberComms(memberComms)
 			.maxParticipants(5)
 			.introduction("카페고리 스터디입니다.")
 			.build();

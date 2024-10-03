@@ -5,6 +5,7 @@ import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
+import com.example.demo.implement.study.MemberComms;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -40,11 +41,16 @@ public class CafeStudyQueryRepository {
                     .or(cafeStudyNameContains(request.getKeyword())),
                 dateEq(request.getDate()),
                 cafeStudyTagTypeEq(request.getCafeStudyTagType()),
-                hasAllCafeTagTypes(request.getCafeTagTypes())
+                hasAllCafeTagTypes(request.getCafeTagTypes()),
+                memberCommsEq(request.getMemberComms())
             )
             .orderBy(cafeStudy.createdDate.desc());
 
         return SliceResponse.of(PagingUtil.toSlice(query, pageable));
+    }
+
+    private BooleanExpression memberCommsEq(MemberComms memberComms) {
+        return memberComms == null ? null : cafeStudy.memberComms.eq(memberComms);
     }
 
     private BooleanExpression hasAllCafeTagTypes(List<CafeTagType> cafeTagTypes) {
