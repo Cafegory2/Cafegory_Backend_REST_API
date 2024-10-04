@@ -11,21 +11,17 @@ import java.util.stream.Collectors;
 public class SliceResponse<T> {
 
     private final boolean hasNext;
-    private final boolean hasPrevious;
-    private final int currentPage;
-    private final int currentContentSize;
+    private final Integer nextPage;
     private final List<T> content;
 
-    private SliceResponse(boolean hasNext, boolean hasPrevious, int currentPage, int currentContentSize, List<T> content) {
+    private SliceResponse(boolean hasNext, Integer nextPage, List<T> content) {
         this.hasNext = hasNext;
-        this.hasPrevious = hasPrevious;
-        this.currentPage = currentPage;
-        this.currentContentSize = currentContentSize;
+        this.nextPage = hasNext ? nextPage : null;
         this.content = content;
     }
 
     public static <T> SliceResponse<T> of(Slice<T> content) {
-        return new SliceResponse<>(content.hasNext(), content.hasPrevious(), content.getNumber(), content.getNumberOfElements(), content.getContent());
+        return new SliceResponse<>(content.hasNext(), content.getNumber() + 1, content.getContent());
     }
 
     public <U> SliceResponse<U> map(Function<T, U> converter) {
@@ -33,6 +29,6 @@ public class SliceResponse<T> {
             .map(converter)
             .collect(Collectors.toList());
 
-        return new SliceResponse<>(this.hasNext, this.hasPrevious, this.currentPage, this.currentContentSize, convertedContent);
+        return new SliceResponse<>(this.hasNext, this.nextPage, convertedContent);
     }
 }

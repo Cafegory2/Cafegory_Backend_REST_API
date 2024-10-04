@@ -82,7 +82,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideKeywords1() {
@@ -140,7 +140,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideTime1() {
@@ -253,7 +253,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag1() {
@@ -299,7 +299,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, null, List.of(type), null, 0, 10)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag2() {
@@ -346,7 +346,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, null, List.of(type1, type2), null, 0, 10)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideCafeStudyTag3() {
@@ -389,7 +389,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, null, null, memberComms, 0, 10)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideMemberComms1() {
@@ -452,9 +452,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, null, null, null, 0, 5)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(5);
+        assertThat(result.getContent().size()).isEqualTo(5);
         assertThat(result.isHasNext()).isTrue();
-        assertThat(result.isHasPrevious()).isFalse();
     }
 
     @Test
@@ -476,9 +475,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, null, null, null, 1, 5)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(5);
+        assertThat(result.getContent().size()).isEqualTo(5);
         assertThat(result.isHasNext()).isTrue();
-        assertThat(result.isHasPrevious()).isTrue();
     }
 
     @Test
@@ -500,9 +498,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             createCafeStudySearchListRequest("강남", null, null, null, null, 2, 5)
         );
         //then
-        assertThat(result.getCurrentContentSize()).isEqualTo(1);
+        assertThat(result.getContent().size()).isEqualTo(1);
         assertThat(result.isHasNext()).isFalse();
-        assertThat(result.isHasPrevious()).isTrue();
     }
 
     @ParameterizedTest
@@ -557,7 +554,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         SliceResponse<CafeStudy> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
         );
-        assertThat(result.getCurrentContentSize()).isEqualTo(expected);
+        assertThat(result.getContent().size()).isEqualTo(expected);
     }
 
     private static Stream<Arguments> provideMultipleFiltering1() {
