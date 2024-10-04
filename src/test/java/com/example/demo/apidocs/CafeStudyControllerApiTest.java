@@ -4,16 +4,17 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeTag;
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyTag;
-import com.example.demo.implement.study.CafeStudyTagType;
+import com.example.demo.implement.study.*;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -38,6 +39,10 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
     @Autowired
     private MemberSaveHelper memberSaveHelper;
+    @Autowired
+    private CafeTagSaveHelper cafeTagSaveHelper;
+    @Autowired
+    private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
     @Autowired
     private TimeUtil timeUtil;
 
@@ -75,39 +80,62 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
     @Test
     void searchCafeStudies() {
+        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+
         Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag2);
+        Cafe cafe2 = cafeSaveHelper.saveCafeWith24For7();
+        cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag2);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag3);
 
         Member member = memberSaveHelper.saveMember("cafegory@gmail.com");
 
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+        CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
-        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+        LocalDateTime startDateTime1 = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member,
-            startDateTime.plusHours(2), startDateTime.plusHours(4));
+        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+            startDateTime1.plusHours(2), startDateTime1.plusHours(4), MemberComms.WELCOME);
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
+        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
+            startDateTime1.plusHours(4), startDateTime1.plusHours(6), MemberComms.WELCOME);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag1);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("keyword", "강남");
-        params.put("page", "0");
-        params.put("sizePerPage", "10");
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("keyword", "강남");
+        params.add("date", "2000-01-01");
+        params.add("cafeStudyTag", CafeStudyTagType.DEVELOPMENT.toString());
+        params.add("cafeTags", CafeTagType.WIFI.toString());
+        params.add("cafeTags", CafeTagType.OUTLET.toString());
+        params.add("memberComms", MemberComms.WELCOME.toString());
+        params.add("page", "0");
+        params.add("sizePerPage", "10");
 
         RestAssured.given(spec).log().all()
             .filter(RestAssuredRestDocumentationWrapper.document(
                     "카공 목록 조회 API",
                     requestParameters(
                         parameterWithName("keyword").description("검색어"),
+                        parameterWithName("date").description("조회 필터링 날짜"),
+                        parameterWithName("cafeStudyTag").description("카공 태그"),
+                        parameterWithName("cafeTags").description("카페 태그, 여러개의 카공 태그를 넣을 수 있다."),
+                        parameterWithName("memberComms").description("소통여부"),
                         parameterWithName("page").description("페이지 번호"),
                         parameterWithName("sizePerPage").description("페이지 당 개수")
-
                     )
                 )
             )
             .contentType(ContentType.JSON)
             .params(params)
             .when()
-//            .get("/cafe-study/list?keyword=aa&page=1&sizePerPage=10")
             .get("/cafe-study/list")
             .then().log().all()
             .statusCode(200);

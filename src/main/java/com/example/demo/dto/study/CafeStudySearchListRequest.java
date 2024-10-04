@@ -4,10 +4,11 @@ import com.example.demo.dto.PagedRequest;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.MemberComms;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -18,10 +19,13 @@ import java.util.List;
 @Setter
 public class CafeStudySearchListRequest extends PagedRequest {
 
-//    @NotBlank
+    @NotBlank
     private String keyword;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
+    @JsonProperty("cafeStudyTag")
     private CafeStudyTagType cafeStudyTagType;
+    @JsonProperty("cafeTags")
     private List<CafeTagType> cafeTagTypes = new ArrayList<>();
     private MemberComms memberComms;
 

@@ -12,16 +12,13 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
 import static com.example.demo.implement.study.QCafeStudy.*;
-import static com.querydsl.core.types.ExpressionUtils.orderBy;
 
 @Repository
 @RequiredArgsConstructor
