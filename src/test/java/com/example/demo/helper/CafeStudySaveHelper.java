@@ -1,10 +1,12 @@
 package com.example.demo.helper;
 
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 import com.example.demo.factory.TestCafeStudyFactory;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.MemberComms;
+import com.example.demo.implement.study.RecruitmentStatus;
 import com.example.demo.repository.study.CafeStudyRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,22 @@ public class CafeStudySaveHelper {
 
 		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
+		return cafeStudyRepository.save(cafeStudy);
+	}
+
+	public CafeStudy saveFinishedCafeStudy(Cafe cafe, Member leader, LocalDateTime startDateTime,
+								   LocalDateTime endDateTime) throws Exception {
+		Member mergedLeader = memberRepository.save(leader);
+		Cafe mergedCafe = cafeRepository.save(cafe);
+
+		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
+			endDateTime);
+
+		Class<? extends CafeStudy> cafeStudyClass = cafeStudy.getClass();
+		Field recruitmentStatusField = cafeStudyClass.getDeclaredField("recruitmentStatus");
+		recruitmentStatusField.setAccessible(true);
+		recruitmentStatusField.set(cafeStudy, RecruitmentStatus.CLOSED);
+
 		return cafeStudyRepository.save(cafeStudy);
 	}
 

@@ -58,14 +58,9 @@ public class CafeStudy extends BaseEntity {
 	@OneToMany(mappedBy = "cafeStudy")
 	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
 
-	// TODO: 기획 확정 후 enum 생성하기
-	// @Transient
-	// private Category category;
-
 	@Builder
-	private CafeStudy(Long id, String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
+	private CafeStudy(String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
 		MemberComms memberComms, int maxParticipants, String introduction) {
-		//TODO Builder에서 id 제거
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;

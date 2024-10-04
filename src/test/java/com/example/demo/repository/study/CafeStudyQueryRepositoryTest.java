@@ -18,6 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -404,10 +405,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         );
     }
 
-
     @Test
-    @DisplayName("카공 목록 조회는 카공 생성시간이 가장 최근인 순으로 정렬한다.")
-    void find_newest_cafe_studies() {
+    @DisplayName("카공 목록 조회는 카공 참여 가능 목록을 먼저 보여주고, 카공 생성시간이 최근인 순으로 정렬한다.")
+    void show_available_cafe_studies_first() throws Exception {
         //given
         Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
@@ -417,20 +417,19 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
         CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
-        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        Thread.sleep(1000);
+        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        Thread.sleep(1000);
         CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
         //when
-
         SliceResponse<CafeStudy> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
         );
         //then
         List<CafeStudy> content = result.getContent();
-
         assertThat(content)
             .extracting(CafeStudy::getCreatedDate)
-            .containsExactly(cafeStudy1.getCreatedDate(), cafeStudy2.getCreatedDate(), cafeStudy3.getCreatedDate());
-//                .isSortedAccordingTo(Comparator.reverseOrder());
+            .containsExactly(cafeStudy3.getCreatedDate(), cafeStudy1.getCreatedDate(), cafeStudy2.getCreatedDate());
     }
 
     @Test

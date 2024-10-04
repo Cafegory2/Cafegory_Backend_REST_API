@@ -51,7 +51,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
         params.put("cafeId", String.valueOf(cafe.getId()));
         params.put("startDateTime", "2024-10-10T12:00:00");
         params.put("endDateTime", "2024-10-10T14:00:00");
-        params.put("memberComms", "POSSIBLE");
+        params.put("memberComms", "WELCOME");
         params.put("maxParticipants", String.valueOf(4));
         params.put("introduction", "카페고리 스터디 소개글");
 

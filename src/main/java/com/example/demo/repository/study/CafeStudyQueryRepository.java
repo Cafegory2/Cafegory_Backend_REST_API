@@ -2,13 +2,12 @@ package com.example.demo.repository.study;
 
 import com.example.demo.dto.SliceResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyTagType;
-import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.implement.study.*;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
 import static com.example.demo.implement.study.QCafeStudy.*;
+import static com.querydsl.core.types.ExpressionUtils.orderBy;
 
 @Repository
 @RequiredArgsConstructor
@@ -44,9 +44,19 @@ public class CafeStudyQueryRepository {
                 hasAllCafeTagTypes(request.getCafeTagTypes()),
                 memberCommsEq(request.getMemberComms())
             )
-            .orderBy(cafeStudy.createdDate.desc());
+            .orderBy(
+                getRecruitmentStatusPriority().asc(),
+                cafeStudy.createdDate.desc()
+            );
 
         return SliceResponse.of(PagingUtil.toSlice(query, pageable));
+    }
+
+    private NumberExpression<Integer> getRecruitmentStatusPriority() {
+        return new CaseBuilder()
+            .when(cafeStudy.recruitmentStatus.eq(RecruitmentStatus.OPEN)).then(0)
+            .when(cafeStudy.recruitmentStatus.eq(RecruitmentStatus.CLOSED)).then(1)
+            .otherwise(3);
     }
 
     private BooleanExpression memberCommsEq(MemberComms memberComms) {
