@@ -18,7 +18,6 @@ public abstract class PagingUtil {
 
     public static org.springframework.data.domain.Pageable createByDefault() {
         return of(DEFAULT_PAGE, DEFAULT_SIZE);
-//        return org.springframework.data.domain.PageRequest.of(DEFAULT_PAGE, DEFAULT_SIZE);
     }
 
     public static org.springframework.data.domain.Pageable of(int page, int sizePerPage) {
