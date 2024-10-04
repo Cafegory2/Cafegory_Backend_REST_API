@@ -1,13 +1,16 @@
 package com.example.demo.util;
 
 import com.querydsl.jpa.impl.JPAQuery;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
 import java.util.List;
 
-public class PagingUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public abstract class PagingUtil {
 
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_SIZE = 10;
