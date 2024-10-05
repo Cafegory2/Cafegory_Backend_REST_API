@@ -26,19 +26,14 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/cafe-study")
 @RequiredArgsConstructor
-@Slf4j
 public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
 	private final CafeStudyQueryService cafeStudyQueryService;
-	private final TimeUtil timeUtil;
-
-	// private final CafeService cafeService;
-	// private final StudyOnceCommentService studyOnceCommentService;
-	// private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
-	// private final StudyOnceCommentQueryService studyOnceCommentQueryService;
 	private final CafeStudyMapper cafeStudyMapper;
 	private final StudyValidator studyValidator;
+
+	private final TimeUtil timeUtil;
 
 	// @GetMapping("/{studyOnceId:[0-9]+}")
 	// public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId,
@@ -55,10 +50,6 @@ public class CafeStudyController {
 	//
 	@GetMapping("/list")
 	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(@Validated @ModelAttribute CafeStudySearchListRequest request) {
-		log.info("request.getKeyword(): {}", request.getKeyword());
-		log.info("request.getPage(): {}", request.getPage());
-		log.info("request.getSizePerPage(): {}", request.getSizePerPage());
-
 		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(request);
 		return ResponseEntity.ok(response);
 	}

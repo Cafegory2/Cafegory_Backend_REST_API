@@ -22,6 +22,8 @@ import java.util.Map;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
@@ -124,12 +126,31 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
                     "카공 목록 조회 API",
                     requestParameters(
                         parameterWithName("keyword").description("검색어"),
-                        parameterWithName("date").description("조회 필터링 날짜"),
+                        parameterWithName("date").description("필터링 날짜"),
                         parameterWithName("cafeStudyTag").description("카공 태그"),
-                        parameterWithName("cafeTags").description("카페 태그, 여러개의 카공 태그를 넣을 수 있다."),
+                        parameterWithName("cafeTags").description("카페 태그 리스트, 여러개의 카공 태그를 넣을 수 있다."),
                         parameterWithName("memberComms").description("소통여부"),
-                        parameterWithName("page").description("페이지 번호"),
-                        parameterWithName("sizePerPage").description("페이지 당 개수")
+                        parameterWithName("page").description("페이지 번호, 0부터 시작한다."),
+                        parameterWithName("sizePerPage").description("한 페이지에 들어가는 컨텐츠 개수")
+                    ),
+                    responseFields(
+                        fieldWithPath("hasNext").description("다음 페이지가 있는지 여부"),
+                        fieldWithPath("nextPage").description("다음 페이지 번호, hasNext가 false라면 nextPage는 null이다."),
+                        fieldWithPath("content[].cafeStudyInfo.id").description("카공 ID"),
+                        fieldWithPath("content[].cafeStudyInfo.name").description("카공 이름"),
+                        fieldWithPath("content[].cafeStudyInfo.tags").description("카공 태그 리스트"),
+                        fieldWithPath("content[].cafeStudyInfo.startDateTime").description("카공 시작 날짜 및 시간"),
+                        fieldWithPath("content[].cafeStudyInfo.endDateTime").description("카공 종료 날짜 및 시간"),
+                        fieldWithPath("content[].cafeStudyInfo.maximumParticipants").description("최대 참여자 수"),
+                        fieldWithPath("content[].cafeStudyInfo.currentParticipants").description("현재 참여자 수"),
+                        fieldWithPath("content[].cafeStudyInfo.views").description("카공 조회수"),
+                        fieldWithPath("content[].cafeStudyInfo.memberComms").description("소통 여부"),
+                        fieldWithPath("content[].cafeStudyInfo.recruitmentStatus").description("모집 상태"),
+                        fieldWithPath("content[].writerInfo.id").description("작성자 ID"),
+                        fieldWithPath("content[].writerInfo.nickname").description("작성자 닉네임"),
+                        fieldWithPath("content[].cafeInfo.id").description("카페 ID"),
+                        fieldWithPath("content[].cafeInfo.imgUrl").description("카페 이미지 URL"),
+                        fieldWithPath("content[].cafeInfo.name").description("카페 이름")
                     )
                 )
             )

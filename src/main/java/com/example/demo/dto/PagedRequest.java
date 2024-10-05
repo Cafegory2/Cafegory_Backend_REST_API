@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PagedRequest {
 
-	protected int page = 1;
+	protected int page = 0;
 	protected int sizePerPage = 10;
 
 	protected PagedRequest(int page, int sizePerPage) {
