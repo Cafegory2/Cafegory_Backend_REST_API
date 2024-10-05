@@ -27,8 +27,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
 
-//TODO TimeUtil 어떻게 처리할건지 정해야함.
-@Import({FakeTimeUtil.class, CafeStudyQueryRepository.class})
+@Import(CafeStudyQueryRepository.class)
 class CafeStudyQueryRepositoryTest extends JpaTest {
 
     @Autowired

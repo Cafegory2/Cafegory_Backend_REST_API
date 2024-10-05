@@ -45,7 +45,6 @@ public class Member extends BaseEntity {
 		this.profileUrl = profileUrl;
 	}
 
-	//TODO 빌더 수정될 수 도 있음.
 	@Builder
 	public Member(Role role, String nickname, String email, String profileUrl, String bio, int participationCount, BeverageSize beverageSize, String refreshToken) {
 		this.role = role;
