@@ -22,8 +22,7 @@ public class ProfileControllerApiTest extends ApiDocsTest {
             .filter(RestAssuredRestDocumentationWrapper.document(
                     "회원가입 환영 페이지 API",
                     requestHeaders(
-                        headerWithName("Authorization").description("JWT 액세스 토큰"),
-                        headerWithName("Refresh-Token").description("JWT 리프레시 토큰, 리프레시 토큰 앞에는 Bearer을 붙이지 않는다.")
+                        headerWithName("Authorization").description("JWT 액세스 토큰")
                     ),
                     responseFields(
                         fieldWithPath("nickname").description("회원 닉네임"),
@@ -33,7 +32,6 @@ public class ProfileControllerApiTest extends ApiDocsTest {
             )
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + jwtToken.getAccessToken())
-            .header("Refresh-Token", jwtToken.getRefreshToken())
             .when()
             .get("/profile/welcome")
             .then().log().all()

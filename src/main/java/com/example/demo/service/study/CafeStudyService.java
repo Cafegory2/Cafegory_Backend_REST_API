@@ -162,7 +162,6 @@ public class CafeStudyService {
         validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
 
         Cafe cafe = cafeReader.getById(request.getCafeId());
-
         BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
             request.getStartDateTime().getDayOfWeek());
         businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
