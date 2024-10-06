@@ -68,7 +68,7 @@ public class CafeStudySearchListResponse {
     @Getter
     @Setter
     @Builder
-    protected static class CafeStudyInfo {
+    private static class CafeStudyInfo {
 
         private Long id;
         private String name;
@@ -85,7 +85,7 @@ public class CafeStudySearchListResponse {
     @Getter
     @Setter
     @Builder
-    protected static class WriterInfo {
+    private static class WriterInfo {
 
         private Long id;
         private String nickname;
@@ -94,7 +94,7 @@ public class CafeStudySearchListResponse {
     @Getter
     @Setter
     @Builder
-    protected static class CafeInfo {
+    private static class CafeInfo {
 
         private Long id;
         private String imgUrl;
