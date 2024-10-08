@@ -25,7 +25,7 @@ public class CafeTag extends BaseEntity {
 	private CafeTagType type;
 
 	@Builder
-	public CafeTag(CafeTagType type) {
+	private CafeTag(CafeTagType type) {
 		this.type = type;
 	}
 }

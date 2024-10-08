@@ -28,7 +28,7 @@ public class CafeStudyCafeStudyTag extends BaseEntity {
     private CafeStudyTag cafeStudyTag;
 
     @Builder
-    public CafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
+    private CafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
         this.cafeStudy = cafeStudy;
         this.cafeStudyTag = cafeStudyTag;
     }

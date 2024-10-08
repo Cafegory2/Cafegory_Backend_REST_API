@@ -40,7 +40,7 @@ public class CafeCafeTag extends BaseEntity {
     private int taggingCount;
 
     @Builder
-    public CafeCafeTag(Cafe cafe, CafeTag cafeTag) {
+    private CafeCafeTag(Cafe cafe, CafeTag cafeTag) {
         this.cafe = cafe;
         this.cafeTag = cafeTag;
         this.taggingCount = 0;
