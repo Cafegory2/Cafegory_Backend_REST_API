@@ -24,7 +24,6 @@ import com.example.demo.validator.StudyValidator;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/cafe-study")
 @RequiredArgsConstructor
 public class CafeStudyController {
 
@@ -48,13 +47,13 @@ public class CafeStudyController {
 	// 	return ResponseEntity.ok(response);
 	// }
 	//
-	@GetMapping("/list")
+	@GetMapping("/cafe-studies")
 	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(@Validated @ModelAttribute CafeStudySearchListRequest request) {
 		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(request);
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("")
+	@PostMapping("/cafe-study")
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
 		@AuthenticationPrincipal UserDetails userDetails) {
