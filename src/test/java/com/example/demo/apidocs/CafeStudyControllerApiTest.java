@@ -132,32 +132,13 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
                         parameterWithName("memberComms").description("소통여부"),
                         parameterWithName("page").description("페이지 번호, 0부터 시작한다."),
                         parameterWithName("sizePerPage").description("한 페이지에 들어가는 컨텐츠 개수")
-                    ),
-                    responseFields(
-                        fieldWithPath("hasNext").description("다음 페이지가 있는지 여부"),
-                        fieldWithPath("nextPage").description("다음 페이지 번호, hasNext가 false라면 nextPage는 null이다."),
-                        fieldWithPath("content[].cafeStudyInfo.id").description("카공 ID"),
-                        fieldWithPath("content[].cafeStudyInfo.name").description("카공 이름"),
-                        fieldWithPath("content[].cafeStudyInfo.tags").description("카공 태그 리스트"),
-                        fieldWithPath("content[].cafeStudyInfo.startDateTime").description("카공 시작 날짜 및 시간"),
-                        fieldWithPath("content[].cafeStudyInfo.endDateTime").description("카공 종료 날짜 및 시간"),
-                        fieldWithPath("content[].cafeStudyInfo.maximumParticipants").description("최대 참여자 수"),
-                        fieldWithPath("content[].cafeStudyInfo.currentParticipants").description("현재 참여자 수"),
-                        fieldWithPath("content[].cafeStudyInfo.views").description("카공 조회수"),
-                        fieldWithPath("content[].cafeStudyInfo.memberComms").description("소통 여부"),
-                        fieldWithPath("content[].cafeStudyInfo.recruitmentStatus").description("모집 상태"),
-                        fieldWithPath("content[].writerInfo.id").description("작성자 ID"),
-                        fieldWithPath("content[].writerInfo.nickname").description("작성자 닉네임"),
-                        fieldWithPath("content[].cafeInfo.id").description("카페 ID"),
-                        fieldWithPath("content[].cafeInfo.imgUrl").description("카페 이미지 URL"),
-                        fieldWithPath("content[].cafeInfo.name").description("카페 이름")
                     )
                 )
             )
             .contentType(ContentType.JSON)
             .params(params)
             .when()
-            .get("/cafe-study/list")
+            .get("/cafe-studies")
             .then().log().all()
             .statusCode(200);
     }

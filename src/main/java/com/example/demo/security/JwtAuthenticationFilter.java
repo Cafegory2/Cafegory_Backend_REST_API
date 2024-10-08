@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         "/login",
         "/docs",
         "/auth/refresh",
-        "/cafe-study/list"
+        "/cafe-study/list",
+        "/cafe-studies"
     );
 
 
