@@ -2,14 +2,16 @@ package com.example.demo.controller;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import com.example.demo.dto.SliceResponse;
+import com.example.demo.dto.study.CafeStudySearchListRequest;
+import com.example.demo.dto.study.CafeStudySearchListResponse;
+import com.example.demo.service.study.CafeStudyQueryService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
@@ -22,19 +24,16 @@ import com.example.demo.validator.StudyValidator;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/cafe-study")
 @RequiredArgsConstructor
+@RequestMapping("/cafe-studies")
 public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
-	private final TimeUtil timeUtil;
-
-	// private final CafeService cafeService;
-	// private final StudyOnceCommentService studyOnceCommentService;
-	// private final StudyOnceQAndAQueryService studyOnceQAndAQueryService;
-	// private final StudyOnceCommentQueryService studyOnceCommentQueryService;
+	private final CafeStudyQueryService cafeStudyQueryService;
 	private final CafeStudyMapper cafeStudyMapper;
 	private final StudyValidator studyValidator;
+
+	private final TimeUtil timeUtil;
 
 	// @GetMapping("/{studyOnceId:[0-9]+}")
 	// public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId,
@@ -49,19 +48,17 @@ public class CafeStudyController {
 	// 	return ResponseEntity.ok(response);
 	// }
 	//
-	// @GetMapping("/list")
-	// public ResponseEntity<PagedResponse<StudyOnceSearchListResponse>> searchList(
-	// 	@ModelAttribute StudyOnceSearchRequest studyOnceSearchRequest) {
-	// 	PagedResponse<StudyOnceSearchListResponse> pagedResponse = studyOnceService.searchStudy(studyOnceSearchRequest);
-	// 	return ResponseEntity.ok(pagedResponse);
-	// }
+	@GetMapping
+	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(@Validated @ModelAttribute CafeStudySearchListRequest request) {
+		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(request);
+		return ResponseEntity.ok(response);
+	}
 
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-
 		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
 		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);

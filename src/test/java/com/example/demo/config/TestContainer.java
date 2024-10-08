@@ -2,21 +2,21 @@ package com.example.demo.config;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.MySQLContainer;
 
 public abstract class TestContainer {
 
-	protected static PostgreSQLContainer postgreSQLContainer;
+	protected static MySQLContainer mysqlContainer;
 
 	static {
-		postgreSQLContainer = new PostgreSQLContainer<>("postgres:16-alpine");
-		postgreSQLContainer.start();
+		mysqlContainer = new MySQLContainer<>("mysql:8.0");
+		mysqlContainer.start();
 	}
 
 	@DynamicPropertySource
 	protected static void registerDynamicProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", postgreSQLContainer::getJdbcUrl);
-		registry.add("spring.datasource.username", postgreSQLContainer::getUsername);
-		registry.add("spring.datasource.password", postgreSQLContainer::getPassword);
+		registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
+		registry.add("spring.datasource.username", mysqlContainer::getUsername);
+		registry.add("spring.datasource.password", mysqlContainer::getPassword);
 	}
 }

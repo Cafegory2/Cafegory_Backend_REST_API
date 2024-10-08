@@ -1,19 +1,12 @@
 package com.example.demo.implement.cafe;
 
-import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
 
+import com.example.demo.implement.study.CafeTagType;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,13 +21,11 @@ public class CafeTag extends BaseEntity {
 	@Column(name = "cafe_tag_id")
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Cafe cafe;
+	@Enumerated(EnumType.STRING)
+	private CafeTagType type;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Tag tag;
-
-	private int taggingCount;
+	@Builder
+	private CafeTag(CafeTagType type) {
+		this.type = type;
+	}
 }

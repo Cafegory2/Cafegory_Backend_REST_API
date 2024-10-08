@@ -1,22 +1,12 @@
 package com.example.demo.implement.study;
 
-import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.cafe.Tag;
-
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,16 +14,16 @@ import lombok.NoArgsConstructor;
 @Table(name = "cafe_study_tag")
 public class CafeStudyTag extends BaseEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "cafe_study_tag_id")
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "cafe_study_tag_id")
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudy cafeStudy;
+    @Enumerated(EnumType.STRING)
+    private CafeStudyTagType type;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Tag tag;
+    @Builder
+    private CafeStudyTag(CafeStudyTagType type) {
+        this.type = type;
+    }
 }

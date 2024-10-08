@@ -57,7 +57,7 @@ class CafeStudyServiceTest extends ServiceTest {
 			.cafeId(cafeId)
 			.startDateTime(start)
 			.endDateTime(end)
-			.memberComms(MemberComms.POSSIBLE)
+			.memberComms(MemberComms.WELCOME)
 			.maxParticipants(4)
 			.introduction("스터디 소개글")
 			.build();
@@ -126,13 +126,16 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
 	void exception_case1() {
 		//given
-		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
+		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
+
 		Member leader = memberSaveHelper.saveMember();
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), timeUtil.now(), cafeStudyCreateRequest));
+		assertDoesNotThrow(() ->
+			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest));
 	}
 
 	@Test
@@ -304,11 +307,13 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카페 영업시간 밖의 시간에 카공을 만들 수 없다.")
 	void study_can_not_start_outside_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+
 		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		Member leader = memberSaveHelper.saveMember();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertThatThrownBy(() -> sut.createStudy(leader.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
+		assertThatThrownBy(() -> sut.createStudy(leader.getId(), now, cafeStudyCreateRequest)).isInstanceOf(
 			CafegoryException.class).hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
 	}
 
@@ -324,11 +329,13 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
 	void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+
 		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		Member leader = memberSaveHelper.saveMember();
 		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), timeUtil.now(), studyOnceCreateRequest));
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest));
 	}
 
 	static Stream<Arguments> provideStartAndEndDateTime2() {

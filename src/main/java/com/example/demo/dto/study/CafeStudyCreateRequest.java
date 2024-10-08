@@ -15,14 +15,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CafeStudyCreateRequest {
-	@NotBlank // String 타입인 경우에는 @NotBlank 가능
+	@NotBlank
 	private String name;
-//	@NotBlank Long타입에는 @NotBlank 불가능 @NotNull만 가능
 	private Long cafeId;
 	private LocalDateTime startDateTime;
 	private LocalDateTime endDateTime;
 	private MemberComms memberComms;
-//	@NotNull int타입은 @NotNull 불필요
 	private int maxParticipants;
 	@NotBlank
 	private String introduction;

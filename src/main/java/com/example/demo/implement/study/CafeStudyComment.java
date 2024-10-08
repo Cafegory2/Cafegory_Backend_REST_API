@@ -45,7 +45,6 @@ public class CafeStudyComment extends BaseEntity {
 
 	// @Builder
 	// private StudyOnceComment(Long id, String content, Member member, CafeStudy cafeStudy) {
-	// 	//todo content에 대한 검증 추가
 	// 	this.id = id;
 	// 	this.content = content;
 	// 	this.member = member;
@@ -58,7 +57,6 @@ public class CafeStudyComment extends BaseEntity {
 	// }
 	//
 	// public void changeContent(String content) {
-	// 	//todo content 에 대한 검증 추가
 	// 	this.content = content;
 	// }
 	//

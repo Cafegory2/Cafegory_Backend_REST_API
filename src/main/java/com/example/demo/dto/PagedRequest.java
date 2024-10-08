@@ -1,9 +1,20 @@
 package com.example.demo.dto;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PagedRequest {
-	protected int page = 1;
+
+	protected int page = 0;
 	protected int sizePerPage = 10;
+
+	protected PagedRequest(int page, int sizePerPage) {
+		this.page = page;
+		this.sizePerPage = sizePerPage;
+	}
 }

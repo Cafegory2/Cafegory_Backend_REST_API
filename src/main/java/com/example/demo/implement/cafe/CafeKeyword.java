@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,12 +29,15 @@ public class CafeKeyword extends BaseEntity {
 	@Column(name = "cafe_keyword_id")
 	private Long id;
 
+	private String keyword;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Cafe cafe;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "keyword_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Keyword keyword;
-
+	@Builder
+	private CafeKeyword(String keyword, Cafe cafe) {
+		this.keyword = keyword;
+		this.cafe = cafe;
+	}
 }

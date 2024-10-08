@@ -1,4 +1,4 @@
-package com.example.demo.implement;
+package com.example.demo.config;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
@@ -10,7 +10,6 @@ import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
 @RequiredArgsConstructor
 public class CurrentDateTimeProvider implements DateTimeProvider {
 

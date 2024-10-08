@@ -5,9 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -35,15 +37,17 @@ class JwtAuthenticationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-        "/favicon.ico",
-        "/login",
-        "/docs",
-        "/auth/refresh"})
+    @CsvSource({
+        "GET, /favicon.ico",
+        "GET, /login",
+        "GET, /docs",
+        "POST, /auth/refresh",
+    })
     @DisplayName("해당 path는 Jwt 토큰 검증을 하지 않는다.")
-    void the_specified_path_does_not_require_Jwt_token_verification(String path) throws Exception {
+    void the_specified_path_does_not_require_Jwt_token_verification(String method, String path) throws Exception {
         //given
         MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod(method);
         request.setRequestURI(path);
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);
@@ -54,13 +58,14 @@ class JwtAuthenticationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-        "/cafe-study"
+    @CsvSource({
+        "POST, /cafe-studies"
     })
     @DisplayName("해당 path는 Jwt 토큰 검증을 한다.")
-    void the_specified_path_requires_Jwt_token_verification(String path) throws ServletException, IOException {
+    void the_specified_path_requires_Jwt_token_verification(String method, String path) throws ServletException, IOException {
         //given
         MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod(method);
         request.setRequestURI(path);
         MockHttpServletResponse response = new MockHttpServletResponse();
         FilterChain filterChain = mock(FilterChain.class);

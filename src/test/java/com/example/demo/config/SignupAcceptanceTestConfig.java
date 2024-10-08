@@ -16,13 +16,11 @@ public class SignupAcceptanceTestConfig {
 
     @Bean
     @Primary
-    @Profile("test")
     public LoginService spyLoginService(MemberReader memberReader, LoginProcessor loginProcessor, SignupProcessor signupProcessor) {
         return new SpyLoginService(memberReader, loginProcessor, signupProcessor);
     }
 
     @Bean
-    @Profile("test")
     public MemberSignupAcceptanceTestHelper memberSignupAcceptanceTestHelper() {
         return new MemberSignupAcceptanceTestHelper();
     }
