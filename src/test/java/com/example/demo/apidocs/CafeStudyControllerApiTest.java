@@ -22,8 +22,6 @@ import java.util.Map;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 
@@ -75,7 +73,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
             .header("Authorization", "Bearer " + jwtToken.getAccessToken())
             .body(params)
             .when()
-            .post("/cafe-study")
+            .post("/cafe-studies")
             .then().log().all()
             .statusCode(200);
     }

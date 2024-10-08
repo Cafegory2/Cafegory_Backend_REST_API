@@ -25,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/cafe-studies")
+@Slf4j
 public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
@@ -47,18 +49,18 @@ public class CafeStudyController {
 	// 	return ResponseEntity.ok(response);
 	// }
 	//
-	@GetMapping("/cafe-studies")
+	@GetMapping
 	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(@Validated @ModelAttribute CafeStudySearchListRequest request) {
 		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(request);
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/cafe-study")
+	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-
+		log.info("memberId: {}", memberId);
 		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
 		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);

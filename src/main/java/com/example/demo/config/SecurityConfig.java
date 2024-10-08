@@ -6,6 +6,7 @@ import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -44,8 +45,7 @@ public class SecurityConfig {
                 .antMatchers("/docs/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/auth/refresh").permitAll()
-                .antMatchers("/cafe-study/list").permitAll()
-                .antMatchers("/cafe-studies").permitAll()
+                .antMatchers(HttpMethod.GET,"/cafe-studies").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager, jpaUserDetailsService), UsernamePasswordAuthenticationFilter.class)
