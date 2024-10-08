@@ -408,18 +408,20 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
     @DisplayName("카공 목록 조회는 카공 참여 가능 목록을 먼저 보여주고, 카공 생성시간이 최근인 순으로 정렬한다.")
     void show_available_cafe_studies_first() throws Exception {
         //given
-        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith24For7();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
 
         Member member = memberSaveHelper.saveMember();
 
-        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
 
         CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         Thread.sleep(1000);
-        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        CafeStudy finishedCafeStudy2 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
         Thread.sleep(1000);
         CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
+        Thread.sleep(1000);
+        CafeStudy finishedCafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
         //when
         SliceResponse<CafeStudy> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
@@ -428,7 +430,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         List<CafeStudy> content = result.getContent();
         assertThat(content)
             .extracting(CafeStudy::getCreatedDate)
-            .containsExactly(cafeStudy3.getCreatedDate(), cafeStudy1.getCreatedDate(), cafeStudy2.getCreatedDate());
+            .containsExactly(cafeStudy3.getCreatedDate(), cafeStudy1.getCreatedDate(), finishedCafeStudy4.getCreatedDate(), finishedCafeStudy2.getCreatedDate());
     }
 
     @Test
