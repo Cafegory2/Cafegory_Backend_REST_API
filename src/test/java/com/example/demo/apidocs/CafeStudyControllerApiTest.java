@@ -11,6 +11,7 @@ import com.example.demo.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
@@ -49,6 +50,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     private TimeUtil timeUtil;
 
     @Test
+    @DisplayName("카공 생성 API")
     void create() {
         //given
         Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
@@ -83,6 +85,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     }
 
     @Test
+    @DisplayName("카공 목록 조회 API")
     void searchCafeStudies() {
         CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
         CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
@@ -146,7 +149,8 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     }
 
     @Test
-    void searchCafeStudy() {
+    @DisplayName("카공 상세정보 조회 API")
+    void getCafeStudyDetail() {
         Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 
         Member coordinator = memberSaveHelper.saveMember("coordinator@gmail.com", "카공글 작성자");
