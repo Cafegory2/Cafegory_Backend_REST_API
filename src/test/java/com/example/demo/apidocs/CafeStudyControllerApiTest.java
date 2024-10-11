@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,11 +53,13 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
         //given
         Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 
+        LocalDate localDateNow = timeUtil.now().plusDays(1).toLocalDate();
+
         Map<String, String> params = new HashMap<>();
         params.put("name", "카페고리 스터디");
         params.put("cafeId", String.valueOf(cafe.getId()));
-        params.put("startDateTime", "2024-10-10T12:00:00");
-        params.put("endDateTime", "2024-10-10T14:00:00");
+        params.put("startDateTime", localDateNow + "T12:00:00");
+        params.put("endDateTime", localDateNow + "T14:00:00");
         params.put("memberComms", "WELCOME");
         params.put("maxParticipants", String.valueOf(4));
         params.put("introduction", "카페고리 스터디 소개글");
