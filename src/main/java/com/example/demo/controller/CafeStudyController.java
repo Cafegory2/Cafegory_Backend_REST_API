@@ -3,8 +3,7 @@ package com.example.demo.controller;
 import static com.example.demo.exception.ExceptionType.*;
 
 import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.dto.study.CafeStudySearchListResponse;
+import com.example.demo.dto.study.*;
 import com.example.demo.service.study.CafeStudyQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dto.study.CafeStudyCreateRequest;
-import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyService;
@@ -35,19 +32,13 @@ public class CafeStudyController {
 
 	private final TimeUtil timeUtil;
 
-	// @GetMapping("/{studyOnceId:[0-9]+}")
-	// public ResponseEntity<StudyOnceSearchResponse> search(@PathVariable Long studyOnceId,
-	// 	@RequestHeader(value = "Authorization", required = false) String authorization) {
-	// 	if (StringUtils.hasText(authorization)) {
-	// 		long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 		StudyOnceSearchResponse response = studyOnceService.searchStudyOnceWithMemberParticipation(studyOnceId,
-	// 			memberId);
-	// 		return new ResponseEntity<>(response, HttpStatus.OK);
-	// 	}
-	// 	StudyOnceSearchResponse response = studyOnceService.searchByStudyId(studyOnceId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
+
+	@GetMapping("/{cafeStudyId}")
+	public ResponseEntity<CafeStudyDetailResponse> getCafeStudyDetail(@PathVariable Long cafeStudyId) {
+		CafeStudyDetailResponse response = cafeStudyQueryService.getCafeStudyDetail(cafeStudyId);
+		return ResponseEntity.ok(response);
+	}
+
 	@GetMapping
 	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(@Validated @ModelAttribute CafeStudySearchListRequest request) {
 		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(request);

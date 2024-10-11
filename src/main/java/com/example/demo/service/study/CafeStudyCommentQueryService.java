@@ -24,7 +24,7 @@
 // @Service
 // @RequiredArgsConstructor
 // @Transactional(readOnly = true)
-// public class StudyOnceCommentQueryServiceImpl implements StudyOnceCommentQueryService {
+// public class CafeStudyCommentQueryService implements StudyOnceCommentQueryService {
 //
 // 	private final StudyOnceCommentRepository studyOnceCommentRepository;
 // 	private final StudyOnceRepository studyOnceRepository;
