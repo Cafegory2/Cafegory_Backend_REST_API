@@ -22,6 +22,6 @@ public class CafeStudyReader {
 
     public CafeStudy read(Long cafeStudyId) {
         return cafeStudyRepository.findById(cafeStudyId)
-            .orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
+            .orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
     }
 }
