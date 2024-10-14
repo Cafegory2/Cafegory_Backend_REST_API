@@ -9,10 +9,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@SQLDelete(sql = "UPDATE CafeTag SET deleted_date = CURRENT_TIMESTAMP WHERE cafe_tag_id=?")
+@Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_tag")
 public class CafeTag extends BaseEntity {
 

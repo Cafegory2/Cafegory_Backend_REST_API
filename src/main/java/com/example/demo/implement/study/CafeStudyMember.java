@@ -23,10 +23,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@SQLDelete(sql = "UPDATE cafe_study_member SET deleted_date = CURRENT_TIMESTAMP WHERE cafe_study_member_id=?")
+@Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_member", uniqueConstraints = {
 	@UniqueConstraint(name = "unique_cafe_study_member", columnNames = {"cafe_study_id", "member_id"})})
 public class CafeStudyMember extends BaseEntity {

@@ -24,8 +24,4 @@ public abstract class BaseEntity {
 	@LastModifiedDate
 	private LocalDateTime lastModifiedDate;
 	private LocalDateTime deletedDate;
-
-	public void softDelete(LocalDateTime deletedDate) {
-		this.deletedDate = deletedDate;
-	}
 }

@@ -16,10 +16,14 @@ import com.example.demo.implement.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE menu SET deleted_date = CURRENT_TIMESTAMP WHERE menu_id=?")
+@Where(clause = "deleted_date IS NULL")
 @Table(name = "menu")
 public class Menu extends BaseEntity {
 
