@@ -17,7 +17,7 @@ class ProfileMapperTest {
     @DisplayName("WelcomeProfileResponse 로 변환한다.")
     void toWelcomeProfileResponse() {
         //given
-        Member member = createMember("테스트닉네임", "testProfileUrl");
+        Member member = createMemberWith("테스트닉네임", "testProfileUrl");
         //when
         WelcomeProfileResponse response = sut.toWelcomeProfileResponse(member);
         //then

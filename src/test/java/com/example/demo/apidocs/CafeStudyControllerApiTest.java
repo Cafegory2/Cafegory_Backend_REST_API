@@ -11,19 +11,20 @@ import com.example.demo.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 class CafeStudyControllerApiTest extends ApiDocsTest {
 
@@ -44,18 +45,23 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     @Autowired
     private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
     @Autowired
+    private CafeStudyCommentSaveHelper cafeStudyCommentSaveHelper;
+    @Autowired
     private TimeUtil timeUtil;
 
     @Test
+    @DisplayName("카공 생성 API")
     void create() {
         //given
         Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
 
+        LocalDate localDateNow = timeUtil.now().plusDays(1).toLocalDate();
+
         Map<String, String> params = new HashMap<>();
         params.put("name", "카페고리 스터디");
         params.put("cafeId", String.valueOf(cafe.getId()));
-        params.put("startDateTime", "2024-10-10T12:00:00");
-        params.put("endDateTime", "2024-10-10T14:00:00");
+        params.put("startDateTime", localDateNow + "T12:00:00");
+        params.put("endDateTime", localDateNow + "T14:00:00");
         params.put("memberComms", "WELCOME");
         params.put("maxParticipants", String.valueOf(4));
         params.put("introduction", "카페고리 스터디 소개글");
@@ -79,6 +85,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     }
 
     @Test
+    @DisplayName("카공 목록 조회 API")
     void searchCafeStudies() {
         CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
         CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
@@ -137,6 +144,46 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
             .params(params)
             .when()
             .get("/cafe-studies")
+            .then().log().all()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("카공 상세정보 조회 API")
+    void getCafeStudyDetail() {
+        Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+
+        Member coordinator = memberSaveHelper.saveMember("coordinator@gmail.com", "카공글 작성자");
+        Member member1 = memberSaveHelper.saveMember("test1@gmail.com", "멤버1");
+        Member member2 = memberSaveHelper.saveMember("test2@gmail.com", "멤버2");
+
+        CafeStudyTag cafeStudyTag = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+
+        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+
+        CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, coordinator,
+            startDateTime.plusHours(2), startDateTime.plusHours(4), MemberComms.WELCOME);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy, cafeStudyTag);
+
+        CafeStudyComment root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyComment replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);
+        CafeStudyComment replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyRole.MEMBER, cafeStudy);
+
+        CafeStudyComment root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyRole.MEMBER, cafeStudy);
+        CafeStudyComment replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyRole.COORDINATOR, cafeStudy);
+        CafeStudyComment replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyRole.MEMBER, cafeStudy);
+
+        RestAssured.given(spec).log().all()
+            .filter(RestAssuredRestDocumentationWrapper.document(
+                    "카공 상세정보 조회 API",
+                    pathParameters(
+                        parameterWithName("cafeStudyId").description("카공 ID")
+                    )
+                )
+            )
+            .contentType(ContentType.JSON)
+            .when()
+            .get("/cafe-studies/{cafeStudyId}", cafeStudy.getId())
             .then().log().all()
             .statusCode(200);
     }

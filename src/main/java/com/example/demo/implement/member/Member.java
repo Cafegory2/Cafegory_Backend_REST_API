@@ -11,10 +11,13 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "deleted_date IS NULL")
 @Table(name = "member")
 public class Member extends BaseEntity {
 

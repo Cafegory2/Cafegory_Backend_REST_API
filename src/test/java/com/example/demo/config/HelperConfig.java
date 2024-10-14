@@ -3,6 +3,7 @@ package com.example.demo.config;
 import com.example.demo.helper.*;
 import com.example.demo.repository.cafe.*;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
+import com.example.demo.repository.study.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -60,5 +61,13 @@ public class HelperConfig {
         CafeCafeTagRepository cafeCafeTagRepository
     ) {
         return new CafeCafeTagSaveHelper(cafeRepository, cafeTagRepository, cafeCafeTagRepository);
+    }
+
+    @Bean
+    public CafeStudyCommentSaveHelper cafeStudyCommentSaveHelper(
+        CafeStudyCommentRepository cafeStudyCommentRepository,
+        MemberRepository memberRepository, CafeStudyRepository cafeStudyRepository
+    ) {
+        return new CafeStudyCommentSaveHelper(cafeStudyCommentRepository, memberRepository, cafeStudyRepository);
     }
 }
