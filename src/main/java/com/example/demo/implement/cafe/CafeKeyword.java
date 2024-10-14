@@ -23,7 +23,6 @@ import org.hibernate.annotations.Where;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@SQLDelete(sql = "UPDATE cafe_keyword SET deleted_date = CURRENT_TIMESTAMP WHERE cafe_keyword_id=?")
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_keyword")
 public class CafeKeyword extends BaseEntity {

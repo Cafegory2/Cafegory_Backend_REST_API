@@ -18,7 +18,6 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@SQLDelete(sql = "UPDATE cafe_study_comment SET deleted_date = CURRENT_TIMESTAMP WHERE cafe_study_comment_id=?")
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_comment")
 public class CafeStudyComment extends BaseEntity {

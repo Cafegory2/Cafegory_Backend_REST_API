@@ -17,7 +17,6 @@ import org.hibernate.annotations.Where;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@SQLDelete(sql = "UPDATE member SET deleted_date = CURRENT_TIMESTAMP WHERE member_id=?")
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "member")
 public class Member extends BaseEntity {

@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@SQLDelete(sql = "UPDATE cafe_study_tag SET deleted_date = CURRENT_TIMESTAMP WHERE cafe_study_tag_id=?")
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_tag")
 public class CafeStudyTag extends BaseEntity {
