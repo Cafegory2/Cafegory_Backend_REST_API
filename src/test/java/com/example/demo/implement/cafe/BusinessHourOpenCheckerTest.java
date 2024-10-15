@@ -151,15 +151,15 @@ public class BusinessHourOpenCheckerTest {
 			 4일 : 일
 			*/
 			//TODO 소수점 제거 필요
-			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59, 999_999_000), true),
+			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 22, 0), false),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 58), true),
-			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59, 999_999_000), false),
+			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 59), false),
 			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 58), true),
-			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59, 999_999_000), false),
+			Arguments.of(LocalDateTime.of(2024, 2, 2, 23, 59, 59), false),
 			Arguments.of(LocalDateTime.of(2024, 2, 3, 0, 0), true),
 			Arguments.of(LocalDateTime.of(2024, 2, 4, 0, 0), true),
-			Arguments.of(LocalDateTime.of(2024, 2, 4, 21, 59, 59, 999_999_000), true),
+			Arguments.of(LocalDateTime.of(2024, 2, 4, 21, 59, 59), true),
 			Arguments.of(LocalDateTime.of(2024, 2, 4, 22, 0, 0), false)
 		);
 	}
