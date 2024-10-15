@@ -18,9 +18,4 @@ public class Address {
 		this.fullAddress = fullAddress;
 		this.region = region;
 	}
-
-	public String showFullAddress() {
-		return getFullAddress();
-	}
-
 }

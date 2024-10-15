@@ -14,6 +14,7 @@ plugins {
     id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
     id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
     id 'org.hidetake.swagger.generator' version '2.18.2'
+    id 'org.jetbrains.kotlin.jvm'
 
 }
 
@@ -21,7 +22,6 @@ group = 'com.cafegory'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '11'
 }
 
 configurations {
@@ -89,6 +89,7 @@ dependencies {
     testImplementation 'com.epages:restdocs-api-spec-restassured:' + restdocsApiSpecVersion
     testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
     swaggerUI 'org.webjars:swagger-ui:5.17.14'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
 }
 
@@ -197,5 +198,8 @@ configurations {
 }
 compileQuerydsl {
     options.annotationProcessorPath = configurations.querydsl
+}
+kotlin {
+    jvmToolchain(11)
 }
 //querydsl 추가 끝
