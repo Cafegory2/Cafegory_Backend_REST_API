@@ -37,9 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     static {
         excludeUrls.add(GET.name(), "/favicon.ico");
         excludeUrls.add(GET.name(), "/docs");
-        excludeUrls.add(GET.name(), "/cafe-studies");
         excludeUrls.add(GET.name(), "/login");
-
+        excludeUrls.add(GET.name(), "/cafe-studies");
+        excludeUrls.add(GET.name(), "/cafes");
         excludeUrls.add(POST.name(), "/auth/refresh");
     }
 

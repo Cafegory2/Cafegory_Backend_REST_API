@@ -48,7 +48,7 @@ public class CafeApiTest extends ApiDocsTest {
             )
             .contentType(ContentType.JSON)
             .when()
-            .get("/cafe/{cafeId}", cafe.getId())
+            .get("/cafes/{cafeId}", cafe.getId())
             .then().log().all()
             .statusCode(200)
             .extract().as(CafeDetailResponse.class);
