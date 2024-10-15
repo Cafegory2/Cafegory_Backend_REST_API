@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -38,4 +39,10 @@ public class Menu extends BaseEntity {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Cafe cafe;
 
+	@Builder
+	private Menu(String name, String price, Cafe cafe) {
+		this.name = name;
+		this.price = price;
+		this.cafe = cafe;
+	}
 }
