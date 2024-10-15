@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/auth/refresh").permitAll()
                 .antMatchers(HttpMethod.GET,"/cafe-studies/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/cafes/**").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager, jpaUserDetailsService), UsernamePasswordAuthenticationFilter.class)

@@ -9,6 +9,8 @@ import com.example.demo.repository.study.CafeStudyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class CafeStudyReader {
@@ -18,6 +20,10 @@ public class CafeStudyReader {
 
     public SliceResponse<CafeStudy> searchCafeStudies(CafeStudySearchListRequest request) {
         return cafeStudyQueryRepository.findCafeStudies(request);
+    }
+
+    public List<CafeStudy> readAllWithCoordinatorBy(Long cafeId) {
+        return cafeStudyRepository.findAllByCafeId(cafeId);
     }
 
     public CafeStudy read(Long cafeStudyId) {

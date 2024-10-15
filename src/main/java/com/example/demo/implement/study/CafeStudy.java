@@ -86,6 +86,10 @@ public class CafeStudy extends BaseEntity {
 		cafeStudyMembers.add(cafeStudyMember);
 	}
 
+	public boolean isRecruitmentOpen() {
+		return this.recruitmentStatus.isRecruitmentOpen();
+	}
+
 	// private void validateStartDateTime(LocalDateTime startDateTime) {
 	// 	LocalDateTime now = LOCAL_DATE_TIME_NOW;
 	// 	Duration between = Duration.between(now, startDateTime);

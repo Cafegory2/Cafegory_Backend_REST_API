@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class BusinessHourQueryDslRepository {
+public class BusinessHourQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	public BusinessHour findWithCafeAndDayOfWeek(Cafe cafe, DayOfWeek dayOfWeek) {

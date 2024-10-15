@@ -18,4 +18,9 @@ public class CafeReader {
 	public Cafe getById(Long cafeId) {
 		return cafeRepository.findById(cafeId).orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
+
+	public Cafe getWithTags(Long cafeId) {
+		 return cafeRepository.findWithTags(cafeId)
+			 .orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+	}
 }

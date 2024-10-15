@@ -70,4 +70,11 @@ public class HelperConfig {
     ) {
         return new CafeStudyCommentSaveHelper(cafeStudyCommentRepository, memberRepository, cafeStudyRepository);
     }
+
+    @Bean
+    public MenuSaveHelper menuSaveHelper(
+        MenuRepository menuRepository, CafeRepository cafeRepository
+    ) {
+        return new MenuSaveHelper(menuRepository, cafeRepository);
+    }
 }

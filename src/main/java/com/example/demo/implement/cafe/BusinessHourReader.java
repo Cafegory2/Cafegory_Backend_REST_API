@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.repository.cafe.BusinessHourQueryDslRepository;
+import com.example.demo.repository.cafe.BusinessHourQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +12,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BusinessHourReader {
 
-	private final BusinessHourQueryDslRepository businessHourQueryDslRepository;
+	private final BusinessHourQueryRepository businessHourQueryRepository;
 
 	public BusinessHour getBusinessHoursByCafeAndDay(Cafe cafe, DayOfWeek startDateTime) {
-		return businessHourQueryDslRepository.findWithCafeAndDayOfWeek(cafe, startDateTime);
+		return businessHourQueryRepository.findWithCafeAndDayOfWeek(cafe, startDateTime);
 	}
 
 }
