@@ -150,7 +150,6 @@ public class BusinessHourOpenCheckerTest {
 			 3일 : 토
 			 4일 : 일
 			*/
-			//TODO 소수점 제거 필요
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 21, 59, 59), true),
 			Arguments.of(LocalDateTime.of(2024, 1, 29, 22, 0), false),
 			Arguments.of(LocalDateTime.of(2024, 1, 30, 23, 59, 58), true),
