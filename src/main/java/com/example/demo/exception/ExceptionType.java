@@ -37,7 +37,7 @@ public enum ExceptionType {
 	STUDY_ONCE_CONFLICT_TIME(CONFLICT, "해당 시간에 참여중인 카공이 이미 있습니다."),
 	STUDY_ONCE_DUPLICATE(CONFLICT, "이미 참여중인 카공입니다."),
 	STUDY_ONCE_FULL(CONFLICT, "카공 신청 가능 인원을 초과하였습니다."),
-	STUDY_ONCE_NOT_FOUND(NOT_FOUND, "해당 카공을 찾을 수 없습니다."),
+	CAFE_STUDY_NOT_FOUND(NOT_FOUND, "해당 카공을 찾을 수 없습니다."),
 	STUDY_ONCE_TOO_LATE_JOIN(CONFLICT, "카공 인원 모집이 확정된 이후 참여 신청을 할 수 없습니다."),
 	STUDY_ONCE_TOO_LATE_QUIT(CONFLICT, "카공 인원 모집이 확정된 이후 참여 취소를 할 수 없습니다."),
 	STUDY_ONCE_TRY_QUIT_NOT_JOIN(CONFLICT, "참여중인 카공이 아닙니다."),

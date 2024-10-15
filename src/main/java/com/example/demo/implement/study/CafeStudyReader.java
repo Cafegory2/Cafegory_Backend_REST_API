@@ -2,6 +2,8 @@ package com.example.demo.implement.study;
 
 import com.example.demo.dto.SliceResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.repository.study.CafeStudyQueryRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +24,10 @@ public class CafeStudyReader {
 
     public List<CafeStudy> readAllWithCoordinatorBy(Long cafeId) {
         return cafeStudyRepository.findAllByCafeId(cafeId);
+    }
+
+    public CafeStudy read(Long cafeStudyId) {
+        return cafeStudyRepository.findById(cafeStudyId)
+            .orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
     }
 }

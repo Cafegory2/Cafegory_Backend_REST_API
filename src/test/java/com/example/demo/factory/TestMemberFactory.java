@@ -2,7 +2,6 @@ package com.example.demo.factory;
 
 import static com.example.demo.implement.member.BeverageSize.*;
 
-import com.example.demo.implement.member.BeverageSize;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.Role;
 
@@ -11,7 +10,7 @@ public class TestMemberFactory {
 	public static Member createMember() {
 		return Member.builder()
 			.role(Role.USER)
-			.nickname("김동현")
+			.nickname("닉네임")
 			.email("cafegory@gmail.com")
 			.profileUrl("프로필 이미지")
 			.bio("자기 소개글")
@@ -22,7 +21,7 @@ public class TestMemberFactory {
 	public static Member createmember(String email) {
 		return Member.builder()
 			.role(Role.USER)
-			.nickname("김동현")
+			.nickname("닉네임")
 			.email(email)
 			.profileUrl("프로필 이미지")
 			.bio("자기 소개글")
@@ -30,7 +29,18 @@ public class TestMemberFactory {
 			.build();
 	}
 
-	public static Member createMember(String nickname, String profileUrl) {
+	public static Member createmember(String email, String nickname) {
+		return Member.builder()
+			.role(Role.USER)
+			.nickname(nickname)
+			.email(email)
+			.profileUrl("프로필 이미지")
+			.bio("자기 소개글")
+			.beverageSize(TALL)
+			.build();
+	}
+
+	public static Member createMemberWith(String nickname, String profileUrl) {
 		return Member.builder()
 			.role(Role.USER)
 			.nickname(nickname)

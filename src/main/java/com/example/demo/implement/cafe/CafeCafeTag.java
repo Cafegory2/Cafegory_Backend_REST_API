@@ -17,10 +17,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_cafe_tag")
 public class CafeCafeTag extends BaseEntity {
 

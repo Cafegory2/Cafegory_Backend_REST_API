@@ -154,7 +154,7 @@ public class CafeStudyService {
     // }
 
     public CafeStudy findCafeStudyById(Long cafeStudyId) {
-        return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
+        return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
     }
 
     @Transactional

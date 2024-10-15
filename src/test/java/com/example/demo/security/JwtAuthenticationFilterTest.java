@@ -41,7 +41,8 @@ class JwtAuthenticationFilterTest {
         "GET, /favicon.ico",
         "GET, /login",
         "GET, /docs",
-        "POST, /auth/refresh",
+        "GET, /cafe-studies/1",
+        "POST, /auth/refresh"
     })
     @DisplayName("해당 path는 Jwt 토큰 검증을 하지 않는다.")
     void the_specified_path_does_not_require_Jwt_token_verification(String method, String path) throws Exception {
