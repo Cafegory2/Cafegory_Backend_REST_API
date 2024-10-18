@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.dto.study.CafeStudyCreateResponse;
+import com.example.demo.dto.study.CafeStudyDeleteResponse;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
@@ -123,4 +124,10 @@ public class CafeStudyMapper {
 			.build();
 	}
 
+	public CafeStudyDeleteResponse toCafeStudyDeleteResponse(CafeStudy cafeStudy) {
+		return CafeStudyDeleteResponse.builder()
+			.cafeStudyId(cafeStudy.getId())
+			.deletedAt(cafeStudy.getDeletedDate())
+			.build();
+	}
 }
