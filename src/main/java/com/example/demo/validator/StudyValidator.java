@@ -58,7 +58,7 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateCafeStudyCoordinator(Member memberId, CafeStudy cafeStudy) {
+	public void validateMemberIsCafeStudyCoordinator(Member memberId, CafeStudy cafeStudy) {
 		if (!cafeStudy.getCoordinator().equals(memberId)) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
 		}
