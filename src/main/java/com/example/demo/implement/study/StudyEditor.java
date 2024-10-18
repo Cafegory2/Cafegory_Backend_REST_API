@@ -2,6 +2,7 @@ package com.example.demo.implement.study;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.implement.cafe.Cafe;
@@ -20,9 +21,9 @@ public class StudyEditor {
 
 	public Long createAndSaveCafeStudy(String studyName, Cafe cafe, Member coordinator, LocalDateTime startDateTime,
 		LocalDateTime endDateTime, MemberComms memberComms, int maxParticipants) {
-		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(studyName, cafe, coordinator, startDateTime, endDateTime,
+		CafeStudyEntity cafeStudyEntity = cafeStudyMapper.toNewEntity(studyName, cafe, coordinator, startDateTime, endDateTime,
 			memberComms, maxParticipants);
-		CafeStudy savedStudy = cafeStudyRepository.save(cafeStudy);
+		CafeStudyEntity savedStudy = cafeStudyRepository.save(cafeStudyEntity);
 
 		return savedStudy.getId();
 	}

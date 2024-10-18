@@ -1,30 +1,30 @@
 package com.example.demo.factory;
 
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyComment;
-import com.example.demo.implement.study.StudyRole;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
+import com.example.demo.packageex.studyqna.repository.CafeStudyCommentEntity;
+import com.example.demo.implement.study.StudyMemberRole;
 
 public class TestCafeStudyCommentFactory {
 
-	public static CafeStudyComment createRootComment(Member member, StudyRole studyRole, CafeStudy cafeStudy) {
-		return CafeStudyComment.builder()
+	public static CafeStudyCommentEntity createRootComment(Member member, StudyMemberRole studyMemberRole, CafeStudyEntity cafeStudyEntity) {
+		return CafeStudyCommentEntity.builder()
 			.author(member)
-			.studyRole(studyRole)
+			.studyMemberRole(studyMemberRole)
 			.content("Root 댓글 내용")
 			.parentComment(null)
-			.cafeStudy(cafeStudy)
+			.cafeStudyEntity(cafeStudyEntity)
 			.build();
 	}
 
-	public static CafeStudyComment createReplyToParentComment(CafeStudyComment parentComment, Member member,
-															  StudyRole studyRole, CafeStudy cafeStudy) {
-		return CafeStudyComment.builder()
+	public static CafeStudyCommentEntity createReplyToParentComment(CafeStudyCommentEntity parentComment, Member member,
+																	StudyMemberRole studyMemberRole, CafeStudyEntity cafeStudyEntity) {
+		return CafeStudyCommentEntity.builder()
 			.author(member)
-			.studyRole(studyRole)
+			.studyMemberRole(studyMemberRole)
 			.content("Reply 댓글 내용")
 			.parentComment(parentComment)
-			.cafeStudy(cafeStudy)
+			.cafeStudyEntity(cafeStudyEntity)
 			.build();
 	}
 }

@@ -1,6 +1,6 @@
 package com.example.demo.implement.study;
 
-public enum StudyRole {
+public enum StudyMemberRole {
 
 	COORDINATOR,
 	MEMBER

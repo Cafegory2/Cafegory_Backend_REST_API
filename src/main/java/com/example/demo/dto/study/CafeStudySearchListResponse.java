@@ -3,6 +3,7 @@ package com.example.demo.dto.study;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.*;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,17 +19,17 @@ public class CafeStudySearchListResponse {
     private WriterInfo writerInfo;
     private CafeInfo cafeInfo;
 
-    public static CafeStudySearchListResponse from(CafeStudy cafeStudy) {
+    public static CafeStudySearchListResponse from(CafeStudyEntity cafeStudyEntity) {
         CafeStudySearchListResponse response = new CafeStudySearchListResponse();
-        response.cafeStudyInfo = createCafeStudyInfo(cafeStudy);
-        response.writerInfo = createWriterInfo(cafeStudy);
-        response.cafeInfo = createCafeInfo(cafeStudy);
+        response.cafeStudyInfo = createCafeStudyInfo(cafeStudyEntity);
+        response.writerInfo = createWriterInfo(cafeStudyEntity);
+        response.cafeInfo = createCafeInfo(cafeStudyEntity);
 
         return response;
     }
 
-    private static CafeInfo createCafeInfo(CafeStudy cafeStudy) {
-        Cafe cafe = cafeStudy.getCafe();
+    private static CafeInfo createCafeInfo(CafeStudyEntity cafeStudyEntity) {
+        Cafe cafe = cafeStudyEntity.getCafe();
 
         return CafeInfo.builder()
             .id(cafe.getId())
@@ -37,8 +38,8 @@ public class CafeStudySearchListResponse {
             .build();
     }
 
-    private static WriterInfo createWriterInfo(CafeStudy cafeStudy) {
-        Member writer = cafeStudy.getCoordinator();
+    private static WriterInfo createWriterInfo(CafeStudyEntity cafeStudyEntity) {
+        Member writer = cafeStudyEntity.getCoordinator();
 
         return WriterInfo.builder()
             .id(writer.getId())
@@ -46,22 +47,22 @@ public class CafeStudySearchListResponse {
             .build();
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudyEntity) {
         return CafeStudyInfo.builder()
-            .id(cafeStudy.getId())
-            .name(cafeStudy.getName())
+            .id(cafeStudyEntity.getId())
+            .name(cafeStudyEntity.getName())
             .tags(
-                cafeStudy.getCafeStudyCafeStudyTags().stream()
+                cafeStudyEntity.getCafeStudyCafeStudyTags().stream()
                     .map(cafeStudyCafeStudyTag -> cafeStudyCafeStudyTag.getCafeStudyTag().getType())
                     .collect(Collectors.toList())
             )
-            .startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
-            .endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
-            .maximumParticipants(cafeStudy.getMaxParticipants())
-            .currentParticipants(cafeStudy.getCafeStudyMembers().size())
-            .views(cafeStudy.getViews())
-            .memberComms(cafeStudy.getMemberComms())
-            .recruitmentStatus(cafeStudy.getRecruitmentStatus())
+            .startDateTime(cafeStudyEntity.getStudyPeriod().getStartDateTime())
+            .endDateTime(cafeStudyEntity.getStudyPeriod().getEndDateTime())
+            .maximumParticipants(cafeStudyEntity.getMaxParticipants())
+            .currentParticipants(cafeStudyEntity.getCafeStudyMembers().size())
+            .views(cafeStudyEntity.getViews())
+            .memberComms(cafeStudyEntity.getMemberComms())
+            .recruitmentStatus(cafeStudyEntity.getRecruitmentStatus())
             .build();
     }
 

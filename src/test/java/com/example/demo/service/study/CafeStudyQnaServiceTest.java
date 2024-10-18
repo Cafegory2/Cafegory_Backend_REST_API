@@ -1,47 +1,54 @@
-//package com.example.demo.service.study;
+package com.example.demo.service.study;
+
+import com.example.demo.helper.CafeStudyCommentSaveHelper;
+import com.example.demo.helper.CafeStudySaveHelper;
+import com.example.demo.packageex.studyqna.service.CafeStudyQnaService;
+import com.example.demo.util.TimeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.demo.config.ServiceTest;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+
+class CafeStudyQnaServiceTest extends ServiceTest {
+
+    @Autowired
+    private CafeStudyQnaService sut;
+    @Autowired
+    private CafeSaveHelper cafeSaveHelper;
+    @Autowired
+    private MemberSaveHelper memberSaveHelper;
+    @Autowired
+    private CafeStudySaveHelper cafeStudySaveHelper;
+    @Autowired
+    private CafeStudyCommentSaveHelper cafeStudyCommentSaveHelper;
+    @Autowired
+    private TimeUtil timeUtil;
+
+//    @Test
+//    @DisplayName("회원은 Q&A에 댓글을 남길 수 있다.")
+//    void write_comment() {
+//        //given
+//        Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 //
-//import static org.assertj.core.api.Assertions.*;
+//        Member coordinator = memberSaveHelper.saveMember();
+//        Member member = memberSaveHelper.saveMember();
 //
-//import java.util.List;
-//
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//
-//import com.example.demo.config.ServiceTest;
-//import com.example.demo.implement.cafe.Cafe;
-//import com.example.demo.implement.member.Member;
-//import com.example.demo.implement.member.ThumbnailImage;
-//import com.example.demo.implement.study.StudyOnce;
-//import com.example.demo.implement.study.StudyOnceComment;
-//import com.example.demo.dto.study.StudyOnceCommentRequest;
-//import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
-//import com.example.demo.exception.CafegoryException;
-//import com.example.demo.exception.ExceptionType;
-//import com.example.demo.helper.CafeSaveHelper;
-//import com.example.demo.helper.MemberSaveHelper;
-//import com.example.demo.helper.StudyOnceCommentSaveHelper;
-//import com.example.demo.helper.StudyOnceSaveHelper;
-//import com.example.demo.helper.ThumbnailImageSaveHelper;
-//import com.example.demo.repository.study.StudyOnceCommentRepository;
-//
-//class StudyOnceCommentServiceImplTest extends ServiceTest {
-//
-//	@Autowired
-//	private StudyOnceCommentService sut;
-//	@Autowired
-//	private StudyOnceCommentRepository studyOnceCommentRepository;
-//	@Autowired
-//	private CafeSaveHelper cafePersistHelper;
-//	@Autowired
-//	private MemberSaveHelper memberSaveHelper;
-//	@Autowired
-//	private StudyOnceSaveHelper studyOnceSaveHelper;
-//	@Autowired
-//	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
-//	@Autowired
-//	private StudyOnceCommentSaveHelper studyOnceCommentSaveHelper;
-//
+//        LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+//        CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
+//        //when
+//        CafeStudyCommentCreateRequest request = CafeStudyCommentCreateRequest.builder()
+//            .cafeStudyId(cafeStudy.getId())
+//            .parentCommentId(null)
+//            .content("Q&A 댓글 내용")
+//            .build();
+//        CafeStudyCommentCreateResponse response = sut.leaveComment(request);
+//        //then
+//        assertThat(response)
+//            .extracting("content")
+//            .isEqualTo("Q&A 댓글 내용");
+//    }
+
 //	@Test
 //	@DisplayName("답변이 달리지 않은 질문은 수정 가능하다.")
 //	void question_without_replies_can_be_updated() {
@@ -195,4 +202,4 @@
 //			.isInstanceOf(CafegoryException.class)
 //			.hasMessage(ExceptionType.STUDY_ONCE_SINGLE_REPLY_PER_QUESTION.getErrorMessage());
 //	}
-//}
+}

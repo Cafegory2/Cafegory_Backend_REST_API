@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
 import com.example.demo.factory.TestCafeStudyFactory;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
 import com.example.demo.repository.study.CafeStudyRepository;
@@ -25,49 +25,49 @@ public class CafeStudySaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeRepository cafeRepository;
 
-	public CafeStudy saveCafeStudy(Cafe cafe, Member leader, LocalDateTime startDateTime,
-										   LocalDateTime endDateTime) {
+	public CafeStudyEntity saveCafeStudy(Cafe cafe, Member leader, LocalDateTime startDateTime,
+										 LocalDateTime endDateTime) {
 		Member mergedLeader = memberRepository.save(leader);
 		Cafe mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudyEntity = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
-		return cafeStudyRepository.save(cafeStudy);
+		return cafeStudyRepository.save(cafeStudyEntity);
 	}
 
-	public CafeStudy saveFinishedCafeStudy(Cafe cafe, Member leader, LocalDateTime startDateTime,
-								   LocalDateTime endDateTime) throws Exception {
+	public CafeStudyEntity saveFinishedCafeStudy(Cafe cafe, Member leader, LocalDateTime startDateTime,
+												 LocalDateTime endDateTime) throws Exception {
 		Member mergedLeader = memberRepository.save(leader);
 		Cafe mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudyEntity = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
 
-		Class<? extends CafeStudy> cafeStudyClass = cafeStudy.getClass();
+		Class<? extends CafeStudyEntity> cafeStudyClass = cafeStudyEntity.getClass();
 		Field recruitmentStatusField = cafeStudyClass.getDeclaredField("recruitmentStatus");
 		recruitmentStatusField.setAccessible(true);
-		recruitmentStatusField.set(cafeStudy, RecruitmentStatus.CLOSED);
+		recruitmentStatusField.set(cafeStudyEntity, RecruitmentStatus.CLOSED);
 
-		return cafeStudyRepository.save(cafeStudy);
+		return cafeStudyRepository.save(cafeStudyEntity);
 	}
 
-	public CafeStudy saveCafeStudyWithName(Cafe cafe, Member leader, LocalDateTime startDateTime,
-										   LocalDateTime endDateTime, String cafeStudyName) {
+	public CafeStudyEntity saveCafeStudyWithName(Cafe cafe, Member leader, LocalDateTime startDateTime,
+												 LocalDateTime endDateTime, String cafeStudyName) {
 		Member mergedLeader = memberRepository.save(leader);
 		Cafe mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudyWithName(mergedCafe, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudyEntity = TestCafeStudyFactory.createCafeStudyWithName(mergedCafe, mergedLeader, startDateTime,
 			endDateTime, cafeStudyName);
-		return cafeStudyRepository.save(cafeStudy);
+		return cafeStudyRepository.save(cafeStudyEntity);
 	}
 
-	public CafeStudy saveCafeStudyWithMemberComms(Cafe cafe, Member leader, LocalDateTime startDateTime,
-												  LocalDateTime endDateTime, MemberComms memberComms) {
+	public CafeStudyEntity saveCafeStudyWithMemberComms(Cafe cafe, Member leader, LocalDateTime startDateTime,
+														LocalDateTime endDateTime, MemberComms memberComms) {
 		Member mergedLeader = memberRepository.save(leader);
 		Cafe mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudy cafeStudy = TestCafeStudyFactory.createCafeStudyWithMemberComms(mergedCafe, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudyEntity = TestCafeStudyFactory.createCafeStudyWithMemberComms(mergedCafe, mergedLeader, startDateTime,
 			endDateTime, memberComms);
-		return cafeStudyRepository.save(cafeStudy);
+		return cafeStudyRepository.save(cafeStudyEntity);
 	}
 }

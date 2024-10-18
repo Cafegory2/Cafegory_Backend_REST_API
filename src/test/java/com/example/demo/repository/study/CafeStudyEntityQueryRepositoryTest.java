@@ -9,6 +9,7 @@ import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.cafe.CafeTag;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.*;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.*;
 
 @Import(CafeStudyQueryRepository.class)
-class CafeStudyQueryRepositoryTest extends JpaTest {
+class CafeStudyEntityQueryRepositoryTest extends JpaTest {
 
     @Autowired
     private CafeStudyQueryRepository sut;
@@ -77,7 +77,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10), "카페고리 스터디2");
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
         );
         //then
@@ -135,7 +135,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
         );
         //then
@@ -240,15 +240,15 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
         CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
+        CafeStudyEntity cafeStudyEntity1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity1, cafeStudyTag1);
+        CafeStudyEntity cafeStudyEntity2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity2, cafeStudyTag2);
 
-        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
+        CafeStudyEntity cafeStudyEntity3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity3, cafeStudyTag1);
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
         );
         //then
@@ -294,7 +294,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, List.of(type), null, 0, 10)
         );
         //then
@@ -341,7 +341,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, List.of(type1, type2), null, 0, 10)
         );
         //then
@@ -384,7 +384,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         cafeStudySaveHelper.saveCafeStudyWithMemberComms(
             cafe2, member, startDateTime.plusHours(8), startDateTime.plusHours(10), MemberComms.WELCOME);
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, memberComms, 0, 10)
         );
         //then
@@ -415,22 +415,22 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
+        CafeStudyEntity cafeStudyEntity1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         Thread.sleep(1000);
-        CafeStudy finishedCafeStudy2 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        CafeStudyEntity finishedCafeStudyEntity2 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
         Thread.sleep(1000);
-        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
+        CafeStudyEntity cafeStudyEntity3 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
         Thread.sleep(1000);
-        CafeStudy finishedCafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
+        CafeStudyEntity finishedCafeStudyEntity4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe1, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
         );
         //then
-        List<CafeStudy> content = result.getContent();
+        List<CafeStudyEntity> content = result.getContent();
         assertThat(content)
-            .extracting(CafeStudy::getCreatedDate)
-            .containsExactly(cafeStudy3.getCreatedDate(), cafeStudy1.getCreatedDate(), finishedCafeStudy4.getCreatedDate(), finishedCafeStudy2.getCreatedDate());
+            .extracting(CafeStudyEntity::getCreatedDate)
+            .containsExactly(cafeStudyEntity3.getCreatedDate(), cafeStudyEntity1.getCreatedDate(), finishedCafeStudyEntity4.getCreatedDate(), finishedCafeStudyEntity2.getCreatedDate());
     }
 
     @Test
@@ -449,7 +449,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         }
         //when
 
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, null, 0, 5)
         );
         //then
@@ -472,7 +472,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(i), startDateTime.plusHours(i + 1));
         }
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, null, 1, 5)
         );
         //then
@@ -495,7 +495,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
             cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(i), startDateTime.plusHours(i + 1));
         }
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", null, null, null, null, 2, 5)
         );
         //then
@@ -531,28 +531,28 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
         CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+        CafeStudyEntity cafeStudyEntity1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
             timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
             timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
             MemberComms.WELCOME
         );
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity1, cafeStudyTag1);
 
-        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
+        CafeStudyEntity cafeStudyEntity2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
             timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
             timeUtil.localDateTime(2000, 1, 2, 14, 0, 0),
             MemberComms.AVOID
         );
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity2, cafeStudyTag2);
 
-        CafeStudy cafeStudy3 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+        CafeStudyEntity cafeStudyEntity3 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
             timeUtil.localDateTime(2000, 1, 1, 15, 0, 0),
             timeUtil.localDateTime(2000, 1, 1, 17, 0, 0),
             MemberComms.WELCOME
         );
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag2);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity3, cafeStudyTag2);
         //when
-        SliceResponse<CafeStudy> result = sut.findCafeStudies(
+        SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
             createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
         );
         assertThat(result.getContent().size()).isEqualTo(expected);

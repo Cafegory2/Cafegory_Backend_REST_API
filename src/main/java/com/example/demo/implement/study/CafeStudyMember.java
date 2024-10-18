@@ -19,11 +19,11 @@ import javax.persistence.UniqueConstraint;
 import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.member.Member;
 
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -41,28 +41,28 @@ public class CafeStudyMember extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudy cafeStudy;
+	private CafeStudyEntity cafeStudyEntity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private Member member;
 
 	@Enumerated(EnumType.STRING)
-	private StudyRole studyRole;
+	private StudyMemberRole studyMemberRole;
 
 	@Enumerated(EnumType.STRING)
 	private Attendance attendance;
 
 	@Builder
-	private CafeStudyMember(CafeStudy cafeStudy, Member member, StudyRole studyRole) {
-		this.cafeStudy = cafeStudy;
+	private CafeStudyMember(CafeStudyEntity cafeStudyEntity, Member member, StudyMemberRole studyMemberRole) {
+		this.cafeStudyEntity = cafeStudyEntity;
 		this.member = member;
-		this.studyRole = studyRole;
+		this.studyMemberRole = studyMemberRole;
 	}
 
 	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
-		LocalDateTime studyStartDateTime = cafeStudy.getStudyPeriod().getStartDateTime();
-		LocalDateTime studyEndDateTime = cafeStudy.getStudyPeriod().getEndDateTime();
+		LocalDateTime studyStartDateTime = cafeStudyEntity.getStudyPeriod().getStartDateTime();
+		LocalDateTime studyEndDateTime = cafeStudyEntity.getStudyPeriod().getEndDateTime();
 		return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (
 			studyStartDateTime.isBefore(end) || studyStartDateTime.isEqual(end));
 	}

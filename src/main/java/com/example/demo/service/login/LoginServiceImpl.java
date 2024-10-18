@@ -2,7 +2,7 @@ package com.example.demo.service.login;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.login.LoginProcessor;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.packageex.member.implement.MemberReader;
 import com.example.demo.implement.signup.SignupProcessor;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;

@@ -24,7 +24,7 @@ import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.util.TimeUtil;
 
-class CafeStudyServiceTest extends ServiceTest {
+class CafeStudyEntityServiceTest extends ServiceTest {
 
 	@Autowired
 	private CafeStudyService sut;

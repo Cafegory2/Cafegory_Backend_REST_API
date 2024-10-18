@@ -1,4 +1,4 @@
-package com.example.demo.implement.study;
+package com.example.demo.packageex.cafestudy.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,11 @@ import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 
+import com.example.demo.implement.study.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -21,8 +21,8 @@ import org.hibernate.annotations.Where;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study")
-public class CafeStudy extends BaseEntity {
-	//
+public class CafeStudyEntity extends BaseEntity {
+
 	public static final int LIMIT_MEMBER_CAPACITY = 6;
 	public static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
 	public static final int MIN_DELAY_BEFORE_START = 1 * 60 * 60;
@@ -62,8 +62,8 @@ public class CafeStudy extends BaseEntity {
 	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
-	private CafeStudy(String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
-		MemberComms memberComms, int maxParticipants, String introduction) {
+	private CafeStudyEntity(String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
+							MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;
@@ -79,9 +79,9 @@ public class CafeStudy extends BaseEntity {
 
 	private void addCoordinatorToStudy(Member coordinator) {
 		CafeStudyMember cafeStudyMember = CafeStudyMember.builder()
-			.cafeStudy(this)
+			.cafeStudyEntity(this)
 			.member(coordinator)
-			.studyRole(StudyRole.COORDINATOR)
+			.studyMemberRole(StudyMemberRole.COORDINATOR)
 			.build();
 		cafeStudyMembers.add(cafeStudyMember);
 	}

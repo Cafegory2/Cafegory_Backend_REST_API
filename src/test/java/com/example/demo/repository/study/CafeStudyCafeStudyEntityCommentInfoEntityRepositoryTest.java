@@ -7,9 +7,9 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyComment;
-import com.example.demo.implement.study.StudyRole;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
+import com.example.demo.packageex.studyqna.repository.CafeStudyCommentEntity;
+import com.example.demo.implement.study.StudyMemberRole;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-class CafeStudyCommentRepositoryTest extends JpaTest {
+class CafeStudyCafeStudyEntityCommentInfoEntityRepositoryTest extends JpaTest {
 
     @Autowired
     private CafeStudyCommentRepository sut;
@@ -49,17 +49,17 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
+        CafeStudyEntity cafeStudyEntity = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
 
-        CafeStudyComment root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
-        CafeStudyComment replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        CafeStudyComment replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyMemberRole.MEMBER, cafeStudyEntity);
+        CafeStudyCommentEntity replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyMemberRole.COORDINATOR, cafeStudyEntity);
+        CafeStudyCommentEntity replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyMemberRole.MEMBER, cafeStudyEntity);
 
-        CafeStudyComment root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyRole.MEMBER, cafeStudy);
-        CafeStudyComment replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        CafeStudyComment replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyMemberRole.MEMBER, cafeStudyEntity);
+        CafeStudyCommentEntity replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyMemberRole.COORDINATOR, cafeStudyEntity);
+        CafeStudyCommentEntity replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyMemberRole.MEMBER, cafeStudyEntity);
         //when
-        List<CafeStudyComment> result = sut.findAllBy(cafeStudy.getId());
+        List<CafeStudyCommentEntity> result = sut.findAllBy(cafeStudyEntity.getId());
         //then
         assertThat(result.size()).isEqualTo(6);
     }

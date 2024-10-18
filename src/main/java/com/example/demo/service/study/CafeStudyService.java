@@ -16,7 +16,7 @@ import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.cafe.CafeReader;
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyMember;
 import com.example.demo.implement.study.StudyEditor;
 import com.example.demo.repository.member.MemberRepository;
@@ -153,7 +153,7 @@ public class CafeStudyService {
     // 	}
     // }
 
-    public CafeStudy findCafeStudyById(Long cafeStudyId) {
+    public CafeStudyEntity findCafeStudyById(Long cafeStudyId) {
         return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
     }
 

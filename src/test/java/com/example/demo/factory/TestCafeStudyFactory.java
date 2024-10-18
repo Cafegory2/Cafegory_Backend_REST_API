@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;
 
@@ -12,9 +12,9 @@ import static com.example.demo.implement.study.MemberComms.*;
 
 public class TestCafeStudyFactory {
 
-	public static CafeStudy createCafeStudy(Cafe cafe, Member leader,
-													LocalDateTime startDateTime, LocalDateTime endDateTime) {
-		return CafeStudy.builder()
+	public static CafeStudyEntity createCafeStudy(Cafe cafe, Member leader,
+												  LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
 			.cafe(cafe)
 			.coordinator(leader)
@@ -25,9 +25,9 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
-	public static CafeStudy createCafeStudyWithName(Cafe cafe, Member leader,
-													LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
-		return CafeStudy.builder()
+	public static CafeStudyEntity createCafeStudyWithName(Cafe cafe, Member leader,
+														  LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
+		return CafeStudyEntity.builder()
 			.name(cafeStudyName)
 			.cafe(cafe)
 			.coordinator(leader)
@@ -38,9 +38,9 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
-	public static CafeStudy createCafeStudyWithCreatedDate(Cafe cafe, Member leader,
-											LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
-		return CafeStudy.builder()
+	public static CafeStudyEntity createCafeStudyWithCreatedDate(Cafe cafe, Member leader,
+																 LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
+		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
 			.cafe(cafe)
 			.coordinator(leader)
@@ -51,9 +51,9 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
-	public static CafeStudy createCafeStudyWithMemberComms(Cafe cafe, Member leader,
-											LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
-		return CafeStudy.builder()
+	public static CafeStudyEntity createCafeStudyWithMemberComms(Cafe cafe, Member leader,
+																 LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
+		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
 			.cafe(cafe)
 			.coordinator(leader)

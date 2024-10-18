@@ -1,11 +1,11 @@
 package com.example.demo.implement.study;
 
 import com.example.demo.implement.BaseEntity;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,15 +24,15 @@ public class CafeStudyCafeStudyTag extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudy cafeStudy;
+    private CafeStudyEntity cafeStudyEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CafeStudyTag cafeStudyTag;
 
     @Builder
-    private CafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
-        this.cafeStudy = cafeStudy;
+    private CafeStudyCafeStudyTag(CafeStudyEntity cafeStudyEntity, CafeStudyTag cafeStudyTag) {
+        this.cafeStudyEntity = cafeStudyEntity;
         this.cafeStudyTag = cafeStudyTag;
     }
 }

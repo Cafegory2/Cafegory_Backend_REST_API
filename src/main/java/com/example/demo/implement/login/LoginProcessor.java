@@ -1,7 +1,7 @@
 package com.example.demo.implement.login;
 
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.packageex.member.implement.MemberReader;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import lombok.RequiredArgsConstructor;
