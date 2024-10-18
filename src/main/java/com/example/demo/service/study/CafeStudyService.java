@@ -223,7 +223,7 @@ public class CafeStudyService {
 	}
 
 	private void validateStudyDelete(Member member, CafeStudy cafeStudy) {
-		studyValidator.validateCafeStudyCoordinator(member, cafeStudy);
+		studyValidator.validateMemberIsCafeStudyCoordinator(member, cafeStudy);
 		studyValidator.validateCafeStudyMembersPresent(cafeStudy);
 	}
 
