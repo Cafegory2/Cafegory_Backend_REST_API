@@ -23,12 +23,6 @@ public class FakeTimeUtil implements TimeUtil {
 	 * FakeTimeUtil fake = new FakeTimeUtil(LocalDateTime.of(2024, 9, 22, 10, 0, 0));
 	 *
 	 */
-	public static final LocalDateTime DEFAULT_FIXED_DATE_TIME = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
-	private final LocalDateTime fixedLocalDateTime;
-
-	public FakeTimeUtil() {
-		fixedLocalDateTime = DEFAULT_FIXED_DATE_TIME;
-	}
 
 	@Override
 	public LocalTime maxLocalTime() {
