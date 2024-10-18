@@ -130,7 +130,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
-		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
+		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
 
 		Member leader = memberSaveHelper.saveMember();
 		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
