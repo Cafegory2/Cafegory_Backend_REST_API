@@ -8,6 +8,8 @@ import com.example.demo.implement.cafe.CafeTag;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.*;
 import com.example.demo.implement.token.JwtToken;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
+import com.example.demo.packageex.studyqna.repository.CafeStudyCommentEntity;
 import com.example.demo.util.TimeUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -26,7 +28,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
-class CafeStudyControllerApiTest extends ApiDocsTest {
+class CafeStudyEntityControllerApiTest extends ApiDocsTest {
 
     @Autowired
     private CafeSaveHelper cafeSaveHelper;
@@ -108,13 +110,13 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
         LocalDateTime startDateTime1 = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+        CafeStudyEntity cafeStudyEntity1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
             startDateTime1.plusHours(2), startDateTime1.plusHours(4), MemberComms.WELCOME);
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-        CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity1, cafeStudyTag1);
+        CafeStudyEntity cafeStudyEntity2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
             startDateTime1.plusHours(4), startDateTime1.plusHours(6), MemberComms.WELCOME);
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag1);
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity2, cafeStudyTag1);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity2, cafeStudyTag2);
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("keyword", "강남");
@@ -161,17 +163,17 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, coordinator,
+        CafeStudyEntity cafeStudyEntity = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, coordinator,
             startDateTime.plusHours(2), startDateTime.plusHours(4), MemberComms.WELCOME);
-        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy, cafeStudyTag);
+        cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudyEntity, cafeStudyTag);
 
-        CafeStudyComment root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
-        CafeStudyComment replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        CafeStudyComment replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyMemberRole.MEMBER, cafeStudyEntity);
+        CafeStudyCommentEntity replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyMemberRole.COORDINATOR, cafeStudyEntity);
+        CafeStudyCommentEntity replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyMemberRole.MEMBER, cafeStudyEntity);
 
-        CafeStudyComment root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyRole.MEMBER, cafeStudy);
-        CafeStudyComment replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        CafeStudyComment replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyMemberRole.MEMBER, cafeStudyEntity);
+        CafeStudyCommentEntity replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyMemberRole.COORDINATOR, cafeStudyEntity);
+        CafeStudyCommentEntity replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyMemberRole.MEMBER, cafeStudyEntity);
 
         RestAssured.given(spec).log().all()
             .filter(RestAssuredRestDocumentationWrapper.document(
@@ -183,7 +185,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
             )
             .contentType(ContentType.JSON)
             .when()
-            .get("/cafe-studies/{cafeStudyId}", cafeStudy.getId())
+            .get("/cafe-studies/{cafeStudyId}", cafeStudyEntity.getId())
             .then().log().all()
             .statusCode(200);
     }

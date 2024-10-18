@@ -1,43 +1,26 @@
-// package com.example.demo.service.study;
-//
-// import static com.example.demo.exception.ExceptionType.*;
-//
-// import org.springframework.stereotype.Service;
-// import org.springframework.transaction.annotation.Transactional;
-//
-// import com.example.demo.implement.member.Member;
-// import com.example.demo.implement.study.CafeStudy;
-// import com.example.demo.implement.study.StudyOnceComment;
-// import com.example.demo.dto.study.StudyOnceCommentRequest;
-// import com.example.demo.dto.study.StudyOnceCommentSaveRequest;
-// import com.example.demo.dto.study.StudyOnceCommentUpdateRequest;
-// import com.example.demo.exception.CafegoryException;
-// import com.example.demo.repository.member.MemberRepository;
-// import com.example.demo.repository.study.StudyOnceCommentRepository;
-// import com.example.demo.repository.study.StudyOnceRepository;
-//
-// import lombok.RequiredArgsConstructor;
-//
-// @Service
-// @RequiredArgsConstructor
-// @Transactional
-// public class StudyOnceCommentServiceImpl implements StudyOnceCommentService {
-//
-// 	private final StudyOnceCommentRepository studyOnceCommentRepository;
-// 	private final MemberRepository memberRepository;
-// 	private final StudyOnceRepository studyOnceRepository;
-//
-// 	@Override
-// 	public Long saveQuestion(Long memberId, Long studyOnceId, StudyOnceCommentSaveRequest request) {
-// 		StudyOnceComment question = StudyOnceComment.builder()
-// 			.content(request.getContent())
-// 			.member(findMemberById(memberId))
-// 			.cafeStudy(findStudyOnceById(studyOnceId))
-// 			.build();
-// 		StudyOnceComment savedQuestion = studyOnceCommentRepository.save(question);
-// 		return savedQuestion.getId();
-// 	}
-//
+package com.example.demo.packageex.studyqna.service;
+
+import com.example.demo.packageex.studyqna.domain.CafeStudyComment;
+import com.example.demo.packageex.studyqna.implement.CafeStudyCommentReader;
+import com.example.demo.packageex.studyqna.implement.CafeStudyQnaProcessor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class CafeStudyQnaService {
+
+    private final CafeStudyQnaProcessor qnaProcessor;
+    private final CafeStudyCommentReader commentReader;
+
+    @Transactional
+    public CafeStudyComment leaveComment(CafeStudyComment comment, Long memberId) {
+        Long commentId = qnaProcessor.leaveComment(comment, memberId);
+        return commentReader.read(commentId);
+    }
+
 // 	@Override
 // 	public void updateQuestion(Long memberId, Long studyOnceCommentId, StudyOnceCommentUpdateRequest request) {
 // 		StudyOnceComment question = findStudyOnceCommentById(studyOnceCommentId);
@@ -123,4 +106,4 @@
 // 		return studyOnceRepository.findById(studyOnceId)
 // 			.orElseThrow(() -> new CafegoryException(STUDY_ONCE_NOT_FOUND));
 // 	}
-// }
+}

@@ -1,7 +1,7 @@
 package com.example.demo.service.profile;
 
 import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.packageex.member.implement.MemberReader;
 import com.example.demo.mapper.ProfileMapper;
 import org.springframework.stereotype.Service;
 

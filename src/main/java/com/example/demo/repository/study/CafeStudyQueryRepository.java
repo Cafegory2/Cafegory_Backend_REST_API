@@ -3,6 +3,7 @@ package com.example.demo.repository.study;
 import com.example.demo.dto.SliceResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.implement.study.*;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.example.demo.implement.cafe.QCafe.*;
-import static com.example.demo.implement.study.QCafeStudy.*;
+import static com.example.demo.packageex.cafestudy.repository.QCafeStudyEntity.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,13 +27,13 @@ public class CafeStudyQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public SliceResponse<CafeStudy> findCafeStudies(CafeStudySearchListRequest request) {
+    public SliceResponse<CafeStudyEntity> findCafeStudies(CafeStudySearchListRequest request) {
         Pageable pageable = PagingUtil.of(request.getPage(), request.getSizePerPage());
 
-        JPAQuery<CafeStudy> query = queryFactory
-            .select(cafeStudy).distinct()
-            .from(cafeStudy)
-            .join(cafeStudy.cafe, cafe).fetchJoin()
+        JPAQuery<CafeStudyEntity> query = queryFactory
+            .select(cafeStudyEntity).distinct()
+            .from(cafeStudyEntity)
+            .join(cafeStudyEntity.cafe, cafe).fetchJoin()
             .where(
                 keywordContains(request.getKeyword())
                     .or(cafeStudyNameContains(request.getKeyword())),
@@ -43,7 +44,7 @@ public class CafeStudyQueryRepository {
             )
             .orderBy(
                 getRecruitmentStatusPriority().asc(),
-                cafeStudy.createdDate.desc()
+                cafeStudyEntity.createdDate.desc()
             );
 
         return SliceResponse.of(PagingUtil.toSlice(query, pageable));
@@ -51,13 +52,13 @@ public class CafeStudyQueryRepository {
 
     private NumberExpression<Integer> getRecruitmentStatusPriority() {
         return new CaseBuilder()
-            .when(cafeStudy.recruitmentStatus.eq(RecruitmentStatus.OPEN)).then(0)
-            .when(cafeStudy.recruitmentStatus.eq(RecruitmentStatus.CLOSED)).then(1)
+            .when(cafeStudyEntity.recruitmentStatus.eq(RecruitmentStatus.OPEN)).then(0)
+            .when(cafeStudyEntity.recruitmentStatus.eq(RecruitmentStatus.CLOSED)).then(1)
             .otherwise(3);
     }
 
     private BooleanExpression memberCommsEq(MemberComms memberComms) {
-        return memberComms == null ? null : cafeStudy.memberComms.eq(memberComms);
+        return memberComms == null ? null : cafeStudyEntity.memberComms.eq(memberComms);
     }
 
     private BooleanExpression hasAllCafeTagTypes(List<CafeTagType> cafeTagTypes) {
@@ -70,15 +71,15 @@ public class CafeStudyQueryRepository {
     }
 
     private BooleanExpression cafeStudyTagTypeEq(CafeStudyTagType cafeStudyTagType) {
-        return cafeStudyTagType == null ? null : cafeStudy.cafeStudyCafeStudyTags.any().cafeStudyTag.type.eq(cafeStudyTagType);
+        return cafeStudyTagType == null ? null : cafeStudyEntity.cafeStudyCafeStudyTags.any().cafeStudyTag.type.eq(cafeStudyTagType);
     }
 
     private BooleanExpression dateEq(LocalDate date) {
         if(date == null) return null;
 
-        return cafeStudy.studyPeriod.startDateTime.year().eq(date.getYear())
-            .and(cafeStudy.studyPeriod.startDateTime.month().eq(date.getMonthValue()))
-            .and(cafeStudy.studyPeriod.startDateTime.dayOfMonth().eq(date.getDayOfMonth()));
+        return cafeStudyEntity.studyPeriod.startDateTime.year().eq(date.getYear())
+            .and(cafeStudyEntity.studyPeriod.startDateTime.month().eq(date.getMonthValue()))
+            .and(cafeStudyEntity.studyPeriod.startDateTime.dayOfMonth().eq(date.getDayOfMonth()));
     }
 
     private BooleanExpression keywordContains(String keyword) {
@@ -91,7 +92,7 @@ public class CafeStudyQueryRepository {
     private BooleanExpression cafeStudyNameContains(String cafeStudyName) {
         // 만약 이 메서드가 동작하지 않는다면 DB의 맞는 Expressions.stringTemplate 의 내부 구문을 바꿔야 한다.
         // DB에 등록된 키워드와 파라미터의 키워드 둘다 공백제거 한뒤 비교한다.
-        return cafeStudyName == null ? null : Expressions.stringTemplate("function('replace', {0}, ' ', '')", cafeStudy.name)
+        return cafeStudyName == null ? null : Expressions.stringTemplate("function('replace', {0}, ' ', '')", cafeStudyEntity.name)
             .likeIgnoreCase("%" + cafeStudyName.replace(" ", "") + "%");
     }
 }

@@ -3,7 +3,7 @@ package com.example.demo.implement.signup;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.MemberAppender;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.packageex.member.implement.MemberReader;
 import com.example.demo.implement.member.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

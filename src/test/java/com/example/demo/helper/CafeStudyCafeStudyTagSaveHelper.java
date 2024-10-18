@@ -1,7 +1,7 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestCafeStudyCafeStudyTagFactory;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyCafeStudyTag;
 import com.example.demo.implement.study.CafeStudyTag;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
@@ -18,11 +18,11 @@ public class CafeStudyCafeStudyTagSaveHelper {
     private final CafeStudyTagRepository cafeStudyTagRepository;
     private final CafeStudyCafeStudyTagRepository studyCafeStudyTagRepository;
 
-    public CafeStudyCafeStudyTag saveCafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
-        CafeStudy mergedCafeStudy = cafeStudyRepository.save(cafeStudy);
+    public CafeStudyCafeStudyTag saveCafeStudyCafeStudyTag(CafeStudyEntity cafeStudyEntity, CafeStudyTag cafeStudyTag) {
+        CafeStudyEntity mergedCafeStudyEntity = cafeStudyRepository.save(cafeStudyEntity);
         CafeStudyTag mergedCafeStudyTag = cafeStudyTagRepository.save(cafeStudyTag);
 
-        CafeStudyCafeStudyTag cafeStudyCafeStudyTag = TestCafeStudyCafeStudyTagFactory.createCafeStudyCafeStudyTag(mergedCafeStudy, mergedCafeStudyTag);
+        CafeStudyCafeStudyTag cafeStudyCafeStudyTag = TestCafeStudyCafeStudyTagFactory.createCafeStudyCafeStudyTag(mergedCafeStudyEntity, mergedCafeStudyTag);
         return studyCafeStudyTagRepository.save(cafeStudyCafeStudyTag);
     }
 }

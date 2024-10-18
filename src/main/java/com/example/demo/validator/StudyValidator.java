@@ -1,7 +1,7 @@
 package com.example.demo.validator;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.implement.study.CafeStudy.*;
+import static com.example.demo.packageex.cafestudy.repository.CafeStudyEntity.*;
 
 import java.time.LocalDateTime;
 

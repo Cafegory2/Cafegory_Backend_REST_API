@@ -3,6 +3,8 @@ package com.example.demo.dto.study;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.*;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
+import com.example.demo.packageex.studyqna.repository.CafeStudyCommentEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,25 +23,25 @@ public class CafeStudyDetailResponse {
     private CafeInfo cafeInfo;
     private List<Comment> commentsInfo = new ArrayList<>();
 
-    public static CafeStudyDetailResponse of(CafeStudy cafeStudy, List<CafeStudyComment> cafeStudyComments) {
+    public static CafeStudyDetailResponse of(CafeStudyEntity cafeStudyEntity, List<CafeStudyCommentEntity> cafeStudyCommentEntities) {
         CafeStudyDetailResponse response = new CafeStudyDetailResponse();
 
-        response.commentsInfo = buildCommentTree(cafeStudyComments, response);
-        response.cafeStudyInfo = createCafeStudyInfo(cafeStudy);
-        response.coordinatorInfo = createCoordinatorInfo(cafeStudy);
-        response.cafeInfo = createCafeInfo(cafeStudy);
+        response.commentsInfo = buildCommentTree(cafeStudyCommentEntities, response);
+        response.cafeStudyInfo = createCafeStudyInfo(cafeStudyEntity);
+        response.coordinatorInfo = createCoordinatorInfo(cafeStudyEntity);
+        response.cafeInfo = createCafeInfo(cafeStudyEntity);
 
         return response;
     }
 
-    private static List<Comment> buildCommentTree(List<CafeStudyComment> cafeStudyComments, CafeStudyDetailResponse response) {
-        Map<Long, Comment> commentMap = cafeStudyComments.stream()
+    private static List<Comment> buildCommentTree(List<CafeStudyCommentEntity> cafeStudyCommentEntities, CafeStudyDetailResponse response) {
+        Map<Long, Comment> commentMap = cafeStudyCommentEntities.stream()
             .collect(Collectors.toMap(
-                CafeStudyComment::getId, CafeStudyDetailResponse::toComment));
+                CafeStudyCommentEntity::getId, CafeStudyDetailResponse::toComment));
 
         List<Comment> rootComments = new ArrayList<>();
 
-        for(CafeStudyComment comment : cafeStudyComments) {
+        for(CafeStudyCommentEntity comment : cafeStudyCommentEntities) {
             if(!comment.hasParentComment()) {
                 rootComments.add(commentMap.get(comment.getId()));
             } else {
@@ -54,8 +56,8 @@ public class CafeStudyDetailResponse {
         return rootComments;
     }
 
-    private static CafeInfo createCafeInfo(CafeStudy cafeStudy) {
-        Cafe cafe = cafeStudy.getCafe();
+    private static CafeInfo createCafeInfo(CafeStudyEntity cafeStudyEntity) {
+        Cafe cafe = cafeStudyEntity.getCafe();
 
         return CafeInfo.builder()
             .id(cafe.getId())
@@ -64,8 +66,8 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static CoordinatorInfo createCoordinatorInfo(CafeStudy cafeStudy) {
-        Member coordinator = cafeStudy.getCoordinator();
+    private static CoordinatorInfo createCoordinatorInfo(CafeStudyEntity cafeStudyEntity) {
+        Member coordinator = cafeStudyEntity.getCoordinator();
 
         return CoordinatorInfo.builder()
             .id(coordinator.getId())
@@ -73,37 +75,37 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudyEntity) {
         return CafeStudyInfo.builder()
-            .id(cafeStudy.getId())
-            .name(cafeStudy.getName())
-            .createdDate(cafeStudy.getCreatedDate())
-            .modifiedDate(cafeStudy.getLastModifiedDate())
-            .startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
-            .endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
-            .maximumParticipants(cafeStudy.getMaxParticipants())
-            .currentParticipants(cafeStudy.getCafeStudyMembers().size())
-            .memberComms(cafeStudy.getMemberComms())
-            .views(cafeStudy.getViews())
-            .introduction(cafeStudy.getIntroduction())
-            .tag(cafeStudy.getCafeStudyCafeStudyTags().get(0).getCafeStudyTag().getType())
+            .id(cafeStudyEntity.getId())
+            .name(cafeStudyEntity.getName())
+            .createdDate(cafeStudyEntity.getCreatedDate())
+            .modifiedDate(cafeStudyEntity.getLastModifiedDate())
+            .startDateTime(cafeStudyEntity.getStudyPeriod().getStartDateTime())
+            .endDateTime(cafeStudyEntity.getStudyPeriod().getEndDateTime())
+            .maximumParticipants(cafeStudyEntity.getMaxParticipants())
+            .currentParticipants(cafeStudyEntity.getCafeStudyMembers().size())
+            .memberComms(cafeStudyEntity.getMemberComms())
+            .views(cafeStudyEntity.getViews())
+            .introduction(cafeStudyEntity.getIntroduction())
+            .tag(cafeStudyEntity.getCafeStudyCafeStudyTags().get(0).getCafeStudyTag().getType())
             .build();
     }
 
-    private static Comment toComment(CafeStudyComment cafeStudyComment) {
+    private static Comment toComment(CafeStudyCommentEntity cafeStudyCommentEntity) {
         return Comment.builder()
             .writerInfo(
                 Comment.WriterInfo.builder()
-                    .id(cafeStudyComment.getId())
-                    .nickname(cafeStudyComment.getAuthor().getNickname())
-                    .profileUrl(cafeStudyComment.getAuthor().getProfileUrl())
+                    .id(cafeStudyCommentEntity.getId())
+                    .nickname(cafeStudyCommentEntity.getAuthor().getNickname())
+                    .profileUrl(cafeStudyCommentEntity.getAuthor().getProfileUrl())
                     .build()
             )
             .commentInfo(
                 Comment.CommentInfo.builder()
-                    .id(cafeStudyComment.getId())
-                    .content(cafeStudyComment.getContent())
-                    .createdDate(cafeStudyComment.getCreatedDate())
+                    .id(cafeStudyCommentEntity.getId())
+                    .content(cafeStudyCommentEntity.getContent())
+                    .createdDate(cafeStudyCommentEntity.getCreatedDate())
                     .build()
             )
             .replies(new ArrayList<>())

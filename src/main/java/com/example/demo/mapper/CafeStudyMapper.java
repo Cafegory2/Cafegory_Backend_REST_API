@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.packageex.cafestudy.repository.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;
 
@@ -35,12 +35,12 @@ public class CafeStudyMapper {
 	// 		.collect(Collectors.toList());
 	// }
 
-	public CafeStudy toNewEntity(String studyName, Cafe cafe, Member coordinator, LocalDateTime startDateTime,
-		LocalDateTime endDateTime,
-		MemberComms memberComms, int maxParticipants) {
+	public CafeStudyEntity toNewEntity(String studyName, Cafe cafe, Member coordinator, LocalDateTime startDateTime,
+									   LocalDateTime endDateTime,
+									   MemberComms memberComms, int maxParticipants) {
 		StudyPeriod studyPeriod = toStudyPeriod(startDateTime, endDateTime);
 
-		return CafeStudy.builder()
+		return CafeStudyEntity.builder()
 			.name(studyName)
 			.cafe(cafe)
 			.coordinator(coordinator)
@@ -107,19 +107,19 @@ public class CafeStudyMapper {
 	// 		.build();
 	// }
 
-	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudy createdCafeStudy) {
+	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudyEntity createdCafeStudyEntity) {
 		return CafeStudyCreateResponse.builder()
-			.name(createdCafeStudy.getName())
-			.cafeId(createdCafeStudy.getCafe().getId())
-			.coordinatorId(createdCafeStudy.getCoordinator().getId())
-			.startDateTime(createdCafeStudy.getStudyPeriod().getStartDateTime())
-			.endDateTime(createdCafeStudy.getStudyPeriod().getEndDateTime())
-			.memberComms(createdCafeStudy.getMemberComms())
-			.maxParticipants(createdCafeStudy.getMaxParticipants())
-			.nowParticipants(createdCafeStudy.getCafeStudyMembers().size())
-			.introduction(createdCafeStudy.getIntroduction())
-			.views(createdCafeStudy.getViews())
-			.recruitmentStatus(createdCafeStudy.getRecruitmentStatus())
+			.name(createdCafeStudyEntity.getName())
+			.cafeId(createdCafeStudyEntity.getCafe().getId())
+			.coordinatorId(createdCafeStudyEntity.getCoordinator().getId())
+			.startDateTime(createdCafeStudyEntity.getStudyPeriod().getStartDateTime())
+			.endDateTime(createdCafeStudyEntity.getStudyPeriod().getEndDateTime())
+			.memberComms(createdCafeStudyEntity.getMemberComms())
+			.maxParticipants(createdCafeStudyEntity.getMaxParticipants())
+			.nowParticipants(createdCafeStudyEntity.getCafeStudyMembers().size())
+			.introduction(createdCafeStudyEntity.getIntroduction())
+			.views(createdCafeStudyEntity.getViews())
+			.recruitmentStatus(createdCafeStudyEntity.getRecruitmentStatus())
 			.build();
 	}
 

@@ -14,7 +14,7 @@ The following rules in the Naver coding convention cannot be checked by this con
 - [interface-noun-adj]
 - [method-verb-preposition]
 - [space-after-bracket]
-- [space-around-comment]
+- [space-around-commentInfo]
 -->
 
 <module name = "Checker">
