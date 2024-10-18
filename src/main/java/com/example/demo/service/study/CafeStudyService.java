@@ -45,10 +45,6 @@ public class CafeStudyService {
 	private final BusinessHourReader businessHourReader;
 	private final CafeStudyReader cafeStudyReader;
 	private final StudyEditor studyEditor;
-<<<<<<< HEAD
-	private final CafeStudyReader cafeStudyReader;
-=======
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 	private final MemberReader memberReader;
 
 	// @Override
@@ -162,11 +158,7 @@ public class CafeStudyService {
 	// }
 
 	public CafeStudy findCafeStudyById(Long cafeStudyId) {
-<<<<<<< HEAD
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-=======
-		return cafeStudyReader.read(cafeStudyId);
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 	}
 
 	@Transactional
@@ -190,22 +182,12 @@ public class CafeStudyService {
 	}
 
 	@Transactional
-<<<<<<< HEAD
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
 		CafeStudy cafeStudy = cafeStudyReader.read(cafeStudyId);
 		Member member = memberReader.read(memberId);
 		validateStudyDelete(member, cafeStudy);
 
 		cafeStudy.softDelete(now);
-=======
-	public Long deleteCafeStudy(Long coordinatorId, Long cafeStudyId, LocalDateTime now) {
-		Member member = memberReader.read(coordinatorId);
-		CafeStudy cafeStudy = cafeStudyReader.read(cafeStudyId);
-
-		validateStudyDelete(member, cafeStudy);
-		cafeStudy.softDelete(now);
-
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 		return cafeStudy.getId();
 	}
 
@@ -236,7 +218,8 @@ public class CafeStudyService {
 
 	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
 		List<CafeStudyMember> participatedStudies = studyMemberRepository.findByMember(member);
-		return participatedStudies.stream().anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
+		return participatedStudies.stream()
+			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}
 
 	private void validateStudyDelete(Member member, CafeStudy cafeStudy) {

@@ -3,11 +3,11 @@ package com.example.demo.config;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-<<<<<<< HEAD
 import com.example.demo.helper.CafeCafeTagSaveHelper;
 import com.example.demo.helper.CafeKeywordSaveHelper;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
+import com.example.demo.helper.CafeStudyCommentSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.CafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
@@ -19,59 +19,19 @@ import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.repository.cafe.CafeTagRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
+import com.example.demo.repository.study.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
-=======
-<<<<<<< HEAD
-=======
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.repository.cafe.BusinessHourRepository;
-import com.example.demo.repository.cafe.CafeRepository;
->>>>>>> ba34f9b (test: 스터디 삭제 테스트 작성)
-import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.study.CafeStudyRepository;
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 import com.example.demo.util.TimeUtil;
 
 @TestConfiguration
 public class HelperConfig {
 
-<<<<<<< HEAD
 	@Bean
 	public CafeSaveHelper cafeSaveHelper(
 		CafeRepository cafeRepository, BusinessHourRepository businessHourRepository, TimeUtil timeUtil) {
 		return new CafeSaveHelper(cafeRepository, businessHourRepository, timeUtil);
 	}
-=======
-<<<<<<< HEAD
-    @Bean
-    public CafeSaveHelper cafeSaveHelper(
-        CafeRepository cafeRepository, BusinessHourRepository businessHourRepository, TimeUtil timeUtil) {
-        return new CafeSaveHelper(cafeRepository, businessHourRepository, timeUtil);
-    }
-=======
-	@Autowired
-	private CafeRepository cafeRepository;
-	//	@Autowired
-	//	private ReviewRepository reviewRepository;
-	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
-	private BusinessHourRepository businessHourRepository;
-	@Autowired
-	private TimeUtil fakeTimeUtil;
-	//	@Autowired
-	//	private StudyMemberRepository studyMemberRepository;
-	//	@Autowired
-	//	private StudyOnceCommentRepository studyOnceCommentRepository;
-	@Autowired
-	private CafeStudyRepository cafeStudyRepository;
-	//	@Autowired
-	//	private ThumbnailImageRepository thumbnailImageRepository;
->>>>>>> ba34f9b (test: 스터디 삭제 테스트 작성)
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 
 	@Bean
 	public CafeKeywordSaveHelper cafeKeywordSaveHelper(CafeKeywordRepository cafeKeywordRepository,
@@ -90,18 +50,10 @@ public class HelperConfig {
 		return new CafeStudySaveHelper(cafeStudyRepository, memberRepository, cafeRepository);
 	}
 
-<<<<<<< HEAD
 	@Bean
 	public CafeStudyTagSaveHelper cafeStudyTagSaveHelper(CafeStudyTagRepository cafeStudyTagRepository) {
 		return new CafeStudyTagSaveHelper(cafeStudyTagRepository);
 	}
-=======
-<<<<<<< HEAD
-    @Bean
-    public CafeStudyTagSaveHelper cafeStudyTagSaveHelper(CafeStudyTagRepository cafeStudyTagRepository) {
-        return new CafeStudyTagSaveHelper(cafeStudyTagRepository);
-    }
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 
 	@Bean
 	public CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper(
@@ -117,7 +69,6 @@ public class HelperConfig {
 		return new CafeTagSaveHelper(cafeTagRepository);
 	}
 
-<<<<<<< HEAD
 	@Bean
 	public CafeCafeTagSaveHelper cafeCafeTagSaveHelper(
 		CafeRepository cafeRepository, CafeTagRepository cafeTagRepository,
@@ -125,49 +76,12 @@ public class HelperConfig {
 	) {
 		return new CafeCafeTagSaveHelper(cafeRepository, cafeTagRepository, cafeCafeTagRepository);
 	}
-=======
-    @Bean
-    public CafeCafeTagSaveHelper cafeCafeTagSaveHelper(
-        CafeRepository cafeRepository, CafeTagRepository cafeTagRepository,
-        CafeCafeTagRepository cafeCafeTagRepository
-    ) {
-        return new CafeCafeTagSaveHelper(cafeRepository, cafeTagRepository, cafeCafeTagRepository);
-    }
-=======
-	//	@Bean
-	//	public StudyMemberSaveHelper studyMemberSaveHelper() {
-	//		return new StudyMemberSaveHelper(studyMemberRepository, memberRepository, studyOnceRepository);
-	//	}
-	//
-	//	@Bean
-	//	public StudyOnceCommentSaveHelper studyOnceCommentSaveHelper() {
-	//		return new StudyOnceCommentSaveHelper(studyOnceCommentRepository, memberRepository, studyOnceRepository);
-	//	}
 
 	@Bean
-	public CafeStudySaveHelper studyOnceSaveHelper() {
-		return new CafeStudySaveHelper(cafeStudyRepository);
+	public CafeStudyCommentSaveHelper cafeStudyCommentSaveHelper(
+		CafeStudyCommentRepository cafeStudyCommentRepository,
+		MemberRepository memberRepository, CafeStudyRepository cafeStudyRepository
+	) {
+		return new CafeStudyCommentSaveHelper(cafeStudyCommentRepository, memberRepository, cafeStudyRepository);
 	}
-
-	//	@Bean
-	//	public ThumbnailImageSaveHelper thumbnailImageSaveHelper() {
-	//		return new ThumbnailImageSaveHelper(thumbnailImageRepository);
-	//	}
->>>>>>> ba34f9b (test: 스터디 삭제 테스트 작성)
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 }
-
-//	@Bean
-//	public StudyMemberSaveHelper studyMemberSaveHelper() {
-//		return new StudyMemberSaveHelper(studyMemberRepository, memberRepository, studyOnceRepository);
-//	}
-//
-//	@Bean
-//	public StudyOnceCommentSaveHelper studyOnceCommentSaveHelper() {
-//		return new StudyOnceCommentSaveHelper(studyOnceCommentRepository, memberRepository, studyOnceRepository);
-//	}
-//
-//	@Bean
-//	public ThumbnailImageSaveHelper thumbnailImageSaveHelper() {
-//		return new ThumbnailImageSaveHelper(thumbnailImageRepository);
-//	}

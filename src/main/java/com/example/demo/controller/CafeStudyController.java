@@ -76,11 +76,7 @@ public class CafeStudyController {
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
 
-<<<<<<< HEAD
 		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
-=======
-		Long deletedCafeStudyId = cafeStudyService.deleteCafeStudy(memberId, cafeStudyId, timeUtil.now());
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
 		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
 

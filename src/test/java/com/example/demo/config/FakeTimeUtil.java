@@ -14,8 +14,6 @@ import com.example.demo.util.TimeUtil;
 @Primary
 public class FakeTimeUtil implements TimeUtil {
 
-<<<<<<< HEAD
-=======
 	/**
 	 * @apiNote
 	 * DEFAULT_FIXED_DATE_TIME - 기본적으로 2000/01/01 00:00:00으로 설정되어 있습니다.</br>
@@ -32,7 +30,6 @@ public class FakeTimeUtil implements TimeUtil {
 		fixedLocalDateTime = DEFAULT_FIXED_DATE_TIME;
 	}
 
->>>>>>> ba34f9b (test: 스터디 삭제 테스트 작성)
 	@Override
 	public LocalTime maxLocalTime() {
 		return LocalTime.of(23, 59, 59);

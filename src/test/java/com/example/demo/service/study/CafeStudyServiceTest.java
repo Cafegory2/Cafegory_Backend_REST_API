@@ -141,20 +141,6 @@ class CafeStudyServiceTest extends ServiceTest {
 	}
 
 	@Test
-	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
-	void exception_case2222222() {
-		//given
-		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		Member leader = memberSaveHelper.saveMember();
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-
-		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), timeUtil.now(), cafeStudyCreateRequest));
-	}
-
-	@Test
 	@DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
 	void study_starts_1hours_after_now() {
 		//given
@@ -365,19 +351,12 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		Cafe cafe = cafeSaveHelper.saveCafe();
 		Member coordinator = memberSaveHelper.saveMember();
-<<<<<<< HEAD
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
 
 		//then
 		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId(), timeUtil.now()));
-=======
-		CafeStudy cafeStudy = cafeStudySaveHelper.save(cafe, coordinator);
-
-		//then
-		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId()));
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 	}
 
 	@Test
@@ -387,7 +366,6 @@ class CafeStudyServiceTest extends ServiceTest {
 		Cafe cafe = cafeSaveHelper.saveCafe();
 		Member coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
 		Member member = memberSaveHelper.saveMember("member@gmail.com");
-<<<<<<< HEAD
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
@@ -395,13 +373,6 @@ class CafeStudyServiceTest extends ServiceTest {
 		//then
 		assertThatThrownBy(
 			() -> sut.deleteStudy(member.getId(), cafeStudy.getId(), timeUtil.now()))
-=======
-		CafeStudy cafeStudy = cafeStudySaveHelper.save(cafe, coordinator);
-
-		//then
-		assertThatThrownBy(
-			() -> sut.deleteStudy(member.getId(), cafeStudy.getId()))
->>>>>>> d0e38a8 (feat: 스터디 삭제하는 기능 구현)
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_INVALID_LEADER.getErrorMessage());
 	}
