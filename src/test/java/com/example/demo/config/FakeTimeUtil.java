@@ -5,15 +5,24 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import com.example.demo.util.TimeUtil;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.context.annotation.Primary;
+
+import com.example.demo.util.TimeUtil;
 
 @TestComponent
 @Primary
 public class FakeTimeUtil implements TimeUtil {
+
+	/**
+	 * @apiNote
+	 * DEFAULT_FIXED_DATE_TIME - 기본적으로 2000/01/01 00:00:00으로 설정되어 있습니다.</br>
+	 * fixedLocalDateTime - 기본적으로 DEFAULT_FIXED_DATE_TIME 시간을 갖고 있지만, </br>
+	 * 생성 시에 다음과 같은 형태로 원하는 고정 시간을 주입할 수 있습니다. </br>
+	 * </br>
+	 * FakeTimeUtil fake = new FakeTimeUtil(LocalDateTime.of(2024, 9, 22, 10, 0, 0));
+	 *
+	 */
 
 	@Override
 	public LocalTime maxLocalTime() {
