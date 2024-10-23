@@ -2,7 +2,7 @@ package com.example.demo.dto.cafe;
 
 import com.example.demo.implement.cafe.BusinessHourEntity;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.Menu;
+import com.example.demo.implement.cafe.MenuEntity;
 import com.example.demo.implement.study.*;
 import lombok.*;
 
@@ -60,14 +60,14 @@ public class CafeDetailResponse {
     }
 
     private static List<MenuInfo> createMenusInfo(CafeEntity cafeEntity) {
-        List<Menu> menus = cafeEntity.getMenus();
+        List<MenuEntity> menus = cafeEntity.getMenus();
 
         return menus.stream()
             .map(CafeDetailResponse::createMenuInfo)
             .collect(Collectors.toList());
     }
 
-    private static MenuInfo createMenuInfo(Menu menu) {
+    private static MenuInfo createMenuInfo(MenuEntity menu) {
         return MenuInfo.builder()
             .name(menu.getName())
             .price(menu.getPrice())

@@ -41,7 +41,7 @@ public class CafeEntity extends BaseEntity {
 	private List<CafeCafeTagEntity> cafeCafeTags = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
-	private List<Menu> menus = new ArrayList<>();
+	private List<MenuEntity> menus = new ArrayList<>();
 
 	@Builder
 	private CafeEntity(String name, String mainImageUrl, Address address, String sns) {
