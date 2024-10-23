@@ -7,7 +7,7 @@ import com.example.demo.implement.signup.SignupProcessor;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.infrastructure.aws.AwsS3Client;
 import com.example.demo.infrastructure.oauth2.OAuth2Client;
 import com.example.demo.util.ImageData;
@@ -49,7 +49,7 @@ public class LoginServiceImpl implements LoginService{
     }
 
     private void updateMemberRefreshTokenAndProfile(OAuth2Profile profile, JwtToken token) {
-        Member member = memberReader.read(profile.getEmailAddress());
+        MemberEntity member = memberReader.read(profile.getEmailAddress());
         member.setRefreshToken(token.getRefreshToken());
 
         String profileUrl = uploadProfileImageToS3(profile.getProfileImgUrl());

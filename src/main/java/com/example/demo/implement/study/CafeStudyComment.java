@@ -3,13 +3,12 @@ package com.example.demo.implement.study;
 import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class CafeStudyComment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Member author;
+    private MemberEntity author;
 
     private StudyRole studyRole;
     private String content;
@@ -46,7 +45,7 @@ public class CafeStudyComment extends BaseEntity {
     private CafeStudy cafeStudy;
 
     @Builder
-    private CafeStudyComment(Member author, StudyRole studyRole, String content, CafeStudyComment parentComment, CafeStudy cafeStudy) {
+    private CafeStudyComment(MemberEntity author, StudyRole studyRole, String content, CafeStudyComment parentComment, CafeStudy cafeStudy) {
         this.author = author;
         this.studyRole = studyRole;
         this.content = content;

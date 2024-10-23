@@ -24,7 +24,7 @@ import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTag;
@@ -111,7 +111,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag2);
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag3);
 
-		Member member = memberSaveHelper.saveMember("cafegory@gmail.com");
+		MemberEntity member = memberSaveHelper.saveMember("cafegory@gmail.com");
 
 		CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
 		CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
@@ -165,7 +165,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
 		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
-		Member coordinator = memberReader.read("test@gmail.com");
+		MemberEntity coordinator = memberReader.read("test@gmail.com");
 		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, endDateTime);
 
 		RestAssured.given(spec).log().all()

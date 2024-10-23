@@ -1,7 +1,7 @@
 package com.example.demo.implement.signup;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberAppender;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.member.Role;
@@ -26,8 +26,8 @@ public class SignupProcessor {
         return memberAppender.append(createMember(email, nickname));
     }
 
-    private Member createMember(String email, String nickname) {
-        return Member.builder()
+    private MemberEntity createMember(String email, String nickname) {
+        return MemberEntity.builder()
             .email(email)
             .nickname(nickname)
             .profileUrl(null)

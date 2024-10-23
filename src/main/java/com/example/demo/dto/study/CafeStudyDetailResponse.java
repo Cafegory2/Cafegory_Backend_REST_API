@@ -1,7 +1,7 @@
 package com.example.demo.dto.study;
 
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.*;
 import lombok.*;
 
@@ -65,7 +65,7 @@ public class CafeStudyDetailResponse {
     }
 
     private static CoordinatorInfo createCoordinatorInfo(CafeStudy cafeStudy) {
-        Member coordinator = cafeStudy.getCoordinator();
+        MemberEntity coordinator = cafeStudy.getCoordinator();
 
         return CoordinatorInfo.builder()
             .id(coordinator.getId())

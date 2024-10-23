@@ -5,7 +5,7 @@ import com.example.demo.implement.member.MemberReader;
 import com.example.demo.mapper.ProfileMapper;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +17,7 @@ public class ProfileService {
     private final ProfileMapper profileMapper;
 
     public WelcomeProfileResponse getWelcomeProfile(Long memberId) {
-        Member member = memberReader.read(memberId);
+        MemberEntity member = memberReader.read(memberId);
         return profileMapper.toWelcomeProfileResponse(member);
     }
 

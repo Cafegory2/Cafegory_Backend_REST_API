@@ -8,7 +8,7 @@ import com.example.demo.repository.study.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,8 @@ public class CafeStudyCommentSaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeStudyRepository cafeStudyRepository;
 
-	public CafeStudyComment saveRootComment(Member member, StudyRole studyRole, CafeStudy cafeStudy) {
-		Member mergedMember = memberRepository.save(member);
+	public CafeStudyComment saveRootComment(MemberEntity member, StudyRole studyRole, CafeStudy cafeStudy) {
+		MemberEntity mergedMember = memberRepository.save(member);
 		CafeStudy mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
 
 		CafeStudyComment rootComment = TestCafeStudyCommentFactory.createRootComment(
@@ -31,8 +31,8 @@ public class CafeStudyCommentSaveHelper {
 	}
 
 	public CafeStudyComment saveReplyToParentComment(
-		CafeStudyComment parentComment, Member member, StudyRole studyRole, CafeStudy cafeStudy) {
-		Member mergedMember = memberRepository.save(member);
+		CafeStudyComment parentComment, MemberEntity member, StudyRole studyRole, CafeStudy cafeStudy) {
+		MemberEntity mergedMember = memberRepository.save(member);
 		CafeStudy mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
 
 		CafeStudyComment replyToParentComment = TestCafeStudyCommentFactory.createReplyToParentComment(

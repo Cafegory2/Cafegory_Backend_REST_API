@@ -4,11 +4,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
 
-	Optional<Member> findByEmail(String email);
+	Optional<MemberEntity> findByEmail(String email);
 
 	boolean existsByEmail(String email);
 }

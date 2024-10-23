@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.dto.study.CafeStudyDeleteResponse;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;
@@ -36,9 +36,9 @@ public class CafeStudyMapper {
 	// 		.collect(Collectors.toList());
 	// }
 
-	public CafeStudy toNewEntity(String studyName, CafeEntity cafeEntity, Member coordinator, LocalDateTime startDateTime,
-                                 LocalDateTime endDateTime,
-                                 MemberComms memberComms, int maxParticipants) {
+	public CafeStudy toNewEntity(String studyName, CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+								 LocalDateTime endDateTime,
+								 MemberComms memberComms, int maxParticipants) {
 		StudyPeriod studyPeriod = toStudyPeriod(startDateTime, endDateTime);
 
 		return CafeStudy.builder()

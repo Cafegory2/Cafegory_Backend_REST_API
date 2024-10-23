@@ -1,7 +1,7 @@
 package com.example.demo.dto.study;
 
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.*;
 import lombok.*;
 
@@ -38,7 +38,7 @@ public class CafeStudySearchListResponse {
     }
 
     private static WriterInfo createWriterInfo(CafeStudy cafeStudy) {
-        Member writer = cafeStudy.getCoordinator();
+        MemberEntity writer = cafeStudy.getCoordinator();
 
         return WriterInfo.builder()
             .id(writer.getId())

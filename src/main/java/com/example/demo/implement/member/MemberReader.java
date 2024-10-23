@@ -17,12 +17,12 @@ public class MemberReader {
         return memberRepository.existsByEmail(email);
     }
 
-    public Member read(String email) {
+    public MemberEntity read(String email) {
         return memberRepository.findByEmail(email)
             .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
     }
 
-    public Member read(Long memberId) {
+    public MemberEntity read(Long memberId) {
         return memberRepository.findById(memberId)
             .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
     }

@@ -5,7 +5,7 @@ import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTag;
 import com.example.demo.implement.study.CafeStudyTagType;
@@ -58,7 +58,7 @@ public class CafeApiTest extends ApiDocsTest {
         menuSaveHelper.saveMenu("아메리카노", "1500", cafeEntity);
         menuSaveHelper.saveMenu("카페라떼", "3000", cafeEntity);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
 

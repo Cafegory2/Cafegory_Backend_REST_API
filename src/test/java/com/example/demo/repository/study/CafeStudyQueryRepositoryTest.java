@@ -7,7 +7,7 @@ import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.*;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -67,7 +67,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         cafeKeywordSaveHelper.saveCafeKeyword("서울 서초구 강남대로 483 (반포동) 청호빌딩", cafeEntity2);
         cafeKeywordSaveHelper.saveCafeKeyword("카공하기 좋은 카페", cafeEntity2);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -127,7 +127,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity2 = cafeSaveHelper.saveCafeWith24For7();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity2);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         cafeStudySaveHelper.saveCafeStudy(cafeEntity1, member, startFor1, endFor1);
         cafeStudySaveHelper.saveCafeStudy(cafeEntity1, member, startFor2, endFor2);
@@ -232,7 +232,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity2);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -284,7 +284,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag1);
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag2);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -331,7 +331,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag1);
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag3);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -371,7 +371,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity2);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -410,7 +410,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith24For7();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
 
@@ -439,7 +439,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith24For7();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -463,7 +463,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith24For7();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -486,7 +486,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith24For7();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
@@ -525,7 +525,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag1);
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity2, cafeTag3);
 
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
 
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
         CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);

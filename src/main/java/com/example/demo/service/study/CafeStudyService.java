@@ -15,7 +15,7 @@ import com.example.demo.implement.cafe.BusinessHourEntity;
 import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeReader;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyMember;
@@ -171,7 +171,7 @@ public class CafeStudyService {
 		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
 			request.getEndDateTime().toLocalTime(), businessHourEntity);
 
-		Member coordinator = findMemberById(coordinatorId);
+		MemberEntity coordinator = findMemberById(coordinatorId);
 		validateStudyScheduleConflict(
 			buildLocalDateTime(request.getEndDateTime()),
 			buildLocalDateTime(request.getEndDateTime()),
@@ -184,7 +184,7 @@ public class CafeStudyService {
 	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
 		CafeStudy cafeStudy = cafeStudyReader.read(cafeStudyId);
-		Member member = memberReader.read(memberId);
+		MemberEntity member = memberReader.read(memberId);
 		validateStudyDelete(member, cafeStudy);
 
 		cafeStudy.softDelete(now);
@@ -210,19 +210,19 @@ public class CafeStudyService {
 		studyValidator.validateMaxParticipants(maxParticipants);
 	}
 
-	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member coordinator) {
+	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity coordinator) {
 		if (hasStudyScheduleConflict(start, end, coordinator)) {
 			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
 		}
 	}
 
-	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
+	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity member) {
 		List<CafeStudyMember> participatedStudies = studyMemberRepository.findByMember(member);
 		return participatedStudies.stream()
 			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}
 
-	private void validateStudyDelete(Member member, CafeStudy cafeStudy) {
+	private void validateStudyDelete(MemberEntity member, CafeStudy cafeStudy) {
 		studyValidator.validateMemberIsCafeStudyCoordinator(member, cafeStudy);
 		studyValidator.validateCafeStudyMembersPresent(cafeStudy);
 	}
@@ -376,7 +376,7 @@ public class CafeStudyService {
 	// 	return cafeStudy.isLeader(findMemberById(memberId));
 	// }
 
-	private Member findMemberById(Long memberId) {
+	private MemberEntity findMemberById(Long memberId) {
 		return memberReader.read(memberId);
 	}
 }

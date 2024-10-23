@@ -4,7 +4,7 @@ import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.login.LoginProcessor;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.signup.SignupProcessor;
 import com.example.demo.implement.token.JwtToken;
@@ -42,7 +42,7 @@ public class SpyLoginService implements LoginService {
 
         JwtToken token = loginOrSignup(profile);
 
-        Member member = memberReader.read(profile.getEmailAddress());
+        MemberEntity member = memberReader.read(profile.getEmailAddress());
         member.setRefreshToken(token.getRefreshToken());
 
         String filename = UUID.randomUUID().toString();

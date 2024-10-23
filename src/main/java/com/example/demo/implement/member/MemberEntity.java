@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -19,7 +18,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "member")
-public class Member extends BaseEntity {
+public class MemberEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -49,7 +48,7 @@ public class Member extends BaseEntity {
 	}
 
 	@Builder
-	private Member(Role role, String nickname, String email, String profileUrl, String bio, int participationCount, BeverageSize beverageSize, String refreshToken) {
+	private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio, int participationCount, BeverageSize beverageSize, String refreshToken) {
 		this.role = role;
 		this.nickname = nickname;
 		this.email = email;

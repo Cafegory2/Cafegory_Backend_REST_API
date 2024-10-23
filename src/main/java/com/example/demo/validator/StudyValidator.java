@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.util.TimeUtil;
 
@@ -58,7 +58,7 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateMemberIsCafeStudyCoordinator(Member memberId, CafeStudy cafeStudy) {
+	public void validateMemberIsCafeStudyCoordinator(MemberEntity memberId, CafeStudy cafeStudy) {
 		if (!cafeStudy.getCoordinator().equals(memberId)) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
 		}

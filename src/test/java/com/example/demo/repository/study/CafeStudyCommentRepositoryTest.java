@@ -6,7 +6,7 @@ import com.example.demo.helper.CafeStudyCommentSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyComment;
 import com.example.demo.implement.study.StudyRole;
@@ -41,9 +41,9 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
     @DisplayName("카공 ID를 사용하여 해당 카공에 달린 모든 댓글과 대댓글을 조회한다.")
     void find_all_comments_with_replies_in_cafe_study() {
         //given
-        Member coordinator = memberSaveHelper.saveMember("coordinator@gmail.com", "카공글 작성자");
-        Member member1 = memberSaveHelper.saveMember("test1@gmail.com", "멤버1");
-        Member member2 = memberSaveHelper.saveMember("test2@gmail.com", "멤버2");
+        MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com", "카공글 작성자");
+        MemberEntity member1 = memberSaveHelper.saveMember("test1@gmail.com", "멤버1");
+        MemberEntity member2 = memberSaveHelper.saveMember("test2@gmail.com", "멤버2");
 
         CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 

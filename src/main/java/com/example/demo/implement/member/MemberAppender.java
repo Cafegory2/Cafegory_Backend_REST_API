@@ -12,7 +12,7 @@ public class MemberAppender {
 
     private final MemberRepository memberRepository;
 
-    public Long append(Member member) {
+    public Long append(MemberEntity member) {
         return memberRepository.save(member).getId();
     }
 }

@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,7 +39,7 @@ public class CafeStudy extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Member coordinator;
+	private MemberEntity coordinator;
 
 	@Embedded
 	private StudyPeriod studyPeriod;
@@ -61,8 +61,8 @@ public class CafeStudy extends BaseEntity {
 	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
-	private CafeStudy(String name, CafeEntity cafeEntity, Member coordinator, StudyPeriod studyPeriod,
-					  MemberComms memberComms, int maxParticipants, String introduction) {
+	private CafeStudy(String name, CafeEntity cafeEntity, MemberEntity coordinator, StudyPeriod studyPeriod,
+                      MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafeEntity = cafeEntity;
 		this.coordinator = coordinator;
@@ -76,7 +76,7 @@ public class CafeStudy extends BaseEntity {
 		addCoordinatorToStudy(coordinator);
 	}
 
-	private void addCoordinatorToStudy(Member coordinator) {
+	private void addCoordinatorToStudy(MemberEntity coordinator) {
 		CafeStudyMember cafeStudyMember = CafeStudyMember.builder()
 			.cafeStudy(this)
 			.member(coordinator)
