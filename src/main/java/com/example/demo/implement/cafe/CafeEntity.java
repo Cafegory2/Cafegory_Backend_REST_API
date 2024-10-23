@@ -38,7 +38,7 @@ public class CafeEntity extends BaseEntity {
 	private List<CafeKeyword> cafeKeywords = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
-	private List<CafeCafeTag> cafeCafeTags = new ArrayList<>();
+	private List<CafeCafeTagEntity> cafeCafeTags = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
 	private List<Menu> menus = new ArrayList<>();
