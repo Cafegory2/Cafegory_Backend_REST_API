@@ -19,7 +19,7 @@ import java.util.List;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_comment")
-public class CafeStudyComment extends BaseEntity {
+public class CafeStudyCommentEntity extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -35,17 +35,17 @@ public class CafeStudyComment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudyComment parentComment;
+    private CafeStudyCommentEntity parentComment;
 
     @OneToMany(mappedBy = "parentComment")
-    private List<CafeStudyComment> childrenComments = new ArrayList<>();
+    private List<CafeStudyCommentEntity> childrenComments = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CafeStudyEntity cafeStudy;
 
     @Builder
-    private CafeStudyComment(MemberEntity author, StudyRole studyRole, String content, CafeStudyComment parentComment, CafeStudyEntity cafeStudy) {
+    private CafeStudyCommentEntity(MemberEntity author, StudyRole studyRole, String content, CafeStudyCommentEntity parentComment, CafeStudyEntity cafeStudy) {
         this.author = author;
         this.studyRole = studyRole;
         this.content = content;

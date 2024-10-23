@@ -12,7 +12,7 @@ public class CafeStudyCommentReader {
 
     private final CafeStudyCommentRepository cafeStudyCommentRepository;
 
-    public List<CafeStudyComment> readAllBy(Long cafeStudyId) {
+    public List<CafeStudyCommentEntity> readAllBy(Long cafeStudyId) {
         return cafeStudyCommentRepository.findAllBy(cafeStudyId);
     }
 }

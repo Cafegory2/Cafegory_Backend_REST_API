@@ -5,7 +5,7 @@ import com.example.demo.dto.study.CafeStudyDetailResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.dto.study.CafeStudySearchListResponse;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.CafeStudyComment;
+import com.example.demo.implement.study.CafeStudyCommentEntity;
 import com.example.demo.implement.study.CafeStudyCommentReader;
 import com.example.demo.implement.study.CafeStudyReader;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class CafeStudyQueryService {
 
     public CafeStudyDetailResponse getCafeStudyDetail(Long cafeStudyId) {
         CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
-        List<CafeStudyComment> comments = cafeStudyCommentReader.readAllBy(cafeStudyId);
+        List<CafeStudyCommentEntity> comments = cafeStudyCommentReader.readAllBy(cafeStudyId);
 
         return CafeStudyDetailResponse.of(cafeStudy, comments);
     }

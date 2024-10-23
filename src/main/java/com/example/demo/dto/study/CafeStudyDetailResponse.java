@@ -21,7 +21,7 @@ public class CafeStudyDetailResponse {
     private CafeInfo cafeInfo;
     private List<Comment> commentsInfo = new ArrayList<>();
 
-    public static CafeStudyDetailResponse of(CafeStudyEntity cafeStudy, List<CafeStudyComment> cafeStudyComments) {
+    public static CafeStudyDetailResponse of(CafeStudyEntity cafeStudy, List<CafeStudyCommentEntity> cafeStudyComments) {
         CafeStudyDetailResponse response = new CafeStudyDetailResponse();
 
         response.commentsInfo = buildCommentTree(cafeStudyComments, response);
@@ -32,14 +32,14 @@ public class CafeStudyDetailResponse {
         return response;
     }
 
-    private static List<Comment> buildCommentTree(List<CafeStudyComment> cafeStudyComments, CafeStudyDetailResponse response) {
+    private static List<Comment> buildCommentTree(List<CafeStudyCommentEntity> cafeStudyComments, CafeStudyDetailResponse response) {
         Map<Long, Comment> commentMap = cafeStudyComments.stream()
             .collect(Collectors.toMap(
-                CafeStudyComment::getId, CafeStudyDetailResponse::toComment));
+                CafeStudyCommentEntity::getId, CafeStudyDetailResponse::toComment));
 
         List<Comment> rootComments = new ArrayList<>();
 
-        for(CafeStudyComment comment : cafeStudyComments) {
+        for(CafeStudyCommentEntity comment : cafeStudyComments) {
             if(!comment.hasParentComment()) {
                 rootComments.add(commentMap.get(comment.getId()));
             } else {
@@ -90,7 +90,7 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static Comment toComment(CafeStudyComment cafeStudyComment) {
+    private static Comment toComment(CafeStudyCommentEntity cafeStudyComment) {
         return Comment.builder()
             .writerInfo(
                 Comment.WriterInfo.builder()

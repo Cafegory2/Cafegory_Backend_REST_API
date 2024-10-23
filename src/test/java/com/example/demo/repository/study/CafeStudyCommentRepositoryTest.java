@@ -8,7 +8,7 @@ import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.CafeStudyComment;
+import com.example.demo.implement.study.CafeStudyCommentEntity;
 import com.example.demo.implement.study.StudyRole;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -51,15 +51,15 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
 
         CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, startDateTime.plusHours(2));
 
-        CafeStudyComment root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
-        CafeStudyComment replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        CafeStudyComment replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);
+        CafeStudyCommentEntity replyToReply1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot1, member1, StudyRole.MEMBER, cafeStudy);
 
-        CafeStudyComment root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyRole.MEMBER, cafeStudy);
-        CafeStudyComment replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        CafeStudyComment replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity root2 = cafeStudyCommentSaveHelper.saveRootComment(member2, StudyRole.MEMBER, cafeStudy);
+        CafeStudyCommentEntity replyToRoot2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root2, coordinator, StudyRole.COORDINATOR, cafeStudy);
+        CafeStudyCommentEntity replyToReply2 = cafeStudyCommentSaveHelper.saveReplyToParentComment(replyToRoot2, member1, StudyRole.MEMBER, cafeStudy);
         //when
-        List<CafeStudyComment> result = sut.findAllBy(cafeStudy.getId());
+        List<CafeStudyCommentEntity> result = sut.findAllBy(cafeStudy.getId());
         //then
         assertThat(result.size()).isEqualTo(6);
     }
