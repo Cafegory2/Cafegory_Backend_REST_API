@@ -26,15 +26,15 @@ public class CafeQueryService {
 
     public CafeDetailResponse getCafeDetail(Long cafeId, LocalDateTime now) {
         Cafe cafe = cafeReader.getWithTags(cafeId);
-        BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe, now.getDayOfWeek());
+        BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe, now.getDayOfWeek());
 
         List<CafeStudy> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
         List<CafeStudy> openStudies = filterAndSortByIdDesc(cafeStudies, CafeStudy::isRecruitmentOpen);
         List<CafeStudy> closeStudies = filterAndSortByIdDesc(cafeStudies, (study) -> !study.isRecruitmentOpen());
 
-        return CafeDetailResponse.of(cafe, businessHour,
+        return CafeDetailResponse.of(cafe, businessHourEntity,
             businessHourOpenChecker.checkByNowTime(
-                businessHour.getDayOfWeek(), businessHour.getOpeningTime(), businessHour.getClosingTime(), now),
+                businessHourEntity.getDayOfWeek(), businessHourEntity.getOpeningTime(), businessHourEntity.getClosingTime(), now),
             openStudies, closeStudies
         );
     }

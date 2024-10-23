@@ -3,7 +3,7 @@ package com.example.demo.factory;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.BusinessHourEntity;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.util.TimeUtil;
 
@@ -17,9 +17,9 @@ public class TestBusinessHourFactory {
 	//			.build();
 	//	}
 
-	public static BusinessHour createBusinessHourWithDayAnd24For7(Cafe cafe, DayOfWeek day,
-		TimeUtil timeUtil) {
-		return BusinessHour.builder()
+	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(Cafe cafe, DayOfWeek day,
+																		TimeUtil timeUtil) {
+		return BusinessHourEntity.builder()
 			.dayOfWeek(day)
 			.openingTime(LocalTime.MIN)
 			.closingTime(timeUtil.maxLocalTime())
@@ -27,9 +27,9 @@ public class TestBusinessHourFactory {
 			.build();
 	}
 
-	public static BusinessHour createBusinessHourWithDayAndTime(Cafe cafe, DayOfWeek day, LocalTime openingTime,
-		LocalTime closingTime) {
-		return BusinessHour.builder()
+	public static BusinessHourEntity createBusinessHourWithDayAndTime(Cafe cafe, DayOfWeek day, LocalTime openingTime,
+																	  LocalTime closingTime) {
+		return BusinessHourEntity.builder()
 			.dayOfWeek(day)
 			.openingTime(openingTime)
 			.closingTime(closingTime)
@@ -37,8 +37,8 @@ public class TestBusinessHourFactory {
 			.build();
 	}
 
-		public static BusinessHour createBusinessHourWithDayAndTime(DayOfWeek day, LocalTime openingTime, LocalTime closingTime) {
-			return BusinessHour.builder()
+		public static BusinessHourEntity createBusinessHourWithDayAndTime(DayOfWeek day, LocalTime openingTime, LocalTime closingTime) {
+			return BusinessHourEntity.builder()
 				.dayOfWeek(day)
 				.openingTime(openingTime)
 				.closingTime(closingTime)

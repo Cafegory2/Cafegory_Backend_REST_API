@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.BusinessHourEntity;
 import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.implement.cafe.CafeReader;
@@ -166,10 +166,10 @@ public class CafeStudyService {
 		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
 
 		Cafe cafe = cafeReader.getById(request.getCafeId());
-		BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
+		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
 			request.getStartDateTime().getDayOfWeek());
 		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-			request.getEndDateTime().toLocalTime(), businessHour);
+			request.getEndDateTime().toLocalTime(), businessHourEntity);
 
 		Member coordinator = findMemberById(coordinatorId);
 		validateStudyScheduleConflict(

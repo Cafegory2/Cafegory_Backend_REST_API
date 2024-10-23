@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.factory.TestBusinessHourFactory;
 import com.example.demo.factory.TestCafeFactory;
-import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.BusinessHourEntity;
 import com.example.demo.implement.cafe.Cafe;
 import com.example.demo.repository.cafe.BusinessHourRepository;
 import com.example.demo.repository.cafe.CafeRepository;
@@ -38,9 +38,9 @@ public class CafeSaveHelper {
 
 	private void makeBusinessHoursWith7daysFrom9To21(Cafe cafe) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHour businessHour = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafe, day,
+			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafe, day,
 				LocalTime.of(9, 0), LocalTime.of(21, 0));
-			businessHourRepository.save(businessHour);
+			businessHourRepository.save(businessHourEntity);
 		}
 	}
 
@@ -52,9 +52,9 @@ public class CafeSaveHelper {
 
 	private void makeBusinessHourWith24For7(Cafe cafe) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHour businessHour = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day,
+			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day,
 				timeUtil);
-			businessHourRepository.save(businessHour);
+			businessHourRepository.save(businessHourEntity);
 		}
 	}
 }
