@@ -17,13 +17,12 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -32,7 +31,7 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_member", uniqueConstraints = {
 	@UniqueConstraint(name = "unique_cafe_study_member", columnNames = {"cafe_study_id", "member_id"})})
-public class CafeStudyMember extends BaseEntity {
+public class CafeStudyMemberEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -41,11 +40,11 @@ public class CafeStudyMember extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudy cafeStudy;
+	private CafeStudyEntity cafeStudy;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Member member;
+	private MemberEntity member;
 
 	@Enumerated(EnumType.STRING)
 	private StudyRole studyRole;
@@ -54,7 +53,7 @@ public class CafeStudyMember extends BaseEntity {
 	private Attendance attendance;
 
 	@Builder
-	private CafeStudyMember(CafeStudy cafeStudy, Member member, StudyRole studyRole) {
+	private CafeStudyMemberEntity(CafeStudyEntity cafeStudy, MemberEntity member, StudyRole studyRole) {
 		this.cafeStudy = cafeStudy;
 		this.member = member;
 		this.studyRole = studyRole;

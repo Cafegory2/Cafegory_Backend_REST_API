@@ -20,15 +20,15 @@ public class CafeStudyReader {
 	private final CafeStudyRepository cafeStudyRepository;
 	private final CafeStudyQueryRepository cafeStudyQueryRepository;
 
-	public SliceResponse<CafeStudy> searchCafeStudies(CafeStudySearchListRequest request) {
+	public SliceResponse<CafeStudyEntity> searchCafeStudies(CafeStudySearchListRequest request) {
 		return cafeStudyQueryRepository.findCafeStudies(request);
 	}
 
-    public List<CafeStudy> readAllWithCoordinatorBy(Long cafeId) {
+    public List<CafeStudyEntity> readAllWithCoordinatorBy(Long cafeId) {
         return cafeStudyRepository.findAllByCafeId(cafeId);
     }
 
-	public CafeStudy read(Long cafeStudyId) {
+	public CafeStudyEntity read(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId)
 			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
 	}

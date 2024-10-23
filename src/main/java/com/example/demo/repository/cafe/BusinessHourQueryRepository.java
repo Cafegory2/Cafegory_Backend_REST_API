@@ -1,13 +1,13 @@
 package com.example.demo.repository.cafe;
 
-import static com.example.demo.implement.cafe.QBusinessHour.*;
+import static com.example.demo.implement.cafe.QBusinessHourEntity.businessHourEntity;
 
 import java.time.DayOfWeek;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.implement.cafe.BusinessHour;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.BusinessHourEntity;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,10 @@ import lombok.RequiredArgsConstructor;
 public class BusinessHourQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public BusinessHour findWithCafeAndDayOfWeek(Cafe cafe, DayOfWeek dayOfWeek) {
-		return jpaQueryFactory.select(businessHour)
-			.from(businessHour)
-			.where(businessHour.cafe.eq(cafe).and(businessHour.dayOfWeek.eq(dayOfWeek)))
+	public BusinessHourEntity findWithCafeAndDayOfWeek(CafeEntity cafeEntity, DayOfWeek dayOfWeek) {
+		return jpaQueryFactory.select(businessHourEntity)
+			.from(businessHourEntity)
+			.where(businessHourEntity.cafe.eq(cafeEntity).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
 			.fetchOne();
 	}
 }

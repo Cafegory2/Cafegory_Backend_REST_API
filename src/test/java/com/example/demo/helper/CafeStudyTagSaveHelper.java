@@ -1,7 +1,7 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestCafeStudyTagFactory;
-import com.example.demo.implement.study.CafeStudyTag;
+import com.example.demo.implement.study.CafeStudyTagEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.repository.study.CafeStudyTagRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,8 @@ public class CafeStudyTagSaveHelper {
 
     private final CafeStudyTagRepository cafeStudyTagRepository;
 
-    public CafeStudyTag saveCafeStudyTag(CafeStudyTagType cafeStudyTagType) {
-        CafeStudyTag cafeStudyTag = TestCafeStudyTagFactory.createCafeStudyTag(cafeStudyTagType);
+    public CafeStudyTagEntity saveCafeStudyTag(CafeStudyTagType cafeStudyTagType) {
+        CafeStudyTagEntity cafeStudyTag = TestCafeStudyTagFactory.createCafeStudyTag(cafeStudyTagType);
         return cafeStudyTagRepository.save(cafeStudyTag);
     }
 

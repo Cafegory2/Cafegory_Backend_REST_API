@@ -1,8 +1,8 @@
 package com.example.demo.dto.cafe;
 
-import com.example.demo.implement.cafe.BusinessHour;
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.cafe.Menu;
+import com.example.demo.implement.cafe.BusinessHourEntity;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.cafe.MenuEntity;
 import com.example.demo.implement.study.*;
 import lombok.*;
 
@@ -22,24 +22,24 @@ public class CafeDetailResponse {
     private List<CafeStudyInfo> openCafeStudiesInfo = new ArrayList<>();
     private List<CafeStudyInfo> closeCafeStudiesInfo = new ArrayList<>();
 
-    public static CafeDetailResponse of(Cafe cafe, BusinessHour businessHour, boolean isOpen,
-                                        List<CafeStudy> openCafeStudies, List<CafeStudy> closeCafeStudies) {
+    public static CafeDetailResponse of(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen,
+                                        List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
         CafeDetailResponse response = new CafeDetailResponse();
-        response.cafeInfo = createCafeInfo(cafe, businessHour, isOpen);
-        response.menusInfo = createMenusInfo(cafe);
+        response.cafeInfo = createCafeInfo(cafeEntity, businessHourEntity, isOpen);
+        response.menusInfo = createMenusInfo(cafeEntity);
         response.openCafeStudiesInfo = createCafeStudiesInfo(openCafeStudies);
         response.closeCafeStudiesInfo = createCafeStudiesInfo(closeCafeStudies);
 
         return response;
     }
 
-    private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudy> cafeStudies) {
+    private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudyEntity> cafeStudies) {
         return cafeStudies.stream()
             .map(CafeDetailResponse::createCafeStudyInfo)
             .collect(Collectors.toList());
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
         return CafeStudyInfo.builder()
             .id(cafeStudy.getId())
             .name(cafeStudy.getName())
@@ -59,33 +59,33 @@ public class CafeDetailResponse {
             .build();
     }
 
-    private static List<MenuInfo> createMenusInfo(Cafe cafe) {
-        List<Menu> menus = cafe.getMenus();
+    private static List<MenuInfo> createMenusInfo(CafeEntity cafeEntity) {
+        List<MenuEntity> menus = cafeEntity.getMenus();
 
         return menus.stream()
             .map(CafeDetailResponse::createMenuInfo)
             .collect(Collectors.toList());
     }
 
-    private static MenuInfo createMenuInfo(Menu menu) {
+    private static MenuInfo createMenuInfo(MenuEntity menu) {
         return MenuInfo.builder()
             .name(menu.getName())
             .price(menu.getPrice())
             .build();
     }
 
-    private static CafeInfo createCafeInfo(Cafe cafe, BusinessHour businessHour, boolean isOpen) {
+    private static CafeInfo createCafeInfo(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen) {
         return CafeInfo.builder()
-            .id(cafe.getId())
-            .name(cafe.getName())
-            .imgUrl(cafe.getMainImageUrl())
-            .address(cafe.getAddress().getFullAddress())
-            .openingTime(businessHour.getOpeningTime())
-            .closingTime(businessHour.getClosingTime())
+            .id(cafeEntity.getId())
+            .name(cafeEntity.getName())
+            .imgUrl(cafeEntity.getMainImageUrl())
+            .address(cafeEntity.getAddress().getFullAddress())
+            .openingTime(businessHourEntity.getOpeningTime())
+            .closingTime(businessHourEntity.getClosingTime())
             .isOpen(isOpen)
-            .sns(cafe.getSns())
+            .sns(cafeEntity.getSns())
             .tags(
-                cafe.getCafeCafeTags().stream()
+                cafeEntity.getCafeCafeTags().stream()
                     .map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
                     .collect(Collectors.toList())
             )

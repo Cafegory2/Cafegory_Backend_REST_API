@@ -1,7 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ class ProfileMapperTest {
     @DisplayName("WelcomeProfileResponse 로 변환한다.")
     void toWelcomeProfileResponse() {
         //given
-        Member member = createMemberWith("테스트닉네임", "testProfileUrl");
+        MemberEntity member = createMemberWith("테스트닉네임", "testProfileUrl");
         //when
         WelcomeProfileResponse response = sut.toWelcomeProfileResponse(member);
         //then

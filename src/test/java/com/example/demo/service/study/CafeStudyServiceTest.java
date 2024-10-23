@@ -20,9 +20,9 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.util.TimeUtil;
 
@@ -132,8 +132,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
 
-		Member leader = memberSaveHelper.saveMember();
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		MemberEntity leader = memberSaveHelper.saveMember();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() ->
@@ -144,10 +144,10 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
 	void study_starts_1hours_after_now() {
 		//given
-		Member coordinator = memberSaveHelper.saveMember();
+		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusHours(1);
 		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
@@ -157,10 +157,10 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 시간으로부터 1시간 이전일 수 없다.")
 	void study_starts_1hours_before_now() {
 		//given
-		Member coordinator = memberSaveHelper.saveMember();
+		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
@@ -172,10 +172,10 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
 	void study_start_date_before_one_month() {
 		//given
-		Member coordinator = memberSaveHelper.saveMember();
+		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusMonths(1);
 		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
@@ -185,10 +185,10 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
 	void study_start_date_after_one_month() {
 		//given
-		Member coordinator = memberSaveHelper.saveMember();
+		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusMonths(1).plusDays(1);
 		LocalDateTime end = start.plusHours(1);
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
@@ -311,8 +311,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 
-		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		Member leader = memberSaveHelper.saveMember();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		MemberEntity leader = memberSaveHelper.saveMember();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(() -> sut.createStudy(leader.getId(), now, cafeStudyCreateRequest)).isInstanceOf(
@@ -333,8 +333,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 
-		Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		Member leader = memberSaveHelper.saveMember();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		MemberEntity leader = memberSaveHelper.saveMember();
 		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest));
@@ -349,11 +349,11 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공장은 카공을 삭제할 수 있다.")
 	void coordinator_can_delete_study() {
 		//given
-		Cafe cafe = cafeSaveHelper.saveCafe();
-		Member coordinator = memberSaveHelper.saveMember();
+		CafeEntity cafeEntity = cafeSaveHelper.saveCafe();
+		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
 
 		//then
 		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId(), timeUtil.now()));
@@ -363,12 +363,12 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공장이 아니라면 카공을 삭제할 수 없다.")
 	void non_coordinator_can_not_delete_study() {
 		//given
-		Cafe cafe = cafeSaveHelper.saveCafe();
-		Member coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		Member member = memberSaveHelper.saveMember("member@gmail.com");
+		CafeEntity cafeEntity = cafeSaveHelper.saveCafe();
+		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
 
 		//then
 		assertThatThrownBy(

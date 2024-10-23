@@ -1,13 +1,13 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyCafeStudyTag;
-import com.example.demo.implement.study.CafeStudyTag;
+import com.example.demo.implement.study.CafeStudyEntity;
+import com.example.demo.implement.study.CafeStudyCafeStudyTagEntity;
+import com.example.demo.implement.study.CafeStudyTagEntity;
 
 public class TestCafeStudyCafeStudyTagFactory {
 
-    public static CafeStudyCafeStudyTag createCafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
-        return CafeStudyCafeStudyTag.builder()
+    public static CafeStudyCafeStudyTagEntity createCafeStudyCafeStudyTag(CafeStudyEntity cafeStudy, CafeStudyTagEntity cafeStudyTag) {
+        return CafeStudyCafeStudyTagEntity.builder()
             .cafeStudy(cafeStudy)
             .cafeStudyTag(cafeStudyTag)
             .build();

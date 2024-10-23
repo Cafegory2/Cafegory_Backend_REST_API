@@ -65,11 +65,11 @@ public class BusinessHourOpenChecker {
         return (currentTime.isAfter(startTime) || currentTime.equals(startTime)) && currentTime.isBefore(endTime);
     }
 
-    public boolean checkWithBusinessHours(List<BusinessHour> businessHours, LocalDateTime now) {
-        if (!hasMatchingDayOfWeek(businessHours, now)) {
+    public boolean checkWithBusinessHours(List<BusinessHourEntity> businessHourEntities, LocalDateTime now) {
+        if (!hasMatchingDayOfWeek(businessHourEntities, now)) {
             throw new CafegoryException(ExceptionType.CAFE_NOT_FOUND_DAY_OF_WEEK);
         }
-        return businessHours.stream()
+        return businessHourEntities.stream()
             .anyMatch(
                 hour -> checkByNowTime(hour.getDayOfWeek(), hour.getOpeningTime(), hour.getClosingTime(), now));
     }
@@ -113,8 +113,8 @@ public class BusinessHourOpenChecker {
         return false;
     }
 
-    private boolean hasMatchingDayOfWeek(List<BusinessHour> businessHours, LocalDateTime now) {
-        return businessHours.stream()
+    private boolean hasMatchingDayOfWeek(List<BusinessHourEntity> businessHourEntities, LocalDateTime now) {
+        return businessHourEntities.stream()
             .anyMatch(hour -> hour.existsMatchingDayOfWeek(now));
     }
 }

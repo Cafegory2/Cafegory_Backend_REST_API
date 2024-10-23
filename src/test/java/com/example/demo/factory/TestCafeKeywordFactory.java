@@ -1,12 +1,12 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.cafe.CafeKeyword;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.cafe.CafeKeywordEntity;
 
 public class TestCafeKeywordFactory {
 
-    public static CafeKeyword createCafeKeyword(String keyword, Cafe cafe) {
-        return CafeKeyword.builder()
+    public static CafeKeywordEntity createCafeKeyword(String keyword, CafeEntity cafe) {
+        return CafeKeywordEntity.builder()
             .keyword(keyword)
             .cafe(cafe)
             .build();

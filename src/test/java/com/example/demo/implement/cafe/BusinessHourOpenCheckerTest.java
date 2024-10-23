@@ -28,12 +28,12 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("영업 중 여부를 판단한다.")
 	void determines_if_it_is_during_business_hours(LocalDateTime now) {
 		//given
-		List<BusinessHour> businessHours = List.of(
+		List<BusinessHourEntity> businessHourEntities = List.of(
 			createBusinessHourWithDayAndTime(MONDAY, LocalTime.of(9, 0),
 				LocalTime.of(21, 0))
 		);
 		//when
-		boolean isOpen = sut.checkWithBusinessHours(businessHours, now);
+		boolean isOpen = sut.checkWithBusinessHours(businessHourEntities, now);
 		//then
 		assertThat(isOpen).isTrue();
 	}
@@ -50,12 +50,12 @@ public class BusinessHourOpenCheckerTest {
 	@MethodSource("provideLocalDateTime5")
 	@DisplayName("영업 종료 여부를 판단한다.")
 	void determines_if_it_is_after_business_hours(LocalDateTime now) {
-		List<BusinessHour> businessHours = List.of(
+		List<BusinessHourEntity> businessHourEntities = List.of(
 			createBusinessHourWithDayAndTime(MONDAY, LocalTime.of(9, 0),
 				LocalTime.of(21, 0))
 		);
 		//when
-		boolean isOpen = sut.checkWithBusinessHours(businessHours, now);
+		boolean isOpen = sut.checkWithBusinessHours(businessHourEntities, now);
 		//then
 		assertThat(isOpen).isFalse();
 	}
@@ -71,7 +71,7 @@ public class BusinessHourOpenCheckerTest {
 	@MethodSource("provideLocalDateTime2")
 	@DisplayName("24시간 영업한다.")
 	void open_24Hours(LocalDateTime now) {
-		List<BusinessHour> businessHours = List.of(
+		List<BusinessHourEntity> businessHourEntities = List.of(
 			// createBusinessHourWithDayAndTime("MONDAY", LocalTime.of(0, 0),
 			// 	LocalTime.MAX),
 			// createBusinessHourWithDayAndTime("TUESDAY", LocalTime.of(0, 0),
@@ -80,7 +80,7 @@ public class BusinessHourOpenCheckerTest {
 			createBusinessHourWithDayAndTime(TUESDAY, LocalTime.of(0, 0), timeUtil.maxLocalTime())
 		);
 		//when
-		boolean isOpen = sut.checkWithBusinessHours(businessHours, now);
+		boolean isOpen = sut.checkWithBusinessHours(businessHourEntities, now);
 		//then
 		assertThat(isOpen).isTrue();
 	}
@@ -96,14 +96,14 @@ public class BusinessHourOpenCheckerTest {
 	@MethodSource("provideLocalDateTime3")
 	@DisplayName("다음날 새벽까지 영업한다.")
 	void open_until_early_morning_the_next_day(LocalDateTime now, boolean expected) {
-		List<BusinessHour> businessHours = List.of(
+		List<BusinessHourEntity> businessHourEntities = List.of(
 			createBusinessHourWithDayAndTime(MONDAY, LocalTime.of(9, 0),
 				LocalTime.of(2, 0)),
 			createBusinessHourWithDayAndTime(TUESDAY, LocalTime.of(9, 0),
 				LocalTime.of(2, 0))
 		);
 		//when
-		boolean isOpen = sut.checkWithBusinessHours(businessHours, now);
+		boolean isOpen = sut.checkWithBusinessHours(businessHourEntities, now);
 		//then
 		assertThat(isOpen).isEqualTo(expected);
 	}
@@ -123,7 +123,7 @@ public class BusinessHourOpenCheckerTest {
 	@DisplayName("평일은 일찍마감, 금토는 24시간 오픈, 일요일은 일찍 마감")
 	void business_hours_are_different_each_day(LocalDateTime now,
 		boolean expected) {
-		List<BusinessHour> businessHours = List.of(
+		List<BusinessHourEntity> businessHourEntities = List.of(
 			createBusinessHourWithDayAndTime(MONDAY, LocalTime.of(9, 0), LocalTime.of(22, 0)),
 			createBusinessHourWithDayAndTime(TUESDAY, LocalTime.of(9, 0), timeUtil.maxLocalTime()),
 			createBusinessHourWithDayAndTime(FRIDAY, LocalTime.of(9, 0), timeUtil.maxLocalTime()),
@@ -131,7 +131,7 @@ public class BusinessHourOpenCheckerTest {
 			createBusinessHourWithDayAndTime(SUNDAY, LocalTime.of(0, 0), LocalTime.of(22, 0))
 		);
 		//when
-		boolean isOpen = sut.checkWithBusinessHours(businessHours, now);
+		boolean isOpen = sut.checkWithBusinessHours(businessHourEntities, now);
 		//then
 		assertThat(isOpen).isEqualTo(expected);
 

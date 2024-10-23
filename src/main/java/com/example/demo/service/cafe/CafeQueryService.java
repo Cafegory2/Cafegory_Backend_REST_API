@@ -2,7 +2,7 @@ package com.example.demo.service.cafe;
 
 import com.example.demo.dto.cafe.CafeDetailResponse;
 import com.example.demo.implement.cafe.*;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,24 +25,24 @@ public class CafeQueryService {
     private final BusinessHourOpenChecker businessHourOpenChecker;
 
     public CafeDetailResponse getCafeDetail(Long cafeId, LocalDateTime now) {
-        Cafe cafe = cafeReader.getWithTags(cafeId);
-        BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe, now.getDayOfWeek());
+        CafeEntity cafeEntity = cafeReader.getWithTags(cafeId);
+        BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafeEntity, now.getDayOfWeek());
 
-        List<CafeStudy> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
-        List<CafeStudy> openStudies = filterAndSortByIdDesc(cafeStudies, CafeStudy::isRecruitmentOpen);
-        List<CafeStudy> closeStudies = filterAndSortByIdDesc(cafeStudies, (study) -> !study.isRecruitmentOpen());
+        List<CafeStudyEntity> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
+        List<CafeStudyEntity> openStudies = filterAndSortByIdDesc(cafeStudies, CafeStudyEntity::isRecruitmentOpen);
+        List<CafeStudyEntity> closeStudies = filterAndSortByIdDesc(cafeStudies, (study) -> !study.isRecruitmentOpen());
 
-        return CafeDetailResponse.of(cafe, businessHour,
+        return CafeDetailResponse.of(cafeEntity, businessHourEntity,
             businessHourOpenChecker.checkByNowTime(
-                businessHour.getDayOfWeek(), businessHour.getOpeningTime(), businessHour.getClosingTime(), now),
+                businessHourEntity.getDayOfWeek(), businessHourEntity.getOpeningTime(), businessHourEntity.getClosingTime(), now),
             openStudies, closeStudies
         );
     }
 
-    private List<CafeStudy> filterAndSortByIdDesc(List<CafeStudy> cafeStudies, Predicate<CafeStudy> predicate) {
+    private List<CafeStudyEntity> filterAndSortByIdDesc(List<CafeStudyEntity> cafeStudies, Predicate<CafeStudyEntity> predicate) {
         return cafeStudies.stream()
             .filter(predicate)
-            .sorted(Comparator.comparing(CafeStudy::getId).reversed())
+            .sorted(Comparator.comparing(CafeStudyEntity::getId).reversed())
             .collect(Collectors.toList());
     }
 }

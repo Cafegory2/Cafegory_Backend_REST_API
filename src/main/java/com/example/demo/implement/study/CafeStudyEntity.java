@@ -6,14 +6,13 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.member.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -21,7 +20,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study")
-public class CafeStudy extends BaseEntity {
+public class CafeStudyEntity extends BaseEntity {
 	//
 	public static final int LIMIT_MEMBER_CAPACITY = 6;
 	public static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
@@ -36,11 +35,11 @@ public class CafeStudy extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Cafe cafe;
+	private CafeEntity cafe;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Member coordinator;
+	private MemberEntity coordinator;
 
 	@Embedded
 	private StudyPeriod studyPeriod;
@@ -56,14 +55,14 @@ public class CafeStudy extends BaseEntity {
 	private RecruitmentStatus recruitmentStatus;
 
 	@OneToMany(mappedBy = "cafeStudy")
-	private List<CafeStudyMember> cafeStudyMembers = new ArrayList<>();
+	private List<CafeStudyMemberEntity> cafeStudyMembers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafeStudy")
-	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
+	private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
-	private CafeStudy(String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
-		MemberComms memberComms, int maxParticipants, String introduction) {
+	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
+							MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;
@@ -77,8 +76,8 @@ public class CafeStudy extends BaseEntity {
 		addCoordinatorToStudy(coordinator);
 	}
 
-	private void addCoordinatorToStudy(Member coordinator) {
-		CafeStudyMember cafeStudyMember = CafeStudyMember.builder()
+	private void addCoordinatorToStudy(MemberEntity coordinator) {
+		CafeStudyMemberEntity cafeStudyMember = CafeStudyMemberEntity.builder()
 			.cafeStudy(this)
 			.member(coordinator)
 			.studyRole(StudyRole.COORDINATOR)

@@ -15,7 +15,7 @@ public class StudyReader {
 
 	private final CafeStudyRepository cafeStudyRepository;
 
-	public CafeStudy getById(Long cafeStudyId) {
+	public CafeStudyEntity getById(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}

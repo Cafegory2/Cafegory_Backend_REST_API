@@ -1,14 +1,14 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestCafeStudyCommentFactory;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyComment;
+import com.example.demo.implement.study.CafeStudyEntity;
+import com.example.demo.implement.study.CafeStudyCommentEntity;
 import com.example.demo.implement.study.StudyRole;
 import com.example.demo.repository.study.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,21 +21,21 @@ public class CafeStudyCommentSaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeStudyRepository cafeStudyRepository;
 
-	public CafeStudyComment saveRootComment(Member member, StudyRole studyRole, CafeStudy cafeStudy) {
-		Member mergedMember = memberRepository.save(member);
-		CafeStudy mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
+	public CafeStudyCommentEntity saveRootComment(MemberEntity member, StudyRole studyRole, CafeStudyEntity cafeStudy) {
+		MemberEntity mergedMember = memberRepository.save(member);
+		CafeStudyEntity mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
 
-		CafeStudyComment rootComment = TestCafeStudyCommentFactory.createRootComment(
+		CafeStudyCommentEntity rootComment = TestCafeStudyCommentFactory.createRootComment(
 			mergedMember, studyRole, mergedStudyOnce);
 		return cafeStudyCommentRepository.save(rootComment);
 	}
 
-	public CafeStudyComment saveReplyToParentComment(
-		CafeStudyComment parentComment, Member member, StudyRole studyRole, CafeStudy cafeStudy) {
-		Member mergedMember = memberRepository.save(member);
-		CafeStudy mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
+	public CafeStudyCommentEntity saveReplyToParentComment(
+		CafeStudyCommentEntity parentComment, MemberEntity member, StudyRole studyRole, CafeStudyEntity cafeStudy) {
+		MemberEntity mergedMember = memberRepository.save(member);
+		CafeStudyEntity mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
 
-		CafeStudyComment replyToParentComment = TestCafeStudyCommentFactory.createReplyToParentComment(
+		CafeStudyCommentEntity replyToParentComment = TestCafeStudyCommentFactory.createReplyToParentComment(
 			parentComment, mergedMember, studyRole, mergedStudyOnce);
 		return cafeStudyCommentRepository.save(replyToParentComment);
 	}

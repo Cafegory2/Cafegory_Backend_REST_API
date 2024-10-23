@@ -17,7 +17,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -25,7 +24,7 @@ import org.hibernate.annotations.Where;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "menu")
-public class Menu extends BaseEntity {
+public class MenuEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -37,10 +36,10 @@ public class Menu extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Cafe cafe;
+	private CafeEntity cafe;
 
 	@Builder
-	private Menu(String name, String price, Cafe cafe) {
+	private MenuEntity(String name, String price, CafeEntity cafe) {
 		this.name = name;
 		this.price = price;
 		this.cafe = cafe;

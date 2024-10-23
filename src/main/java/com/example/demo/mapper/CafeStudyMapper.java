@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.dto.study.CafeStudyDeleteResponse;
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.member.Member;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;
 
@@ -36,12 +36,12 @@ public class CafeStudyMapper {
 	// 		.collect(Collectors.toList());
 	// }
 
-	public CafeStudy toNewEntity(String studyName, Cafe cafe, Member coordinator, LocalDateTime startDateTime,
-		LocalDateTime endDateTime,
-		MemberComms memberComms, int maxParticipants) {
+	public CafeStudyEntity toNewEntity(String studyName, CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
+									   LocalDateTime endDateTime,
+									   MemberComms memberComms, int maxParticipants) {
 		StudyPeriod studyPeriod = toStudyPeriod(startDateTime, endDateTime);
 
-		return CafeStudy.builder()
+		return CafeStudyEntity.builder()
 			.name(studyName)
 			.cafe(cafe)
 			.coordinator(coordinator)
@@ -108,7 +108,7 @@ public class CafeStudyMapper {
 	// 		.build();
 	// }
 
-	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudy createdCafeStudy) {
+	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudyEntity createdCafeStudy) {
 		return CafeStudyCreateResponse.builder()
 			.name(createdCafeStudy.getName())
 			.cafeId(createdCafeStudy.getCafe().getId())
@@ -124,7 +124,7 @@ public class CafeStudyMapper {
 			.build();
 	}
 
-	public CafeStudyDeleteResponse toCafeStudyDeleteResponse(CafeStudy cafeStudy) {
+	public CafeStudyDeleteResponse toCafeStudyDeleteResponse(CafeStudyEntity cafeStudy) {
 		return CafeStudyDeleteResponse.builder()
 			.cafeStudyId(cafeStudy.getId())
 			.deletedAt(cafeStudy.getDeletedDate())

@@ -22,12 +22,12 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.CafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.cafe.CafeTag;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.cafe.CafeTagEntity;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyTag;
+import com.example.demo.implement.study.CafeStudyEntity;
+import com.example.demo.implement.study.CafeStudyTagEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.MemberComms;
@@ -63,7 +63,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 	@Test
 	void create() {
 		//given
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 
 		LocalDateTime startDateTime = timeUtil.now().plusHours(2);
 		LocalDateTime endDateTime = startDateTime.plusHours(1);
@@ -97,31 +97,31 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
 	@Test
 	void searchCafeStudies() {
-		CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-		CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
-		CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+		CafeTagEntity cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
 
-		Cafe cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag2);
-		Cafe cafe2 = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
 		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag2);
 		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag3);
 
-		Member member = memberSaveHelper.saveMember("cafegory@gmail.com");
+		MemberEntity member = memberSaveHelper.saveMember("cafegory@gmail.com");
 
-		CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-		CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
 		LocalDateTime startDateTime1 = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-		CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
+		CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
 			startDateTime1.plusHours(2), startDateTime1.plusHours(4), MemberComms.WELCOME);
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-		CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
+		CafeStudyEntity cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
 			startDateTime1.plusHours(4), startDateTime1.plusHours(6), MemberComms.WELCOME);
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag1);
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
@@ -163,10 +163,10 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 		LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 1, 0, 0);
 		LocalDateTime endDateTime = timeUtil.localDateTime(2000, 1, 1, 2, 0, 0);
 
-		Cafe cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
-		Member coordinator = memberReader.read("test@gmail.com");
-		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, endDateTime);
+		MemberEntity coordinator = memberReader.read("test@gmail.com");
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, endDateTime);
 
 		RestAssured.given(spec).log().all()
 			.filter(RestAssuredRestDocumentationWrapper.document(

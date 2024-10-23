@@ -15,11 +15,11 @@ public class CafeReader {
 
 	private final CafeRepository cafeRepository;
 
-	public Cafe getById(Long cafeId) {
+	public CafeEntity getById(Long cafeId) {
 		return cafeRepository.findById(cafeId).orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}
 
-	public Cafe getWithTags(Long cafeId) {
+	public CafeEntity getWithTags(Long cafeId) {
 		 return cafeRepository.findWithTags(cafeId)
 			 .orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 	}

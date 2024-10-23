@@ -1,7 +1,7 @@
 package com.example.demo.dto.study;
 
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.*;
 import lombok.*;
 
@@ -21,7 +21,7 @@ public class CafeStudyDetailResponse {
     private CafeInfo cafeInfo;
     private List<Comment> commentsInfo = new ArrayList<>();
 
-    public static CafeStudyDetailResponse of(CafeStudy cafeStudy, List<CafeStudyComment> cafeStudyComments) {
+    public static CafeStudyDetailResponse of(CafeStudyEntity cafeStudy, List<CafeStudyCommentEntity> cafeStudyComments) {
         CafeStudyDetailResponse response = new CafeStudyDetailResponse();
 
         response.commentsInfo = buildCommentTree(cafeStudyComments, response);
@@ -32,14 +32,14 @@ public class CafeStudyDetailResponse {
         return response;
     }
 
-    private static List<Comment> buildCommentTree(List<CafeStudyComment> cafeStudyComments, CafeStudyDetailResponse response) {
+    private static List<Comment> buildCommentTree(List<CafeStudyCommentEntity> cafeStudyComments, CafeStudyDetailResponse response) {
         Map<Long, Comment> commentMap = cafeStudyComments.stream()
             .collect(Collectors.toMap(
-                CafeStudyComment::getId, CafeStudyDetailResponse::toComment));
+                CafeStudyCommentEntity::getId, CafeStudyDetailResponse::toComment));
 
         List<Comment> rootComments = new ArrayList<>();
 
-        for(CafeStudyComment comment : cafeStudyComments) {
+        for(CafeStudyCommentEntity comment : cafeStudyComments) {
             if(!comment.hasParentComment()) {
                 rootComments.add(commentMap.get(comment.getId()));
             } else {
@@ -54,8 +54,8 @@ public class CafeStudyDetailResponse {
         return rootComments;
     }
 
-    private static CafeInfo createCafeInfo(CafeStudy cafeStudy) {
-        Cafe cafe = cafeStudy.getCafe();
+    private static CafeInfo createCafeInfo(CafeStudyEntity cafeStudy) {
+        CafeEntity cafe = cafeStudy.getCafe();
 
         return CafeInfo.builder()
             .id(cafe.getId())
@@ -64,8 +64,8 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static CoordinatorInfo createCoordinatorInfo(CafeStudy cafeStudy) {
-        Member coordinator = cafeStudy.getCoordinator();
+    private static CoordinatorInfo createCoordinatorInfo(CafeStudyEntity cafeStudy) {
+        MemberEntity coordinator = cafeStudy.getCoordinator();
 
         return CoordinatorInfo.builder()
             .id(coordinator.getId())
@@ -73,7 +73,7 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
         return CafeStudyInfo.builder()
             .id(cafeStudy.getId())
             .name(cafeStudy.getName())
@@ -90,7 +90,7 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static Comment toComment(CafeStudyComment cafeStudyComment) {
+    private static Comment toComment(CafeStudyCommentEntity cafeStudyComment) {
         return Comment.builder()
             .writerInfo(
                 Comment.WriterInfo.builder()

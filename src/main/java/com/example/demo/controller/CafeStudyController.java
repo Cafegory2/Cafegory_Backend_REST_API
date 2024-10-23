@@ -22,7 +22,7 @@ import com.example.demo.dto.study.CafeStudyDeleteResponse;
 import com.example.demo.dto.study.CafeStudyDetailResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.dto.study.CafeStudySearchListResponse;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyQueryService;
 import com.example.demo.service.study.CafeStudyService;
@@ -65,7 +65,7 @@ public class CafeStudyController {
 		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
 		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);
-		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
+		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
 
 		return ResponseEntity.ok(response);
@@ -77,7 +77,7 @@ public class CafeStudyController {
 		Long memberId = Long.parseLong(userDetails.getUsername());
 
 		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
-		CafeStudy cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
+		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
 		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
 
 		return ResponseEntity.ok(response);

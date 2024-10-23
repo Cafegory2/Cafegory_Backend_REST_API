@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_cafe_study_tag")
-public class CafeStudyCafeStudyTag extends BaseEntity {
+public class CafeStudyCafeStudyTagEntity extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -24,14 +23,14 @@ public class CafeStudyCafeStudyTag extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudy cafeStudy;
+    private CafeStudyEntity cafeStudy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudyTag cafeStudyTag;
+    private CafeStudyTagEntity cafeStudyTag;
 
     @Builder
-    private CafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
+    private CafeStudyCafeStudyTagEntity(CafeStudyEntity cafeStudy, CafeStudyTagEntity cafeStudyTag) {
         this.cafeStudy = cafeStudy;
         this.cafeStudyTag = cafeStudyTag;
     }

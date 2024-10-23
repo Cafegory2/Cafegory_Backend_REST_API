@@ -11,14 +11,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.cafe.BusinessHour;
+import com.example.demo.implement.cafe.BusinessHourEntity;
 import com.example.demo.implement.cafe.BusinessHourReader;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeReader;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
-import com.example.demo.implement.study.CafeStudy;
-import com.example.demo.implement.study.CafeStudyMember;
+import com.example.demo.implement.study.CafeStudyEntity;
+import com.example.demo.implement.study.CafeStudyMemberEntity;
 import com.example.demo.implement.study.CafeStudyReader;
 import com.example.demo.implement.study.StudyEditor;
 import com.example.demo.repository.member.MemberRepository;
@@ -157,7 +157,7 @@ public class CafeStudyService {
 	// 	}
 	// }
 
-	public CafeStudy findCafeStudyById(Long cafeStudyId) {
+	public CafeStudyEntity findCafeStudyById(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}
 
@@ -165,13 +165,13 @@ public class CafeStudyService {
 	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
 		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
 
-		Cafe cafe = cafeReader.getById(request.getCafeId());
-		BusinessHour businessHour = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
+		CafeEntity cafe = cafeReader.getById(request.getCafeId());
+		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
 			request.getStartDateTime().getDayOfWeek());
 		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-			request.getEndDateTime().toLocalTime(), businessHour);
+			request.getEndDateTime().toLocalTime(), businessHourEntity);
 
-		Member coordinator = findMemberById(coordinatorId);
+		MemberEntity coordinator = findMemberById(coordinatorId);
 		validateStudyScheduleConflict(
 			buildLocalDateTime(request.getEndDateTime()),
 			buildLocalDateTime(request.getEndDateTime()),
@@ -183,8 +183,8 @@ public class CafeStudyService {
 
 	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-		CafeStudy cafeStudy = cafeStudyReader.read(cafeStudyId);
-		Member member = memberReader.read(memberId);
+		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
+		MemberEntity member = memberReader.read(memberId);
 		validateStudyDelete(member, cafeStudy);
 
 		cafeStudy.softDelete(now);
@@ -210,19 +210,19 @@ public class CafeStudyService {
 		studyValidator.validateMaxParticipants(maxParticipants);
 	}
 
-	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member coordinator) {
+	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity coordinator) {
 		if (hasStudyScheduleConflict(start, end, coordinator)) {
 			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
 		}
 	}
 
-	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
-		List<CafeStudyMember> participatedStudies = studyMemberRepository.findByMember(member);
+	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity member) {
+		List<CafeStudyMemberEntity> participatedStudies = studyMemberRepository.findByMember(member);
 		return participatedStudies.stream()
 			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}
 
-	private void validateStudyDelete(Member member, CafeStudy cafeStudy) {
+	private void validateStudyDelete(MemberEntity member, CafeStudyEntity cafeStudy) {
 		studyValidator.validateMemberIsCafeStudyCoordinator(member, cafeStudy);
 		studyValidator.validateCafeStudyMembersPresent(cafeStudy);
 	}
@@ -376,7 +376,7 @@ public class CafeStudyService {
 	// 	return cafeStudy.isLeader(findMemberById(memberId));
 	// }
 
-	private Member findMemberById(Long memberId) {
+	private MemberEntity findMemberById(Long memberId) {
 		return memberReader.read(memberId);
 	}
 }

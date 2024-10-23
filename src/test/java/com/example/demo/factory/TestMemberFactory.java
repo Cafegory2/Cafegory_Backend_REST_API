@@ -2,13 +2,13 @@ package com.example.demo.factory;
 
 import static com.example.demo.implement.member.BeverageSize.*;
 
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.Role;
 
 public class TestMemberFactory {
 
-	public static Member createMember() {
-		return Member.builder()
+	public static MemberEntity createMember() {
+		return MemberEntity.builder()
 			.role(Role.USER)
 			.nickname("닉네임")
 			.email("cafegory@gmail.com")
@@ -18,8 +18,8 @@ public class TestMemberFactory {
 			.build();
 	}
 
-	public static Member createmember(String email) {
-		return Member.builder()
+	public static MemberEntity createmember(String email) {
+		return MemberEntity.builder()
 			.role(Role.USER)
 			.nickname("닉네임")
 			.email(email)
@@ -29,8 +29,8 @@ public class TestMemberFactory {
 			.build();
 	}
 
-	public static Member createmember(String email, String nickname) {
-		return Member.builder()
+	public static MemberEntity createmember(String email, String nickname) {
+		return MemberEntity.builder()
 			.role(Role.USER)
 			.nickname(nickname)
 			.email(email)
@@ -40,8 +40,8 @@ public class TestMemberFactory {
 			.build();
 	}
 
-	public static Member createMemberWith(String nickname, String profileUrl) {
-		return Member.builder()
+	public static MemberEntity createMemberWith(String nickname, String profileUrl) {
+		return MemberEntity.builder()
 			.role(Role.USER)
 			.nickname(nickname)
 			.email("cafegory@gmail.com")

@@ -1,15 +1,14 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.cafe.Cafe;
-import com.example.demo.implement.cafe.CafeCafeTag;
-import com.example.demo.implement.cafe.CafeTag;
-import com.example.demo.implement.study.CafeTagType;
+import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.implement.cafe.CafeCafeTagEntity;
+import com.example.demo.implement.cafe.CafeTagEntity;
 
 public class TestCafeCafeTagFactory {
 
-    public static CafeCafeTag createCafeCafeTag(Cafe cafe, CafeTag cafeTag) {
-        return CafeCafeTag.builder()
-            .cafe(cafe)
+    public static CafeCafeTagEntity createCafeCafeTag(CafeEntity cafeEntity, CafeTagEntity cafeTag) {
+        return CafeCafeTagEntity.builder()
+            .cafe(cafeEntity)
             .cafeTag(cafeTag)
             .build();
     }

@@ -5,7 +5,7 @@ import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.member.Member;
+import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.service.token.JwtTokenManagementService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class JwtTokenManagementServiceTest extends ServiceTest {
     @DisplayName("만료되지 않은 액세스 토큰과 만료되지 않은 리프레시 토큰을 검증한다.")
     void verify_access_and_refresh_token() {
         //given
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
         String accessToken = TestJwtFactory.createAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createRefreshToken(member.getId(), testSecret);
         //then
@@ -39,7 +39,7 @@ class JwtTokenManagementServiceTest extends ServiceTest {
     @DisplayName("만료된 액세스 토큰과 만료되지 않은 리프레시 토큰을 검증한다.")
     void verify_expired_access_and_unexpired_refresh_token() {
         //given
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
         String accessToken = TestJwtFactory.createExpiredAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createRefreshToken(member.getId(), testSecret);
         //then
@@ -50,7 +50,7 @@ class JwtTokenManagementServiceTest extends ServiceTest {
     @DisplayName("만료된 액세스 토큰과 만료된 리프레시 토큰을 검증한다.")
     void verify_expired_access_and_expired_refresh_token() {
         //given
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
         String accessToken = TestJwtFactory.createExpiredAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
         //then
@@ -63,7 +63,7 @@ class JwtTokenManagementServiceTest extends ServiceTest {
     @DisplayName("만료되지 않은 액세스 토큰과 만료된 리프레시 토큰을 검증한다.")
     void verify_unexpired_access_and_expired_refresh_token() {
         //given
-        Member member = memberSaveHelper.saveMember();
+        MemberEntity member = memberSaveHelper.saveMember();
         String accessToken = TestJwtFactory.createAccessToken(member.getId(), testSecret);
         String refreshToken = TestJwtFactory.createExpiredRefreshToken(member.getId(), testSecret);
         //then

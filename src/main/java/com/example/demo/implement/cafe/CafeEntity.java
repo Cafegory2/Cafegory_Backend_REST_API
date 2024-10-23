@@ -4,12 +4,10 @@ import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
 
-import com.example.demo.implement.study.CafeStudyMember;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.List;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe")
-public class Cafe extends BaseEntity {
+public class CafeEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -37,16 +35,16 @@ public class Cafe extends BaseEntity {
 	private String sns;
 
 	@OneToMany(mappedBy = "cafe")
-	private List<CafeKeyword> cafeKeywords = new ArrayList<>();
+	private List<CafeKeywordEntity> cafeKeywords = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
-	private List<CafeCafeTag> cafeCafeTags = new ArrayList<>();
+	private List<CafeCafeTagEntity> cafeCafeTags = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
-	private List<Menu> menus = new ArrayList<>();
+	private List<MenuEntity> menus = new ArrayList<>();
 
 	@Builder
-	private Cafe(String name, String mainImageUrl, Address address, String sns) {
+	private CafeEntity(String name, String mainImageUrl, Address address, String sns) {
 		this.name = name;
 		this.mainImageUrl = mainImageUrl;
 		this.address = address;
