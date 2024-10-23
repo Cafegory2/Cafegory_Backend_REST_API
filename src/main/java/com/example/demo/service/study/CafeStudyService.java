@@ -17,7 +17,7 @@ import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeReader;
 import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyMember;
 import com.example.demo.implement.study.CafeStudyReader;
 import com.example.demo.implement.study.StudyEditor;
@@ -157,7 +157,7 @@ public class CafeStudyService {
 	// 	}
 	// }
 
-	public CafeStudy findCafeStudyById(Long cafeStudyId) {
+	public CafeStudyEntity findCafeStudyById(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}
 
@@ -183,7 +183,7 @@ public class CafeStudyService {
 
 	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-		CafeStudy cafeStudy = cafeStudyReader.read(cafeStudyId);
+		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
 		MemberEntity member = memberReader.read(memberId);
 		validateStudyDelete(member, cafeStudy);
 
@@ -222,7 +222,7 @@ public class CafeStudyService {
 			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}
 
-	private void validateStudyDelete(MemberEntity member, CafeStudy cafeStudy) {
+	private void validateStudyDelete(MemberEntity member, CafeStudyEntity cafeStudy) {
 		studyValidator.validateMemberIsCafeStudyCoordinator(member, cafeStudy);
 		studyValidator.validateCafeStudyMembersPresent(cafeStudy);
 	}

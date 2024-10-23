@@ -20,14 +20,14 @@ public class StudyEditor {
 
 	public Long createAndSaveCafeStudy(String studyName, CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
                                        LocalDateTime endDateTime, MemberComms memberComms, int maxParticipants) {
-		CafeStudy cafeStudy = cafeStudyMapper.toNewEntity(studyName, cafeEntity, coordinator, startDateTime, endDateTime,
+		CafeStudyEntity cafeStudy = cafeStudyMapper.toNewEntity(studyName, cafeEntity, coordinator, startDateTime, endDateTime,
 			memberComms, maxParticipants);
-		CafeStudy savedStudy = cafeStudyRepository.save(cafeStudy);
+		CafeStudyEntity savedStudy = cafeStudyRepository.save(cafeStudy);
 
 		return savedStudy.getId();
 	}
 
-	public Long deleteCafeStudy(CafeStudy cafeStudy, LocalDateTime now) {
+	public Long deleteCafeStudy(CafeStudyEntity cafeStudy, LocalDateTime now) {
 		cafeStudy.softDelete(now);
 
 		return cafeStudy.getId();

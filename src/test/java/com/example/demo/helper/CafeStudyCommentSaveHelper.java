@@ -1,7 +1,7 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestCafeStudyCommentFactory;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyComment;
 import com.example.demo.implement.study.StudyRole;
 import com.example.demo.repository.study.CafeStudyCommentRepository;
@@ -21,9 +21,9 @@ public class CafeStudyCommentSaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeStudyRepository cafeStudyRepository;
 
-	public CafeStudyComment saveRootComment(MemberEntity member, StudyRole studyRole, CafeStudy cafeStudy) {
+	public CafeStudyComment saveRootComment(MemberEntity member, StudyRole studyRole, CafeStudyEntity cafeStudy) {
 		MemberEntity mergedMember = memberRepository.save(member);
-		CafeStudy mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
+		CafeStudyEntity mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
 
 		CafeStudyComment rootComment = TestCafeStudyCommentFactory.createRootComment(
 			mergedMember, studyRole, mergedStudyOnce);
@@ -31,9 +31,9 @@ public class CafeStudyCommentSaveHelper {
 	}
 
 	public CafeStudyComment saveReplyToParentComment(
-		CafeStudyComment parentComment, MemberEntity member, StudyRole studyRole, CafeStudy cafeStudy) {
+		CafeStudyComment parentComment, MemberEntity member, StudyRole studyRole, CafeStudyEntity cafeStudy) {
 		MemberEntity mergedMember = memberRepository.save(member);
-		CafeStudy mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
+		CafeStudyEntity mergedStudyOnce = cafeStudyRepository.save(cafeStudy);
 
 		CafeStudyComment replyToParentComment = TestCafeStudyCommentFactory.createReplyToParentComment(
 			parentComment, mergedMember, studyRole, mergedStudyOnce);

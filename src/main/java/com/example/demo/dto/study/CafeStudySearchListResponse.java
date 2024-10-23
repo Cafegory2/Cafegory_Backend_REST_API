@@ -18,7 +18,7 @@ public class CafeStudySearchListResponse {
     private WriterInfo writerInfo;
     private CafeInfo cafeInfo;
 
-    public static CafeStudySearchListResponse from(CafeStudy cafeStudy) {
+    public static CafeStudySearchListResponse from(CafeStudyEntity cafeStudy) {
         CafeStudySearchListResponse response = new CafeStudySearchListResponse();
         response.cafeStudyInfo = createCafeStudyInfo(cafeStudy);
         response.writerInfo = createWriterInfo(cafeStudy);
@@ -27,7 +27,7 @@ public class CafeStudySearchListResponse {
         return response;
     }
 
-    private static CafeInfo createCafeInfo(CafeStudy cafeStudy) {
+    private static CafeInfo createCafeInfo(CafeStudyEntity cafeStudy) {
         CafeEntity cafeEntity = cafeStudy.getCafeEntity();
 
         return CafeInfo.builder()
@@ -37,7 +37,7 @@ public class CafeStudySearchListResponse {
             .build();
     }
 
-    private static WriterInfo createWriterInfo(CafeStudy cafeStudy) {
+    private static WriterInfo createWriterInfo(CafeStudyEntity cafeStudy) {
         MemberEntity writer = cafeStudy.getCoordinator();
 
         return WriterInfo.builder()
@@ -46,7 +46,7 @@ public class CafeStudySearchListResponse {
             .build();
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
         return CafeStudyInfo.builder()
             .id(cafeStudy.getId())
             .name(cafeStudy.getName())

@@ -2,7 +2,7 @@ package com.example.demo.service.cafe;
 
 import com.example.demo.dto.cafe.CafeDetailResponse;
 import com.example.demo.implement.cafe.*;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,9 +28,9 @@ public class CafeQueryService {
         CafeEntity cafeEntity = cafeReader.getWithTags(cafeId);
         BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafeEntity, now.getDayOfWeek());
 
-        List<CafeStudy> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
-        List<CafeStudy> openStudies = filterAndSortByIdDesc(cafeStudies, CafeStudy::isRecruitmentOpen);
-        List<CafeStudy> closeStudies = filterAndSortByIdDesc(cafeStudies, (study) -> !study.isRecruitmentOpen());
+        List<CafeStudyEntity> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
+        List<CafeStudyEntity> openStudies = filterAndSortByIdDesc(cafeStudies, CafeStudyEntity::isRecruitmentOpen);
+        List<CafeStudyEntity> closeStudies = filterAndSortByIdDesc(cafeStudies, (study) -> !study.isRecruitmentOpen());
 
         return CafeDetailResponse.of(cafeEntity, businessHourEntity,
             businessHourOpenChecker.checkByNowTime(
@@ -39,10 +39,10 @@ public class CafeQueryService {
         );
     }
 
-    private List<CafeStudy> filterAndSortByIdDesc(List<CafeStudy> cafeStudies, Predicate<CafeStudy> predicate) {
+    private List<CafeStudyEntity> filterAndSortByIdDesc(List<CafeStudyEntity> cafeStudies, Predicate<CafeStudyEntity> predicate) {
         return cafeStudies.stream()
             .filter(predicate)
-            .sorted(Comparator.comparing(CafeStudy::getId).reversed())
+            .sorted(Comparator.comparing(CafeStudyEntity::getId).reversed())
             .collect(Collectors.toList());
     }
 }

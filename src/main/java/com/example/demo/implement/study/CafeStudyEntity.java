@@ -20,7 +20,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study")
-public class CafeStudy extends BaseEntity {
+public class CafeStudyEntity extends BaseEntity {
 	//
 	public static final int LIMIT_MEMBER_CAPACITY = 6;
 	public static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
@@ -61,8 +61,8 @@ public class CafeStudy extends BaseEntity {
 	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
-	private CafeStudy(String name, CafeEntity cafeEntity, MemberEntity coordinator, StudyPeriod studyPeriod,
-                      MemberComms memberComms, int maxParticipants, String introduction) {
+	private CafeStudyEntity(String name, CafeEntity cafeEntity, MemberEntity coordinator, StudyPeriod studyPeriod,
+							MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafeEntity = cafeEntity;
 		this.coordinator = coordinator;

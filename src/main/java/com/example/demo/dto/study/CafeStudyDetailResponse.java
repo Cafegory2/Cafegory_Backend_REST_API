@@ -21,7 +21,7 @@ public class CafeStudyDetailResponse {
     private CafeInfo cafeInfo;
     private List<Comment> commentsInfo = new ArrayList<>();
 
-    public static CafeStudyDetailResponse of(CafeStudy cafeStudy, List<CafeStudyComment> cafeStudyComments) {
+    public static CafeStudyDetailResponse of(CafeStudyEntity cafeStudy, List<CafeStudyComment> cafeStudyComments) {
         CafeStudyDetailResponse response = new CafeStudyDetailResponse();
 
         response.commentsInfo = buildCommentTree(cafeStudyComments, response);
@@ -54,7 +54,7 @@ public class CafeStudyDetailResponse {
         return rootComments;
     }
 
-    private static CafeInfo createCafeInfo(CafeStudy cafeStudy) {
+    private static CafeInfo createCafeInfo(CafeStudyEntity cafeStudy) {
         CafeEntity cafeEntity = cafeStudy.getCafeEntity();
 
         return CafeInfo.builder()
@@ -64,7 +64,7 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static CoordinatorInfo createCoordinatorInfo(CafeStudy cafeStudy) {
+    private static CoordinatorInfo createCoordinatorInfo(CafeStudyEntity cafeStudy) {
         MemberEntity coordinator = cafeStudy.getCoordinator();
 
         return CoordinatorInfo.builder()
@@ -73,7 +73,7 @@ public class CafeStudyDetailResponse {
             .build();
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
         return CafeStudyInfo.builder()
             .id(cafeStudy.getId())
             .name(cafeStudy.getName())

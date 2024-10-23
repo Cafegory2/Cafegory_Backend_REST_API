@@ -22,7 +22,7 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.util.TimeUtil;
 
@@ -353,7 +353,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
 
 		//then
 		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId(), timeUtil.now()));
@@ -368,7 +368,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
 
 		//then
 		assertThatThrownBy(

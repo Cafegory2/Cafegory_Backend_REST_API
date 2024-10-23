@@ -26,7 +26,7 @@ import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyTag;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
@@ -118,10 +118,10 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
 		LocalDateTime startDateTime1 = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-		CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafeEntity1, member,
+		CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafeEntity1, member,
 			startDateTime1.plusHours(2), startDateTime1.plusHours(4), MemberComms.WELCOME);
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-		CafeStudy cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafeEntity2, member,
+		CafeStudyEntity cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafeEntity2, member,
 			startDateTime1.plusHours(4), startDateTime1.plusHours(6), MemberComms.WELCOME);
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag1);
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
@@ -166,7 +166,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
 		MemberEntity coordinator = memberReader.read("test@gmail.com");
-		CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, endDateTime);
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, endDateTime);
 
 		RestAssured.given(spec).log().all()
 			.filter(RestAssuredRestDocumentationWrapper.document(

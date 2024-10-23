@@ -42,10 +42,10 @@ public class CafeStudyComment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudy cafeStudy;
+    private CafeStudyEntity cafeStudy;
 
     @Builder
-    private CafeStudyComment(MemberEntity author, StudyRole studyRole, String content, CafeStudyComment parentComment, CafeStudy cafeStudy) {
+    private CafeStudyComment(MemberEntity author, StudyRole studyRole, String content, CafeStudyComment parentComment, CafeStudyEntity cafeStudy) {
         this.author = author;
         this.studyRole = studyRole;
         this.content = content;

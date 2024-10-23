@@ -6,7 +6,7 @@ import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyTag;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
@@ -65,11 +65,11 @@ public class CafeApiTest extends ApiDocsTest {
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
         CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
+        CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
         cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
         cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
-        CafeStudy cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
+        CafeStudyEntity cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag1);
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag2);
 

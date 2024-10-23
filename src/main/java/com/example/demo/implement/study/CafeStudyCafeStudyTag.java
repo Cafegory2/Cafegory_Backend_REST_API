@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -24,14 +23,14 @@ public class CafeStudyCafeStudyTag extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudy cafeStudy;
+    private CafeStudyEntity cafeStudy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private CafeStudyTag cafeStudyTag;
 
     @Builder
-    private CafeStudyCafeStudyTag(CafeStudy cafeStudy, CafeStudyTag cafeStudyTag) {
+    private CafeStudyCafeStudyTag(CafeStudyEntity cafeStudy, CafeStudyTag cafeStudyTag) {
         this.cafeStudy = cafeStudy;
         this.cafeStudyTag = cafeStudyTag;
     }

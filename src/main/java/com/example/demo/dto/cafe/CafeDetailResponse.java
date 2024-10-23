@@ -23,7 +23,7 @@ public class CafeDetailResponse {
     private List<CafeStudyInfo> closeCafeStudiesInfo = new ArrayList<>();
 
     public static CafeDetailResponse of(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen,
-                                        List<CafeStudy> openCafeStudies, List<CafeStudy> closeCafeStudies) {
+                                        List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
         CafeDetailResponse response = new CafeDetailResponse();
         response.cafeInfo = createCafeInfo(cafeEntity, businessHourEntity, isOpen);
         response.menusInfo = createMenusInfo(cafeEntity);
@@ -33,13 +33,13 @@ public class CafeDetailResponse {
         return response;
     }
 
-    private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudy> cafeStudies) {
+    private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudyEntity> cafeStudies) {
         return cafeStudies.stream()
             .map(CafeDetailResponse::createCafeStudyInfo)
             .collect(Collectors.toList());
     }
 
-    private static CafeStudyInfo createCafeStudyInfo(CafeStudy cafeStudy) {
+    private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
         return CafeStudyInfo.builder()
             .id(cafeStudy.getId())
             .name(cafeStudy.getName())

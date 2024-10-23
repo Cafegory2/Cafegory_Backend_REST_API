@@ -7,7 +7,7 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyComment;
 import com.example.demo.implement.study.StudyRole;
 import com.example.demo.util.TimeUtil;
@@ -49,7 +49,7 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        CafeStudy cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, startDateTime.plusHours(2));
+        CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, startDateTime.plusHours(2));
 
         CafeStudyComment root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
         CafeStudyComment replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);

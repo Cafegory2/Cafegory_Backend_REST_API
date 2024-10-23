@@ -40,7 +40,7 @@ public class CafeStudyMember extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudy cafeStudy;
+	private CafeStudyEntity cafeStudy;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -53,7 +53,7 @@ public class CafeStudyMember extends BaseEntity {
 	private Attendance attendance;
 
 	@Builder
-	private CafeStudyMember(CafeStudy cafeStudy, MemberEntity member, StudyRole studyRole) {
+	private CafeStudyMember(CafeStudyEntity cafeStudy, MemberEntity member, StudyRole studyRole) {
 		this.cafeStudy = cafeStudy;
 		this.member = member;
 		this.studyRole = studyRole;

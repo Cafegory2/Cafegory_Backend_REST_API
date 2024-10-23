@@ -1,7 +1,7 @@
 package com.example.demo.validator;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.implement.study.CafeStudy.*;
+import static com.example.demo.implement.study.CafeStudyEntity.*;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.study.CafeStudy;
+import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -58,13 +58,13 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateMemberIsCafeStudyCoordinator(MemberEntity memberId, CafeStudy cafeStudy) {
+	public void validateMemberIsCafeStudyCoordinator(MemberEntity memberId, CafeStudyEntity cafeStudy) {
 		if (!cafeStudy.getCoordinator().equals(memberId)) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
 		}
 	}
 
-	public void validateCafeStudyMembersPresent(CafeStudy cafeStudy) {
+	public void validateCafeStudyMembersPresent(CafeStudyEntity cafeStudy) {
 		if (!cafeStudy.getCafeStudyMembers().isEmpty()) {
 			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);
 		}
