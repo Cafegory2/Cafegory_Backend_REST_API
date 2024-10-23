@@ -55,7 +55,7 @@ public class CafeStudyEntity extends BaseEntity {
 	private RecruitmentStatus recruitmentStatus;
 
 	@OneToMany(mappedBy = "cafeStudy")
-	private List<CafeStudyMember> cafeStudyMembers = new ArrayList<>();
+	private List<CafeStudyMemberEntity> cafeStudyMembers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafeStudy")
 	private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
@@ -77,7 +77,7 @@ public class CafeStudyEntity extends BaseEntity {
 	}
 
 	private void addCoordinatorToStudy(MemberEntity coordinator) {
-		CafeStudyMember cafeStudyMember = CafeStudyMember.builder()
+		CafeStudyMemberEntity cafeStudyMember = CafeStudyMemberEntity.builder()
 			.cafeStudy(this)
 			.member(coordinator)
 			.studyRole(StudyRole.COORDINATOR)

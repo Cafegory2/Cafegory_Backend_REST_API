@@ -31,7 +31,7 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_member", uniqueConstraints = {
 	@UniqueConstraint(name = "unique_cafe_study_member", columnNames = {"cafe_study_id", "member_id"})})
-public class CafeStudyMember extends BaseEntity {
+public class CafeStudyMemberEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -53,7 +53,7 @@ public class CafeStudyMember extends BaseEntity {
 	private Attendance attendance;
 
 	@Builder
-	private CafeStudyMember(CafeStudyEntity cafeStudy, MemberEntity member, StudyRole studyRole) {
+	private CafeStudyMemberEntity(CafeStudyEntity cafeStudy, MemberEntity member, StudyRole studyRole) {
 		this.cafeStudy = cafeStudy;
 		this.member = member;
 		this.studyRole = studyRole;

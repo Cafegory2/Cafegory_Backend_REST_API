@@ -18,7 +18,7 @@ import com.example.demo.implement.cafe.CafeReader;
 import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.CafeStudyMember;
+import com.example.demo.implement.study.CafeStudyMemberEntity;
 import com.example.demo.implement.study.CafeStudyReader;
 import com.example.demo.implement.study.StudyEditor;
 import com.example.demo.repository.member.MemberRepository;
@@ -217,7 +217,7 @@ public class CafeStudyService {
 	}
 
 	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity member) {
-		List<CafeStudyMember> participatedStudies = studyMemberRepository.findByMember(member);
+		List<CafeStudyMemberEntity> participatedStudies = studyMemberRepository.findByMember(member);
 		return participatedStudies.stream()
 			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}
