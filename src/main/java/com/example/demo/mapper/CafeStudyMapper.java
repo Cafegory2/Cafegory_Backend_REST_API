@@ -43,7 +43,7 @@ public class CafeStudyMapper {
 
 		return CafeStudyEntity.builder()
 			.name(studyName)
-			.cafeEntity(cafeEntity)
+			.cafe(cafeEntity)
 			.coordinator(coordinator)
 			.studyPeriod(studyPeriod)
 			.memberComms(memberComms)
@@ -111,7 +111,7 @@ public class CafeStudyMapper {
 	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudyEntity createdCafeStudy) {
 		return CafeStudyCreateResponse.builder()
 			.name(createdCafeStudy.getName())
-			.cafeId(createdCafeStudy.getCafeEntity().getId())
+			.cafeId(createdCafeStudy.getCafe().getId())
 			.coordinatorId(createdCafeStudy.getCoordinator().getId())
 			.startDateTime(createdCafeStudy.getStudyPeriod().getStartDateTime())
 			.endDateTime(createdCafeStudy.getStudyPeriod().getEndDateTime())

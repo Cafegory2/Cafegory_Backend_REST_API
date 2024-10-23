@@ -18,9 +18,9 @@ public class StudyEditor {
 	private final CafeStudyRepository cafeStudyRepository;
 	private final CafeStudyMapper cafeStudyMapper;
 
-	public Long createAndSaveCafeStudy(String studyName, CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+	public Long createAndSaveCafeStudy(String studyName, CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
                                        LocalDateTime endDateTime, MemberComms memberComms, int maxParticipants) {
-		CafeStudyEntity cafeStudy = cafeStudyMapper.toNewEntity(studyName, cafeEntity, coordinator, startDateTime, endDateTime,
+		CafeStudyEntity cafeStudy = cafeStudyMapper.toNewEntity(studyName, cafe, coordinator, startDateTime, endDateTime,
 			memberComms, maxParticipants);
 		CafeStudyEntity savedStudy = cafeStudyRepository.save(cafeStudy);
 

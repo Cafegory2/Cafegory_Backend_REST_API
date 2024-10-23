@@ -28,12 +28,12 @@ public class CafeStudySearchListResponse {
     }
 
     private static CafeInfo createCafeInfo(CafeStudyEntity cafeStudy) {
-        CafeEntity cafeEntity = cafeStudy.getCafeEntity();
+        CafeEntity cafe = cafeStudy.getCafe();
 
         return CafeInfo.builder()
-            .id(cafeEntity.getId())
-            .imgUrl(cafeEntity.getMainImageUrl())
-            .name(cafeEntity.getName())
+            .id(cafe.getId())
+            .imgUrl(cafe.getMainImageUrl())
+            .name(cafe.getName())
             .build();
     }
 

@@ -165,8 +165,8 @@ public class CafeStudyService {
 	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
 		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
 
-		CafeEntity cafeEntity = cafeReader.getById(request.getCafeId());
-		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafeEntity,
+		CafeEntity cafe = cafeReader.getById(request.getCafeId());
+		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
 			request.getStartDateTime().getDayOfWeek());
 		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
 			request.getEndDateTime().toLocalTime(), businessHourEntity);
@@ -177,7 +177,7 @@ public class CafeStudyService {
 			buildLocalDateTime(request.getEndDateTime()),
 			coordinator);
 
-		return studyEditor.createAndSaveCafeStudy(request.getName(), cafeEntity, coordinator, request.getStartDateTime(),
+		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
 			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
 	}
 

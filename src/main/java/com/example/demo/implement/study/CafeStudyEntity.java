@@ -35,7 +35,7 @@ public class CafeStudyEntity extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeEntity cafeEntity;
+	private CafeEntity cafe;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -61,10 +61,10 @@ public class CafeStudyEntity extends BaseEntity {
 	private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
-	private CafeStudyEntity(String name, CafeEntity cafeEntity, MemberEntity coordinator, StudyPeriod studyPeriod,
+	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
 							MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
-		this.cafeEntity = cafeEntity;
+		this.cafe = cafe;
 		this.coordinator = coordinator;
 		this.studyPeriod = studyPeriod;
 		this.memberComms = memberComms;

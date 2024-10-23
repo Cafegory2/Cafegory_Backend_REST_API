@@ -16,7 +16,7 @@ public class TestCafeStudyFactory {
 												  LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
-			.cafeEntity(cafeEntity)
+			.cafe(cafeEntity)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(WELCOME)
@@ -29,7 +29,7 @@ public class TestCafeStudyFactory {
 														  LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
 		return CafeStudyEntity.builder()
 			.name(cafeStudyName)
-			.cafeEntity(cafeEntity)
+			.cafe(cafeEntity)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(WELCOME)
@@ -42,7 +42,7 @@ public class TestCafeStudyFactory {
 																 LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
-			.cafeEntity(cafeEntity)
+			.cafe(cafeEntity)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(WELCOME)
@@ -55,7 +55,7 @@ public class TestCafeStudyFactory {
 																 LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
-			.cafeEntity(cafeEntity)
+			.cafe(cafeEntity)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(memberComms)

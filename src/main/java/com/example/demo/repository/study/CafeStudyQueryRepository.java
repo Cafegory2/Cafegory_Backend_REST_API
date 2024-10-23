@@ -38,7 +38,7 @@ public class CafeStudyQueryRepository {
 		JPAQuery<CafeStudyEntity> query = queryFactory
 			.select(cafeStudyEntity).distinct()
 			.from(cafeStudyEntity)
-			.join(cafeStudyEntity.cafeEntity, cafeEntity).fetchJoin()
+			.join(cafeStudyEntity.cafe, cafeEntity).fetchJoin()
 			.where(
 				keywordContains(request.getKeyword())
 					.or(cafeStudyNameContains(request.getKeyword())),
