@@ -58,7 +58,7 @@ public class CafeStudyEntity extends BaseEntity {
 	private List<CafeStudyMember> cafeStudyMembers = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafeStudy")
-	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
+	private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
 	private CafeStudyEntity(String name, CafeEntity cafeEntity, MemberEntity coordinator, StudyPeriod studyPeriod,

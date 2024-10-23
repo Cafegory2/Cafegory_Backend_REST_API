@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_cafe_study_tag")
-public class CafeStudyCafeStudyTag extends BaseEntity {
+public class CafeStudyCafeStudyTagEntity extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -30,7 +30,7 @@ public class CafeStudyCafeStudyTag extends BaseEntity {
     private CafeStudyTag cafeStudyTag;
 
     @Builder
-    private CafeStudyCafeStudyTag(CafeStudyEntity cafeStudy, CafeStudyTag cafeStudyTag) {
+    private CafeStudyCafeStudyTagEntity(CafeStudyEntity cafeStudy, CafeStudyTag cafeStudyTag) {
         this.cafeStudy = cafeStudy;
         this.cafeStudyTag = cafeStudyTag;
     }
