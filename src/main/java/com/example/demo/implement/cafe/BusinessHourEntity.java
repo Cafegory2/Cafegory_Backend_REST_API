@@ -46,14 +46,14 @@ public class BusinessHourEntity extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeEntity cafeEntity;
+	private CafeEntity cafe;
 
 	@Builder
-	private BusinessHourEntity(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime, CafeEntity cafeEntity) {
+	private BusinessHourEntity(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime, CafeEntity cafe) {
 		this.dayOfWeek = dayOfWeek;
 		this.openingTime = openingTime;
 		this.closingTime = closingTime;
-		this.cafeEntity = cafeEntity;
+		this.cafe = cafe;
 	}
 
 		public boolean existsMatchingDayOfWeek(LocalDateTime now) {

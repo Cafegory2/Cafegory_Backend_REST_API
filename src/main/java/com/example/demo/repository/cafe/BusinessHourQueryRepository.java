@@ -20,7 +20,7 @@ public class BusinessHourQueryRepository {
 	public BusinessHourEntity findWithCafeAndDayOfWeek(CafeEntity cafeEntity, DayOfWeek dayOfWeek) {
 		return jpaQueryFactory.select(businessHourEntity)
 			.from(businessHourEntity)
-			.where(businessHourEntity.cafeEntity.eq(cafeEntity).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
+			.where(businessHourEntity.cafe.eq(cafeEntity).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
 			.fetchOne();
 	}
 }
