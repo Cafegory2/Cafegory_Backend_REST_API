@@ -6,7 +6,7 @@ import com.example.demo.dto.SliceResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.CafeTag;
+import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.*;
 import com.example.demo.util.TimeUtil;
@@ -272,8 +272,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
     @DisplayName("하나의 카페 태그로 필터링한 카공 목록을 조회한다.")
     void find_cafe_studies_by_cafe_tag(CafeTagType type, int expected) {
         //given
-        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
 
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);
@@ -316,10 +316,10 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
     @DisplayName("여러개의 카페 태그들로 필터링한 카공 목록을 조회한다.")
     void find_cafe_studies_by_cafe_tags(CafeTagType type1, CafeTagType type2, int expected) {
         //given
-        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
-        CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
-        CafeTag cafeTag4 = cafeTagSaveHelper.saveCafeTag(CafeTagType.QUIET);
+        CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTagEntity cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+        CafeTagEntity cafeTag4 = cafeTagSaveHelper.saveCafeTag(CafeTagType.QUIET);
 
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);
@@ -510,10 +510,10 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
         CafeStudyTagType cafeStudyTagType, MemberComms memberComms, int expected
     ) {
         //given
-        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
-        CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
-        CafeTag cafeTag4 = cafeTagSaveHelper.saveCafeTag(CafeTagType.QUIET);
+        CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTagEntity cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+        CafeTagEntity cafeTag4 = cafeTagSaveHelper.saveCafeTag(CafeTagType.QUIET);
 
         CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);

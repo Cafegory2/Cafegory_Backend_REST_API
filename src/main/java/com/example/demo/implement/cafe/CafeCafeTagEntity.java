@@ -37,12 +37,12 @@ public class CafeCafeTagEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeTag cafeTag;
+    private CafeTagEntity cafeTag;
 
     private int taggingCount;
 
     @Builder
-    private CafeCafeTagEntity(CafeEntity cafe, CafeTag cafeTag) {
+    private CafeCafeTagEntity(CafeEntity cafe, CafeTagEntity cafeTag) {
         this.cafe = cafe;
         this.cafeTag = cafeTag;
         this.taggingCount = 0;

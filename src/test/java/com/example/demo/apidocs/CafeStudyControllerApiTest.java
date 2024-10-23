@@ -23,7 +23,7 @@ import com.example.demo.helper.CafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.CafeTag;
+import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.study.CafeStudy;
@@ -97,9 +97,9 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
 	@Test
 	void searchCafeStudies() {
-		CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-		CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
-		CafeTag cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+		CafeTagEntity cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
 
 		CafeEntity cafeEntity1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafeEntity1);

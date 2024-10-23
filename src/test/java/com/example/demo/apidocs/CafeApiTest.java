@@ -4,7 +4,7 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.*;
 import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.CafeTag;
+import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.CafeStudyTag;
@@ -48,8 +48,8 @@ public class CafeApiTest extends ApiDocsTest {
     @Test
     @DisplayName("카페 상세정보 조회 API")
     void getCafeStudyDetail() throws Exception {
-        CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-        CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+        CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+        CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
 
         CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
         cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity, cafeTag1);
