@@ -35,7 +35,7 @@ public class CafeEntity extends BaseEntity {
 	private String sns;
 
 	@OneToMany(mappedBy = "cafe")
-	private List<CafeKeyword> cafeKeywords = new ArrayList<>();
+	private List<CafeKeywordEntity> cafeKeywords = new ArrayList<>();
 
 	@OneToMany(mappedBy = "cafe")
 	private List<CafeCafeTagEntity> cafeCafeTags = new ArrayList<>();

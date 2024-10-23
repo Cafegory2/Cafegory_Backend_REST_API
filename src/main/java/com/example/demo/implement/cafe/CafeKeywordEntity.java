@@ -24,7 +24,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_keyword")
-public class CafeKeyword extends BaseEntity {
+public class CafeKeywordEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -38,7 +38,7 @@ public class CafeKeyword extends BaseEntity {
 	private CafeEntity cafe;
 
 	@Builder
-	private CafeKeyword(String keyword, CafeEntity cafe) {
+	private CafeKeywordEntity(String keyword, CafeEntity cafe) {
 		this.keyword = keyword;
 		this.cafe = cafe;
 	}
