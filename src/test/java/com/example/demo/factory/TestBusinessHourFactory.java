@@ -37,13 +37,13 @@ public class TestBusinessHourFactory {
 			.build();
 	}
 
-	//	public static BusinessHour createBusinessHourWithDayAndTime(String day, LocalTime startTime, LocalTime endTime) {
-	//		return BusinessHour.builder()
-	//			.startTime(startTime)
-	//			.endTime(endTime)
-	//			.day(day)
-	//			.build();
-	//	}
+		public static BusinessHour createBusinessHourWithDayAndTime(DayOfWeek day, LocalTime openingTime, LocalTime closingTime) {
+			return BusinessHour.builder()
+				.dayOfWeek(day)
+				.openingTime(openingTime)
+				.closingTime(closingTime)
+				.build();
+		}
 	//
 	//	public static BusinessHour createBusinessHour(Long id, String day, LocalTime startTime, LocalTime endTime,
 	//		Cafe cafe) {

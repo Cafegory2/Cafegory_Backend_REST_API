@@ -1,22 +1,10 @@
 package com.example.demo.config;
 
+import com.example.demo.helper.*;
+import com.example.demo.repository.cafe.*;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import com.example.demo.helper.CafeCafeTagSaveHelper;
-import com.example.demo.helper.CafeKeywordSaveHelper;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeStudyCommentSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.CafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeTagSaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.repository.cafe.BusinessHourRepository;
-import com.example.demo.repository.cafe.CafeCafeTagRepository;
-import com.example.demo.repository.cafe.CafeKeywordRepository;
-import com.example.demo.repository.cafe.CafeRepository;
-import com.example.demo.repository.cafe.CafeTagRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
 import com.example.demo.repository.study.CafeStudyCommentRepository;
@@ -76,6 +64,13 @@ public class HelperConfig {
 	) {
 		return new CafeCafeTagSaveHelper(cafeRepository, cafeTagRepository, cafeCafeTagRepository);
 	}
+
+    @Bean
+    public MenuSaveHelper menuSaveHelper(
+		MenuRepository menuRepository, CafeRepository cafeRepository
+    ) {
+        return new MenuSaveHelper(menuRepository, cafeRepository);
+    }
 
 	@Bean
 	public CafeStudyCommentSaveHelper cafeStudyCommentSaveHelper(

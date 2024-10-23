@@ -1,6 +1,7 @@
 package com.example.demo.implement.cafe;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.persistence.Column;
@@ -56,15 +57,15 @@ public class BusinessHour extends BaseEntity {
 		this.cafe = cafe;
 	}
 
-	//	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
-	//		try {
-	//			return now.getDayOfWeek().equals(DayOfWeek.valueOf(day));
-	//		} catch (IllegalArgumentException e) {
-	//			return false;
-	//		}
-	//	}
-	//
-	//	public boolean matchesDayOfWeek(DayOfWeek dayOfWeek) {
-	//		return day.equals(dayOfWeek.toString());
-	//	}
+		public boolean existsMatchingDayOfWeek(LocalDateTime now) {
+			try {
+				return now.getDayOfWeek().equals(this.dayOfWeek);
+			} catch (IllegalArgumentException e) {
+				return false;
+			}
+		}
+
+		public boolean matchesDayOfWeek(DayOfWeek dayOfWeek) {
+			return this.dayOfWeek.equals(dayOfWeek);
+		}
 }

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultTimeUtil implements TimeUtil {
 
 	@Override
