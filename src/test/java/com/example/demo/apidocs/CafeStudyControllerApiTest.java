@@ -27,7 +27,7 @@ import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.CafeStudyTag;
+import com.example.demo.implement.study.CafeStudyTagEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.MemberComms;
@@ -113,8 +113,8 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
 		MemberEntity member = memberSaveHelper.saveMember("cafegory@gmail.com");
 
-		CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-		CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
 		LocalDateTime startDateTime1 = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 

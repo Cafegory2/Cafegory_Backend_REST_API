@@ -27,10 +27,10 @@ public class CafeStudyCafeStudyTagEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeStudyTag cafeStudyTag;
+    private CafeStudyTagEntity cafeStudyTag;
 
     @Builder
-    private CafeStudyCafeStudyTagEntity(CafeStudyEntity cafeStudy, CafeStudyTag cafeStudyTag) {
+    private CafeStudyCafeStudyTagEntity(CafeStudyEntity cafeStudy, CafeStudyTagEntity cafeStudyTag) {
         this.cafeStudy = cafeStudy;
         this.cafeStudyTag = cafeStudyTag;
     }
