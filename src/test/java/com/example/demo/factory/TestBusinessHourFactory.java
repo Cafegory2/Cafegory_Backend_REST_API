@@ -23,7 +23,7 @@ public class TestBusinessHourFactory {
 			.dayOfWeek(day)
 			.openingTime(LocalTime.MIN)
 			.closingTime(timeUtil.maxLocalTime())
-			.cafeEntity(cafe)
+			.cafe(cafe)
 			.build();
 	}
 
@@ -33,7 +33,7 @@ public class TestBusinessHourFactory {
 			.dayOfWeek(day)
 			.openingTime(openingTime)
 			.closingTime(closingTime)
-			.cafeEntity(cafe)
+			.cafe(cafe)
 			.build();
 	}
 
