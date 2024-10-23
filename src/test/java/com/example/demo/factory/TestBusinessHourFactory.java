@@ -17,23 +17,23 @@ public class TestBusinessHourFactory {
 	//			.build();
 	//	}
 
-	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(CafeEntity cafeEntity, DayOfWeek day,
+	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(CafeEntity cafe, DayOfWeek day,
 																		TimeUtil timeUtil) {
 		return BusinessHourEntity.builder()
 			.dayOfWeek(day)
 			.openingTime(LocalTime.MIN)
 			.closingTime(timeUtil.maxLocalTime())
-			.cafeEntity(cafeEntity)
+			.cafeEntity(cafe)
 			.build();
 	}
 
-	public static BusinessHourEntity createBusinessHourWithDayAndTime(CafeEntity cafeEntity, DayOfWeek day, LocalTime openingTime,
+	public static BusinessHourEntity createBusinessHourWithDayAndTime(CafeEntity cafe, DayOfWeek day, LocalTime openingTime,
 																	  LocalTime closingTime) {
 		return BusinessHourEntity.builder()
 			.dayOfWeek(day)
 			.openingTime(openingTime)
 			.closingTime(closingTime)
-			.cafeEntity(cafeEntity)
+			.cafeEntity(cafe)
 			.build();
 	}
 

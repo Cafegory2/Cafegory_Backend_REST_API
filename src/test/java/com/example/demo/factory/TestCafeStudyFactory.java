@@ -12,11 +12,11 @@ import com.example.demo.implement.study.StudyPeriod;
 
 public class TestCafeStudyFactory {
 
-	public static CafeStudyEntity createCafeStudy(CafeEntity cafeEntity, MemberEntity leader,
+	public static CafeStudyEntity createCafeStudy(CafeEntity cafe, MemberEntity leader,
 												  LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
-			.cafe(cafeEntity)
+			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(WELCOME)
@@ -25,11 +25,11 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
-	public static CafeStudyEntity createCafeStudyWithName(CafeEntity cafeEntity, MemberEntity leader,
+	public static CafeStudyEntity createCafeStudyWithName(CafeEntity cafe, MemberEntity leader,
 														  LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
 		return CafeStudyEntity.builder()
 			.name(cafeStudyName)
-			.cafe(cafeEntity)
+			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(WELCOME)
@@ -38,11 +38,11 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
-	public static CafeStudyEntity createCafeStudyWithCreatedDate(CafeEntity cafeEntity, MemberEntity leader,
+	public static CafeStudyEntity createCafeStudyWithCreatedDate(CafeEntity cafe, MemberEntity leader,
 																 LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
-			.cafe(cafeEntity)
+			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(WELCOME)
@@ -51,11 +51,11 @@ public class TestCafeStudyFactory {
 			.build();
 	}
 
-	public static CafeStudyEntity createCafeStudyWithMemberComms(CafeEntity cafeEntity, MemberEntity leader,
+	public static CafeStudyEntity createCafeStudyWithMemberComms(CafeEntity cafe, MemberEntity leader,
 																 LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
-			.cafe(cafeEntity)
+			.cafe(cafe)
 			.coordinator(leader)
 			.studyPeriod(createStudyPeriod(startDateTime, endDateTime))
 			.memberComms(memberComms)

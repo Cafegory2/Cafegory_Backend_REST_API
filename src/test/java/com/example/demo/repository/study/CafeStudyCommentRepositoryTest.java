@@ -45,11 +45,11 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
         MemberEntity member1 = memberSaveHelper.saveMember("test1@gmail.com", "멤버1");
         MemberEntity member2 = memberSaveHelper.saveMember("test2@gmail.com", "멤버2");
 
-        CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 
         LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 
-        CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, startDateTime, startDateTime.plusHours(2));
+        CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
 
         CafeStudyCommentEntity root1 = cafeStudyCommentSaveHelper.saveRootComment(member1, StudyRole.MEMBER, cafeStudy);
         CafeStudyCommentEntity replyToRoot1 = cafeStudyCommentSaveHelper.saveReplyToParentComment(root1, coordinator, StudyRole.COORDINATOR, cafeStudy);

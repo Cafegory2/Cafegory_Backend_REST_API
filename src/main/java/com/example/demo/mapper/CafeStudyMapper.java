@@ -36,14 +36,14 @@ public class CafeStudyMapper {
 	// 		.collect(Collectors.toList());
 	// }
 
-	public CafeStudyEntity toNewEntity(String studyName, CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+	public CafeStudyEntity toNewEntity(String studyName, CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
 									   LocalDateTime endDateTime,
 									   MemberComms memberComms, int maxParticipants) {
 		StudyPeriod studyPeriod = toStudyPeriod(startDateTime, endDateTime);
 
 		return CafeStudyEntity.builder()
 			.name(studyName)
-			.cafe(cafeEntity)
+			.cafe(cafe)
 			.coordinator(coordinator)
 			.studyPeriod(studyPeriod)
 			.memberComms(memberComms)

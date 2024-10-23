@@ -1,6 +1,6 @@
 package com.example.demo.repository.study;
 
-import static com.example.demo.implement.cafe.QCafeEntity.cafeEntity;
+import static com.example.demo.implement.cafe.QCafeEntity.cafe;
 import static com.example.demo.implement.study.QCafeStudyEntity.cafeStudyEntity;
 
 import java.time.LocalDate;
@@ -38,7 +38,7 @@ public class CafeStudyQueryRepository {
 		JPAQuery<CafeStudyEntity> query = queryFactory
 			.select(cafeStudyEntity).distinct()
 			.from(cafeStudyEntity)
-			.join(cafeStudyEntity.cafe, cafeEntity).fetchJoin()
+			.join(cafeStudyEntity.cafe, cafe).fetchJoin()
 			.where(
 				keywordContains(request.getKeyword())
 					.or(cafeStudyNameContains(request.getKeyword())),
@@ -71,7 +71,7 @@ public class CafeStudyQueryRepository {
 			return null;
 
 		return cafeTagTypes.stream()
-			.map(type -> cafeEntity.cafeCafeTags.any().cafeTag.type.eq(type))
+			.map(type -> cafe.cafeCafeTags.any().cafeTag.type.eq(type))
 			.reduce(BooleanExpression::and)
 			.orElse(null);
 	}
@@ -94,7 +94,7 @@ public class CafeStudyQueryRepository {
 		// 만약 이 메서드가 동작하지 않는다면 DB의 맞는 Expressions.stringTemplate 의 내부 구문을 바꿔야 한다.
 		// DB에 등록된 키워드와 파라미터의 키워드 둘다 공백제거 한뒤 비교한다.
 		return keyword == null ? null :
-			Expressions.stringTemplate("function('replace', {0}, ' ', '')", cafeEntity.cafeKeywords.any().keyword)
+			Expressions.stringTemplate("function('replace', {0}, ' ', '')", cafe.cafeKeywords.any().keyword)
 				.likeIgnoreCase("%" + keyword.replace(" ", "") + "%");
 	}
 

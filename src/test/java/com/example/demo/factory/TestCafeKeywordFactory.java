@@ -5,10 +5,10 @@ import com.example.demo.implement.cafe.CafeKeywordEntity;
 
 public class TestCafeKeywordFactory {
 
-    public static CafeKeywordEntity createCafeKeyword(String keyword, CafeEntity cafeEntity) {
+    public static CafeKeywordEntity createCafeKeyword(String keyword, CafeEntity cafe) {
         return CafeKeywordEntity.builder()
             .keyword(keyword)
-            .cafe(cafeEntity)
+            .cafe(cafe)
             .build();
     }
 }

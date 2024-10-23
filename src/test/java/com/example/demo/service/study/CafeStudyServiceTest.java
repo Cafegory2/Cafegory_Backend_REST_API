@@ -133,8 +133,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
 
 		MemberEntity leader = memberSaveHelper.saveMember();
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() ->
 			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest));
@@ -147,8 +147,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusHours(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
 	}
@@ -160,8 +160,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
 			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
@@ -175,8 +175,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusMonths(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
 	}
@@ -188,8 +188,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity coordinator = memberSaveHelper.saveMember();
 		LocalDateTime start = timeUtil.now().plusMonths(1).plusDays(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith24For7();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
 			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
@@ -311,9 +311,9 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		MemberEntity leader = memberSaveHelper.saveMember();
-		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(() -> sut.createStudy(leader.getId(), now, cafeStudyCreateRequest)).isInstanceOf(
 			CafegoryException.class).hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
@@ -333,9 +333,9 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 		MemberEntity leader = memberSaveHelper.saveMember();
-		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafeEntity.getId());
+		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest));
 	}
