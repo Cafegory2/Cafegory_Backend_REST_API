@@ -15,17 +15,17 @@ public class MenuSaveHelper {
     private final MenuRepository menuRepository;
     private final CafeRepository cafeRepository;
 
-    public MenuEntity saveMenu(CafeEntity cafeEntity) {
-        CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+    public MenuEntity saveMenu(CafeEntity cafe) {
+        CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-        MenuEntity menu = TestMenuFactory.createMenu(mergedCafeEntity);
+        MenuEntity menu = TestMenuFactory.createMenu(mergedCafe);
         return menuRepository.save(menu);
     }
 
-    public MenuEntity saveMenu(String name, String price, CafeEntity cafeEntity) {
-        CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+    public MenuEntity saveMenu(String name, String price, CafeEntity cafe) {
+        CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-        MenuEntity menu = TestMenuFactory.createMenu(name, price, mergedCafeEntity);
+        MenuEntity menu = TestMenuFactory.createMenu(name, price, mergedCafe);
         return menuRepository.save(menu);
     }
 }

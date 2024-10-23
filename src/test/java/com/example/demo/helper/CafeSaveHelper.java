@@ -26,35 +26,35 @@ public class CafeSaveHelper {
 	private final TimeUtil timeUtil;
 
 	public CafeEntity saveCafe() {
-		CafeEntity cafeEntity = TestCafeFactory.createCafe();
-		return cafeRepository.save(cafeEntity);
+		CafeEntity cafe = TestCafeFactory.createCafe();
+		return cafeRepository.save(cafe);
 	}
 
 	public CafeEntity saveCafeWith7daysFrom9To21() {
-		CafeEntity cafeEntity = TestCafeFactory.createCafe();
-		makeBusinessHoursWith7daysFrom9To21(cafeEntity);
-		return cafeRepository.save(cafeEntity);
+		CafeEntity cafe = TestCafeFactory.createCafe();
+		makeBusinessHoursWith7daysFrom9To21(cafe);
+		return cafeRepository.save(cafe);
 	}
 
-	private void makeBusinessHoursWith7daysFrom9To21(CafeEntity cafeEntity) {
+	private void makeBusinessHoursWith7daysFrom9To21(CafeEntity cafe) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafeEntity, day,
+			BusinessHourEntity businessHour = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafe, day,
 				LocalTime.of(9, 0), LocalTime.of(21, 0));
-			businessHourRepository.save(businessHourEntity);
+			businessHourRepository.save(businessHour);
 		}
 	}
 
 	public CafeEntity saveCafeWith24For7() {
-		CafeEntity cafeEntity = TestCafeFactory.createCafe();
-		makeBusinessHourWith24For7(cafeEntity);
-		return cafeRepository.save(cafeEntity);
+		CafeEntity cafe = TestCafeFactory.createCafe();
+		makeBusinessHourWith24For7(cafe);
+		return cafeRepository.save(cafe);
 	}
 
-	private void makeBusinessHourWith24For7(CafeEntity cafeEntity) {
+	private void makeBusinessHourWith24For7(CafeEntity cafe) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafeEntity, day,
+			BusinessHourEntity businessHour = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day,
 				timeUtil);
-			businessHourRepository.save(businessHourEntity);
+			businessHourRepository.save(businessHour);
 		}
 	}
 }

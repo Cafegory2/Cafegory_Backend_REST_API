@@ -18,11 +18,11 @@ public class CafeCafeTagSaveHelper {
     private final CafeTagRepository cafeTagRepository;
     private final CafeCafeTagRepository cafeCafeTagRepository;
 
-    public CafeCafeTagEntity saveCafeCafeTag(CafeEntity cafeEntity, CafeTagEntity cafeTag) {
-        CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+    public CafeCafeTagEntity saveCafeCafeTag(CafeEntity cafe, CafeTagEntity cafeTag) {
+        CafeEntity mergedCafe = cafeRepository.save(cafe);
         CafeTagEntity mergedCafeTag = cafeTagRepository.save(cafeTag);
 
-        CafeCafeTagEntity cafeCafeTag = TestCafeCafeTagFactory.createCafeCafeTag(mergedCafeEntity, mergedCafeTag);
+        CafeCafeTagEntity cafeCafeTag = TestCafeCafeTagFactory.createCafeCafeTag(mergedCafe, mergedCafeTag);
         return cafeCafeTagRepository.save(cafeCafeTag);
     }
 }

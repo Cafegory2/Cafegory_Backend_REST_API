@@ -25,22 +25,22 @@ public class CafeStudySaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeRepository cafeRepository;
 
-	public CafeStudyEntity saveCafeStudy(CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+	public CafeStudyEntity saveCafeStudy(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
 										 LocalDateTime endDateTime) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
-		CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafeEntity, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
 		return cafeStudyRepository.save(cafeStudy);
 	}
 
-	public CafeStudyEntity saveFinishedCafeStudy(CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+	public CafeStudyEntity saveFinishedCafeStudy(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
 												 LocalDateTime endDateTime) throws Exception {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
-		CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafeEntity, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
 
 		Class<? extends CafeStudyEntity> cafeStudyClass = cafeStudy.getClass();
@@ -51,22 +51,22 @@ public class CafeStudySaveHelper {
 		return cafeStudyRepository.save(cafeStudy);
 	}
 
-	public CafeStudyEntity saveCafeStudyWithName(CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+	public CafeStudyEntity saveCafeStudyWithName(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
 												 LocalDateTime endDateTime, String cafeStudyName) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
-		CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudyWithName(mergedCafeEntity, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudyWithName(mergedCafe, mergedLeader, startDateTime,
 			endDateTime, cafeStudyName);
 		return cafeStudyRepository.save(cafeStudy);
 	}
 
-	public CafeStudyEntity saveCafeStudyWithMemberComms(CafeEntity cafeEntity, MemberEntity coordinator, LocalDateTime startDateTime,
+	public CafeStudyEntity saveCafeStudyWithMemberComms(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
 														LocalDateTime endDateTime, MemberComms memberComms) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
-		CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudyWithMemberComms(mergedCafeEntity, mergedLeader,
+		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudyWithMemberComms(mergedCafe, mergedLeader,
 			startDateTime, endDateTime, memberComms);
 		return cafeStudyRepository.save(cafeStudy);
 	}

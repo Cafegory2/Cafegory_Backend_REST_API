@@ -15,10 +15,10 @@ public class CafeKeywordSaveHelper {
     private final CafeKeywordRepository cafeKeywordRepository;
     private final CafeRepository cafeRepository;
 
-    public CafeKeywordEntity saveCafeKeyword(String keyword, CafeEntity cafeEntity) {
-        CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
+    public CafeKeywordEntity saveCafeKeyword(String keyword, CafeEntity cafe) {
+        CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-        CafeKeywordEntity cafeKeyword = TestCafeKeywordFactory.createCafeKeyword(keyword, mergedCafeEntity);
+        CafeKeywordEntity cafeKeyword = TestCafeKeywordFactory.createCafeKeyword(keyword, mergedCafe);
         return cafeKeywordRepository.save(cafeKeyword);
     }
 }
