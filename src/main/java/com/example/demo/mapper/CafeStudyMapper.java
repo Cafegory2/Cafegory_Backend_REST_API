@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.dto.study.CafeStudyDeleteResponse;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
 import com.example.demo.implement.study.MemberComms;
@@ -36,14 +36,14 @@ public class CafeStudyMapper {
 	// 		.collect(Collectors.toList());
 	// }
 
-	public CafeStudy toNewEntity(String studyName, Cafe cafe, Member coordinator, LocalDateTime startDateTime,
-		LocalDateTime endDateTime,
-		MemberComms memberComms, int maxParticipants) {
+	public CafeStudy toNewEntity(String studyName, CafeEntity cafeEntity, Member coordinator, LocalDateTime startDateTime,
+                                 LocalDateTime endDateTime,
+                                 MemberComms memberComms, int maxParticipants) {
 		StudyPeriod studyPeriod = toStudyPeriod(startDateTime, endDateTime);
 
 		return CafeStudy.builder()
 			.name(studyName)
-			.cafe(cafe)
+			.cafeEntity(cafeEntity)
 			.coordinator(coordinator)
 			.studyPeriod(studyPeriod)
 			.memberComms(memberComms)
@@ -111,7 +111,7 @@ public class CafeStudyMapper {
 	public CafeStudyCreateResponse toStudyOnceCreateResponse(CafeStudy createdCafeStudy) {
 		return CafeStudyCreateResponse.builder()
 			.name(createdCafeStudy.getName())
-			.cafeId(createdCafeStudy.getCafe().getId())
+			.cafeId(createdCafeStudy.getCafeEntity().getId())
 			.coordinatorId(createdCafeStudy.getCoordinator().getId())
 			.startDateTime(createdCafeStudy.getStudyPeriod().getStartDateTime())
 			.endDateTime(createdCafeStudy.getStudyPeriod().getEndDateTime())

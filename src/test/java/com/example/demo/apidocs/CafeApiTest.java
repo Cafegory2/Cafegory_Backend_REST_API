@@ -3,7 +3,7 @@ package com.example.demo.apidocs;
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.*;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTag;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.CafeStudy;
@@ -51,12 +51,12 @@ public class CafeApiTest extends ApiDocsTest {
         CafeTag cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
         CafeTag cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
 
-        Cafe cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe, cafeTag1);
-        cafeCafeTagSaveHelper.saveCafeCafeTag(cafe, cafeTag2);
+        CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity, cafeTag1);
+        cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity, cafeTag2);
 
-        menuSaveHelper.saveMenu("아메리카노", "1500", cafe);
-        menuSaveHelper.saveMenu("카페라떼", "3000", cafe);
+        menuSaveHelper.saveMenu("아메리카노", "1500", cafeEntity);
+        menuSaveHelper.saveMenu("카페라떼", "3000", cafeEntity);
 
         Member member = memberSaveHelper.saveMember();
 
@@ -65,11 +65,11 @@ public class CafeApiTest extends ApiDocsTest {
         CafeStudyTag cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
         CafeStudyTag cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
 
-        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
+        CafeStudy cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-        cafeStudySaveHelper.saveFinishedCafeStudy(cafe, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
-        cafeStudySaveHelper.saveCafeStudy(cafe, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
-        CafeStudy cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafe, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
+        cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(2), startDateTime.plusHours(4));
+        cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
+        CafeStudy cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(12), startDateTime.plusHours(14));
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag1);
         cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag2);
 
@@ -121,7 +121,7 @@ public class CafeApiTest extends ApiDocsTest {
             )
             .contentType(ContentType.JSON)
             .when()
-            .get("/cafes/{cafeId}", cafe.getId())
+            .get("/cafes/{cafeId}", cafeEntity.getId())
             .then().log().all()
             .statusCode(200);
     }

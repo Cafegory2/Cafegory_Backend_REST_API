@@ -4,7 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.util.TimeUtil;
 
 public class TestBusinessHourFactory {
@@ -17,23 +17,23 @@ public class TestBusinessHourFactory {
 	//			.build();
 	//	}
 
-	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(Cafe cafe, DayOfWeek day,
+	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(CafeEntity cafeEntity, DayOfWeek day,
 																		TimeUtil timeUtil) {
 		return BusinessHourEntity.builder()
 			.dayOfWeek(day)
 			.openingTime(LocalTime.MIN)
 			.closingTime(timeUtil.maxLocalTime())
-			.cafe(cafe)
+			.cafeEntity(cafeEntity)
 			.build();
 	}
 
-	public static BusinessHourEntity createBusinessHourWithDayAndTime(Cafe cafe, DayOfWeek day, LocalTime openingTime,
+	public static BusinessHourEntity createBusinessHourWithDayAndTime(CafeEntity cafeEntity, DayOfWeek day, LocalTime openingTime,
 																	  LocalTime closingTime) {
 		return BusinessHourEntity.builder()
 			.dayOfWeek(day)
 			.openingTime(openingTime)
 			.closingTime(closingTime)
-			.cafe(cafe)
+			.cafeEntity(cafeEntity)
 			.build();
 	}
 

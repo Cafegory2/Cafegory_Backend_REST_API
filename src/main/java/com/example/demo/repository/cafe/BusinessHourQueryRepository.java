@@ -7,7 +7,7 @@ import java.time.DayOfWeek;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -17,10 +17,10 @@ import lombok.RequiredArgsConstructor;
 public class BusinessHourQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public BusinessHourEntity findWithCafeAndDayOfWeek(Cafe cafe, DayOfWeek dayOfWeek) {
+	public BusinessHourEntity findWithCafeAndDayOfWeek(CafeEntity cafeEntity, DayOfWeek dayOfWeek) {
 		return jpaQueryFactory.select(businessHourEntity)
 			.from(businessHourEntity)
-			.where(businessHourEntity.cafe.eq(cafe).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
+			.where(businessHourEntity.cafeEntity.eq(cafeEntity).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
 			.fetchOne();
 	}
 }

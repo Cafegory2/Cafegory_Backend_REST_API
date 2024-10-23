@@ -1,7 +1,7 @@
 package com.example.demo.dto.cafe;
 
 import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.Menu;
 import com.example.demo.implement.study.*;
 import lombok.*;
@@ -22,11 +22,11 @@ public class CafeDetailResponse {
     private List<CafeStudyInfo> openCafeStudiesInfo = new ArrayList<>();
     private List<CafeStudyInfo> closeCafeStudiesInfo = new ArrayList<>();
 
-    public static CafeDetailResponse of(Cafe cafe, BusinessHourEntity businessHourEntity, boolean isOpen,
+    public static CafeDetailResponse of(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen,
                                         List<CafeStudy> openCafeStudies, List<CafeStudy> closeCafeStudies) {
         CafeDetailResponse response = new CafeDetailResponse();
-        response.cafeInfo = createCafeInfo(cafe, businessHourEntity, isOpen);
-        response.menusInfo = createMenusInfo(cafe);
+        response.cafeInfo = createCafeInfo(cafeEntity, businessHourEntity, isOpen);
+        response.menusInfo = createMenusInfo(cafeEntity);
         response.openCafeStudiesInfo = createCafeStudiesInfo(openCafeStudies);
         response.closeCafeStudiesInfo = createCafeStudiesInfo(closeCafeStudies);
 
@@ -59,8 +59,8 @@ public class CafeDetailResponse {
             .build();
     }
 
-    private static List<MenuInfo> createMenusInfo(Cafe cafe) {
-        List<Menu> menus = cafe.getMenus();
+    private static List<MenuInfo> createMenusInfo(CafeEntity cafeEntity) {
+        List<Menu> menus = cafeEntity.getMenus();
 
         return menus.stream()
             .map(CafeDetailResponse::createMenuInfo)
@@ -74,18 +74,18 @@ public class CafeDetailResponse {
             .build();
     }
 
-    private static CafeInfo createCafeInfo(Cafe cafe, BusinessHourEntity businessHourEntity, boolean isOpen) {
+    private static CafeInfo createCafeInfo(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen) {
         return CafeInfo.builder()
-            .id(cafe.getId())
-            .name(cafe.getName())
-            .imgUrl(cafe.getMainImageUrl())
-            .address(cafe.getAddress().getFullAddress())
+            .id(cafeEntity.getId())
+            .name(cafeEntity.getName())
+            .imgUrl(cafeEntity.getMainImageUrl())
+            .address(cafeEntity.getAddress().getFullAddress())
             .openingTime(businessHourEntity.getOpeningTime())
             .closingTime(businessHourEntity.getClosingTime())
             .isOpen(isOpen)
-            .sns(cafe.getSns())
+            .sns(cafeEntity.getSns())
             .tags(
-                cafe.getCafeCafeTags().stream()
+                cafeEntity.getCafeCafeTags().stream()
                     .map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
                     .collect(Collectors.toList())
             )

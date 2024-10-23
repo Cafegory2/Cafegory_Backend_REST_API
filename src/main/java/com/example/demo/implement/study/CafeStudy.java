@@ -6,14 +6,13 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.Member;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -36,7 +35,7 @@ public class CafeStudy extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Cafe cafe;
+	private CafeEntity cafeEntity;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -62,10 +61,10 @@ public class CafeStudy extends BaseEntity {
 	private List<CafeStudyCafeStudyTag> cafeStudyCafeStudyTags = new ArrayList<>();
 
 	@Builder
-	private CafeStudy(String name, Cafe cafe, Member coordinator, StudyPeriod studyPeriod,
-		MemberComms memberComms, int maxParticipants, String introduction) {
+	private CafeStudy(String name, CafeEntity cafeEntity, Member coordinator, StudyPeriod studyPeriod,
+					  MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
-		this.cafe = cafe;
+		this.cafeEntity = cafeEntity;
 		this.coordinator = coordinator;
 		this.studyPeriod = studyPeriod;
 		this.memberComms = memberComms;

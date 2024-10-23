@@ -17,7 +17,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 @Entity
@@ -36,10 +35,10 @@ public class CafeKeyword extends BaseEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private Cafe cafe;
+	private CafeEntity cafe;
 
 	@Builder
-	private CafeKeyword(String keyword, Cafe cafe) {
+	private CafeKeyword(String keyword, CafeEntity cafe) {
 		this.keyword = keyword;
 		this.cafe = cafe;
 	}

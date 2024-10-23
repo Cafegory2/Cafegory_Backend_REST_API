@@ -1,7 +1,7 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestCafeCafeTagFactory;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeCafeTag;
 import com.example.demo.implement.cafe.CafeTag;
 import com.example.demo.repository.cafe.CafeCafeTagRepository;
@@ -18,11 +18,11 @@ public class CafeCafeTagSaveHelper {
     private final CafeTagRepository cafeTagRepository;
     private final CafeCafeTagRepository cafeCafeTagRepository;
 
-    public CafeCafeTag saveCafeCafeTag(Cafe cafe, CafeTag cafeTag) {
-        Cafe mergedCafe = cafeRepository.save(cafe);
+    public CafeCafeTag saveCafeCafeTag(CafeEntity cafeEntity, CafeTag cafeTag) {
+        CafeEntity mergedCafeEntity = cafeRepository.save(cafeEntity);
         CafeTag mergedCafeTag = cafeTagRepository.save(cafeTag);
 
-        CafeCafeTag cafeCafeTag = TestCafeCafeTagFactory.createCafeCafeTag(mergedCafe, mergedCafeTag);
+        CafeCafeTag cafeCafeTag = TestCafeCafeTagFactory.createCafeCafeTag(mergedCafeEntity, mergedCafeTag);
         return cafeCafeTagRepository.save(cafeCafeTag);
     }
 }

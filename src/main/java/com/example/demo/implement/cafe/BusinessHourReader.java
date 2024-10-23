@@ -14,8 +14,8 @@ public class BusinessHourReader {
 
 	private final BusinessHourQueryRepository businessHourQueryRepository;
 
-	public BusinessHourEntity getBusinessHoursByCafeAndDay(Cafe cafe, DayOfWeek startDateTime) {
-		return businessHourQueryRepository.findWithCafeAndDayOfWeek(cafe, startDateTime);
+	public BusinessHourEntity getBusinessHoursByCafeAndDay(CafeEntity cafeEntity, DayOfWeek startDateTime) {
+		return businessHourQueryRepository.findWithCafeAndDayOfWeek(cafeEntity, startDateTime);
 	}
 
 }

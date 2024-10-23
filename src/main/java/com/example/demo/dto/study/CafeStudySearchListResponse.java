@@ -1,6 +1,6 @@
 package com.example.demo.dto.study;
 
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.Member;
 import com.example.demo.implement.study.*;
 import lombok.*;
@@ -28,12 +28,12 @@ public class CafeStudySearchListResponse {
     }
 
     private static CafeInfo createCafeInfo(CafeStudy cafeStudy) {
-        Cafe cafe = cafeStudy.getCafe();
+        CafeEntity cafeEntity = cafeStudy.getCafeEntity();
 
         return CafeInfo.builder()
-            .id(cafe.getId())
-            .imgUrl(cafe.getMainImageUrl())
-            .name(cafe.getName())
+            .id(cafeEntity.getId())
+            .imgUrl(cafeEntity.getMainImageUrl())
+            .name(cafeEntity.getName())
             .build();
     }
 

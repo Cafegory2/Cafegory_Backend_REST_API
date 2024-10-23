@@ -1,12 +1,12 @@
 package com.example.demo.factory;
 
 import com.example.demo.implement.cafe.Address;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 
 public class TestCafeFactory {
 
-	public static Cafe createCafe() {
-		return Cafe.builder()
+	public static CafeEntity createCafe() {
+		return CafeEntity.builder()
 			.name("카페고리")
 			.mainImageUrl("카페 대표 이미지")
 			.address(new Address("서울 마포구 합정동", "합정동"))

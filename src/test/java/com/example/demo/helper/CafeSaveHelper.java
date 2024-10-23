@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.factory.TestBusinessHourFactory;
 import com.example.demo.factory.TestCafeFactory;
 import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.Cafe;
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.repository.cafe.BusinessHourRepository;
 import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.util.TimeUtil;
@@ -25,34 +25,34 @@ public class CafeSaveHelper {
 
 	private final TimeUtil timeUtil;
 
-	public Cafe saveCafe() {
-		Cafe cafe = TestCafeFactory.createCafe();
-		return cafeRepository.save(cafe);
+	public CafeEntity saveCafe() {
+		CafeEntity cafeEntity = TestCafeFactory.createCafe();
+		return cafeRepository.save(cafeEntity);
 	}
 
-	public Cafe saveCafeWith7daysFrom9To21() {
-		Cafe cafe = TestCafeFactory.createCafe();
-		makeBusinessHoursWith7daysFrom9To21(cafe);
-		return cafeRepository.save(cafe);
+	public CafeEntity saveCafeWith7daysFrom9To21() {
+		CafeEntity cafeEntity = TestCafeFactory.createCafe();
+		makeBusinessHoursWith7daysFrom9To21(cafeEntity);
+		return cafeRepository.save(cafeEntity);
 	}
 
-	private void makeBusinessHoursWith7daysFrom9To21(Cafe cafe) {
+	private void makeBusinessHoursWith7daysFrom9To21(CafeEntity cafeEntity) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafe, day,
+			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAndTime(cafeEntity, day,
 				LocalTime.of(9, 0), LocalTime.of(21, 0));
 			businessHourRepository.save(businessHourEntity);
 		}
 	}
 
-	public Cafe saveCafeWith24For7() {
-		Cafe cafe = TestCafeFactory.createCafe();
-		makeBusinessHourWith24For7(cafe);
-		return cafeRepository.save(cafe);
+	public CafeEntity saveCafeWith24For7() {
+		CafeEntity cafeEntity = TestCafeFactory.createCafe();
+		makeBusinessHourWith24For7(cafeEntity);
+		return cafeRepository.save(cafeEntity);
 	}
 
-	private void makeBusinessHourWith24For7(Cafe cafe) {
+	private void makeBusinessHourWith24For7(CafeEntity cafeEntity) {
 		for (DayOfWeek day : DayOfWeek.values()) {
-			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day,
+			BusinessHourEntity businessHourEntity = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafeEntity, day,
 				timeUtil);
 			businessHourRepository.save(businessHourEntity);
 		}
