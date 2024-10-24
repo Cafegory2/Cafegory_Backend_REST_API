@@ -3,6 +3,7 @@ package com.example.demo.dto.study;
 import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.study.*;
+import com.example.demo.qna.repository.CafeStudyCommentEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;

@@ -1,10 +1,15 @@
-package com.example.demo.implement.study;
+package com.example.demo.qna.repository;
 
 import javax.persistence.*;
 
+import com.example.demo.domain.DefaultDate;
 import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.member.MemberEntity;
 
+import com.example.demo.implement.study.CafeStudyEntity;
+import com.example.demo.implement.study.StudyRole;
+import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.qna.domain.Comment;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,6 +56,26 @@ public class CafeStudyCommentEntity extends BaseEntity {
         this.content = content;
         this.parentComment = parentComment;
         this.cafeStudy = cafeStudy;
+    }
+
+    public Comment toComment() {
+        return Comment.builder()
+            .commentId(this.id)
+            .member(
+                MemberIdentity.builder()
+                    .id(this.author.getId())
+                    .nickname(this.author.getNickname())
+                    .build()
+            )
+            .cafeStudyId(this.cafeStudy.getId())
+            .content(this.content)
+            .date(
+                DefaultDate.builder()
+                    .createdDate(getCreatedDate())
+                    .lastModifiedDate(getLastModifiedDate())
+                    .build()
+            )
+            .build();
     }
 
     //

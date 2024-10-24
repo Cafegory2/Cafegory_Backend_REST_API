@@ -21,7 +21,7 @@ import org.hibernate.annotations.Where;
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study")
 public class CafeStudyEntity extends BaseEntity {
-	//
+
 	public static final int LIMIT_MEMBER_CAPACITY = 6;
 	public static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
 	public static final int MIN_DELAY_BEFORE_START = 1 * 60 * 60;

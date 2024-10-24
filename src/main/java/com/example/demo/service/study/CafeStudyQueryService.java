@@ -5,8 +5,8 @@ import com.example.demo.dto.study.CafeStudyDetailResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.dto.study.CafeStudySearchListResponse;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.CafeStudyCommentEntity;
-import com.example.demo.implement.study.CafeStudyCommentReader;
+import com.example.demo.qna.repository.CafeStudyCommentEntity;
+import com.example.demo.qna.implement.CommentReader;
 import com.example.demo.implement.study.CafeStudyReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 public class CafeStudyQueryService {
 
     private final CafeStudyReader cafeStudyReader;
-    private final CafeStudyCommentReader cafeStudyCommentReader;
+    private final CommentReader commentReader;
 
     public SliceResponse<CafeStudySearchListResponse> searchCafeStudiesByDynamicFilter(CafeStudySearchListRequest request) {
         SliceResponse<CafeStudyEntity> response = cafeStudyReader.searchCafeStudies(request);
@@ -29,7 +29,7 @@ public class CafeStudyQueryService {
 
     public CafeStudyDetailResponse getCafeStudyDetail(Long cafeStudyId) {
         CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
-        List<CafeStudyCommentEntity> comments = cafeStudyCommentReader.readAllBy(cafeStudyId);
+        List<CafeStudyCommentEntity> comments = commentReader.readAllBy(cafeStudyId);
 
         return CafeStudyDetailResponse.of(cafeStudy, comments);
     }

@@ -2,7 +2,7 @@ package com.example.demo.repository.study;
 
 import java.util.List;
 
-import com.example.demo.implement.study.CafeStudyCommentEntity;
+import com.example.demo.qna.repository.CafeStudyCommentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -2,7 +2,7 @@ package com.example.demo.helper;
 
 import com.example.demo.factory.TestCafeStudyCommentFactory;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.CafeStudyCommentEntity;
+import com.example.demo.qna.repository.CafeStudyCommentEntity;
 import com.example.demo.implement.study.StudyRole;
 import com.example.demo.repository.study.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
