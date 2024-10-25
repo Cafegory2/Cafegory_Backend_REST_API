@@ -8,10 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.example.demo.domain.DateAudit;
 import com.example.demo.implement.BaseEntity;
 
 import com.example.demo.implement.member.BeverageSize;
 import com.example.demo.implement.member.Role;
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.domain.MemberIdentity;
 import lombok.*;
 import org.hibernate.annotations.Where;
 
@@ -59,6 +62,24 @@ public class MemberEntity extends BaseEntity {
 		this.participationCount = participationCount;
 		this.beverageSize = beverageSize;
 		this.refreshToken = refreshToken;
+	}
+
+	public Member toMember() {
+		return Member.builder()
+			.identity(
+				MemberIdentity.builder()
+					.id(this.id)
+					.nickname(this.nickname)
+					.build()
+			)
+			.imgUrl(this.profileUrl)
+			.dateAudit(
+				DateAudit.builder()
+					.createdDate(this.getCreatedDate())
+					.modifiedDate(this.getLastModifiedDate())
+					.build()
+			)
+			.build();
 	}
 
 	// public void addStudyMember(StudyMember studyMember) {

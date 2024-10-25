@@ -2,7 +2,7 @@ package com.example.demo.factory;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.review.ReviewEntity;
+import com.example.demo.cafe.infrastructure.ReviewEntity;
 
 public class TestReviewFactory {
 

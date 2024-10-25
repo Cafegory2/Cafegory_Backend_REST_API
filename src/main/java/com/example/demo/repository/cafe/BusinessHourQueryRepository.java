@@ -1,6 +1,5 @@
 package com.example.demo.repository.cafe;
 
-import static com.example.demo.implement.cafe.QBusinessHourEntity.businessHourEntity;
 
 import java.time.DayOfWeek;
 
@@ -11,6 +10,8 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.example.demo.cafe.infrastructure.QBusinessHourEntity.businessHourEntity;
 
 @Repository
 @RequiredArgsConstructor

@@ -1,11 +1,13 @@
-package com.example.demo.implement.review;
+package com.example.demo.cafe.infrastructure;
 
 import javax.persistence.*;
 
+import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.Review;
+import com.example.demo.domain.DateAudit;
 import com.example.demo.implement.BaseEntity;
 import org.hibernate.annotations.Where;
 
-import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
@@ -15,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -43,5 +46,29 @@ public class ReviewEntity extends BaseEntity {
 	private ReviewEntity(CafeEntity cafe, MemberEntity member) {
 		this.cafe = cafe;
 		this.member = member;
+	}
+
+	public Review toReview() {
+		return Review.builder()
+			.id(this.id)
+			.tags(
+				reviewCafeTag.stream()
+					.map(tag -> tag.getCafeTag().getType())
+					.collect(Collectors.toList())
+			)
+			.cafe(
+				Cafe.builder()
+					.id(cafe.getId())
+					.name(cafe.getName())
+					.imgUrl(cafe.getMainImageUrl())
+					.build()
+			)
+			.dateAudit(
+				DateAudit.builder()
+					.createdDate(this.getCreatedDate())
+					.modifiedDate(this.getLastModifiedDate())
+					.build()
+			)
+			.build();
 	}
 }

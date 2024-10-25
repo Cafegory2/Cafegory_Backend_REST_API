@@ -161,35 +161,37 @@ public class CafeStudyService {
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}
 
-	@Transactional
-	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
-		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
+	//TODO 해야됨!!!
+//	@Transactional
+//	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
+//		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
+//
+//		CafeEntity cafe = cafeReader.getById(request.getCafeId());
+//		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
+//			request.getStartDateTime().getDayOfWeek());
+//		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
+//			request.getEndDateTime().toLocalTime(), businessHourEntity);
+//
+//		MemberEntity coordinator = findMemberById(coordinatorId);
+//		validateStudyScheduleConflict(
+//			buildLocalDateTime(request.getEndDateTime()),
+//			buildLocalDateTime(request.getEndDateTime()),
+//			coordinator);
+//
+//		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
+//			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
+//	}
 
-		CafeEntity cafe = cafeReader.getById(request.getCafeId());
-		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
-			request.getStartDateTime().getDayOfWeek());
-		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-			request.getEndDateTime().toLocalTime(), businessHourEntity);
-
-		MemberEntity coordinator = findMemberById(coordinatorId);
-		validateStudyScheduleConflict(
-			buildLocalDateTime(request.getEndDateTime()),
-			buildLocalDateTime(request.getEndDateTime()),
-			coordinator);
-
-		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
-			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
-	}
-
-	@Transactional
-	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
-		MemberEntity member = memberReader.read(memberId);
-		validateStudyDelete(member, cafeStudy);
-
-		cafeStudy.softDelete(now);
-		return cafeStudy.getId();
-	}
+	//TODO 해야됨!!!
+//	@Transactional
+//	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
+//		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
+//		MemberEntity member = memberReader.read(memberId);
+//		validateStudyDelete(member, cafeStudy);
+//
+//		cafeStudy.softDelete(now);
+//		return cafeStudy.getId();
+//	}
 
 	private LocalDateTime buildLocalDateTime(LocalDateTime localDateTime) {
 		return timeUtil.localDateTime(
@@ -376,7 +378,8 @@ public class CafeStudyService {
 	// 	return cafeStudy.isLeader(findMemberById(memberId));
 	// }
 
-	private MemberEntity findMemberById(Long memberId) {
-		return memberReader.read(memberId);
-	}
+	//TODO 해야됨!!!
+//	private MemberEntity findMemberById(Long memberId) {
+//		return memberReader.read(memberId);
+//	}
 }

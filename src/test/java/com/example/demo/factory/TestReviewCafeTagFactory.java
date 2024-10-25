@@ -1,8 +1,8 @@
 package com.example.demo.factory;
 
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.review.ReviewCafeTagEntity;
-import com.example.demo.implement.review.ReviewEntity;
+import com.example.demo.cafe.infrastructure.ReviewCafeTagEntity;
+import com.example.demo.cafe.infrastructure.ReviewEntity;
 
 public class TestReviewCafeTagFactory {
 

@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.Review;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.member.BeverageSize;
+import com.example.demo.member.domain.Member;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.review.ReviewEntity;
+import com.example.demo.cafe.infrastructure.ReviewEntity;
 import com.example.demo.implement.study.CafeTagType;
 
 import lombok.AccessLevel;
@@ -26,7 +29,7 @@ public class MyPageResponse {
 
 	//TODO 함께 참여한 멤버 리스트 추가
 
-	public static MyPageResponse of(MemberEntity member, List<ReviewEntity> reviews) {
+	public static MyPageResponse of(Member member, List<Review> reviews) {
 		MyPageResponse response = new MyPageResponse();
 
 		response.myInfo = createMyInfo(member);
@@ -35,39 +38,35 @@ public class MyPageResponse {
 		return response;
 	}
 
-	private static List<ReviewInfo> createReviewsInfo(List<ReviewEntity> reviews) {
+	private static List<ReviewInfo> createReviewsInfo(List<Review> reviews) {
 		return reviews.stream()
 			.map(MyPageResponse::createReviewInfo)
 			.collect(Collectors.toList());
 	}
 
-	private static ReviewInfo createReviewInfo(ReviewEntity review) {
-		CafeEntity cafe = review.getCafe();
+	private static ReviewInfo createReviewInfo(Review review) {
+		Cafe cafe = review.getCafe();
 
 		return ReviewInfo.builder()
-			.tags(
-				review.getReviewCafeTag().stream()
-					.map(cafeTags -> cafeTags.getCafeTag().getType())
-					.collect(Collectors.toList())
-			)
+			.tags(review.getTags())
 			.cafeInfo(
 				ReviewInfo.CafeInfo.builder()
 					.id(cafe.getId())
-					.imgUrl(cafe.getMainImageUrl())
+					.imgUrl(cafe.getImgUrl())
 					.name(cafe.getName())
 					.build()
 			)
 			.build();
 	}
 
-	private static MyInfo createMyInfo(MemberEntity member) {
+	private static MyInfo createMyInfo(Member member) {
 		return MyInfo.builder()
-			.nickname(member.getNickname())
+			.nickname(member.getIdentity().getNickname())
 			.email(member.getEmail())
-			.profileUrl(member.getProfileUrl())
+			.profileUrl(member.getImgUrl())
 			.bio(member.getBio())
 			.beverageSize(member.getBeverageSize())
-			.createdDate(member.getCreatedDate())
+			.createdDate(member.getDateAudit().getCreatedDate())
 			.build();
 	}
 

@@ -3,8 +3,8 @@ package com.example.demo.config;
 import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.helper.*;
 import com.example.demo.repository.cafe.*;
-import com.example.demo.repository.review.ReviewCafeTagRepository;
-import com.example.demo.repository.review.ReviewRepository;
+import com.example.demo.cafe.infrastructure.ReviewCafeTagRepository;
+import com.example.demo.cafe.infrastructure.ReviewRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

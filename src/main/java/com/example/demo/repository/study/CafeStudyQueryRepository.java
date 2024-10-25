@@ -1,6 +1,6 @@
 package com.example.demo.repository.study;
 
-import static com.example.demo.implement.cafe.QCafeEntity.cafeEntity;
+import static com.example.demo.cafe.infrastructure.QCafeEntity.cafeEntity;
 import static com.example.demo.implement.study.QCafeStudyEntity.cafeStudyEntity;
 
 import java.time.LocalDate;

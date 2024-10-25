@@ -8,7 +8,7 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.implement.MemberReader;
-import com.example.demo.implement.review.ReviewEntity;
+import com.example.demo.cafe.infrastructure.ReviewEntity;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;

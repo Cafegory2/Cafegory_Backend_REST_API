@@ -14,7 +14,7 @@
 // import com.example.demo.exception.ExceptionType;
 // import com.example.demo.cafe.infrastructure.CafeRepository;
 // import com.example.demo.repository.member.MemberRepository;
-// import com.example.demo.repository.review.ReviewRepository;
+// import com.example.demo.cafe.infrastructure.ReviewRepository;
 //
 // import lombok.RequiredArgsConstructor;
 //

@@ -57,31 +57,32 @@ public class CafeStudyController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping
-	public ResponseEntity<CafeStudyCreateResponse> create(
-		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
-		@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-
-		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
-		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
-
-		return ResponseEntity.ok(response);
-	}
-
-	@DeleteMapping("/{cafeStudyId:[0-9]+}")
-	public ResponseEntity<CafeStudyDeleteResponse> delete(@PathVariable Long cafeStudyId,
-		@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-
-		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
-		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
-
-		return ResponseEntity.ok(response);
-	}
+	//TODO 해야됨!!!
+//	@PostMapping
+//	public ResponseEntity<CafeStudyCreateResponse> create(
+//		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
+//		@AuthenticationPrincipal UserDetails userDetails) {
+//		Long memberId = Long.parseLong(userDetails.getUsername());
+//		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+//
+//		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);
+//		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
+//		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
+//
+//		return ResponseEntity.ok(response);
+//	}
+//
+//	@DeleteMapping("/{cafeStudyId:[0-9]+}")
+//	public ResponseEntity<CafeStudyDeleteResponse> delete(@PathVariable Long cafeStudyId,
+//		@AuthenticationPrincipal UserDetails userDetails) {
+//		Long memberId = Long.parseLong(userDetails.getUsername());
+//
+//		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
+//		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
+//		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
+//
+//		return ResponseEntity.ok(response);
+//	}
 
 	// @PatchMapping("/{studyOnceId:[0-9]+}")
 	// public ResponseEntity<StudyOnceResponse> update(@PathVariable Long studyOnceId,

@@ -1,6 +1,7 @@
 package com.example.demo.member.implement;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.Member;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,10 @@ public class MemberReader {
             .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
     }
 
-    public MemberEntity read(Long memberId) {
-        return memberRepository.findById(memberId)
+    public Member read(Long memberId) {
+        MemberEntity memberEntity = memberRepository.findById(memberId)
             .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+
+        return memberEntity.toMember();
     }
 }

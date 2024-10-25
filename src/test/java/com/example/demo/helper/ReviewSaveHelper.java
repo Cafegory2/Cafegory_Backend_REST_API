@@ -2,14 +2,14 @@ package com.example.demo.helper;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.review.ReviewEntity;
+import com.example.demo.cafe.infrastructure.ReviewEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import com.example.demo.factory.TestReviewFactory;
 import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.review.ReviewRepository;
+import com.example.demo.cafe.infrastructure.ReviewRepository;
 
 import lombok.RequiredArgsConstructor;
 
