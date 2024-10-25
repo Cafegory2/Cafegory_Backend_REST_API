@@ -26,7 +26,7 @@ public class MyPageResponse {
 
 	//TODO 함께 참여한 멤버 리스트 추가
 
-	public static MyPageResponse of(MemberEntity member, CafeStudyEntity cafeStudy, List<ReviewCafeTagEntity> reviews) {
+	public static MyPageResponse of(MemberEntity member, CafeStudyEntity cafeStudy, List<ReviewEntity> reviews) {
 		MyPageResponse response = new MyPageResponse();
 
 		response.myInfo = createMyInfo(member);
@@ -37,6 +37,12 @@ public class MyPageResponse {
 
 	private static List<ReviewInfo> createReviewsInfo(List<ReviewEntity> reviews) {
 		return ReviewInfo.builder()
+			.tags(
+				reviews.stream()
+					.map(review -> )
+			)
+			.cafeInfo()
+
 
 	}
 
@@ -71,6 +77,7 @@ public class MyPageResponse {
 	private static class ReviewInfo {
 
 		private List<CafeTagType> tags;
+		private CafeInfo cafeInfo;
 
 		@Getter
 		@Setter

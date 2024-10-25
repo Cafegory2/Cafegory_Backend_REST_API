@@ -24,7 +24,7 @@ public class ProfileService {
 
     public MyPageResponse getMypage(Long memberId) {
         MemberEntity member = memberReader.read(memberId);
-        return MyPageResponse.of()
+        return null;
     }
 
     // 	@Override

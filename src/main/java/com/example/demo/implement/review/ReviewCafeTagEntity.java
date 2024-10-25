@@ -41,12 +41,9 @@ public class ReviewCafeTagEntity extends BaseEntity {
 	@JoinColumn(name = "cafe_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeTagEntity cafeTag;
 
-	private int taggingCount;
-
 	@Builder
-	private ReviewCafeTagEntity(ReviewEntity review, CafeTagEntity cafeTag, int taggingCount) {
+	private ReviewCafeTagEntity(ReviewEntity review, CafeTagEntity cafeTag) {
 		this.review = review;
 		this.cafeTag = cafeTag;
-		this.taggingCount = taggingCount;
 	}
 }
