@@ -1,4 +1,4 @@
-package com.example.demo.implement.cafe;
+package com.example.demo.implement.review;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.implement.BaseEntity;
+import com.example.demo.implement.cafe.CafeTagEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,17 +25,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Where(clause = "deleted_date IS NULL")
-@Table(name = "cafe_cafe_tag")
-public class CafeCafeTagEntity extends BaseEntity {
+@Table(name = "review_cafe_tag")
+public class ReviewCafeTagEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	@Column(name = "cafe_cafe_tag_id")
+	@Column(name = "review_cafe_tag_id")
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeEntity cafe;
+	@JoinColumn(name = "review_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private ReviewEntity review;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -43,9 +44,9 @@ public class CafeCafeTagEntity extends BaseEntity {
 	private int taggingCount;
 
 	@Builder
-	private CafeCafeTagEntity(CafeEntity cafe, CafeTagEntity cafeTag) {
-		this.cafe = cafe;
+	private ReviewCafeTagEntity(ReviewEntity review, CafeTagEntity cafeTag, int taggingCount) {
+		this.review = review;
 		this.cafeTag = cafeTag;
-		this.taggingCount = 0;
+		this.taggingCount = taggingCount;
 	}
 }
