@@ -43,6 +43,8 @@ public class CafeCafeTagEntity extends BaseEntity {
 
 	private int taggingCount;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "review_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private ReviewEntity review;
 
 	@Builder

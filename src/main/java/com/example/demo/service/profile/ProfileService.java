@@ -1,5 +1,6 @@
 package com.example.demo.service.profile;
 
+import com.example.demo.dto.profile.MyPageResponse;
 import com.example.demo.dto.profile.WelcomeProfileResponse;
 import com.example.demo.implement.member.MemberReader;
 import com.example.demo.mapper.ProfileMapper;
@@ -23,7 +24,7 @@ public class ProfileService {
 
     public MyPageResponse getMypage(Long memberId) {
         MemberEntity member = memberReader.read(memberId);
-        return
+        return null;
     }
 
     // 	@Override

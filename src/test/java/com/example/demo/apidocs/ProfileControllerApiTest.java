@@ -5,6 +5,7 @@ import com.example.demo.config.ApiDocsTest;
 import com.example.demo.implement.token.JwtToken;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -34,6 +35,30 @@ public class ProfileControllerApiTest extends ApiDocsTest {
             .header("Authorization", "Bearer " + jwtToken.getAccessToken())
             .when()
             .get("/profile/welcome")
+            .then().log().all()
+            .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("마이페이지 조회 API")
+    void mypage() {
+        JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
+
+        RestAssured.given(spec).log().all()
+            .filter(RestAssuredRestDocumentationWrapper.document(
+                    "마이 페이지 조회 API",
+                    requestHeaders(
+                        headerWithName("Authorization").description("JWT 액세스 토큰")
+                    ),
+                    responseFields(
+
+                    )
+                )
+            )
+            .contentType(ContentType.JSON)
+            .header("Authorization", "Bearer " + jwtToken.getAccessToken())
+            .when()
+            .get("/profile/mypage")
             .then().log().all()
             .statusCode(200);
     }
