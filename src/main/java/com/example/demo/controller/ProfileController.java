@@ -1,13 +1,15 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.service.profile.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.dto.profile.MyPageResponse;
+import com.example.demo.dto.profile.WelcomeProfileResponse;
+import com.example.demo.service.profile.ProfileService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,14 +18,21 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProfileController {
 
-    private final ProfileService profileService;
+	private final ProfileService profileService;
 
-    @GetMapping("/welcome")
-    public ResponseEntity<WelcomeProfileResponse> welcome(@AuthenticationPrincipal UserDetails userDetails) {
-        Long memberId = Long.parseLong(userDetails.getUsername());
-        WelcomeProfileResponse response = profileService.getWelcomeProfile(memberId);
+	@GetMapping("/welcome")
+	public ResponseEntity<WelcomeProfileResponse> welcome(@AuthenticationPrincipal UserDetails userDetails) {
+		Long memberId = Long.parseLong(userDetails.getUsername());
+		WelcomeProfileResponse response = profileService.getWelcomeProfile(memberId);
 
-        return ResponseEntity.ok(response);
-    }
+		return ResponseEntity.ok(response);
+	}
 
+	@GetMapping("/mypage")
+	public ResponseEntity<MyPageResponse> mypage(@AuthenticationPrincipal UserDetails userDetails) {
+		Long memberId = Long.parseLong(userDetails.getUsername());
+		MyPageResponse myPageResponse = profileService.getMypage(memberId);
+
+		return null;
+	}
 }

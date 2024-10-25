@@ -21,8 +21,12 @@ public class ProfileService {
         return profileMapper.toWelcomeProfileResponse(member);
     }
 
+    public MyPageResponse getMypage(Long memberId) {
+        MemberEntity member = memberReader.read(memberId);
+        return
+    }
 
-// 	@Override
+    // 	@Override
 // 	public ProfileGetResponse get(Long requestMemberId, Long targetMemberId, LocalDateTime baseDateTime) {
 // 		if (isOwnerOfProfile(requestMemberId, targetMemberId)) {
 // 			return makeProfileGetResponse(targetMemberId);
