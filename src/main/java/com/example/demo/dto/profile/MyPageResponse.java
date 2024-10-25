@@ -2,12 +2,12 @@ package com.example.demo.dto.profile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.member.BeverageSize;
 import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.review.ReviewCafeTagEntity;
 import com.example.demo.implement.review.ReviewEntity;
-import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeTagType;
 
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ public class MyPageResponse {
 
 	//TODO 함께 참여한 멤버 리스트 추가
 
-	public static MyPageResponse of(MemberEntity member, CafeStudyEntity cafeStudy, List<ReviewEntity> reviews) {
+	public static MyPageResponse of(MemberEntity member, List<ReviewEntity> reviews) {
 		MyPageResponse response = new MyPageResponse();
 
 		response.myInfo = createMyInfo(member);
@@ -36,14 +36,27 @@ public class MyPageResponse {
 	}
 
 	private static List<ReviewInfo> createReviewsInfo(List<ReviewEntity> reviews) {
+		return reviews.stream()
+			.map(MyPageResponse::createReviewInfo)
+			.collect(Collectors.toList());
+	}
+
+	private static ReviewInfo createReviewInfo(ReviewEntity review) {
+		CafeEntity cafe = review.getCafe();
+
 		return ReviewInfo.builder()
 			.tags(
-				reviews.stream()
-					.map(review -> )
+				review.getReviewCafeTag().stream()
+					.map(cafeTags -> cafeTags.getCafeTag().getType())
+					.collect(Collectors.toList())
 			)
-			.cafeInfo()
-
-
+			.cafeInfo(
+				ReviewInfo.CafeInfo.builder()
+					.imgUrl(cafe.getMainImageUrl())
+					.name(cafe.getName())
+					.build()
+			)
+			.build();
 	}
 
 	private static MyInfo createMyInfo(MemberEntity member) {
