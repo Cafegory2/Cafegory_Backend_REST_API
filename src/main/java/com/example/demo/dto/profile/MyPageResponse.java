@@ -52,6 +52,7 @@ public class MyPageResponse {
 			)
 			.cafeInfo(
 				ReviewInfo.CafeInfo.builder()
+					.id(cafe.getId())
 					.imgUrl(cafe.getMainImageUrl())
 					.name(cafe.getName())
 					.build()

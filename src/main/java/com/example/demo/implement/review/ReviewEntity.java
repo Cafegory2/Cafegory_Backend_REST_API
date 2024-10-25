@@ -2,6 +2,7 @@ package com.example.demo.implement.review;
 
 import javax.persistence.*;
 
+import com.example.demo.implement.BaseEntity;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.implement.cafe.CafeEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "review")
-public class ReviewEntity {
+public class ReviewEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue

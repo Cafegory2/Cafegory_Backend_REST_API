@@ -2,6 +2,9 @@ package com.example.demo.config;
 
 import com.example.demo.helper.*;
 import com.example.demo.repository.cafe.*;
+import com.example.demo.repository.review.ReviewCafeTagRepository;
+import com.example.demo.repository.review.ReviewRepository;
+import net.bytebuddy.utility.nullability.MaybeNull;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -78,5 +81,20 @@ public class HelperConfig {
 		MemberRepository memberRepository, CafeStudyRepository cafeStudyRepository
 	) {
 		return new CafeStudyCommentSaveHelper(cafeStudyCommentRepository, memberRepository, cafeStudyRepository);
+	}
+
+	@Bean
+	public ReviewSaveHelper reviewSaveHelper(
+		ReviewRepository reviewRepository, CafeRepository cafeRepository, MemberRepository memberRepository
+	) {
+		return new ReviewSaveHelper(reviewRepository, cafeRepository, memberRepository);
+	}
+
+	@Bean
+	public ReviewCafeTagSaveHelper reviewCafeTagSaveHelper(
+		ReviewRepository reviewRepository, CafeTagRepository cafeTagRepository,
+		ReviewCafeTagRepository reviewCafeTagRepository
+	) {
+		return new ReviewCafeTagSaveHelper(reviewRepository, cafeTagRepository, reviewCafeTagRepository);
 	}
 }
