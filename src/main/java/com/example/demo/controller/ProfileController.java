@@ -31,8 +31,8 @@ public class ProfileController {
 	@GetMapping("/mypage")
 	public ResponseEntity<MyPageResponse> mypage(@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-		MyPageResponse myPageResponse = profileService.getMypage(memberId);
+		MyPageResponse response = profileService.getMypage(memberId);
 
-		return null;
+		return ResponseEntity.ok(response);
 	}
 }
