@@ -1,4 +1,4 @@
-package com.example.demo.controller;
+package com.example.demo.member.presentation;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.profile.MyPageResponse;
 import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.service.profile.ProfileService;
+import com.example.demo.member.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
 

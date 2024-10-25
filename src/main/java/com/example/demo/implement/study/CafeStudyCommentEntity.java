@@ -3,7 +3,7 @@ package com.example.demo.implement.study;
 import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

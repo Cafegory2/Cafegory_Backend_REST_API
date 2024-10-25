@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

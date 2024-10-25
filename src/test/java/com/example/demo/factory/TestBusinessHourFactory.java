@@ -3,8 +3,8 @@ package com.example.demo.factory;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.util.TimeUtil;
 
 public class TestBusinessHourFactory {

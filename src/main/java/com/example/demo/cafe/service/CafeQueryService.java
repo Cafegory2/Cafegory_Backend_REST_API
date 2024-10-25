@@ -1,5 +1,9 @@
-package com.example.demo.service.cafe;
+package com.example.demo.cafe.service;
 
+import com.example.demo.cafe.implement.BusinessHourOpenChecker;
+import com.example.demo.cafe.implement.CafeReader;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.dto.cafe.CafeDetailResponse;
 import com.example.demo.implement.cafe.*;
 import com.example.demo.implement.study.CafeStudyEntity;

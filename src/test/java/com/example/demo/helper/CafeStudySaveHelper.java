@@ -6,12 +6,12 @@ import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.factory.TestCafeStudyFactory;
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
-import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 

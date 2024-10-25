@@ -5,7 +5,7 @@ import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.service.token.JwtTokenManagementService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

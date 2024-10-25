@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.repository.study.CafeStudyRepository;
 

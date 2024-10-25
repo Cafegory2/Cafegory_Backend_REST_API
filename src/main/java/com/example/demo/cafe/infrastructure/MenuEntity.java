@@ -1,4 +1,4 @@
-package com.example.demo.implement.cafe;
+package com.example.demo.cafe.infrastructure;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;

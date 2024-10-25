@@ -7,8 +7,8 @@ import java.time.LocalTime;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.BusinessHourOpenChecker;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.implement.BusinessHourOpenChecker;
 
 import lombok.RequiredArgsConstructor;
 

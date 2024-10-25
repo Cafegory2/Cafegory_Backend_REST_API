@@ -1,8 +1,7 @@
-package com.example.demo.repository.cafe;
+package com.example.demo.cafe.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.implement.cafe.CafeEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

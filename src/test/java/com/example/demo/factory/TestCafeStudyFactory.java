@@ -4,8 +4,8 @@ import static com.example.demo.implement.study.MemberComms.*;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;

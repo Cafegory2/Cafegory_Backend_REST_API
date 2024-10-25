@@ -1,9 +1,9 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestMenuFactory;
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.MenuEntity;
-import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.MenuEntity;
+import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.repository.cafe.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

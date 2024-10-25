@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.member.BeverageSize;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.implement.review.ReviewEntity;
 import com.example.demo.implement.study.CafeTagType;
 

@@ -1,4 +1,4 @@
-package com.example.demo.implement.cafe;
+package com.example.demo.cafe.infrastructure;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;

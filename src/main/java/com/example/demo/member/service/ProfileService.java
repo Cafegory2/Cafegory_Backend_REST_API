@@ -1,4 +1,4 @@
-package com.example.demo.service.profile;
+package com.example.demo.member.service;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.profile.MyPageResponse;
 import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.member.implement.MemberReader;
 import com.example.demo.implement.review.ReviewEntity;
 import com.example.demo.mapper.ProfileMapper;
 import com.example.demo.service.review.ReviewReader;

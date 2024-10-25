@@ -6,8 +6,8 @@ import java.time.DayOfWeek;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;

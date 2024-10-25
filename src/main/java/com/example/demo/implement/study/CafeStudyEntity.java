@@ -6,8 +6,8 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

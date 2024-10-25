@@ -1,4 +1,4 @@
-package com.example.demo.implement.cafe;
+package com.example.demo.cafe.implement;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import org.springframework.stereotype.Component;

@@ -1,9 +1,12 @@
-package com.example.demo.implement.cafe;
+package com.example.demo.cafe.infrastructure;
 
 import javax.persistence.*;
 
 import com.example.demo.implement.BaseEntity;
 
+import com.example.demo.implement.cafe.Address;
+import com.example.demo.implement.cafe.CafeCafeTagEntity;
+import com.example.demo.implement.cafe.CafeKeywordEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

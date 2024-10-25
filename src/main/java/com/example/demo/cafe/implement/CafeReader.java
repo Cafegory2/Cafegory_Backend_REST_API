@@ -1,9 +1,10 @@
-package com.example.demo.implement.cafe;
+package com.example.demo.cafe.implement;
 
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.cafe.infrastructure.CafeRepository;
 
 import lombok.RequiredArgsConstructor;
 

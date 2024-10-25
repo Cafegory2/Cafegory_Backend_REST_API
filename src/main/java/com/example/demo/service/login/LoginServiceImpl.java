@@ -2,12 +2,12 @@ package com.example.demo.service.login;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.login.LoginProcessor;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.member.implement.MemberReader;
 import com.example.demo.implement.signup.SignupProcessor;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.dto.oauth2.OAuth2Profile;
 import com.example.demo.dto.oauth2.OAuth2TokenRequest;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.infrastructure.aws.AwsS3Client;
 import com.example.demo.infrastructure.oauth2.OAuth2Client;
 import com.example.demo.util.ImageData;

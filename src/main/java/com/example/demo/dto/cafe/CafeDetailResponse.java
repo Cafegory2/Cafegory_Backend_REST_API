@@ -1,8 +1,8 @@
 package com.example.demo.dto.cafe;
 
-import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.MenuEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.MenuEntity;
 import com.example.demo.implement.study.*;
 import lombok.*;
 

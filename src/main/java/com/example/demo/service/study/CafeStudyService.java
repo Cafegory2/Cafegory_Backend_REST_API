@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.cafe.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.implement.cafe.BusinessHourReader;
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.cafe.CafeReader;
-import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.implement.CafeReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.member.implement.MemberReader;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyMemberEntity;
 import com.example.demo.implement.study.CafeStudyReader;

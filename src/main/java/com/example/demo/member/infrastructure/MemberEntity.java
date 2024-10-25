@@ -1,4 +1,4 @@
-package com.example.demo.implement.member;
+package com.example.demo.member.infrastructure;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,8 @@ import javax.persistence.Table;
 
 import com.example.demo.implement.BaseEntity;
 
+import com.example.demo.implement.member.BeverageSize;
+import com.example.demo.implement.member.Role;
 import lombok.*;
 import org.hibernate.annotations.Where;
 

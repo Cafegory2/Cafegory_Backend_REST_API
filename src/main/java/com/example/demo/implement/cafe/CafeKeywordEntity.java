@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
-package com.example.demo.controller;
+package com.example.demo.cafe.presentation;
 
 import com.example.demo.dto.cafe.CafeDetailResponse;
-import com.example.demo.service.cafe.CafeQueryService;
+import com.example.demo.cafe.service.CafeQueryService;
 import com.example.demo.util.TimeUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

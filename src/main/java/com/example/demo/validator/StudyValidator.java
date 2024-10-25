@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 

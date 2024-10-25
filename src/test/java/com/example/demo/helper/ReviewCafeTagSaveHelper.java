@@ -1,15 +1,10 @@
 package com.example.demo.helper;
 
 import com.example.demo.factory.TestReviewCafeTagFactory;
-import com.example.demo.factory.TestReviewFactory;
-import com.example.demo.implement.cafe.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.member.MemberEntity;
 import com.example.demo.implement.review.ReviewCafeTagEntity;
 import com.example.demo.implement.review.ReviewEntity;
-import com.example.demo.repository.cafe.CafeRepository;
 import com.example.demo.repository.cafe.CafeTagRepository;
-import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.review.ReviewCafeTagRepository;
 import com.example.demo.repository.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;

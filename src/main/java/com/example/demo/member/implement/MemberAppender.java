@@ -1,5 +1,6 @@
-package com.example.demo.implement.member;
+package com.example.demo.member.implement;
 
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

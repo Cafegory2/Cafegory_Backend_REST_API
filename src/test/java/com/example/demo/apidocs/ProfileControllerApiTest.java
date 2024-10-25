@@ -4,10 +4,10 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
 import com.example.demo.helper.*;
-import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.member.implement.MemberReader;
 import com.example.demo.implement.review.ReviewEntity;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.util.TimeUtil;

@@ -5,8 +5,8 @@ import javax.persistence.*;
 import com.example.demo.implement.BaseEntity;
 import org.hibernate.annotations.Where;
 
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
