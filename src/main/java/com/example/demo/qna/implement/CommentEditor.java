@@ -11,10 +11,11 @@ import com.example.demo.qna.domain.Comment;
 import com.example.demo.repository.study.CafeStudyCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class CommentAppender {
+public class CommentEditor {
 
     private final CafeStudyCommentRepository commentRepository;
     private final MemberReader memberReader;
@@ -22,7 +23,7 @@ public class CommentAppender {
 
     public Long append(Comment comment, Long memberId) {
         MemberEntity author = memberReader.read(memberId);
-        CafeStudyCommentEntity parentComment = findParentComment(comment.getParentCommentId());
+        CafeStudyCommentEntity parentComment = findParentCommentEntity(comment.getParentCommentId());
         CafeStudyEntity cafeStudy = cafeStudyReader.read(comment.getCafeStudyId());
 
         CafeStudyCommentEntity commentEntity = createCafeStudyCommentEntity(comment.getContent(), author, parentComment, cafeStudy);
@@ -31,11 +32,15 @@ public class CommentAppender {
         return saved.getId();
     }
 
-    private CafeStudyCommentEntity findParentComment(Long parentCommentId) {
+    private CafeStudyCommentEntity findParentCommentEntity(Long parentCommentId) {
         if (parentCommentId == null) {
             return null;
         }
-        return commentRepository.findById(parentCommentId)
+        return findCommentEntity(parentCommentId);
+    }
+
+    private CafeStudyCommentEntity findCommentEntity(Long commentId) {
+        return commentRepository.findById(commentId)
             .orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_COMMENT_NOT_FOUND));
     }
 
@@ -47,5 +52,11 @@ public class CommentAppender {
             .parentComment(parentComment)
             .cafeStudy(cafeStudy)
             .build();
+    }
+
+    @Transactional
+    public void edit(String content, Long commentId) {
+        CafeStudyCommentEntity commentEntity = findCommentEntity(commentId);
+        commentEntity.changeContent(content);
     }
 }

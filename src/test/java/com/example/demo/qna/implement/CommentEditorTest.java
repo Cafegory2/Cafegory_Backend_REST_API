@@ -12,6 +12,7 @@ import com.example.demo.implement.study.StudyRole;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.repository.CafeStudyCommentEntity;
+import com.example.demo.repository.study.CafeStudyCommentRepository;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,11 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 
-class CommentAppenderTest extends ServiceTest {
+class CommentEditorTest extends ServiceTest {
 
     @Autowired
-    private CommentAppender sut;
+    private CommentEditor sut;
+
     @Autowired
     private CafeStudySaveHelper cafeStudySaveHelper;
     @Autowired
@@ -33,6 +35,10 @@ class CommentAppenderTest extends ServiceTest {
     private CafeSaveHelper cafeSaveHelper;
     @Autowired
     private CafeStudyCommentSaveHelper cafeStudyCommentSaveHelper;
+
+    @Autowired
+    private CafeStudyCommentRepository cafeStudyCommentRepository;
+
     @Autowired
     private TimeUtil timeUtil;
 
@@ -85,5 +91,27 @@ class CommentAppenderTest extends ServiceTest {
                     .build()
             )
             .build();
+    }
+
+    @Test
+    @DisplayName("댓글을 수정한다.")
+    void edit_comment() {
+        //given
+        CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+
+        MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+        MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
+
+        LocalDateTime startDateTime =
+            timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+        CafeStudyEntity cafeStudy =
+            cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
+        CafeStudyCommentEntity commentEntity =
+            cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
+        //when
+        sut.edit("변경된 댓글 내용", commentEntity.getId());
+        //then
+        CafeStudyCommentEntity result = cafeStudyCommentRepository.findById(commentEntity.getId()).orElse(null);
+        assertThat(result.getContent()).isEqualTo("변경된 댓글 내용");
     }
 }

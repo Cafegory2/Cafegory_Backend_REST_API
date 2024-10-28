@@ -78,24 +78,10 @@ public class CafeStudyCommentEntity extends BaseEntity {
             .build();
     }
 
-    //
-    // public void addReply(StudyOnceComment reply) {
-    // 	this.children.add(reply);
-    // 	reply.parent = this;
-    // }
-    //
-    // public void changeContent(String content) {
-    // 	this.content = content;
-    // }
-    //
-    // public boolean isPersonAsked(Member member) {
-    // 	return this.member.getId().equals(member.getId());
-    // }
-    //
-    // public boolean hasReply() {
-    // 	return !this.children.isEmpty();
-    // }
-    //
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
     public boolean hasParentComment() {
         return this.parentComment != null;
     }
