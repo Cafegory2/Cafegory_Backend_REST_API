@@ -18,7 +18,7 @@ class CommentValidatorTest {
     private CommentValidator sut = new CommentValidator();
 
     @Test
-    @DisplayName("댓글 검증")
+    @DisplayName("댓글 문자열 검증")
     void validate_not_blank1() {
         assertDoesNotThrow(() -> sut.validateContentNotBlank("텍스트"));
     }

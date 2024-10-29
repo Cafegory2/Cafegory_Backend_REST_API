@@ -53,7 +53,7 @@ class CommentEditorTest extends ServiceTest {
         LocalDateTime dateTime = timeUtil.localDateTime(2000, 1, 1, 12, 0, 0);
         CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, member, dateTime, dateTime.plusHours(2));
 
-        Comment comment = createComment(cafeStudy.getId(), member, null);
+        Comment comment = createComment("댓글 내용", cafeStudy.getId(), member, null);
         //when
         Long savedMemberId = sut.append(comment, member.getId());
         //then
@@ -73,7 +73,7 @@ class CommentEditorTest extends ServiceTest {
         CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, member, dateTime, dateTime.plusHours(2));
         CafeStudyCommentEntity rootComment = cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
 
-        Comment comment = createComment(cafeStudy.getId(), coordinator, rootComment.getId());
+        Comment comment = createComment("대댓글 내용", cafeStudy.getId(), coordinator, rootComment.getId());
         //when
         Long savedMemberId = sut.append(comment, member.getId());
         //then
@@ -81,7 +81,7 @@ class CommentEditorTest extends ServiceTest {
     }
 
     private Comment createComment(
-        Long cafeStudyId, MemberEntity member, Long parentCommentId) {
+        String content, Long cafeStudyId, MemberEntity member, Long parentCommentId) {
         return Comment.builder()
             .cafeStudyId(cafeStudyId)
             .parentCommentId(parentCommentId)
@@ -91,6 +91,7 @@ class CommentEditorTest extends ServiceTest {
                     .nickname(member.getNickname())
                     .build()
             )
+            .content(content)
             .build();
     }
 

@@ -23,6 +23,8 @@ public class CommentEditor {
     private final CommentValidator commentValidator;
 
     public Long append(Comment comment, Long memberId) {
+        commentValidator.validateContentNotBlank(comment.getContent());
+        
         MemberEntity author = memberReader.read(memberId);
         CafeStudyCommentEntity parentComment = findParentCommentEntity(comment.getParentCommentId());
         CafeStudyEntity cafeStudy = cafeStudyReader.read(comment.getCafeStudyId());

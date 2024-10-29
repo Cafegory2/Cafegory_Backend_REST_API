@@ -23,7 +23,6 @@ public class QnaService {
     @Autowired
     private final CommentValidator commentValidator;
 
-
     @Transactional
     public Comment leaveComment(Comment comment, Long memberId) {
         Long commentId = commentEditor.append(comment, memberId);
