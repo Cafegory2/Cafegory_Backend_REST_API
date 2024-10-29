@@ -1,7 +1,5 @@
 package com.example.demo.repository.study;
 
-import static com.example.demo.implement.cafe.QCafeEntity.cafeEntity;
-import static com.example.demo.implement.study.QCafeStudyEntity.cafeStudyEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,6 +23,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.example.demo.implement.cafe.QCafeEntity.cafeEntity;
+import static com.example.demo.implement.study.QCafeStudyEntity.cafeStudyEntity;
+
 
 @Repository
 @RequiredArgsConstructor

@@ -6,7 +6,6 @@ import com.example.demo.qna.implement.CommentEditor;
 import com.example.demo.qna.implement.CommentReader;
 import com.example.demo.qna.implement.CommentValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,11 +16,8 @@ import static com.example.demo.exception.ExceptionType.*;
 @RequiredArgsConstructor
 public class QnaService {
 
-    @Autowired
     private final CommentEditor commentEditor;
-    @Autowired
     private final CommentReader commentReader;
-    @Autowired
     private final CommentValidator commentValidator;
 
     public Comment leaveComment(Comment comment, Long memberId) {
