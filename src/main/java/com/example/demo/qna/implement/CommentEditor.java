@@ -8,7 +8,7 @@ import com.example.demo.qna.repository.CafeStudyCommentEntity;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyReader;
 import com.example.demo.qna.domain.Comment;
-import com.example.demo.repository.study.CafeStudyCommentRepository;
+import com.example.demo.qna.repository.CafeStudyCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

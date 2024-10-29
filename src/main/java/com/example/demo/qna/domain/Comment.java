@@ -12,8 +12,11 @@ public class Comment {
     private Long commentId;
     private Long parentCommentId;
     private Long cafeStudyId;
-    //TODO member 이름 수정
     private MemberIdentity author;
     private String content;
     private DefaultDate date;
+
+    public boolean isAuthor(Long memberId) {
+        return this.author.isMember(memberId);
+    }
 }

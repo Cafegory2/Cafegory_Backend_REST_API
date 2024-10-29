@@ -18,7 +18,7 @@ public class CommentValidator {
     }
 
     public void validateCommentAuthor(Comment comment, Long memberId) {
-        if(!memberId.equals(comment.getAuthor().getId())) {
+        if(!comment.isAuthor(memberId)) {
             throw new CafegoryException(CAFE_STUDY_COMMENT_PERMISSION_DENIED);
         }
     }

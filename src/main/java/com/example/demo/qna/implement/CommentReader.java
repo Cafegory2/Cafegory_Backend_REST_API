@@ -4,7 +4,7 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.repository.CafeStudyCommentEntity;
-import com.example.demo.repository.study.CafeStudyCommentRepository;
+import com.example.demo.qna.repository.CafeStudyCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

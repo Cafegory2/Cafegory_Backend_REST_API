@@ -12,7 +12,7 @@ import com.example.demo.implement.study.StudyRole;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.repository.CafeStudyCommentEntity;
-import com.example.demo.repository.study.CafeStudyCommentRepository;
+import com.example.demo.qna.repository.CafeStudyCommentRepository;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
