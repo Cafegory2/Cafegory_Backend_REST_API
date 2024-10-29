@@ -53,7 +53,7 @@ class CommentEditorTest extends ServiceTest {
         LocalDateTime dateTime = timeUtil.localDateTime(2000, 1, 1, 12, 0, 0);
         CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, member, dateTime, dateTime.plusHours(2));
 
-        Comment comment = createComment(cafeStudy, member, null);
+        Comment comment = createComment(cafeStudy.getId(), member, null);
         //when
         Long savedMemberId = sut.append(comment, member.getId());
         //then
@@ -85,7 +85,7 @@ class CommentEditorTest extends ServiceTest {
         return Comment.builder()
             .cafeStudyId(cafeStudyId)
             .parentCommentId(parentCommentId)
-            .member(
+            .author(
                 MemberIdentity.builder()
                     .id(member.getId())
                     .nickname(member.getNickname())

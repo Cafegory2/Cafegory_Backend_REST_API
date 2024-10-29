@@ -61,7 +61,7 @@ public class CafeStudyCommentEntity extends BaseEntity {
     public Comment toComment() {
         return Comment.builder()
             .commentId(this.id)
-            .member(
+            .author(
                 MemberIdentity.builder()
                     .id(this.author.getId())
                     .nickname(this.author.getNickname())

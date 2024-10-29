@@ -24,8 +24,8 @@ public class QnaCommentSaveResponse {
 
     private static WriterInfo createWriterinfo(Comment comment) {
         return WriterInfo.builder()
-            .id(comment.getMember().getId())
-            .nickname(comment.getMember().getNickname())
+            .id(comment.getAuthor().getId())
+            .nickname(comment.getAuthor().getNickname())
             .build();
     }
 

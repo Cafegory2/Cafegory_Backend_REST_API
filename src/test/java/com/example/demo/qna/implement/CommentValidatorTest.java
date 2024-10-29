@@ -36,7 +36,7 @@ class CommentValidatorTest {
     @DisplayName("댓글 작성자와 수정을 요청한 사용자가 일치한다.")
     void success_validate_comment_author_() {
         Comment comment = Comment.builder()
-            .member(MemberIdentity.builder().id(1L).build())
+            .author(MemberIdentity.builder().id(1L).build())
             .build();
         assertDoesNotThrow(() -> sut.validateCommentAuthor(comment, 1L));
     }
@@ -46,7 +46,7 @@ class CommentValidatorTest {
     @DisplayName("댓글 작성자와 수정을 요청한 사용자가 일치하지 않는다.")
     void fail_validate_comment_author2() {
         Comment comment = Comment.builder()
-            .member(MemberIdentity.builder().id(1L).build())
+            .author(MemberIdentity.builder().id(1L).build())
             .build();
         assertThatThrownBy(() -> sut.validateCommentAuthor(comment, 2L))
             .isInstanceOf(CafegoryException.class)

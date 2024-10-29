@@ -13,7 +13,7 @@ public class Comment {
     private Long parentCommentId;
     private Long cafeStudyId;
     //TODO member 이름 수정
-    private MemberIdentity member;
+    private MemberIdentity author;
     private String content;
     private DefaultDate date;
 }
