@@ -68,4 +68,23 @@ class QnaServiceTest extends ServiceTest {
             .build();
     }
 
+    @Test
+    @DisplayName("답변이 작성된 댓글은 삭제할 수 없다.")
+    void can_not_remove_comment_WithReplies() {
+        //given
+        CafeEntity cafe = cafeSaveHelper.saveCafe();
+
+        MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+        MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
+
+        LocalDateTime dateTime = timeUtil.localDateTime(2000, 1, 1, 12, 0, 0);
+        CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, member, dateTime, dateTime.plusHours(2));
+
+        CafeStudyCommentEntity rootComment = cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
+        cafeStudyCommentSaveHelper.saveReplyToParentComment(rootComment, coordinator, StudyRole.COORDINATOR, cafeStudy);
+        //when, then
+        assertThatThrownBy(() -> sut.remove(rootComment.getId(), member.getId(), timeUtil.now()))
+            .isInstanceOf(CafegoryException.class)
+            .hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
+    }
 }

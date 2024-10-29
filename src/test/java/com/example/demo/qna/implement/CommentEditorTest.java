@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -123,5 +124,27 @@ class CommentEditorTest extends ServiceTest {
             .commentId(commentId)
             .content(content)
             .build();
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다.")
+    void remove_comment() {
+        //given
+        CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+
+        MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+        MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
+
+        LocalDateTime startDateTime =
+            timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+        CafeStudyEntity cafeStudy =
+            cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
+        CafeStudyCommentEntity commentEntity =
+            cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
+        //when
+        sut.remove(commentEntity.getId(), timeUtil.now());
+        //then
+        List<CafeStudyCommentEntity> result = cafeStudyCommentRepository.findAll();
+        assertThat(result).hasSize(0);
     }
 }

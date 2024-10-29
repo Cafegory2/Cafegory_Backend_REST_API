@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 import static com.example.demo.exception.ExceptionType.*;
 
 @Service
@@ -33,7 +35,7 @@ public class QnaService {
     public void editComment(Comment comment, Long memberId) {
         Comment readComment = commentReader.read(comment.getCommentId());
         commentValidator.validateCommentAuthor(readComment, memberId);
-        validateNoReplies(comment);
+        validateNoReplies(readComment);
 
         commentEditor.edit(readComment);
     }
@@ -43,5 +45,14 @@ public class QnaService {
         if(commentReader.existsReplies(comment.getCommentId())) {
             throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
         }
+    }
+
+    @Transactional
+    public void remove(Long commentId, Long memberId, LocalDateTime now) {
+        Comment readComment = commentReader.read(commentId);
+        commentValidator.validateCommentAuthor(readComment, memberId);
+        validateNoReplies(readComment);
+
+        commentEditor.remove(commentId, now);
     }
 }

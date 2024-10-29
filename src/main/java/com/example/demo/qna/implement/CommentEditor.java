@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class CommentEditor {
@@ -24,7 +26,7 @@ public class CommentEditor {
 
     public Long append(Comment comment, Long memberId) {
         commentValidator.validateContentNotBlank(comment.getContent());
-        
+
         MemberEntity author = memberReader.read(memberId);
         CafeStudyCommentEntity parentComment = findParentCommentEntity(comment.getParentCommentId());
         CafeStudyEntity cafeStudy = cafeStudyReader.read(comment.getCafeStudyId());
@@ -63,5 +65,11 @@ public class CommentEditor {
 
         CafeStudyCommentEntity commentEntity = findCommentEntity(comment.getCommentId());
         commentEntity.changeContent(comment.getContent());
+    }
+
+    @Transactional
+    public void remove(Long commentId, LocalDateTime now) {
+        CafeStudyCommentEntity commentEntity = findCommentEntity(commentId);
+        commentEntity.softDelete(now);
     }
 }
