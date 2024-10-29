@@ -21,9 +21,13 @@ public class CommentReader {
     }
 
     public Comment read(Long commentId) {
-        CafeStudyCommentEntity commentEntity = cafeStudyCommentRepository.findById(commentId)
+        CafeStudyCommentEntity commentEntity = cafeStudyCommentRepository.findWithMember(commentId)
             .orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_COMMENT_NOT_FOUND));
 
         return commentEntity.toComment();
+    }
+
+    public boolean existsReplies(Long commentId) {
+        return cafeStudyCommentRepository.existsByParentComment_Id(commentId);
     }
 }

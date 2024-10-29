@@ -50,8 +50,12 @@ public enum ExceptionType {
 	STUDY_ONCE_SINGLE_REPLY_PER_QUESTION(CONFLICT, "하나의 카공 질문에는 하나의 답변만 할 수 있습니다."),
 	STUDY_ONCE_EARLY_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 시작 10분 이후여야 합니다."),
 	STUDY_ONCE_LATE_TAKE_ATTENDANCE(BAD_REQUEST, "스터디 출석체크는 스터디 진행시간 절반이 지나기전에만 변경할 수 있습니다. "),
+
 	CAFE_STUDY_COMMENT_NOT_FOUND(NOT_FOUND, "없는 카공 댓글입니다."),
-	STUDY_ONCE_COMMENT_PERMISSION_DENIED(FORBIDDEN, "댓글을 작성한 회원 본인만 수정 할 권한이 있습니다."),
+	CAFE_STUDY_COMMENT_CONTENT_NOT_BLANK(BAD_REQUEST, "댓글은 빈 문자열 또는 공백일 수 없습니다."),
+	CAFE_STUDY_COMMENT_HAS_REPLY(BAD_REQUEST, "답변이 달린 댓글은 수정할 수 없습니다."),
+	CAFE_STUDY_COMMENT_PERMISSION_DENIED(FORBIDDEN, "댓글을 작성한 회원 본인만 수정 할 권한이 있습니다."),
+
 	STUDY_ONCE_PARENT_COMMENT_MODIFICATION_BLOCKED(FORBIDDEN, "답변이 존재하는 질문은 수정 할 수 없습니다."),
 	STUDY_ONCE_PARENT_COMMENT_REMOVAL_BLOCKED(FORBIDDEN, "답변이 존재하는 질문은 삭제 할 수 없습니다."),
 	STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디 이름은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
@@ -74,7 +78,8 @@ public enum ExceptionType {
 
 	PROFILE_GET_PERMISSION_DENIED(FORBIDDEN, "프로필을 조회할 권한이 없는 상대입니다."),
 	PROFILE_UPDATE_PERMISSION_DENIED(FORBIDDEN, "자신의 프로필만 조회할 수 있습니다."),
-	PROFILE_UPDATE_INVALID_INTRODUCTION(FORBIDDEN, "자기 소개글은 300자 이하로만 작성할 수 있습니다.");
+	PROFILE_UPDATE_INVALID_INTRODUCTION(FORBIDDEN, "자기 소개글은 300자 이하로만 작성할 수 있습니다."),
+	;
 
 	private final HttpStatus errStatus;
 	private final String errorMessage;

@@ -20,6 +20,7 @@ public class CommentEditor {
     private final CafeStudyCommentRepository commentRepository;
     private final MemberReader memberReader;
     private final CafeStudyReader cafeStudyReader;
+    private final CommentValidator commentValidator;
 
     public Long append(Comment comment, Long memberId) {
         MemberEntity author = memberReader.read(memberId);
@@ -55,8 +56,10 @@ public class CommentEditor {
     }
 
     @Transactional
-    public void edit(String content, Long commentId) {
-        CafeStudyCommentEntity commentEntity = findCommentEntity(commentId);
-        commentEntity.changeContent(content);
+    public void edit(Comment comment) {
+        commentValidator.validateContentNotBlank(comment.getContent());
+
+        CafeStudyCommentEntity commentEntity = findCommentEntity(comment.getCommentId());
+        commentEntity.changeContent(comment.getContent());
     }
 }

@@ -73,7 +73,7 @@ class CommentEditorTest extends ServiceTest {
         CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, member, dateTime, dateTime.plusHours(2));
         CafeStudyCommentEntity rootComment = cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
 
-        Comment comment = createComment(cafeStudy, coordinator, rootComment);
+        Comment comment = createComment(cafeStudy.getId(), coordinator, rootComment.getId());
         //when
         Long savedMemberId = sut.append(comment, member.getId());
         //then
@@ -81,9 +81,10 @@ class CommentEditorTest extends ServiceTest {
     }
 
     private Comment createComment(
-        CafeStudyEntity cafeStudy, MemberEntity member, CafeStudyCommentEntity parentCommentEntity) {
+        Long cafeStudyId, MemberEntity member, Long parentCommentId) {
         return Comment.builder()
-            .cafeStudyId(cafeStudy.getId())
+            .cafeStudyId(cafeStudyId)
+            .parentCommentId(parentCommentId)
             .member(
                 MemberIdentity.builder()
                     .id(member.getId())
@@ -108,10 +109,18 @@ class CommentEditorTest extends ServiceTest {
             cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
         CafeStudyCommentEntity commentEntity =
             cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
+        Comment comment = createComment("변경된 댓글 내용", commentEntity.getId());
         //when
-        sut.edit("변경된 댓글 내용", commentEntity.getId());
+        sut.edit(comment);
         //then
         CafeStudyCommentEntity result = cafeStudyCommentRepository.findById(commentEntity.getId()).orElse(null);
         assertThat(result.getContent()).isEqualTo("변경된 댓글 내용");
+    }
+
+    private Comment createComment(String content, Long commentId) {
+        return Comment.builder()
+            .commentId(commentId)
+            .content(content)
+            .build();
     }
 }
