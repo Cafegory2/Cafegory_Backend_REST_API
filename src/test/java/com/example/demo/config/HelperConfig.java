@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
-import com.example.demo.qna.repository.CafeStudyCommentRepository;
+import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
 import com.example.demo.util.TimeUtil;

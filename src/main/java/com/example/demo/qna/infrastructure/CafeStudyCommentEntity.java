@@ -1,4 +1,4 @@
-package com.example.demo.qna.repository;
+package com.example.demo.qna.infrastructure;
 
 import javax.persistence.*;
 

@@ -5,7 +5,7 @@ import com.example.demo.dto.study.CafeStudyDetailResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.dto.study.CafeStudySearchListResponse;
 import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.qna.repository.CafeStudyCommentEntity;
+import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.qna.implement.CommentReader;
 import com.example.demo.implement.study.CafeStudyReader;
 import lombok.RequiredArgsConstructor;
