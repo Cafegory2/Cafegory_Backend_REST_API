@@ -8,7 +8,6 @@ import com.example.demo.qna.implement.CommentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -25,13 +24,11 @@ public class QnaService {
     @Autowired
     private final CommentValidator commentValidator;
 
-    @Transactional
     public Comment leaveComment(Comment comment, Long memberId) {
         Long commentId = commentEditor.append(comment, memberId);
         return commentReader.read(commentId);
     }
 
-    @Transactional
     public void editComment(Comment comment, Long memberId) {
         Comment readComment = commentReader.read(comment.getCommentId());
         commentValidator.validateCommentAuthor(readComment, memberId);
@@ -47,7 +44,6 @@ public class QnaService {
         }
     }
 
-    @Transactional
     public void remove(Long commentId, Long memberId, LocalDateTime now) {
         Comment readComment = commentReader.read(commentId);
         commentValidator.validateCommentAuthor(readComment, memberId);

@@ -7,6 +7,7 @@ import com.example.demo.qna.repository.CafeStudyCommentEntity;
 import com.example.demo.qna.repository.CafeStudyCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class CommentReader {
         return cafeStudyCommentRepository.findAllBy(cafeStudyId);
     }
 
+    @Transactional(readOnly = true)
     public Comment read(Long commentId) {
         CafeStudyCommentEntity commentEntity = cafeStudyCommentRepository.findWithMember(commentId)
             .orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_COMMENT_NOT_FOUND));
