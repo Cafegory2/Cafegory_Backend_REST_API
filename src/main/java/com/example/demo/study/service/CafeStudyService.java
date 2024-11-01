@@ -7,18 +7,18 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.example.demo.cafe.domain.Cafe;
-import com.example.demo.study.domain.Study;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.cafe.domain.BusinessHour;
+import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.implement.CafeReader;
-import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.study.domain.Study;
 import com.example.demo.study.implement.CafeStudyReader;
 import com.example.demo.study.implement.StudyEditor;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
@@ -161,10 +161,10 @@ public class CafeStudyService {
 		validateStudyCreation(study.getName(), now, study.getSchedule().getStartDateTime(), study.getMaxParticipants());
 
 		Cafe cafe = cafeReader.read(study.getCafeId());
-		BusinessHourEntity businessHourEntity = businessHourReader.readBy(cafe,
+		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(),
 			study.getSchedule().getStartDateTime().getDayOfWeek());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule().getStartDateTime().toLocalTime(),
-			study.getSchedule().getEndDateTime().toLocalTime(), businessHourEntity);
+			study.getSchedule().getEndDateTime().toLocalTime(), businessHour);
 
 		MemberEntity coordinator = memberReader.readMemberEntity(coordinatorId);
 		validateStudyScheduleConflict(

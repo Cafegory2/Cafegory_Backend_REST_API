@@ -1,5 +1,7 @@
 package com.example.demo.cafe.service;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -9,12 +11,15 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.implement.BusinessHourOpenChecker;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.dto.cafe.CafeDetailResponse;
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHourReader;
+import com.example.demo.repository.cafe.BusinessHourRepository;
 import com.example.demo.study.implement.CafeStudyReader;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
@@ -30,14 +35,18 @@ public class CafeQueryService {
 	private final BusinessHourReader businessHourReader;
 	private final BusinessHourOpenChecker businessHourOpenChecker;
 
+	private final BusinessHourRepository businessHourRepository;
+
 	public CafeDetailResponse getCafeDetail(Long cafeId, LocalDateTime now) {
 		CafeEntity cafeEntity = cafeReader.getWithTags(cafeId);
-		BusinessHourEntity businessHourEntity = businessHourReader.readBy(cafeEntity.toCafe(),
-			now.getDayOfWeek());
+		BusinessHour businessHour = businessHourReader.readBy(cafeId, now.getDayOfWeek());
 
 		List<CafeStudyEntity> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
 		List<CafeStudyEntity> openStudies = filterAndSortByIdDesc(cafeStudies, CafeStudyEntity::isRecruitmentOpen);
 		List<CafeStudyEntity> closeStudies = filterAndSortByIdDesc(cafeStudies, (study) -> !study.isRecruitmentOpen());
+
+		BusinessHourEntity businessHourEntity = businessHourRepository.findById(businessHour.getId())
+			.orElseThrow(() -> new CafegoryException(CAFE_BUSINESS_HOUR_NOT_FOUND));
 
 		return CafeDetailResponse.of(cafeEntity, businessHourEntity,
 			businessHourOpenChecker.checkByNowTime(

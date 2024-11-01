@@ -15,13 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
+import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -56,15 +58,24 @@ public class BusinessHourEntity extends BaseEntity {
 		this.cafe = cafe;
 	}
 
-		public boolean existsMatchingDayOfWeek(LocalDateTime now) {
-			try {
-				return now.getDayOfWeek().equals(this.dayOfWeek);
-			} catch (IllegalArgumentException e) {
-				return false;
-			}
+	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
+		try {
+			return now.getDayOfWeek().equals(this.dayOfWeek);
+		} catch (IllegalArgumentException e) {
+			return false;
 		}
+	}
 
-		public boolean matchesDayOfWeek(DayOfWeek dayOfWeek) {
-			return this.dayOfWeek.equals(dayOfWeek);
-		}
+	public boolean matchesDayOfWeek(DayOfWeek dayOfWeek) {
+		return this.dayOfWeek.equals(dayOfWeek);
+	}
+
+	public BusinessHour toBusinessHour() {
+		return BusinessHour.builder()
+			.id(this.id)
+			.dayOfWeek(this.dayOfWeek)
+			.openingTme(this.openingTime)
+			.closingTme(this.closingTime)
+			.build();
+	}
 }

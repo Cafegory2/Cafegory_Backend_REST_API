@@ -67,6 +67,7 @@ public enum ExceptionType {
 	REVIEW_INVALID_RATE_RANGE(BAD_REQUEST, "평점이 허용된 범위를 벗어났습니다."),
 
 	CAFE_NOT_FOUND(NOT_FOUND, "없는 카페입니다."),
+	CAFE_BUSINESS_HOUR_NOT_FOUND(NOT_FOUND, "영업시간이 존재하지 않습니다."),
 	CAFE_INVALID_BUSINESS_TIME_RANGE(BAD_REQUEST, "영업시간이 허용된 범위를 벗어났습니다."),
 	CAFE_NOT_FOUND_DAY_OF_WEEK(INTERNAL_SERVER_ERROR, "현재 요일과 일치하는 요일을 찾을 수 없습니다."),
 
