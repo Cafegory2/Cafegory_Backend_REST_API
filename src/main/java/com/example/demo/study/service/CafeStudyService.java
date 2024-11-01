@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.study.implement.StudyReader;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -47,6 +48,7 @@ public class CafeStudyService {
 	private final CafeStudyReader cafeStudyReader;
 	private final StudyEditor studyEditor;
 	private final MemberReader memberReader;
+	private final StudyReader studyReader;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -157,20 +159,20 @@ public class CafeStudyService {
 	}
 
 	@Transactional
-	public Long createStudy(Long memberId, LocalDateTime now, Study study) {
+	public Study createStudy(Long memberId, LocalDateTime now, Study study) {
 		validateStudyCreation(study.getName(), now, study.getSchedule().getStartDateTime());
 
 		Cafe cafe = cafeReader.read(study.getCafeId());
 		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
-		MemberEntity coordinator = memberReader.readMemberEntity(memberId);
 		validateStudyScheduleConflict(
-			buildLocalDateTime(study.getSchedule().getStartDateTime()),
-			buildLocalDateTime(study.getSchedule().getEndDateTime()),
-			coordinator);
+			buildLocalDateTime(study.getStartDateTime()),
+			buildLocalDateTime(study.getEndDateTime()),
+			memberId);
 
-		return studyEditor.createAndSaveCafeStudy(study, cafe, memberId);
+		Long savedId = studyEditor.save(study, cafe, memberId);
+		return studyReader.read(savedId);
 	}
 
 	@Transactional
@@ -199,14 +201,14 @@ public class CafeStudyService {
 		studyValidator.validateStartDate(startDateTime);
 	}
 
-	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity coordinator) {
-		if (hasStudyScheduleConflict(start, end, coordinator)) {
+	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Long memberId) {
+		if (hasStudyScheduleConflict(start, end, memberId)) {
 			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
 		}
 	}
 
-	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity member) {
-		List<CafeStudyMemberEntity> participatedStudies = studyMemberRepository.findByMember(member);
+	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Long memberId) {
+		List<CafeStudyMemberEntity> participatedStudies = studyMemberRepository.findByMember_Id(memberId);
 		return participatedStudies.stream()
 			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
 	}

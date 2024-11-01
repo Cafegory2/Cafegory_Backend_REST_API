@@ -6,8 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.member.infrastructure.MemberEntity;
 
-public interface StudyMemberRepository
-	extends JpaRepository<CafeStudyMemberEntity, StudyMemberId> {
+public interface StudyMemberRepository extends JpaRepository<CafeStudyMemberEntity, StudyMemberId> {
 
-	List<CafeStudyMemberEntity> findByMember(MemberEntity member);
+	List<CafeStudyMemberEntity> findByMember_Id(Long memberId);
 }

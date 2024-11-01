@@ -1,6 +1,7 @@
 package com.example.demo.study.domain;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,5 +20,13 @@ public class Study {
 
 	public DayOfWeek getStartDate() {
 		return schedule.getStartDateTime().getDayOfWeek();
+	}
+
+	public LocalDateTime getStartDateTime() {
+		return schedule.getStartDateTime();
+	}
+
+	public LocalDateTime getEndDateTime() {
+		return schedule.getEndDateTime();
 	}
 }

@@ -1,9 +1,12 @@
 package com.example.demo.study.implement;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.study.infrastructure.QStudyPeriod.studyPeriod;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.member.domain.Member;
+import com.example.demo.study.infrastructure.StudyPeriod;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.cafe.domain.Cafe;
@@ -23,42 +26,54 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudyEditor {
 
-	private final CafeStudyRepository cafeStudyRepository;
-	private final CafeStudyMapper cafeStudyMapper;
-	private final CafeRepository cafeRepository;
+    private final CafeStudyRepository cafeStudyRepository;
+    private final CafeRepository cafeRepository;
+    private final MemberRepository memberRepository;
 
-	private final StudyValidator studyValidator;
+    private final StudyValidator studyValidator;
 
-	private final MemberRepository memberRepository;
 
-	public Long createAndSaveCafeStudy(Study study, Cafe cafe, Long memberId) {
-		validateStudyDetails(study);
+    public Long save(Study study, Cafe cafe, Long memberId) {
+        validateStudyDetails(study);
 
-		MemberEntity coordinatorEntity = memberRepository.findById(memberId)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+        MemberEntity memberEntity = memberRepository.findById(memberId)
+            .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+        CafeEntity cafeEntity = cafeRepository.findById(cafe.getId())
+            .orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 
-		CafeEntity cafeEntity = cafeRepository.findById(cafe.getId())
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+        CafeStudyEntity savedStudy =
+            cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
+        return savedStudy.getId();
+    }
 
-		CafeStudyEntity cafeStudy = cafeStudyMapper
-			.toNewEntity(
-				study.getName(), cafeEntity, coordinatorEntity, study.getSchedule().getStartDateTime(),
-				study.getSchedule().getEndDateTime(), study.getMemberComms(), study.getMaxParticipants()
-			);
-		CafeStudyEntity savedStudy = cafeStudyRepository.save(cafeStudy);
+    private void validateStudyDetails(Study study) {
+        studyValidator.validateEmptyOrWhiteSpace(study.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+        studyValidator.validateNameLength(study.getName());
+        studyValidator.validateMaxParticipants(study.getMaxParticipants());
+    }
 
-		return savedStudy.getId();
-	}
+    public Long deleteCafeStudy(CafeStudyEntity cafeStudy, LocalDateTime now) {
+        cafeStudy.softDelete(now);
 
-	private void validateStudyDetails(Study study) {
-		studyValidator.validateEmptyOrWhiteSpace(study.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		studyValidator.validateNameLength(study.getName());
-		studyValidator.validateMaxParticipants(study.getMaxParticipants());
-	}
+        return cafeStudy.getId();
+    }
 
-	public Long deleteCafeStudy(CafeStudyEntity cafeStudy, LocalDateTime now) {
-		cafeStudy.softDelete(now);
+    private CafeStudyEntity buildCafeStudyEntity(Study study, CafeEntity cafeEntity, MemberEntity memberEntity) {
+        return CafeStudyEntity.builder()
+            .name(study.getName())
+            .cafe(cafeEntity)
+            .coordinator(memberEntity)
+            .studyPeriod(buildStudyPeriod(study))
+            .memberComms(study.getMemberComms())
+            .maxParticipants(study.getMaxParticipants())
+            .build();
+    }
 
-		return cafeStudy.getId();
-	}
+    private StudyPeriod buildStudyPeriod(Study study) {
+        return StudyPeriod.builder()
+            .startDateTime(study.getStartDateTime())
+            .endDateTime(study.getEndDateTime())
+            .build();
+    }
+
 }

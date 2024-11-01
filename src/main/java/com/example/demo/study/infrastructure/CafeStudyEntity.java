@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.study.domain.Schedule;
+import com.example.demo.study.domain.Study;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
@@ -92,6 +94,23 @@ public class CafeStudyEntity extends BaseEntity {
 		this.recruitmentStatus = RecruitmentStatus.OPEN;
 
 		addCoordinatorToStudy(coordinator);
+	}
+
+	public Study toStudy() {
+		return Study.builder()
+			.id(this.id)
+			.name(this.name)
+			.cafeId(this.cafe.getId())
+			.schedule(
+				Schedule.builder()
+					.startDateTime(this.getStudyPeriod().getStartDateTime())
+					.endDateTime(this.getStudyPeriod().getEndDateTime())
+					.build()
+			)
+			.memberComms(this.memberComms)
+			.maxParticipants(this.maxParticipants)
+			.introduction(this.introduction)
+			.build();
 	}
 
 	private void addCoordinatorToStudy(MemberEntity coordinator) {

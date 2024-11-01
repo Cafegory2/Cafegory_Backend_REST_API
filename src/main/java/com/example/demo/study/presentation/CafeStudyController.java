@@ -1,5 +1,6 @@
 package com.example.demo.study.presentation;
 
+import com.example.demo.study.domain.Study;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,8 +60,9 @@ public class CafeStudyController {
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
 
-		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
+		//TODO 트랜잭션 확인
+		Study study = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
+//		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(sstu);
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
 
 		return ResponseEntity.ok(response);
