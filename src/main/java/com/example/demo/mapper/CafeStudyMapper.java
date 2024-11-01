@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.dto.study.CafeStudyDeleteResponse;
-import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.StudyPeriod;
 import com.example.demo.study.presentation.CafeStudyCreateResponse;

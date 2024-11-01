@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.example.demo.study.domain.StudyRole;
-import com.example.demo.study.implement.*;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -19,8 +17,13 @@ import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyRole;
+import com.example.demo.study.implement.CafeStudyReader;
+import com.example.demo.study.implement.StudyEditor;
+import com.example.demo.study.implement.StudyMemberEditor;
+import com.example.demo.study.implement.StudyReader;
+import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
@@ -173,6 +176,7 @@ public class CafeStudyService {
 		return studyReader.read(savedStudyId);
 	}
 
+	// TODO: 카공장 삭제하기 해야됨!!!!!!
 	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
 		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
