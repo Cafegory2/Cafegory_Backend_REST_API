@@ -16,8 +16,8 @@ public class BusinessHourReader {
 
 	private final BusinessHourQueryRepository businessHourQueryRepository;
 
-	public BusinessHour readBy(Long cafeId, DayOfWeek startDateTime) {
-		BusinessHourEntity businessHourEntity = businessHourQueryRepository.findBy(cafeId, startDateTime);
+	public BusinessHour readBy(Long cafeId, DayOfWeek startDate) {
+		BusinessHourEntity businessHourEntity = businessHourQueryRepository.findBy(cafeId, startDate);
 
 		return businessHourEntity.toBusinessHour();
 	}

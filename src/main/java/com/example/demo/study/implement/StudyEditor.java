@@ -4,17 +4,16 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.cafe.domain.Cafe;
-import com.example.demo.cafe.infrastructure.CafeRepository;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.study.domain.MemberComms;
 import com.example.demo.mapper.CafeStudyMapper;
-import com.example.demo.member.domain.Member;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 
@@ -32,12 +31,10 @@ public class StudyEditor {
 
 	private final MemberRepository memberRepository;
 
-	public Long createAndSaveCafeStudy(String studyName, Cafe cafe, Member coordinator,
-									   LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms, int maxParticipants) {
-		studyValidator.validateEmptyOrWhiteSpace(studyName, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		studyValidator.validateNameLength(studyName);
+	public Long createAndSaveCafeStudy(Study study, Cafe cafe, Long memberId) {
+		validateStudyDetails(study);
 
-		MemberEntity coordinatorEntity = memberRepository.findById(coordinator.getIdentity().getId())
+		MemberEntity coordinatorEntity = memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 
 		CafeEntity cafeEntity = cafeRepository.findById(cafe.getId())
@@ -45,11 +42,18 @@ public class StudyEditor {
 
 		CafeStudyEntity cafeStudy = cafeStudyMapper
 			.toNewEntity(
-				studyName, cafeEntity, coordinatorEntity, startDateTime, endDateTime, memberComms, maxParticipants
+				study.getName(), cafeEntity, coordinatorEntity, study.getSchedule().getStartDateTime(),
+				study.getSchedule().getEndDateTime(), study.getMemberComms(), study.getMaxParticipants()
 			);
 		CafeStudyEntity savedStudy = cafeStudyRepository.save(cafeStudy);
 
 		return savedStudy.getId();
+	}
+
+	private void validateStudyDetails(Study study) {
+		studyValidator.validateEmptyOrWhiteSpace(study.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+		studyValidator.validateNameLength(study.getName());
+		studyValidator.validateMaxParticipants(study.getMaxParticipants());
 	}
 
 	public Long deleteCafeStudy(CafeStudyEntity cafeStudy, LocalDateTime now) {

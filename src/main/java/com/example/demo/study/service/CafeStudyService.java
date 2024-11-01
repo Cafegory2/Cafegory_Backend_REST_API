@@ -21,13 +21,13 @@ import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.implement.CafeStudyReader;
 import com.example.demo.study.implement.StudyEditor;
+import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.util.TimeUtil;
 import com.example.demo.validator.BusinessHourValidator;
-import com.example.demo.study.implement.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -157,24 +157,20 @@ public class CafeStudyService {
 	}
 
 	@Transactional
-	public Long createStudy(Long coordinatorId, LocalDateTime now, Study study) {
-		validateStudyCreation(study.getName(), now, study.getSchedule().getStartDateTime(), study.getMaxParticipants());
+	public Long createStudy(Long memberId, LocalDateTime now, Study study) {
+		validateStudyCreation(study.getName(), now, study.getSchedule().getStartDateTime());
 
 		Cafe cafe = cafeReader.read(study.getCafeId());
-		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(),
-			study.getSchedule().getStartDateTime().getDayOfWeek());
-		businessHourValidator.validateBetweenBusinessHour(study.getSchedule().getStartDateTime().toLocalTime(),
-			study.getSchedule().getEndDateTime().toLocalTime(), businessHour);
+		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
+		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
-		MemberEntity coordinator = memberReader.readMemberEntity(coordinatorId);
+		MemberEntity coordinator = memberReader.readMemberEntity(memberId);
 		validateStudyScheduleConflict(
-			buildLocalDateTime(study.getSchedule().getEndDateTime()),
+			buildLocalDateTime(study.getSchedule().getStartDateTime()),
 			buildLocalDateTime(study.getSchedule().getEndDateTime()),
 			coordinator);
 
-		return studyEditor.createAndSaveCafeStudy(study.getName(), cafe, coordinator.toMember(),
-			study.getSchedule().getStartDateTime(),
-			study.getSchedule().getEndDateTime(), study.getMemberComms(), study.getMaxParticipants());
+		return studyEditor.createAndSaveCafeStudy(study, cafe, memberId);
 	}
 
 	@Transactional
@@ -198,11 +194,9 @@ public class CafeStudyService {
 		);
 	}
 
-	private void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime,
-		int maxParticipants) {
+	private void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime) {
 		studyValidator.validateStartDateTime(now, startDateTime);
 		studyValidator.validateStartDate(startDateTime);
-		studyValidator.validateMaxParticipants(maxParticipants);
 	}
 
 	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity coordinator) {

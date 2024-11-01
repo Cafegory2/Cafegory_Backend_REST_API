@@ -1,5 +1,7 @@
 package com.example.demo.study.domain;
 
+import java.time.DayOfWeek;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,4 +16,8 @@ public class Study {
 	private MemberComms memberComms;
 	private int maxParticipants;
 	private String introduction;
+
+	public DayOfWeek getStartDate() {
+		return schedule.getStartDateTime().getDayOfWeek();
+	}
 }
