@@ -3,6 +3,8 @@ package com.example.demo.study.domain;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
+import com.example.demo.implement.study.RecruitmentStatus;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,8 +17,9 @@ public class Study {
 	private Long cafeId;
 	private Schedule schedule;
 	private MemberComms memberComms;
-	private int maxParticipants;
 	private String introduction;
+	private Long coordinatorId;
+	private RecruitmentStatus recruitmentStatus;
 
 	public DayOfWeek getStartDate() {
 		return schedule.getStartDateTime().getDayOfWeek();
