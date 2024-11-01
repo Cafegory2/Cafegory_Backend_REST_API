@@ -23,10 +23,10 @@ public class ProfileService {
 	private final ReviewReader reviewReader;
 	private final ProfileMapper profileMapper;
 
-//	public WelcomeProfileResponse getWelcomeProfile(Long memberId) {
-//		MemberEntity member = memberReader.read(memberId);
-//		return profileMapper.toWelcomeProfileResponse(member);
-//	}
+	public WelcomeProfileResponse getWelcomeProfile(Long memberId) {
+		MemberEntity member = memberReader.readMemberEntity(memberId);
+		return profileMapper.toWelcomeProfileResponse(member);
+	}
 //
 //	public MyPageResponse getMypage(Long memberId) {
 //		Member member = memberReader.read(memberId);

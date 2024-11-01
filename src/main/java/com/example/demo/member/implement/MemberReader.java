@@ -30,4 +30,9 @@ public class MemberReader {
 
         return memberEntity.toMember();
     }
+
+    public MemberEntity readMemberEntity(Long memberId) {
+       return memberRepository.findById(memberId)
+            .orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+    }
 }

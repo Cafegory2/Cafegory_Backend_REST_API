@@ -2,24 +2,14 @@ package com.example.demo.controller;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import com.example.demo.dto.study.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudyCreateRequest;
-import com.example.demo.dto.study.CafeStudyCreateResponse;
-import com.example.demo.dto.study.CafeStudyDetailResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.dto.study.CafeStudySearchListResponse;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.service.study.CafeStudyQueryService;
@@ -55,7 +45,6 @@ public class CafeStudyController {
 		return ResponseEntity.ok(response);
 	}
 
-	//TODO 해야됨!!!
 	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
@@ -70,17 +59,17 @@ public class CafeStudyController {
 		return ResponseEntity.ok(response);
 	}
 
-	//	@DeleteMapping("/{cafeStudyId:[0-9]+}")
-	//	public ResponseEntity<CafeStudyDeleteResponse> delete(@PathVariable Long cafeStudyId,
-	//		@AuthenticationPrincipal UserDetails userDetails) {
-	//		Long memberId = Long.parseLong(userDetails.getUsername());
-	//
-	//		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
-	//		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
-	//		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
-	//
-	//		return ResponseEntity.ok(response);
-	//	}
+		@DeleteMapping("/{cafeStudyId:[0-9]+}")
+		public ResponseEntity<CafeStudyDeleteResponse> delete(@PathVariable Long cafeStudyId,
+															  @AuthenticationPrincipal UserDetails userDetails) {
+			Long memberId = Long.parseLong(userDetails.getUsername());
+
+			Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
+			CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
+			CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
+
+			return ResponseEntity.ok(response);
+		}
 
 	// @PatchMapping("/{studyOnceId:[0-9]+}")
 	// public ResponseEntity<StudyOnceResponse> update(@PathVariable Long studyOnceId,
