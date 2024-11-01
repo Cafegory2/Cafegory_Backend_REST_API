@@ -1,4 +1,4 @@
-package com.example.demo.validator;
+package com.example.demo.study.implement;
 
 import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
@@ -32,7 +32,7 @@ public class StudyValidator {
 	}
 
 	public void validateNameLength(String name) {
-		if (name.length() > MAX_STUDY_NAME_LENGTH) {
+		if (name.isEmpty() || name.length() > MAX_STUDY_NAME_LENGTH) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
 		}
 	}

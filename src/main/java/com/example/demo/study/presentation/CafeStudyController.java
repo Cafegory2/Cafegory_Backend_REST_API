@@ -1,7 +1,5 @@
 package com.example.demo.study.presentation;
 
-import static com.example.demo.exception.ExceptionType.*;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +23,7 @@ import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.util.TimeUtil;
-import com.example.demo.validator.StudyValidator;
+import com.example.demo.study.implement.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -60,8 +58,6 @@ public class CafeStudyController {
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-		//TODO 옮기기
-		studyValidator.validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
 		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
 		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);

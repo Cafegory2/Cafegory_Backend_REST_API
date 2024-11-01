@@ -27,7 +27,7 @@ import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.util.TimeUtil;
 import com.example.demo.validator.BusinessHourValidator;
-import com.example.demo.validator.StudyValidator;
+import com.example.demo.study.implement.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -200,7 +200,6 @@ public class CafeStudyService {
 
 	private void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime,
 		int maxParticipants) {
-		studyValidator.validateNameLength(name);
 		studyValidator.validateStartDateTime(now, startDateTime);
 		studyValidator.validateStartDate(startDateTime);
 		studyValidator.validateMaxParticipants(maxParticipants);

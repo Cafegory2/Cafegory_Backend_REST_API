@@ -3,7 +3,6 @@ package com.example.demo.study.implement;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.infrastructure.CafeRepository;
@@ -29,10 +28,14 @@ public class StudyEditor {
 	private final CafeStudyMapper cafeStudyMapper;
 	private final CafeRepository cafeRepository;
 
+	private final StudyValidator studyValidator;
+
 	private final MemberRepository memberRepository;
 
 	public Long createAndSaveCafeStudy(String studyName, Cafe cafe, Member coordinator,
 									   LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms, int maxParticipants) {
+		studyValidator.validateEmptyOrWhiteSpace(studyName, STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+		studyValidator.validateNameLength(studyName);
 
 		MemberEntity coordinatorEntity = memberRepository.findById(coordinator.getIdentity().getId())
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
