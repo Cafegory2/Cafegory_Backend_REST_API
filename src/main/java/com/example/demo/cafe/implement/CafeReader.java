@@ -1,5 +1,6 @@
 package com.example.demo.cafe.implement;
 
+import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +17,11 @@ public class CafeReader {
 
 	private final CafeRepository cafeRepository;
 
-	public CafeEntity getById(Long cafeId) {
-		return cafeRepository.findById(cafeId).orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+	public Cafe read(Long cafeId) {
+		CafeEntity cafeEntity = cafeRepository.findById(cafeId)
+			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+
+		return cafeEntity.toCafe();
 	}
 
 	public CafeEntity getWithTags(Long cafeId) {

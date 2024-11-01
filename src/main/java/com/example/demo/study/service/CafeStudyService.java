@@ -7,11 +7,12 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.study.domain.Study;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
-import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.member.domain.Member;
@@ -24,7 +25,6 @@ import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
-import com.example.demo.study.presentation.CafeStudyCreateRequest;
 import com.example.demo.util.TimeUtil;
 import com.example.demo.validator.BusinessHourValidator;
 import com.example.demo.validator.StudyValidator;
@@ -157,24 +157,24 @@ public class CafeStudyService {
 	}
 
 	@Transactional
-	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
-		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
+	public Long createStudy(Long coordinatorId, LocalDateTime now, Study study) {
+		validateStudyCreation(study.getName(), now, study.getSchedule().getStartDateTime(), study.getMaxParticipants());
 
-		CafeEntity cafe = cafeReader.getById(request.getCafeId());
-		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
-			request.getStartDateTime().getDayOfWeek());
-		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-			request.getEndDateTime().toLocalTime(), businessHourEntity);
+		Cafe cafe = cafeReader.read(study.getCafeId());
+		BusinessHourEntity businessHourEntity = businessHourReader.readBy(cafe,
+			study.getSchedule().getStartDateTime().getDayOfWeek());
+		businessHourValidator.validateBetweenBusinessHour(study.getSchedule().getStartDateTime().toLocalTime(),
+			study.getSchedule().getEndDateTime().toLocalTime(), businessHourEntity);
 
 		MemberEntity coordinator = memberReader.readMemberEntity(coordinatorId);
 		validateStudyScheduleConflict(
-			buildLocalDateTime(request.getEndDateTime()),
-			buildLocalDateTime(request.getEndDateTime()),
+			buildLocalDateTime(study.getSchedule().getEndDateTime()),
+			buildLocalDateTime(study.getSchedule().getEndDateTime()),
 			coordinator);
 
-		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator.toMember(),
-			request.getStartDateTime(),
-			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
+		return studyEditor.createAndSaveCafeStudy(study.getName(), cafe, coordinator.toMember(),
+			study.getSchedule().getStartDateTime(),
+			study.getSchedule().getEndDateTime(), study.getMemberComms(), study.getMaxParticipants());
 	}
 
 	@Transactional

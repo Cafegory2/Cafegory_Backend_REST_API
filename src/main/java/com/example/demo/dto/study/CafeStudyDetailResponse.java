@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.study.CafeStudyCommentEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 

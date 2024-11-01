@@ -32,7 +32,7 @@ public class CafeQueryService {
 
 	public CafeDetailResponse getCafeDetail(Long cafeId, LocalDateTime now) {
 		CafeEntity cafeEntity = cafeReader.getWithTags(cafeId);
-		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafeEntity,
+		BusinessHourEntity businessHourEntity = businessHourReader.readBy(cafeEntity.toCafe(),
 			now.getDayOfWeek());
 
 		List<CafeStudyEntity> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);

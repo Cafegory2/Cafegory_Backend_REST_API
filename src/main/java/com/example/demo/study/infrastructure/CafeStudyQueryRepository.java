@@ -1,7 +1,7 @@
 package com.example.demo.study.infrastructure;
 
 import static com.example.demo.cafe.infrastructure.QCafeEntity.*;
-import static com.example.demo.implement.study.QCafeStudyEntity.*;
+import static com.example.demo.study.infrastructure.QCafeStudyEntity.cafeStudyEntity;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,7 +13,7 @@ import com.example.demo.dto.SliceResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;

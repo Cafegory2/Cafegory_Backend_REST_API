@@ -1,11 +1,11 @@
 package com.example.demo.factory;
 
-import static com.example.demo.implement.study.MemberComms.*;
+import static com.example.demo.study.domain.MemberComms.*;
 
 import java.time.LocalDateTime;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.StudyPeriod;

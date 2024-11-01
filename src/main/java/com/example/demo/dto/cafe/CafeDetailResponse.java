@@ -11,7 +11,7 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.MenuEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 

@@ -27,7 +27,7 @@ import com.example.demo.implement.cafe.CafeTagEntity;
 import com.example.demo.implement.study.CafeStudyTagEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.token.JwtToken;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;

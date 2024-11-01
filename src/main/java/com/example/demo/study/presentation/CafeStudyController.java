@@ -57,12 +57,13 @@ public class CafeStudyController {
 
 	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
-		@RequestBody @Validated CafeStudyCreateRequest cafeStudyCreateRequest,
+		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-		studyValidator.validateEmptyOrWhiteSpace(cafeStudyCreateRequest.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+		//TODO 옮기기
+		studyValidator.validateEmptyOrWhiteSpace(request.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
 
-		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), cafeStudyCreateRequest);
+		Long cafeStudyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
 		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(cafeStudyId);
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
 

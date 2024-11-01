@@ -1,4 +1,4 @@
-package com.example.demo.implement.study;
+package com.example.demo.study.domain;
 
 
 public enum MemberComms {

@@ -23,7 +23,7 @@ import org.hibernate.annotations.Where;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.study.CafeStudyCafeStudyTagEntity;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
 import com.example.demo.implement.study.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;

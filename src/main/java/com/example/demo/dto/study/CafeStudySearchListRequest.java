@@ -3,7 +3,7 @@ package com.example.demo.dto.study;
 import com.example.demo.dto.PagedRequest;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;

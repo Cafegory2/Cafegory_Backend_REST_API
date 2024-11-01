@@ -20,7 +20,7 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.presentation.CafeStudyCreateRequest;
@@ -138,7 +138,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() ->
-			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest));
+			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy()));
 	}
 
 	@Test
@@ -151,7 +151,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
+		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
 	}
 
 	@Test
@@ -165,7 +165,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
-			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy())).isInstanceOf(
 			CafegoryException.class).hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
 	}
 
@@ -179,7 +179,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest));
+		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
 	}
 
 	@Test
@@ -193,7 +193,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
-			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest)).isInstanceOf(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy())).isInstanceOf(
 			CafegoryException.class).hasMessage(CAFE_STUDY_WRONG_START_DATE.getErrorMessage());
 	}
 
@@ -316,7 +316,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity leader = memberSaveHelper.saveMember();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertThatThrownBy(() -> sut.createStudy(leader.getId(), now, cafeStudyCreateRequest)).isInstanceOf(
+		assertThatThrownBy(() -> sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy())).isInstanceOf(
 			CafegoryException.class).hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
 	}
 
@@ -338,7 +338,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity leader = memberSaveHelper.saveMember();
 		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest));
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest.toStudy()));
 	}
 
 	static Stream<Arguments> provideStartAndEndDateTime2() {

@@ -2,7 +2,7 @@ package com.example.demo.study.presentation;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
 
 import lombok.AccessLevel;

@@ -2,6 +2,7 @@ package com.example.demo.cafe.infrastructure;
 
 import javax.persistence.*;
 
+import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.implement.BaseEntity;
 
 import com.example.demo.implement.cafe.Address;
@@ -54,32 +55,11 @@ public class CafeEntity extends BaseEntity {
 		this.sns = sns;
 	}
 
-	//	public String showFullAddress() {
-	//		return address.showFullAddress();
-	//	}
-	//
-	//	public String getRegion() {
-	//		return this.address.getRegion();
-	//	}
-	//
-	//	public boolean isOpen(OpenChecker<BusinessHour> openChecker) {
-	//		return openChecker.checkWithBusinessHours(this.businessHours, LOCAL_DATE_TIME_NOW);
-	//	}
-	//
-	//	public OptionalDouble calcAverageRating() {
-	//		return reviews.stream()
-	//			.mapToDouble(Review::getRate)
-	//			.average();
-	//	}
-	//
-	//	public BusinessHour findBusinessHour(DayOfWeek dayOfWeek) {
-	//		return businessHours.stream()
-	//			.filter(businessHour -> businessHour.matchesDayOfWeek(dayOfWeek))
-	//			.findFirst()
-	//			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND_DAY_OF_WEEK));
-	//	}
-	//
-	//	public void changeBusinessHours(List<BusinessHour> businessHours) {
-	//		this.businessHours = businessHours;
-	//	}
+	public Cafe toCafe() {
+		return Cafe.builder()
+			.id(this.id)
+			.name(this.name)
+			.imgUrl(this.mainImageUrl)
+			.build();
+	}
 }
