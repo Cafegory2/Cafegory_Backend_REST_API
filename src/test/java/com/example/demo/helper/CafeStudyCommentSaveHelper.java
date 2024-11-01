@@ -4,7 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.factory.TestCafeStudyCommentFactory;
 import com.example.demo.implement.study.CafeStudyCommentEntity;
-import com.example.demo.implement.study.StudyRole;
+import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyCommentRepository;

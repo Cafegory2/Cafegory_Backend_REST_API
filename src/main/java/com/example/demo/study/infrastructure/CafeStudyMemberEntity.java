@@ -20,7 +20,7 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.study.Attendance;
-import com.example.demo.implement.study.StudyRole;
+import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
@@ -60,6 +60,7 @@ public class CafeStudyMemberEntity extends BaseEntity {
 		this.cafeStudy = cafeStudy;
 		this.member = member;
 		this.studyRole = studyRole;
+		this.attendance = Attendance.YES;
 	}
 
 	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {

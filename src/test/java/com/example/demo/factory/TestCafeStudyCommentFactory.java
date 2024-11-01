@@ -1,7 +1,7 @@
 package com.example.demo.factory;
 
 import com.example.demo.implement.study.CafeStudyCommentEntity;
-import com.example.demo.implement.study.StudyRole;
+import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 

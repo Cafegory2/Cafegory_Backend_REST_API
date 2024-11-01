@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StudyValidator {
 
+	public static final int MAX_MEMBER_CAPACITY = 6;
+	public static final int MIN_MEMBER_CAPACITY = 2;
 	private static final int MAX_STUDY_NAME_LENGTH = 20;
 
 	private final TimeUtil timeUtil;
@@ -53,7 +55,7 @@ public class StudyValidator {
 	}
 
 	public void validateMaxParticipants(int maxParticipants) {
-		if (maxParticipants > LIMIT_MEMBER_CAPACITY || maxParticipants < MIN_LIMIT_MEMBER_CAPACITY) {
+		if (maxParticipants > MAX_MEMBER_CAPACITY || maxParticipants < MIN_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}
 	}

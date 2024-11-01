@@ -49,7 +49,7 @@ public class StudyEditor {
     private void validateStudyDetails(Study study) {
         studyValidator.validateEmptyOrWhiteSpace(study.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
         studyValidator.validateNameLength(study.getName());
-        studyValidator.validateMaxParticipants(study.getMaxParticipants());
+        studyValidator.validateMaxParticipants(study.getMaxParticipantCount());
     }
 
     public Long deleteCafeStudy(CafeStudyEntity cafeStudy, LocalDateTime now) {
@@ -65,7 +65,7 @@ public class StudyEditor {
             .coordinator(memberEntity)
             .studyPeriod(buildStudyPeriod(study))
             .memberComms(study.getMemberComms())
-            .maxParticipants(study.getMaxParticipants())
+            .maxParticipants(study.getMaxParticipantCount())
             .build();
     }
 

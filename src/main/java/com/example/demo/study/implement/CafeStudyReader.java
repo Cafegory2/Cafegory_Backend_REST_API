@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class CafeStudyReader {
-
+	//TODO StudyReader랑 합쳐야함
 	private final CafeStudyRepository cafeStudyRepository;
 	private final CafeStudyQueryRepository cafeStudyQueryRepository;
 

@@ -25,6 +25,8 @@ public class CafeStudySaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeRepository cafeRepository;
 
+	private final CafeStudyMemberSaveHelper cafeStudyMemberSaveHelper;
+
 	public CafeStudyEntity saveCafeStudy(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
 		LocalDateTime endDateTime) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
@@ -32,7 +34,10 @@ public class CafeStudySaveHelper {
 
 		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
-		return cafeStudyRepository.save(cafeStudy);
+		CafeStudyEntity savedCafeStudy = cafeStudyRepository.save(cafeStudy);
+		cafeStudyMemberSaveHelper.saveCafeStudyMember(savedCafeStudy, mergedLeader);
+
+		return savedCafeStudy;
 	}
 
 	public CafeStudyEntity saveFinishedCafeStudy(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,

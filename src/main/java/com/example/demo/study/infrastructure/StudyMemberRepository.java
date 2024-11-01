@@ -9,4 +9,6 @@ import com.example.demo.member.infrastructure.MemberEntity;
 public interface StudyMemberRepository extends JpaRepository<CafeStudyMemberEntity, StudyMemberId> {
 
 	List<CafeStudyMemberEntity> findByMember_Id(Long memberId);
+
+	int countByCafeStudy_Id(Long cafeStudyId);
 }

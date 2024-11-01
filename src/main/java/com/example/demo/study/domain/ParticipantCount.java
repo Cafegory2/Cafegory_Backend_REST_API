@@ -5,9 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ParticipantCapacity {
+public class ParticipantCount {
 
-	private int maxParticipants;
-	private int nowParticipants;
-
+	private int currentCount;
 }

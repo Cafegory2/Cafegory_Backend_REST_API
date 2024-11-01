@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.study.domain.StudyRole;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.implement.BaseEntity;

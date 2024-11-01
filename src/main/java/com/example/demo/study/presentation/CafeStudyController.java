@@ -62,7 +62,8 @@ public class CafeStudyController {
 
 		//TODO 트랜잭션 확인
 		Study study = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
-//		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(sstu);
+
+		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(study.getId());
 		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
 
 		return ResponseEntity.ok(response);

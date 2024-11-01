@@ -15,10 +15,11 @@ public class Study {
 	private Long id;
 	private String name;
 	private Long cafeId;
+	private Long coordinatorId;
 	private Schedule schedule;
 	private MemberComms memberComms;
+	private int maxParticipantCount;
 	private String introduction;
-	private Long coordinatorId;
 	private RecruitmentStatus recruitmentStatus;
 
 	public DayOfWeek getStartDate() {

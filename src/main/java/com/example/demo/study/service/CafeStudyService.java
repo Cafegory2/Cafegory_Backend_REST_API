@@ -7,7 +7,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.example.demo.study.implement.StudyReader;
+import com.example.demo.study.domain.StudyRole;
+import com.example.demo.study.implement.*;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -20,9 +21,6 @@ import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.implement.CafeStudyReader;
-import com.example.demo.study.implement.StudyEditor;
-import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
@@ -36,10 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CafeStudyService {
 	private final CafeStudyRepository cafeStudyRepository;
-	private final MemberRepository memberRepository;
 	private final StudyMemberRepository studyMemberRepository;
-	// private final StudyMemberMapper studyMemberMapper;
-	// private final StudyPeriodMapper studyPeriodMapper;
 	private final TimeUtil timeUtil;
 	private final StudyValidator studyValidator;
 	private final BusinessHourValidator businessHourValidator;
@@ -49,6 +44,7 @@ public class CafeStudyService {
 	private final StudyEditor studyEditor;
 	private final MemberReader memberReader;
 	private final StudyReader studyReader;
+	private final StudyMemberEditor studyMemberEditor;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -171,8 +167,10 @@ public class CafeStudyService {
 			buildLocalDateTime(study.getEndDateTime()),
 			memberId);
 
-		Long savedId = studyEditor.save(study, cafe, memberId);
-		return studyReader.read(savedId);
+		Long savedStudyId = studyEditor.save(study, cafe, memberId);
+		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
+
+		return studyReader.read(savedStudyId);
 	}
 
 	@Transactional

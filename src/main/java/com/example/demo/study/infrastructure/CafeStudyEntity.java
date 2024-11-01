@@ -27,7 +27,7 @@ import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.study.CafeStudyCafeStudyTagEntity;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
-import com.example.demo.implement.study.StudyRole;
+import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
@@ -41,9 +41,7 @@ import lombok.NoArgsConstructor;
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study")
 public class CafeStudyEntity extends BaseEntity {
-	//
-	public static final int LIMIT_MEMBER_CAPACITY = 6;
-	public static final int MIN_LIMIT_MEMBER_CAPACITY = 2;
+
 	public static final int MIN_DELAY_BEFORE_START = 1 * 60 * 60;
 
 	@Id
@@ -82,7 +80,7 @@ public class CafeStudyEntity extends BaseEntity {
 
 	@Builder
 	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
-		MemberComms memberComms, int maxParticipants, String introduction) {
+							MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;
@@ -101,6 +99,7 @@ public class CafeStudyEntity extends BaseEntity {
 			.id(this.id)
 			.name(this.name)
 			.cafeId(this.cafe.getId())
+			.coordinatorId(this.coordinator.getId())
 			.schedule(
 				Schedule.builder()
 					.startDateTime(this.getStudyPeriod().getStartDateTime())
@@ -108,8 +107,9 @@ public class CafeStudyEntity extends BaseEntity {
 					.build()
 			)
 			.memberComms(this.memberComms)
-			.maxParticipants(this.maxParticipants)
+			.maxParticipantCount(this.maxParticipants)
 			.introduction(this.introduction)
+			.recruitmentStatus(this.recruitmentStatus)
 			.build();
 	}
 

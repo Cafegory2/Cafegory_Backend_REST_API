@@ -6,6 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.example.demo.study.domain.MemberComms;
 
+import com.example.demo.study.domain.ParticipantCount;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
 import lombok.AccessLevel;
@@ -49,7 +50,6 @@ public class CafeStudyCreateRequest {
                     .build()
             )
             .memberComms(this.memberComms)
-            .maxParticipants(this.maxParticipants)
             .introduction(this.introduction)
             .build();
     }
