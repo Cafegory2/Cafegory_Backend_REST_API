@@ -5,15 +5,15 @@ import static com.example.demo.implement.study.MemberComms.*;
 import java.time.LocalDateTime;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
-import com.example.demo.implement.study.StudyPeriod;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.StudyPeriod;
 
 public class TestCafeStudyFactory {
 
 	public static CafeStudyEntity createCafeStudy(CafeEntity cafe, MemberEntity leader,
-												  LocalDateTime startDateTime, LocalDateTime endDateTime) {
+		LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
 			.cafe(cafe)
@@ -26,7 +26,7 @@ public class TestCafeStudyFactory {
 	}
 
 	public static CafeStudyEntity createCafeStudyWithName(CafeEntity cafe, MemberEntity leader,
-														  LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
+		LocalDateTime startDateTime, LocalDateTime endDateTime, String cafeStudyName) {
 		return CafeStudyEntity.builder()
 			.name(cafeStudyName)
 			.cafe(cafe)
@@ -39,7 +39,7 @@ public class TestCafeStudyFactory {
 	}
 
 	public static CafeStudyEntity createCafeStudyWithCreatedDate(CafeEntity cafe, MemberEntity leader,
-																 LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
+		LocalDateTime startDateTime, LocalDateTime endDateTime, LocalDateTime createdDate) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
 			.cafe(cafe)
@@ -52,7 +52,7 @@ public class TestCafeStudyFactory {
 	}
 
 	public static CafeStudyEntity createCafeStudyWithMemberComms(CafeEntity cafe, MemberEntity leader,
-																 LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
+		LocalDateTime startDateTime, LocalDateTime endDateTime, MemberComms memberComms) {
 		return CafeStudyEntity.builder()
 			.name("카페고리 스터디")
 			.cafe(cafe)

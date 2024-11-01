@@ -1,4 +1,4 @@
-package com.example.demo.implement.study;
+package com.example.demo.study.infrastructure;
 
 import java.time.LocalDateTime;
 
@@ -16,14 +16,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.Where;
+
 import com.example.demo.implement.BaseEntity;
+import com.example.demo.implement.study.Attendance;
+import com.example.demo.implement.study.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

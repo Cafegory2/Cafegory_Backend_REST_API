@@ -1,7 +1,7 @@
-package com.example.demo.repository.study;
+package com.example.demo.study.infrastructure;
 
-import static com.example.demo.cafe.infrastructure.QCafeEntity.cafeEntity;
-import static com.example.demo.implement.study.QCafeStudyEntity.cafeStudyEntity;
+import static com.example.demo.cafe.infrastructure.QCafeEntity.*;
+import static com.example.demo.implement.study.QCafeStudyEntity.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.dto.SliceResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.MemberComms;

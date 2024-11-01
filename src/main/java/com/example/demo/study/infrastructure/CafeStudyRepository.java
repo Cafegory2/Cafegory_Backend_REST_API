@@ -1,11 +1,9 @@
-package com.example.demo.repository.study;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.example.demo.implement.study.CafeStudyEntity;
-import org.springframework.data.jpa.repository.Query;
+package com.example.demo.study.infrastructure;
 
 import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CafeStudyRepository extends JpaRepository<CafeStudyEntity, Long> {
 

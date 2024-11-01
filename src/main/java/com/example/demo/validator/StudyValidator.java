@@ -1,7 +1,7 @@
 package com.example.demo.validator;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.implement.study.CafeStudyEntity.*;
+import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.study.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;

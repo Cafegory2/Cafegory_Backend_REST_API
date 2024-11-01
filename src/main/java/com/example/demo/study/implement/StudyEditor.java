@@ -1,4 +1,4 @@
-package com.example.demo.implement.study;
+package com.example.demo.study.implement;
 
 import static com.example.demo.exception.ExceptionType.*;
 
@@ -8,11 +8,13 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.implement.study.MemberComms;
 import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.study.CafeStudyRepository;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 

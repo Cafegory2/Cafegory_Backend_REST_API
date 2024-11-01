@@ -1,11 +1,12 @@
-package com.example.demo.implement.study;
+package com.example.demo.study.implement;
 
 import static com.example.demo.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.repository.study.CafeStudyRepository;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 

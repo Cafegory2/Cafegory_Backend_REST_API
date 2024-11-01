@@ -1,4 +1,4 @@
-package com.example.demo.implement.study;
+package com.example.demo.study.infrastructure;
 
 import java.time.LocalDateTime;
 

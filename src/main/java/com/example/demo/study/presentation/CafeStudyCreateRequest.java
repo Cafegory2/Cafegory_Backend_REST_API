@@ -1,9 +1,8 @@
-package com.example.demo.dto.study;
+package com.example.demo.study.presentation;
 
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.example.demo.implement.study.MemberComms;
 

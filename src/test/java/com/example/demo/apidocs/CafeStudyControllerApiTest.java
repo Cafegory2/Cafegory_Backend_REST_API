@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.CafeCafeTagSaveHelper;
 import com.example.demo.helper.CafeKeywordSaveHelper;
@@ -22,16 +23,15 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.CafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.implement.MemberReader;
-import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyTagEntity;
 import com.example.demo.implement.study.CafeStudyTagType;
 import com.example.demo.implement.study.CafeTagType;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.token.JwtToken;
+import com.example.demo.member.implement.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;

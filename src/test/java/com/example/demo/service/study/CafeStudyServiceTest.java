@@ -14,16 +14,17 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
-import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.presentation.CafeStudyCreateRequest;
+import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.util.TimeUtil;
 
 class CafeStudyServiceTest extends ServiceTest {
