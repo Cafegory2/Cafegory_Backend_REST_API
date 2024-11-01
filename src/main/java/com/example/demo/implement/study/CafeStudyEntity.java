@@ -3,17 +3,31 @@ package com.example.demo.implement.study;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-import com.example.demo.implement.BaseEntity;
+import org.hibernate.annotations.Where;
+
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.implement.BaseEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -62,7 +76,7 @@ public class CafeStudyEntity extends BaseEntity {
 
 	@Builder
 	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
-							MemberComms memberComms, int maxParticipants, String introduction) {
+		MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;

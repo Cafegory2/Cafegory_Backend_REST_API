@@ -8,15 +8,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import com.example.demo.domain.DateAudit;
 import com.example.demo.implement.BaseEntity;
-
 import com.example.demo.implement.member.BeverageSize;
 import com.example.demo.implement.member.Role;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberIdentity;
-import lombok.*;
-import org.hibernate.annotations.Where;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,7 +58,8 @@ public class MemberEntity extends BaseEntity {
 	}
 
 	@Builder
-	private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio, int participationCount, BeverageSize beverageSize, String refreshToken) {
+	private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio,
+		int participationCount, BeverageSize beverageSize, String refreshToken) {
 		this.role = role;
 		this.nickname = nickname;
 		this.email = email;
@@ -72,6 +78,11 @@ public class MemberEntity extends BaseEntity {
 					.nickname(this.nickname)
 					.build()
 			)
+			.role(this.role)
+			.nickname(this.nickname)
+			.email(this.email)
+			.bio(this.bio)
+			.beverageSize(this.beverageSize)
 			.imgUrl(this.profileUrl)
 			.dateAudit(
 				DateAudit.builder()
@@ -79,6 +90,18 @@ public class MemberEntity extends BaseEntity {
 					.modifiedDate(this.getLastModifiedDate())
 					.build()
 			)
+			.refreshToken(this.refreshToken)
+			.build();
+	}
+
+	public static MemberEntity fromMember(Member member) {
+		return MemberEntity.builder()
+			.role(member.getRole())
+			.nickname(member.getNickname())
+			.email(member.getEmail())
+			.profileUrl(member.getImgUrl())
+			.bio(member.getBio())
+			.refreshToken(member.getRefreshToken())
 			.build();
 	}
 

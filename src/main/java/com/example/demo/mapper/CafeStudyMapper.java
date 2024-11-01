@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.dto.study.CafeStudyCreateResponse;
 import com.example.demo.dto.study.CafeStudyDeleteResponse;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.MemberComms;
 import com.example.demo.implement.study.StudyPeriod;
+import com.example.demo.member.infrastructure.MemberEntity;
 
 @Component
 public class CafeStudyMapper {
@@ -36,9 +36,10 @@ public class CafeStudyMapper {
 	// 		.collect(Collectors.toList());
 	// }
 
-	public CafeStudyEntity toNewEntity(String studyName, CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
-									   LocalDateTime endDateTime,
-									   MemberComms memberComms, int maxParticipants) {
+	public CafeStudyEntity toNewEntity(String studyName, CafeEntity cafe, MemberEntity coordinator,
+		LocalDateTime startDateTime,
+		LocalDateTime endDateTime,
+		MemberComms memberComms, int maxParticipants) {
 		StudyPeriod studyPeriod = toStudyPeriod(startDateTime, endDateTime);
 
 		return CafeStudyEntity.builder()

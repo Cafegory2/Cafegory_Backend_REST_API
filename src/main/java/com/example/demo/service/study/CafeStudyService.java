@@ -9,18 +9,19 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.cafe.implement.CafeReader;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.dto.study.CafeStudyCreateRequest;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.implement.cafe.BusinessHourReader;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.cafe.implement.CafeReader;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.implement.MemberReader;
 import com.example.demo.implement.study.CafeStudyEntity;
 import com.example.demo.implement.study.CafeStudyMemberEntity;
 import com.example.demo.implement.study.CafeStudyReader;
 import com.example.demo.implement.study.StudyEditor;
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.implement.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyRepository;
 import com.example.demo.repository.study.StudyMemberRepository;
@@ -162,36 +163,36 @@ public class CafeStudyService {
 	}
 
 	//TODO 해야됨!!!
-//	@Transactional
-//	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
-//		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
-//
-//		CafeEntity cafe = cafeReader.getById(request.getCafeId());
-//		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
-//			request.getStartDateTime().getDayOfWeek());
-//		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
-//			request.getEndDateTime().toLocalTime(), businessHourEntity);
-//
-//		MemberEntity coordinator = findMemberById(coordinatorId);
-//		validateStudyScheduleConflict(
-//			buildLocalDateTime(request.getEndDateTime()),
-//			buildLocalDateTime(request.getEndDateTime()),
-//			coordinator);
-//
-//		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
-//			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
-//	}
+	@Transactional
+	public Long createStudy(Long coordinatorId, LocalDateTime now, CafeStudyCreateRequest request) {
+		validateStudyCreation(request.getName(), now, request.getStartDateTime(), request.getMaxParticipants());
+
+		CafeEntity cafe = cafeReader.getById(request.getCafeId());
+		BusinessHourEntity businessHourEntity = businessHourReader.getBusinessHoursByCafeAndDay(cafe,
+			request.getStartDateTime().getDayOfWeek());
+		businessHourValidator.validateBetweenBusinessHour(request.getStartDateTime().toLocalTime(),
+			request.getEndDateTime().toLocalTime(), businessHourEntity);
+
+		Member coordinator = findMemberById(coordinatorId);
+		validateStudyScheduleConflict(
+			buildLocalDateTime(request.getEndDateTime()),
+			buildLocalDateTime(request.getEndDateTime()),
+			coordinator);
+
+		return studyEditor.createAndSaveCafeStudy(request.getName(), cafe, coordinator, request.getStartDateTime(),
+			request.getEndDateTime(), request.getMemberComms(), request.getMaxParticipants());
+	}
 
 	//TODO 해야됨!!!
-//	@Transactional
-//	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-//		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
-//		MemberEntity member = memberReader.read(memberId);
-//		validateStudyDelete(member, cafeStudy);
-//
-//		cafeStudy.softDelete(now);
-//		return cafeStudy.getId();
-//	}
+	//	@Transactional
+	//	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
+	//		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
+	//		MemberEntity member = memberReader.read(memberId);
+	//		validateStudyDelete(member, cafeStudy);
+	//
+	//		cafeStudy.softDelete(now);
+	//		return cafeStudy.getId();
+	//	}
 
 	private LocalDateTime buildLocalDateTime(LocalDateTime localDateTime) {
 		return timeUtil.localDateTime(
@@ -212,13 +213,13 @@ public class CafeStudyService {
 		studyValidator.validateMaxParticipants(maxParticipants);
 	}
 
-	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity coordinator) {
+	private void validateStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member coordinator) {
 		if (hasStudyScheduleConflict(start, end, coordinator)) {
 			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
 		}
 	}
 
-	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, MemberEntity member) {
+	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Member member) {
 		List<CafeStudyMemberEntity> participatedStudies = studyMemberRepository.findByMember(member);
 		return participatedStudies.stream()
 			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
@@ -378,8 +379,7 @@ public class CafeStudyService {
 	// 	return cafeStudy.isLeader(findMemberById(memberId));
 	// }
 
-	//TODO 해야됨!!!
-//	private MemberEntity findMemberById(Long memberId) {
-//		return memberReader.read(memberId);
-//	}
+	private Member findMemberById(Long memberId) {
+		return memberReader.read(memberId);
+	}
 }
