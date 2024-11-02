@@ -216,8 +216,8 @@ public class CafeStudyService {
 	}
 
 	private void validateStudyDelete(MemberEntity member, CafeStudyEntity cafeStudy) {
-		studyValidator.validateMemberIsCafeStudyCoordinator(member, cafeStudy);
-		studyValidator.validateCafeStudyMembersPresent(cafeStudy);
+		studyValidator.validateMemberIsCafeStudyCoordinator(member.getId(), cafeStudy);
+		studyValidator.validateCafeStudyMembersPresent(member, cafeStudy);
 	}
 
 	// @Override

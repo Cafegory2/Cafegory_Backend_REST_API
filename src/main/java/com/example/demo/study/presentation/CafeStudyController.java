@@ -1,6 +1,5 @@
 package com.example.demo.study.presentation;
 
-import com.example.demo.study.domain.Study;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,11 +19,12 @@ import com.example.demo.dto.study.CafeStudyDetailResponse;
 import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.dto.study.CafeStudySearchListResponse;
 import com.example.demo.mapper.CafeStudyMapper;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.util.TimeUtil;
-import com.example.demo.study.implement.StudyValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -54,6 +54,7 @@ public class CafeStudyController {
 		return ResponseEntity.ok(response);
 	}
 
+	// TODO: 11.1일 릭팩터링
 	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest request,
