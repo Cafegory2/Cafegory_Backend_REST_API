@@ -21,7 +21,7 @@
 //import com.example.demo.helper.MemberSaveHelper;
 //import com.example.demo.helper.ReviewSaveHelper;
 //import com.example.demo.helper.ThumbnailImageSaveHelper;
-//import com.example.demo.repository.review.ReviewRepository;
+//import com.example.demo.cafe.infrastructure.ReviewRepository;
 //
 //class ReviewServiceTest extends ServiceTest {
 //

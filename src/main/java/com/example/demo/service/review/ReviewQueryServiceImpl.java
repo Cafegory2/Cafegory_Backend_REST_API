@@ -16,8 +16,8 @@
 // import com.example.demo.dto.review.ReviewSearchListResponse;
 // import com.example.demo.exception.CafegoryException;
 // import com.example.demo.mapper.ReviewMapper;
-// import com.example.demo.repository.cafe.CafeRepository;
-// import com.example.demo.repository.review.ReviewRepository;
+// import com.example.demo.cafe.infrastructure.CafeRepository;
+// import com.example.demo.cafe.infrastructure.ReviewRepository;
 // import com.example.demo.util.PageRequestCustom;
 //
 // import lombok.RequiredArgsConstructor;

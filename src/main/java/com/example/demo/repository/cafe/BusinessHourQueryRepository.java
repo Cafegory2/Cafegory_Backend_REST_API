@@ -1,26 +1,26 @@
 package com.example.demo.repository.cafe;
 
-import static com.example.demo.implement.cafe.QBusinessHourEntity.businessHourEntity;
 
 import java.time.DayOfWeek;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.implement.cafe.BusinessHourEntity;
-import com.example.demo.implement.cafe.CafeEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.example.demo.cafe.infrastructure.QBusinessHourEntity.businessHourEntity;
 
 @Repository
 @RequiredArgsConstructor
 public class BusinessHourQueryRepository {
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public BusinessHourEntity findWithCafeAndDayOfWeek(CafeEntity cafeEntity, DayOfWeek dayOfWeek) {
+	public BusinessHourEntity findBy(Long cafeId, DayOfWeek dayOfWeek) {
 		return jpaQueryFactory.select(businessHourEntity)
 			.from(businessHourEntity)
-			.where(businessHourEntity.cafe.eq(cafeEntity).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
+			.where(businessHourEntity.cafe.id.eq(cafeId).and(businessHourEntity.dayOfWeek.eq(dayOfWeek)))
 			.fetchOne();
 	}
 }

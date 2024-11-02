@@ -4,7 +4,7 @@ import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.member.MemberEntity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

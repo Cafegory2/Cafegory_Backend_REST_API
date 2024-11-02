@@ -1,0 +1,78 @@
+package com.example.demo.study.implement;
+
+import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
+
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Component;
+
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.util.TimeUtil;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class StudyValidator {
+
+	public static final int MAX_MEMBER_CAPACITY = 6;
+	public static final int MIN_MEMBER_CAPACITY = 2;
+	private static final int MAX_STUDY_NAME_LENGTH = 20;
+
+	private final TimeUtil timeUtil;
+
+	public void validateEmptyOrWhiteSpace(String target, ExceptionType exceptionType) {
+		if (target.isBlank()) {
+			throw new CafegoryException(exceptionType);
+		}
+	}
+
+	public void validateNameLength(String name) {
+		if (name.isEmpty() || name.length() > MAX_STUDY_NAME_LENGTH) {
+			throw new CafegoryException(CAFE_STUDY_INVALID_NAME);
+		}
+	}
+
+	public void validateStartDateTime(LocalDateTime now, LocalDateTime startDateTime) {
+		LocalDateTime nowPlusHour = now.plusSeconds(MIN_DELAY_BEFORE_START - 1);
+
+		if (!startDateTime.isAfter(nowPlusHour)) {
+			throw new CafegoryException(STUDY_ONCE_WRONG_START_TIME);
+		}
+	}
+
+	public void validateStartDate(LocalDateTime startDateTime) {
+		LocalDateTime plusMonths = timeUtil.now().plusMonths(1);
+		if (startDateTime.isAfter(plusMonths)) {
+			throw new CafegoryException(CAFE_STUDY_WRONG_START_DATE);
+		}
+	}
+
+	public void validateMaxParticipants(int maxParticipants) {
+		if (maxParticipants > MAX_MEMBER_CAPACITY || maxParticipants < MIN_MEMBER_CAPACITY) {
+			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
+		}
+	}
+
+	public void validateMemberIsCafeStudyCoordinator(Long memberId, CafeStudyEntity cafeStudy) {
+		if (!cafeStudy.getCoordinator().getId().equals(memberId)) {
+			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
+		}
+	}
+
+	public void validateCafeStudyMembersPresent(MemberEntity coordinator, CafeStudyEntity cafeStudy) {
+		boolean isNotCoordinatorOnly = cafeStudy.getCafeStudyMembers()
+			.stream()
+			.anyMatch(studyMember -> !studyMember.getMember().getId().equals(coordinator.getId()));
+
+		if (isNotCoordinatorOnly) {
+			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);
+		}
+	}
+}

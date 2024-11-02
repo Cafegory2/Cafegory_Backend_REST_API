@@ -1,12 +1,17 @@
 package com.example.demo.dto.profile;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@RequiredArgsConstructor
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class WelcomeProfileResponse {
 
-    private final String nickname;
-    private final String profileUrl;
+	private String nickname;
+	private String profileUrl;
 }

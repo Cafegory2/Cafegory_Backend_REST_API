@@ -1,9 +1,9 @@
 package com.example.demo.implement.signup;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.member.MemberAppender;
-import com.example.demo.implement.member.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.member.implement.MemberAppender;
+import com.example.demo.member.implement.MemberReader;
 import com.example.demo.implement.member.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

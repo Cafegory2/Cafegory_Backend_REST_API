@@ -5,15 +5,15 @@ import java.time.LocalDateTime;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.factory.TestCafeStudyFactory;
-import com.example.demo.implement.cafe.CafeEntity;
-import com.example.demo.implement.member.MemberEntity;
-import com.example.demo.implement.study.CafeStudyEntity;
-import com.example.demo.implement.study.MemberComms;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
-import com.example.demo.repository.cafe.CafeRepository;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.repository.study.CafeStudyRepository;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,18 +25,23 @@ public class CafeStudySaveHelper {
 	private final MemberRepository memberRepository;
 	private final CafeRepository cafeRepository;
 
+	private final CafeStudyMemberSaveHelper cafeStudyMemberSaveHelper;
+
 	public CafeStudyEntity saveCafeStudy(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
-										 LocalDateTime endDateTime) {
+		LocalDateTime endDateTime) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
 		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
 		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudy(mergedCafe, mergedLeader, startDateTime,
 			endDateTime);
-		return cafeStudyRepository.save(cafeStudy);
+		CafeStudyEntity savedCafeStudy = cafeStudyRepository.save(cafeStudy);
+		cafeStudyMemberSaveHelper.saveCafeStudyMember(savedCafeStudy, mergedLeader);
+
+		return savedCafeStudy;
 	}
 
 	public CafeStudyEntity saveFinishedCafeStudy(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
-												 LocalDateTime endDateTime) throws Exception {
+		LocalDateTime endDateTime) throws Exception {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
 		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
@@ -52,17 +57,19 @@ public class CafeStudySaveHelper {
 	}
 
 	public CafeStudyEntity saveCafeStudyWithName(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
-												 LocalDateTime endDateTime, String cafeStudyName) {
+		LocalDateTime endDateTime, String cafeStudyName) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
 		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
-		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudyWithName(mergedCafe, mergedLeader, startDateTime,
+		CafeStudyEntity cafeStudy = TestCafeStudyFactory.createCafeStudyWithName(mergedCafe, mergedLeader,
+			startDateTime,
 			endDateTime, cafeStudyName);
 		return cafeStudyRepository.save(cafeStudy);
 	}
 
-	public CafeStudyEntity saveCafeStudyWithMemberComms(CafeEntity cafe, MemberEntity coordinator, LocalDateTime startDateTime,
-														LocalDateTime endDateTime, MemberComms memberComms) {
+	public CafeStudyEntity saveCafeStudyWithMemberComms(CafeEntity cafe, MemberEntity coordinator,
+		LocalDateTime startDateTime,
+		LocalDateTime endDateTime, MemberComms memberComms) {
 		MemberEntity mergedLeader = memberRepository.save(coordinator);
 		CafeEntity mergedCafe = cafeRepository.save(cafe);
 
