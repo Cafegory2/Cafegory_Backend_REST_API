@@ -1,4 +1,4 @@
-package com.example.demo.implement.study;
+package com.example.demo.qna.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.domain.DateAudit;
+import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.qna.domain.Comment;
 import com.example.demo.study.domain.StudyRole;
 import org.hibernate.annotations.Where;
 
@@ -67,26 +70,31 @@ public class CafeStudyCommentEntity extends BaseEntity {
 		this.cafeStudy = cafeStudy;
 	}
 
-	//
-	// public void addReply(StudyOnceComment reply) {
-	// 	this.children.add(reply);
-	// 	reply.parent = this;
-	// }
-	//
-	// public void changeContent(String content) {
-	// 	this.content = content;
-	// }
-	//
-	// public boolean isPersonAsked(Member member) {
-	// 	return this.member.getId().equals(member.getId());
-	// }
-	//
-	// public boolean hasReply() {
-	// 	return !this.children.isEmpty();
-	// }
-	//
+	public Comment toComment() {
+		return Comment.builder()
+			.commentId(this.id)
+			.author(
+				MemberIdentity.builder()
+					.id(this.author.getId())
+					.nickname(this.author.getNickname())
+					.build()
+			)
+			.cafeStudyId(this.cafeStudy.getId())
+			.content(this.content)
+			.date(
+				DateAudit.builder()
+					.createdDate(getCreatedDate())
+					.modifiedDate(getLastModifiedDate())
+					.build()
+			)
+			.build();
+	}
+
+	public void changeContent(String content) {
+		this.content = content;
+	}
+
 	public boolean hasParentComment() {
 		return this.parentComment != null;
 	}
-
 }

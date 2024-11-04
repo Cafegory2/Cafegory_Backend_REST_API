@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudyCommentSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.study.CafeStudyCommentEntity;
+import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;

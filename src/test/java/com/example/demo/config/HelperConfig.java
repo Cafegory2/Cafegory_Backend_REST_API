@@ -15,7 +15,7 @@ import com.example.demo.repository.cafe.CafeTagRepository;
 import com.example.demo.repository.cafe.MenuRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
-import com.example.demo.repository.study.CafeStudyCommentRepository;
+import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.util.TimeUtil;
