@@ -63,7 +63,6 @@ public class CommentEditor {
             .build();
     }
 
-    //TODO 구현 계층도 트랜잭션이 필요할까?
     @Transactional
     public void edit(Comment comment) {
         commentValidator.validateContentNotBlank(comment.getContent());
