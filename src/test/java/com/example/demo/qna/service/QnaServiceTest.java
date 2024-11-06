@@ -9,7 +9,7 @@ import com.example.demo.helper.CafeStudyCommentSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
@@ -54,15 +54,15 @@ class QnaServiceTest extends ServiceTest {
 
         CafeStudyCommentEntity rootComment = cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
         cafeStudyCommentSaveHelper.saveReplyToParentComment(rootComment, coordinator, StudyRole.COORDINATOR, cafeStudy);
-        Comment comment = createComment("변경된 댓글 내용", rootComment.getId());
+        CommentContent commentContent = createCommentContent("변경된 댓글 내용", rootComment.getId());
         //when, then
-        assertThatThrownBy(() -> sut.editComment(comment, member.getId()))
+        assertThatThrownBy(() -> sut.editComment(commentContent, member.getId()))
             .isInstanceOf(CafegoryException.class)
             .hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
     }
 
-    private Comment createComment(String content, Long commentId) {
-        return Comment.builder()
+    private CommentContent createCommentContent(String content, Long commentId) {
+        return CommentContent.builder()
             .commentId(commentId)
             .content(content)
             .build();

@@ -2,6 +2,7 @@ package com.example.demo.qna.service;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.implement.CommentEditor;
 import com.example.demo.qna.implement.CommentReader;
 import com.example.demo.qna.implement.CommentValidator;
@@ -25,7 +26,7 @@ public class QnaService {
         return commentReader.read(commentId);
     }
 
-    public void editComment(Comment comment, Long memberId) {
+    public void editComment(CommentContent comment, Long memberId) {
         Comment readComment = commentReader.read(comment.getCommentId());
         commentValidator.validateCommentAuthor(readComment, memberId);
         validateNoReplies(readComment);
