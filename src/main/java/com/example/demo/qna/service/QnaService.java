@@ -34,14 +34,13 @@ public class QnaService {
         commentEditor.edit(readComment);
     }
 
-    //TODO Validator에게 검증의 책임을 준다면 Validator는 DB계층을 의존해도 되나?
     private void validateNoReplies(Comment comment) {
         if(commentReader.existsReplies(comment.getCommentId())) {
             throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
         }
     }
 
-    public void remove(Long commentId, Long memberId, LocalDateTime now) {
+    public void removeComment(Long commentId, Long memberId, LocalDateTime now) {
         Comment readComment = commentReader.read(commentId);
         commentValidator.validateCommentAuthor(readComment, memberId);
         validateNoReplies(readComment);

@@ -41,7 +41,6 @@ class CommentValidatorTest {
         assertDoesNotThrow(() -> sut.validateCommentAuthor(comment, 1L));
     }
 
-    //TODO 기존에서는 Service 레이어 테스트에서 "자신이 작성한 댓글만 수정할 수 있다" 테스트를 작성했는데, 공유한 테스트 작성법을 읽어보고 validator 테스트에서 테스트를 작성하고, Service 레이어의 자신이 작성한 테스트는 지워버렸다.
     @Test
     @DisplayName("댓글 작성자와 수정을 요청한 사용자가 일치하지 않는다.")
     void fail_validate_comment_author2() {

@@ -83,7 +83,7 @@ class QnaServiceTest extends ServiceTest {
         CafeStudyCommentEntity rootComment = cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
         cafeStudyCommentSaveHelper.saveReplyToParentComment(rootComment, coordinator, StudyRole.COORDINATOR, cafeStudy);
         //when, then
-        assertThatThrownBy(() -> sut.remove(rootComment.getId(), member.getId(), timeUtil.now()))
+        assertThatThrownBy(() -> sut.removeComment(rootComment.getId(), member.getId(), timeUtil.now()))
             .isInstanceOf(CafegoryException.class)
             .hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
     }
