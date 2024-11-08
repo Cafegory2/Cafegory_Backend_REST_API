@@ -5,12 +5,11 @@ import java.time.LocalDateTime;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.implement.study.RecruitmentStatus;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.demo.study.domain.Study;
+import lombok.*;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CafeStudyCreateResponse {
 	private long cafeStudyId;
@@ -25,6 +24,22 @@ public class CafeStudyCreateResponse {
 	private String introduction;
 	private int views;
 	private RecruitmentStatus recruitmentStatus;
+
+	public static CafeStudyCreateResponse from(Study study) {
+		return CafeStudyCreateResponse.builder()
+			.name(study.getName())
+			.cafeId(study.getCafeId())
+			.coordinatorId(study.getCoordinatorId())
+			.startDateTime(study.getStartDateTime())
+			.endDateTime(study.getEndDateTime())
+			.memberComms(study.getMemberComms())
+			.maxParticipants(study.getMaxParticipantCount())
+			.nowParticipants(1)
+			.introduction(study.getIntroduction())
+			.views(0)
+			.recruitmentStatus(study.getRecruitmentStatus())
+			.build();
+	}
 
 	@Builder
 	private CafeStudyCreateResponse(long cafeStudyId, String name, long cafeId, long coordinatorId,
