@@ -21,10 +21,15 @@ public class StudyMemberReader {
 		return studyMemberRepository.countByCafeStudy_Id(cafeStudyId);
 	}
 
-	public List<Participant> read(Long memberId) {
+	public List<Participant> readMyUpcomingsBy(Long memberId) {
 		return studyMemberRepository.findByMember_Id(memberId)
 			.stream().map(CafeStudyMemberEntity::toParticipant)
 			.collect(Collectors.toList());
+	}
+
+	// study에 참여한 참여자를 가져온다.
+	public List<Participant> readParticipantsBy(Long studyId) {
+
 	}
 
 }

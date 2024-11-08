@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -55,5 +56,10 @@ class StudyValidatorTest {
 	@DisplayName("최대 참여 인원수는 2명 이상 6명 이하이다.")
 	void validate_max_participants(int value) {
 		assertDoesNotThrow(() -> sut.validateMaxParticipants(value));
+	}
+
+	@Test
+	void isAuthor() {
+		throw new IllegalArgumentException();
 	}
 }
