@@ -59,13 +59,9 @@ public class CafeStudyController {
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-
-		//TODO 트랜잭션 확인
 		Study study = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
 
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(study.getId());
-		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
-
+		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);
 		return ResponseEntity.ok(response);
 	}
 

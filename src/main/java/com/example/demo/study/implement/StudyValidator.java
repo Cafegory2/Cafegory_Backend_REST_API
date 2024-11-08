@@ -63,9 +63,13 @@ public class StudyValidator {
 	}
 
 	public void validateStudyScheduleOverlap(Study newStudy, List<Study> participantStudies) {
-		participantStudies.stream()
+		boolean isOverlapped = participantStudies.stream()
 			.map(Study::getSchedule)
 			.anyMatch(schedule -> schedule.overlaps(newStudy.getSchedule()));
+
+		if (isOverlapped) {
+			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);
+		}
 	}
 
 	public void validateMemberIsCafeStudyCoordinator(Long memberId, CafeStudyEntity cafeStudy) {
