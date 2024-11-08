@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.study.domain.Schedule;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -183,7 +184,11 @@ public class CafeStudyService {
 	}
 
 	private void validateStudyScheduleConflict2(Study newStudy, List<Study> participantStudies) {
-		//
+		participantStudies.stream()
+			.map(Study::getSchedule)
+			.anyMatch(schedule -> schedule.conflictsWith(newStudy.getSchedule()))
+		Schedule newStudySchedule = newStudy.getSchedule();
+
 	}
 
 	// TODO: 카공장 삭제하기 해야됨!!!!!!
