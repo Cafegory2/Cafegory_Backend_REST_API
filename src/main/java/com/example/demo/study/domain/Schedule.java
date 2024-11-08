@@ -11,4 +11,10 @@ public class Schedule {
 
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+
+    //TODO 문서화, 주석 필수
+    public boolean contains (Schedule schedule) {
+
+        this.startDateTime.isBefore(schedule.endDateTime)
+    }
 }
