@@ -167,8 +167,9 @@ public class CafeStudyService {
 		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
+		List<Study> participantStudies = studyReader.readUpcomingBy(memberId, now);
 
-		 List<CafeStudy> studyReader.readUpcomingBy(memberId, now);
+		validateStudyScheduleConflict2(study, participantStudies);
 
 		validateStudyScheduleConflict(
 			buildLocalDateTime(study.getStartDateTime()),
@@ -179,6 +180,10 @@ public class CafeStudyService {
 		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
 
 		return studyReader.read(savedStudyId);
+	}
+
+	private void validateStudyScheduleConflict2(Study newStudy, List<Study> participantStudies) {
+		//
 	}
 
 	// TODO: 카공장 삭제하기 해야됨!!!!!!
@@ -192,17 +197,7 @@ public class CafeStudyService {
 		return cafeStudy.getId();
 	}
 
-	private LocalDateTime buildLocalDateTime(LocalDateTime localDateTime) {
-		return timeUtil.localDateTime(
-			localDateTime.getYear(),
-			localDateTime.getMonthValue(),
-			localDateTime.getDayOfMonth(),
-			localDateTime.getHour(),
-			localDateTime.getMinute(),
-			localDateTime.getSecond()
-		);
-	}
-
+	// TODO name 제거
 	private void validateStudyCreation(String name, LocalDateTime now, LocalDateTime startDateTime) {
 		studyValidator.validateStartDateTime(now, startDateTime);
 		studyValidator.validateStartDate(startDateTime);
