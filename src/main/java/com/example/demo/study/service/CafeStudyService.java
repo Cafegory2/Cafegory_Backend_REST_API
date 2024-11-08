@@ -167,6 +167,9 @@ public class CafeStudyService {
 		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
+
+		 List<CafeStudy> studyReader.readUpcomingBy(memberId, now);
+
 		validateStudyScheduleConflict(
 			buildLocalDateTime(study.getStartDateTime()),
 			buildLocalDateTime(study.getEndDateTime()),
