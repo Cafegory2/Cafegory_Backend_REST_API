@@ -17,15 +17,16 @@ import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.CafeStudyReader;
 import com.example.demo.study.implement.StudyEditor;
 import com.example.demo.study.implement.StudyMemberEditor;
+import com.example.demo.study.implement.StudyMemberReader;
 import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.util.TimeUtil;
@@ -48,6 +49,7 @@ public class CafeStudyService {
 	private final MemberReader memberReader;
 	private final StudyReader studyReader;
 	private final StudyMemberEditor studyMemberEditor;
+	private final StudyMemberReader studyMemberReader;
 
 	// @Override
 	// public void tryJoin(long memberId, long studyId) {
@@ -210,14 +212,25 @@ public class CafeStudyService {
 	}
 
 	private boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end, Long memberId) {
-		List<CafeStudyMemberEntity> participatedStudies = studyMemberRepository.findByMember_Id(memberId);
-		return participatedStudies.stream()
-			.anyMatch(participatedStudy -> participatedStudy.isConflictWith(start, end));
+		List<Participant> participants = studyMemberReader.read(memberId);
+
+		// 멤버가 참여중인 스터디가 생성하는 스터디의 시간과 겹치는게 있는지 검증...
+		// StudyMember - Study - StudyPeriod
+		// Participant - Study - Schedule
+		return participants.stream()
+			.anyMatch(participant -> isConflictWith(start, end));
 	}
 
 	private void validateStudyDelete(MemberEntity member, CafeStudyEntity cafeStudy) {
 		studyValidator.validateMemberIsCafeStudyCoordinator(member.getId(), cafeStudy);
 		studyValidator.validateCafeStudyMembersPresent(member, cafeStudy);
+	}
+
+	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
+		LocalDateTime studyStartDateTime = cafeStudy.getStudyPeriod().getStartDateTime();
+		LocalDateTime studyEndDateTime = cafeStudy.getStudyPeriod().getEndDateTime();
+		return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (
+			studyStartDateTime.isBefore(end) || studyStartDateTime.isEqual(end));
 	}
 
 	// @Override
