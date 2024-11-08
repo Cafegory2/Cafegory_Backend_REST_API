@@ -20,6 +20,7 @@ import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.StudyEditor;
 import com.example.demo.study.implement.StudyMemberEditor;
+import com.example.demo.study.implement.StudyMemberReader;
 import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
@@ -41,6 +42,7 @@ public class CafeStudyService {
 	private final MemberReader memberReader;
 	private final StudyReader studyReader;
 	private final StudyMemberEditor studyMemberEditor;
+	private final StudyMemberReader studyMemberReader;
 
 	public CafeStudyEntity findCafeStudyById(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
@@ -62,16 +64,18 @@ public class CafeStudyService {
 		return studyReader.read(savedStudyId);
 	}
 
+	// TODO: 11/08일 delete study 검토 필요
+	// TODO editor에 위임! & return 타입 void로 변환
 	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-//		CafeStudyEntity cafeStudy = cafeStudyReader.readStudyEntity(cafeStudyId);
 		Study study = cafeStudyReader.read(cafeStudyId);
-		MemberEntity member = memberReader.readMemberEntity(memberId);
-		validateStudyDelete(member.getId(), study, cafeStudy); // cafeStudy대신 studyMemberIds 가 필요
+		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
 
-		//TODO 구현계층으로 가야함
-//		cafeStudy.softDelete(now);
-		return cafeStudy.getId();
+		MemberEntity member = memberReader.readMemberEntity(memberId);
+		validateStudyDelete(member.getId(), study.getCoordinatorId(), participantIds);
+		studyEditor.deleteCafeStudy(study.getId(), now);
+
+		return study.getId();
 	}
 
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {
@@ -79,8 +83,8 @@ public class CafeStudyService {
 		studyValidator.validateStartDate(startDateTime);
 	}
 
-	private void validateStudyDelete(Long memberId, Study study, CafeStudyEntity cafeStudyEntity) {
-		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, study.getCoordinatorId());
-		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), cafeStudyEntity);
+	private void validateStudyDelete(Long memberId, Long coordinatorId, List<Long> participantIds) {
+		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, coordinatorId);
+		studyValidator.validateCafeStudyMembersPresent(coordinatorId, participantIds);
 	}
 }

@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -78,10 +76,9 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateCafeStudyMembersPresent(Long coordinatorId, CafeStudyEntity cafeStudy) {
-		boolean isNotCoordinatorOnly = cafeStudy.getCafeStudyMembers()
-			.stream()
-			.anyMatch(studyMember -> !studyMember.getMember().getId().equals(coordinatorId));
+	public void validateCafeStudyMembersPresent(Long coordinatorId, List<Long> participantsIds) {
+		boolean isNotCoordinatorOnly = participantsIds.stream()
+			.anyMatch(coordinatorId::equals);
 
 		if (isNotCoordinatorOnly) {
 			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);

@@ -28,8 +28,10 @@ public class StudyMemberReader {
 	}
 
 	// study에 참여한 참여자를 가져온다.
-	public List<Participant> readParticipantsBy(Long studyId) {
-
+	public List<Long> readParticipantIdsBy(Long studyId) {
+		return studyMemberRepository.findByCafeStudy_Id(studyId).stream()
+			.map(CafeStudyMemberEntity::getId)
+			.collect(Collectors.toList());
 	}
 
 }
