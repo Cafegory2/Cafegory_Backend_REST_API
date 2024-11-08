@@ -18,7 +18,6 @@ import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
-import com.example.demo.study.implement.CafeStudyReader;
 import com.example.demo.study.implement.StudyEditor;
 import com.example.demo.study.implement.StudyMemberEditor;
 import com.example.demo.study.implement.StudyReader;
@@ -37,7 +36,7 @@ public class CafeStudyService {
 	private final BusinessHourValidator businessHourValidator;
 	private final CafeReader cafeReader;
 	private final BusinessHourReader businessHourReader;
-	private final CafeStudyReader cafeStudyReader;
+	private final StudyReader cafeStudyReader;
 	private final StudyEditor studyEditor;
 	private final MemberReader memberReader;
 	private final StudyReader studyReader;
@@ -63,14 +62,15 @@ public class CafeStudyService {
 		return studyReader.read(savedStudyId);
 	}
 
-	// TODO: 카공장 삭제하기 해야됨!!!!!!
 	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-		CafeStudyEntity cafeStudy = cafeStudyReader.read(cafeStudyId);
+//		CafeStudyEntity cafeStudy = cafeStudyReader.readStudyEntity(cafeStudyId);
+		Study study = cafeStudyReader.read(cafeStudyId);
 		MemberEntity member = memberReader.readMemberEntity(memberId);
-		validateStudyDelete(member, cafeStudy);
+		validateStudyDelete(member.getId(), study, cafeStudy); // cafeStudy대신 studyMemberIds 가 필요
 
-		cafeStudy.softDelete(now);
+		//TODO 구현계층으로 가야함
+//		cafeStudy.softDelete(now);
 		return cafeStudy.getId();
 	}
 
@@ -79,8 +79,8 @@ public class CafeStudyService {
 		studyValidator.validateStartDate(startDateTime);
 	}
 
-	private void validateStudyDelete(MemberEntity member, CafeStudyEntity cafeStudy) {
-		studyValidator.validateMemberIsCafeStudyCoordinator(member.getId(), cafeStudy);
-		studyValidator.validateCafeStudyMembersPresent(member, cafeStudy);
+	private void validateStudyDelete(Long memberId, Study study, CafeStudyEntity cafeStudyEntity) {
+		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, study.getCoordinatorId());
+		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), cafeStudyEntity);
 	}
 }

@@ -72,16 +72,16 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateMemberIsCafeStudyCoordinator(Long memberId, CafeStudyEntity cafeStudy) {
-		if (!cafeStudy.getCoordinator().getId().equals(memberId)) {
+	public void validateMemberIsCafeStudyCoordinator(Long memberId, Long coordinatorId) {
+		if (!coordinatorId.equals(memberId)) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
 		}
 	}
 
-	public void validateCafeStudyMembersPresent(MemberEntity coordinator, CafeStudyEntity cafeStudy) {
+	public void validateCafeStudyMembersPresent(Long coordinatorId, CafeStudyEntity cafeStudy) {
 		boolean isNotCoordinatorOnly = cafeStudy.getCafeStudyMembers()
 			.stream()
-			.anyMatch(studyMember -> !studyMember.getMember().getId().equals(coordinator.getId()));
+			.anyMatch(studyMember -> !studyMember.getMember().getId().equals(coordinatorId));
 
 		if (isNotCoordinatorOnly) {
 			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);

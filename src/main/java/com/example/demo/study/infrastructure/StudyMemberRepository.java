@@ -10,5 +10,7 @@ public interface StudyMemberRepository extends JpaRepository<CafeStudyMemberEnti
 
 	List<CafeStudyMemberEntity> findByMember_Id(Long memberId);
 
+	List<CafeStudyMemberEntity> findByCafeStudy_Id(Long studyId);
+
 	int countByCafeStudy_Id(Long cafeStudyId);
 }

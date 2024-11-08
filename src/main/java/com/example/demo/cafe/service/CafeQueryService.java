@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.implement.StudyReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,6 @@ import com.example.demo.dto.cafe.CafeDetailResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.repository.cafe.BusinessHourRepository;
-import com.example.demo.study.implement.CafeStudyReader;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class CafeQueryService {
 
 	private final CafeReader cafeReader;
-	private final CafeStudyReader cafeStudyReader;
+	private final StudyReader cafeStudyReader;
 	private final BusinessHourReader businessHourReader;
 	private final BusinessHourOpenChecker businessHourOpenChecker;
 
