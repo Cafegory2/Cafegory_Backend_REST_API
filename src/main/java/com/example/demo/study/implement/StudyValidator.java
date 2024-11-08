@@ -4,12 +4,14 @@ import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 
@@ -58,6 +60,12 @@ public class StudyValidator {
 		if (maxParticipants > MAX_MEMBER_CAPACITY || maxParticipants < MIN_MEMBER_CAPACITY) {
 			throw new CafegoryException(STUDY_ONCE_LIMIT_MEMBER_CAPACITY);
 		}
+	}
+
+	public void validateStudyScheduleOverlap(Study newStudy, List<Study> participantStudies) {
+		participantStudies.stream()
+			.map(Study::getSchedule)
+			.anyMatch(schedule -> schedule.overlaps(newStudy.getSchedule()));
 	}
 
 	public void validateMemberIsCafeStudyCoordinator(Long memberId, CafeStudyEntity cafeStudy) {
