@@ -1,7 +1,5 @@
 package com.example.demo.study.infrastructure;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
@@ -20,8 +18,9 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.implement.BaseEntity;
 import com.example.demo.implement.study.Attendance;
-import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.Participant;
+import com.example.demo.study.domain.StudyRole;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -63,11 +62,11 @@ public class CafeStudyMemberEntity extends BaseEntity {
 		this.attendance = Attendance.YES;
 	}
 
-	public boolean isConflictWith(LocalDateTime start, LocalDateTime end) {
-		LocalDateTime studyStartDateTime = cafeStudy.getStudyPeriod().getStartDateTime();
-		LocalDateTime studyEndDateTime = cafeStudy.getStudyPeriod().getEndDateTime();
-		return (start.isBefore(studyEndDateTime) || start.isEqual(studyEndDateTime)) && (
-			studyStartDateTime.isBefore(end) || studyStartDateTime.isEqual(end));
+	public Participant toParticipant() {
+		return Participant.builder()
+			.id(this.id)
+			.studyId(this.cafeStudy.getId())
+			.build();
 	}
 
 	// public boolean isLeader(Member member) {

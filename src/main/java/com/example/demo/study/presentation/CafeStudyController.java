@@ -53,8 +53,7 @@ public class CafeStudyController {
 			request);
 		return ResponseEntity.ok(response);
 	}
-
-	// TODO: 11.1일 릭팩터링
+	
 	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest request,
