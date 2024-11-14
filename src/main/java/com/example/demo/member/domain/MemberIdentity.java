@@ -10,7 +10,7 @@ public class MemberIdentity {
     private Long id;
     private String nickname;
 
-    public boolean isMember(Long memberId) {
+    public boolean isSameMember(Long memberId) {
         return this.id.equals(memberId);
     }
 }

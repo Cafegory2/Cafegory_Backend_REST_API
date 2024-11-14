@@ -56,9 +56,9 @@ class CommentEditorTest extends ServiceTest {
 
         Comment comment = createComment("댓글 내용", cafeStudy.getId(), member, null);
         //when
-        Long savedMemberId = sut.save(comment, member.getId());
+        Long savedCommentId = sut.save(comment, member.getId());
         //then
-        assertThat(savedMemberId).isNotNull();
+        assertThat(savedCommentId).isNotNull();
     }
 
     @Test
@@ -76,9 +76,9 @@ class CommentEditorTest extends ServiceTest {
 
         Comment comment = createComment("대댓글 내용", cafeStudy.getId(), coordinator, rootComment.getId());
         //when
-        Long savedMemberId = sut.save(comment, member.getId());
+        Long savedCommentId = sut.save(comment, member.getId());
         //then
-        assertThat(savedMemberId).isNotNull();
+        assertThat(savedCommentId).isNotNull();
     }
 
     private Comment createComment(

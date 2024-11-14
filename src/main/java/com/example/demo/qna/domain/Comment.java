@@ -17,6 +17,6 @@ public class Comment {
     private DateAudit date;
 
     public boolean isAuthor(Long memberId) {
-        return this.author.isMember(memberId);
+        return this.author.isSameMember(memberId);
     }
 }
