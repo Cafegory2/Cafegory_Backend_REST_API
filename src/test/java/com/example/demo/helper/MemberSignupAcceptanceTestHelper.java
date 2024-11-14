@@ -47,7 +47,7 @@ public class MemberSignupAcceptanceTestHelper {
      * 자세한 내용은 SpyLoginService 클래스를 참고해 주세요.
      * </p>
      */
-    public void 회원_생성됨(ExtractableResponse<Response> response) {
+    public void 회원_생성_검증함(ExtractableResponse<Response> response) {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 
