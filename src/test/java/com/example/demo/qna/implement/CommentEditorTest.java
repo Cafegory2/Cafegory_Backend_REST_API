@@ -9,6 +9,7 @@ import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.study.domain.StudyRole;
@@ -84,6 +85,11 @@ class CommentEditorTest extends ServiceTest {
     private Comment createComment(
         String content, Long cafeStudyId, MemberEntity member, Long parentCommentId) {
         return Comment.builder()
+            .commentContent(
+                CommentContent.builder()
+                    .content(content)
+                    .build()
+            )
             .cafeStudyId(cafeStudyId)
             .parentCommentId(parentCommentId)
             .author(
@@ -92,7 +98,6 @@ class CommentEditorTest extends ServiceTest {
                     .nickname(member.getNickname())
                     .build()
             )
-            .content(content)
             .build();
     }
 
@@ -121,8 +126,12 @@ class CommentEditorTest extends ServiceTest {
 
     private Comment createComment(String content, Long commentId) {
         return Comment.builder()
-            .commentId(commentId)
-            .content(content)
+            .commentContent(
+                CommentContent.builder()
+                    .commentId(commentId)
+                    .content(content)
+                    .build()
+            )
             .build();
     }
 

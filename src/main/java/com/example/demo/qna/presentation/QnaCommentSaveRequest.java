@@ -1,6 +1,7 @@
 package com.example.demo.qna.presentation;
 
 import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentContent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,11 @@ public class QnaCommentSaveRequest {
 
     public Comment toComment() {
         return Comment.builder()
-            .content(content)
+            .commentContent(
+                CommentContent.builder()
+                    .content(content)
+                    .build()
+            )
             .parentCommentId(parentCommentId)
             .cafeStudyId(cafeStudyId)
             .build();

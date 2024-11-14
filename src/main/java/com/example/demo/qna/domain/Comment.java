@@ -9,14 +9,21 @@ import lombok.Getter;
 @Builder
 public class Comment {
 
-    private Long commentId;
+    private CommentContent commentContent;
     private Long parentCommentId;
     private Long cafeStudyId;
     private MemberIdentity author;
-    private String content;
     private DateAudit date;
 
     public boolean isAuthor(Long memberId) {
         return this.author.isSameMember(memberId);
+    }
+
+    public Long getCommentId() {
+        return this.commentContent.getCommentId();
+    }
+
+    public String getContent() {
+        return this.commentContent.getContent();
     }
 }

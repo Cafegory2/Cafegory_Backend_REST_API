@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.study.domain.StudyRole;
 import org.hibernate.annotations.Where;
 
@@ -72,7 +73,12 @@ public class CafeStudyCommentEntity extends BaseEntity {
 
 	public Comment toComment() {
 		return Comment.builder()
-			.commentId(this.id)
+			.commentContent(
+				CommentContent.builder()
+					.commentId(this.id)
+					.content(this.content)
+					.build()
+			)
 			.author(
 				MemberIdentity.builder()
 					.id(this.author.getId())
@@ -80,7 +86,6 @@ public class CafeStudyCommentEntity extends BaseEntity {
 					.build()
 			)
 			.cafeStudyId(this.cafeStudy.getId())
-			.content(this.content)
 			.date(
 				DateAudit.builder()
 					.createdDate(getCreatedDate())
