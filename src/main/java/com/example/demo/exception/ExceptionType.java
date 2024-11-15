@@ -57,6 +57,11 @@ public enum ExceptionType {
 	STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디 이름은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 	STUDY_ONCE_OPEN_CHAT_URL_EMPTY_OR_WHITESPACE(BAD_REQUEST, "스터디의 오픈채팅방 URL은 null, 빈 값, 혹은 공백만으로 이루어질 수 없습니다."),
 
+	CAFE_STUDY_COMMENT_NOT_FOUND(NOT_FOUND, "없는 카공 댓글입니다."),
+	CAFE_STUDY_COMMENT_CONTENT_NOT_BLANK(BAD_REQUEST, "댓글은 빈 문자열 또는 공백일 수 없습니다."),
+	CAFE_STUDY_COMMENT_HAS_REPLY(BAD_REQUEST, "답변이 달린 댓글은 수정할 수 없습니다."),
+	CAFE_STUDY_COMMENT_PERMISSION_DENIED(FORBIDDEN, "댓글을 작성한 회원 본인만 수정 할 권한이 있습니다."),
+
 	MEMBER_NOT_FOUND(NOT_FOUND, "없는 회원입니다."),
 	MEMBER_ALREADY_EXISTS(BAD_REQUEST, "해당 이메일로 이미 회원가입이 되어 있습니다."),
 
