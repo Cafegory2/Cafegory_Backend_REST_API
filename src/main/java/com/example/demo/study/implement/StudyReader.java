@@ -6,20 +6,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
+import com.example.demo.study.presentation.CafeStudySearchListRequest;
+import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor

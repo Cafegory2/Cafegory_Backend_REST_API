@@ -5,12 +5,12 @@ import java.time.LocalTime;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourRepository;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.factory.TestBusinessHourFactory;
 import com.example.demo.factory.TestCafeFactory;
-import com.example.demo.cafe.infrastructure.BusinessHourEntity;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.repository.cafe.BusinessHourRepository;
-import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;

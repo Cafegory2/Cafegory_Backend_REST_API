@@ -16,11 +16,11 @@ import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Where;
 
-import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.study.Attendance;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.Attendance;
 import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.StudyRole;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

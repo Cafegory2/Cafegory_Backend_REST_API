@@ -1,8 +1,6 @@
 package com.example.demo.member.domain;
 
 import com.example.demo.domain.DateAudit;
-import com.example.demo.implement.member.BeverageSize;
-import com.example.demo.implement.member.Role;
 
 import lombok.Builder;
 import lombok.Getter;

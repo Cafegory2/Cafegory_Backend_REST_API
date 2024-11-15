@@ -1,17 +1,12 @@
 package com.example.demo.member.service;
 
-import java.util.List;
-
-import com.example.demo.cafe.domain.Review;
-import com.example.demo.member.domain.Member;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.dto.profile.MyPageResponse;
-import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.implement.MemberReader;
-import com.example.demo.mapper.ProfileMapper;
 import com.example.demo.cafe.implement.ReviewReader;
+import com.example.demo.member.implement.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.member.presentation.WelcomeProfileResponse;
+import com.example.demo.trash.mapper.ProfileMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,12 +22,12 @@ public class ProfileService {
 		MemberEntity member = memberReader.readMemberEntity(memberId);
 		return profileMapper.toWelcomeProfileResponse(member);
 	}
-//
-//	public MyPageResponse getMypage(Long memberId) {
-//		Member member = memberReader.read(memberId);
-//		List<Review> reviews = reviewReader.readBy(memberId);
-//		return MyPageResponse.of(member, reviews);
-//	}
+	//
+	//	public MyPageResponse getMypage(Long memberId) {
+	//		Member member = memberReader.read(memberId);
+	//		List<Review> reviews = reviewReader.readBy(memberId);
+	//		return MyPageResponse.of(member, reviews);
+	//	}
 	// 	@Override
 	// 	public ProfileGetResponse get(Long requestMemberId, Long targetMemberId, LocalDateTime baseDateTime) {
 	// 		if (isOwnerOfProfile(requestMemberId, targetMemberId)) {

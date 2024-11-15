@@ -4,10 +4,10 @@
 //import com.example.demo.dto.oauth2.*;
 //import com.example.demo.helper.MemberSaveHelper;
 //import com.example.demo.implement.member.Member;
-//import com.example.demo.implement.token.JwtToken;
-//import com.example.demo.infrastructure.aws.AwsS3Client;
-//import com.example.demo.infrastructure.oauth2.OAuth2Client;
-//import com.example.demo.repository.member.MemberRepository;
+//import com.example.demo.trash.token.implement.JwtToken;
+//import com.example.demo.trash.aws.infrastructure.AwsS3Client;
+//import com.example.demo.trash.oauth2.infrastructure.OAuth2Client;
+//import com.example.demo.member.infrastructure.MemberRepository;
 //import com.example.demo.util.ImageData;
 //import com.example.demo.util.ImageDownloadUtil;
 //import org.junit.jupiter.api.DisplayName;

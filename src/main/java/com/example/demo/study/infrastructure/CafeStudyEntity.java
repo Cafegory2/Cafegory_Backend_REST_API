@@ -18,17 +18,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.demo.study.domain.Schedule;
-import com.example.demo.study.domain.Study;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.study.CafeStudyCafeStudyTagEntity;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.implement.study.RecruitmentStatus;
-import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.RecruitmentStatus;
+import com.example.demo.study.domain.Schedule;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyRole;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -80,7 +79,7 @@ public class CafeStudyEntity extends BaseEntity {
 
 	@Builder
 	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
-							MemberComms memberComms, int maxParticipants, String introduction) {
+		MemberComms memberComms, int maxParticipants, String introduction) {
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;

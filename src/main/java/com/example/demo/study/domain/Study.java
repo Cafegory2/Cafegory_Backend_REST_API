@@ -3,8 +3,6 @@ package com.example.demo.study.domain;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
-import com.example.demo.implement.study.RecruitmentStatus;
-
 import lombok.Builder;
 import lombok.Getter;
 

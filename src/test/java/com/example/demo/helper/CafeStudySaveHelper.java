@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.factory.TestCafeStudyFactory;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.implement.study.RecruitmentStatus;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.member.infrastructure.MemberRepository;
+import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 

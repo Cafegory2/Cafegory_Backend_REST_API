@@ -6,7 +6,7 @@ import com.example.demo.factory.TestCafeStudyCommentFactory;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;

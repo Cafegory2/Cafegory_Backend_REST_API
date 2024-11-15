@@ -3,10 +3,14 @@ package com.example.demo.study.presentation;
 import java.time.LocalDateTime;
 
 import com.example.demo.study.domain.MemberComms;
-import com.example.demo.implement.study.RecruitmentStatus;
-
+import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.domain.Study;
-import lombok.*;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter

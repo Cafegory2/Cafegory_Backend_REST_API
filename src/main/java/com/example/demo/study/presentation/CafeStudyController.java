@@ -13,17 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudyDeleteResponse;
-import com.example.demo.dto.study.CafeStudyDetailResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.dto.study.CafeStudySearchListResponse;
-import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.implement.StudyValidator;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
+import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +47,7 @@ public class CafeStudyController {
 			request);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest request,

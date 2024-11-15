@@ -11,9 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.implement.BusinessHourReader;
+import com.example.demo.cafe.implement.BusinessHourValidator;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
@@ -24,7 +25,6 @@ import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
-import com.example.demo.validator.BusinessHourValidator;
 
 import lombok.RequiredArgsConstructor;
 

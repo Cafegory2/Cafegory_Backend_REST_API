@@ -1,7 +1,7 @@
 package com.example.demo.study.infrastructure;
 
 import static com.example.demo.cafe.infrastructure.QCafeEntity.*;
-import static com.example.demo.study.infrastructure.QCafeStudyEntity.cafeStudyEntity;
+import static com.example.demo.study.infrastructure.QCafeStudyEntity.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -9,12 +9,12 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.implement.study.CafeStudyTagType;
-import com.example.demo.implement.study.CafeTagType;
+import com.example.demo.cafe.domain.CafeTagType;
+import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
-import com.example.demo.implement.study.RecruitmentStatus;
+import com.example.demo.study.domain.RecruitmentStatus;
+import com.example.demo.study.presentation.CafeStudySearchListRequest;
+import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;

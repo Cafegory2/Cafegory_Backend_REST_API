@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudyDetailResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.dto.study.CafeStudySearchListResponse;
 import com.example.demo.qna.implement.CommentReader;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.presentation.CafeStudyDetailResponse;
+import com.example.demo.study.presentation.CafeStudySearchListRequest;
+import com.example.demo.study.presentation.CafeStudySearchListResponse;
+import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
 

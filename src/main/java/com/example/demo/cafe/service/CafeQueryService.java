@@ -8,19 +8,19 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.example.demo.study.implement.StudyReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.implement.BusinessHourOpenChecker;
+import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.infrastructure.BusinessHourRepository;
 import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.dto.cafe.CafeDetailResponse;
+import com.example.demo.cafe.presentation.CafeDetailResponse;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.implement.cafe.BusinessHourReader;
-import com.example.demo.repository.cafe.BusinessHourRepository;
+import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.RequiredArgsConstructor;
