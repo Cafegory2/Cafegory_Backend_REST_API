@@ -63,15 +63,12 @@ public class CafeStudyService {
 		return studyReader.read(savedStudyId);
 	}
 
-	// TODO: 11/08일 delete study 검토 필요
-	// TODO editor에 위임! & return 타입 void로 변환
-	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
+	public void deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
 		Study study = cafeStudyReader.read(cafeStudyId);
 		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
 		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), participantIds);
 
 		studyEditor.deleteCafeStudy(study.getId(), memberId, now);
-		return study.getId();
 	}
 
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {

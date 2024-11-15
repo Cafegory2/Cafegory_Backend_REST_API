@@ -66,15 +66,12 @@ public class CafeStudyController {
 	}
 
 	@DeleteMapping("/{cafeStudyId:[0-9]+}")
-	public ResponseEntity<CafeStudyDeleteResponse> delete(@PathVariable Long cafeStudyId,
+	public ResponseEntity<Void> delete(@PathVariable Long cafeStudyId,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
+		cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
 
-		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
-		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
-
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
 
 	// @PatchMapping("/{studyOnceId:[0-9]+}")
