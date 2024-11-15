@@ -78,7 +78,7 @@ public class StudyValidator {
 
 	public void validateCafeStudyMembersPresent(Long coordinatorId, List<Long> participantsIds) {
 		boolean isNotCoordinatorOnly = participantsIds.stream()
-			.anyMatch(coordinatorId::equals);
+			.anyMatch(participantId -> !participantId.equals(coordinatorId));
 
 		if (isNotCoordinatorOnly) {
 			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);

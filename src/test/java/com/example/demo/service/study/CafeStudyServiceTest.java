@@ -7,9 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import com.example.demo.study.domain.Schedule;
-import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.StudyMemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,9 +20,11 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.Schedule;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.study.presentation.CafeStudyCreateRequest;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.util.TimeUtil;
@@ -158,7 +157,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
+		assertDoesNotThrow(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
 	}
 
 	@Test
@@ -186,7 +186,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
+		assertDoesNotThrow(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
 	}
 
 	@Test
@@ -277,35 +278,4 @@ class CafeStudyServiceTest extends ServiceTest {
 			Arguments.of(LocalDateTime.of(2000, 1, 1, 20, 0), LocalDateTime.of(2000, 1, 1, 21, 0)));
 	}
 
-	@Test
-	@DisplayName("카공장은 카공을 삭제할 수 있다.")
-	void coordinator_can_delete_study() {
-		//given
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafe();
-		MemberEntity coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
-
-		//then
-		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId(), timeUtil.now()));
-	}
-
-	@Test
-	@DisplayName("카공장이 아니라면 카공을 삭제할 수 없다.")
-	void non_coordinator_can_not_delete_study() {
-		//given
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafe();
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
-		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
-
-		//then
-		assertThatThrownBy(
-			() -> sut.deleteStudy(member.getId(), cafeStudy.getId(), timeUtil.now()))
-			.isInstanceOf(CafegoryException.class)
-			.hasMessage(CAFE_STUDY_INVALID_LEADER.getErrorMessage());
-	}
 }

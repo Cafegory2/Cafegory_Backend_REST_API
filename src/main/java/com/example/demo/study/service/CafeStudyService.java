@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.example.demo.member.domain.Member;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -16,7 +15,6 @@ import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.implement.cafe.BusinessHourReader;
 import com.example.demo.member.implement.MemberReader;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.StudyEditor;
@@ -79,9 +77,5 @@ public class CafeStudyService {
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {
 		studyValidator.validateStartDateTime(now, startDateTime);
 		studyValidator.validateStartDate(startDateTime);
-	}
-
-	private void validateStudyDelete(Long coordinatorId, List<Long> participantIds) {
-//		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, coordinatorId);
 	}
 }
