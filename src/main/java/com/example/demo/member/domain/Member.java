@@ -20,4 +20,8 @@ public class Member {
 	private String imgUrl;
 	private DateAudit dateAudit;
 	private String refreshToken;
+
+	public Long getId() {
+		return identity.getId();
+	}
 }

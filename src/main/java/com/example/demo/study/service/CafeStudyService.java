@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.member.domain.Member;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -66,15 +67,12 @@ public class CafeStudyService {
 
 	// TODO: 11/08일 delete study 검토 필요
 	// TODO editor에 위임! & return 타입 void로 변환
-	@Transactional
 	public Long deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
 		Study study = cafeStudyReader.read(cafeStudyId);
 		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
+		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), participantIds);
 
-		MemberEntity member = memberReader.readMemberEntity(memberId);
-		validateStudyDelete(member.getId(), study.getCoordinatorId(), participantIds);
-		studyEditor.deleteCafeStudy(study.getId(), now);
-
+		studyEditor.deleteCafeStudy(study.getId(), memberId, now);
 		return study.getId();
 	}
 
@@ -83,8 +81,7 @@ public class CafeStudyService {
 		studyValidator.validateStartDate(startDateTime);
 	}
 
-	private void validateStudyDelete(Long memberId, Long coordinatorId, List<Long> participantIds) {
-		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, coordinatorId);
-		studyValidator.validateCafeStudyMembersPresent(coordinatorId, participantIds);
+	private void validateStudyDelete(Long coordinatorId, List<Long> participantIds) {
+//		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, coordinatorId);
 	}
 }

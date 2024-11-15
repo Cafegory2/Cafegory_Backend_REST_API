@@ -18,6 +18,7 @@ import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyPeriod;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -48,9 +49,12 @@ public class StudyEditor {
 		studyValidator.validateMaxParticipants(study.getMaxParticipantCount());
 	}
 
-	public void deleteCafeStudy(Long studyId, LocalDateTime now) {
+	@Transactional
+	public void deleteCafeStudy(Long studyId, Long memberId, LocalDateTime now) {
 		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, cafeStudy.getCoordinator().getId());
+
 		cafeStudy.softDelete(now);
 	}
 
