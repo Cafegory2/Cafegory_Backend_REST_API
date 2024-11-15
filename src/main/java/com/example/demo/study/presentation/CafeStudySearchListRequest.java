@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+import com.example.demo.study.domain.SearchCriteria;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.cafe.domain.CafeTagType;
@@ -46,5 +47,15 @@ public class CafeStudySearchListRequest extends PagedRequest {
 		this.cafeStudyTagType = cafeStudyTagType;
 		this.cafeTagTypes = cafeTagTypes;
 		this.memberComms = memberComms;
+	}
+
+	public SearchCriteria toSearchCriteria() {
+		return SearchCriteria
+			.builder()
+			.keyword(this.keyword)
+			.date(this.date)
+			.cafeStudyTagType(this.cafeStudyTagType)
+			.memberComms(this.memberComms)
+			.build();
 	}
 }
