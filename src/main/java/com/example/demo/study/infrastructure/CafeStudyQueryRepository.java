@@ -10,10 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.cafe.domain.CafeTagType;
+import com.example.demo.cafe.domain.CafeTags;
+import com.example.demo.domain.Page;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
-import com.example.demo.study.presentation.CafeStudySearchListRequest;
+import com.example.demo.study.domain.SearchCriteria;
 import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -31,20 +33,22 @@ public class CafeStudyQueryRepository {
 
 	private final JPAQueryFactory queryFactory;
 
-	public SliceResponse<CafeStudyEntity> findCafeStudies(CafeStudySearchListRequest request) {
-		Pageable pageable = PagingUtil.of(request.getPage(), request.getSizePerPage());
+	public SliceResponse<CafeStudyEntity> findCafeStudies(
+		SearchCriteria searchCriteria, CafeTags cafeTags, Page page
+	) {
+		Pageable pageable = PagingUtil.of(page.getPage(), page.getSizePerPage());
 
 		JPAQuery<CafeStudyEntity> query = queryFactory
 			.select(cafeStudyEntity).distinct()
 			.from(cafeStudyEntity)
 			.join(cafeStudyEntity.cafe, cafeEntity).fetchJoin()
 			.where(
-				keywordContains(request.getKeyword())
-					.or(cafeStudyNameContains(request.getKeyword())),
-				dateEq(request.getDate()),
-				cafeStudyTagTypeEq(request.getCafeStudyTagType()),
-				hasAllCafeTagTypes(request.getCafeTagTypes()),
-				memberCommsEq(request.getMemberComms())
+				keywordContains(searchCriteria.getKeyword())
+					.or(cafeStudyNameContains(searchCriteria.getKeyword())),
+				dateEq(searchCriteria.getDate()),
+				cafeStudyTagTypeEq(searchCriteria.getCafeStudyTagType()),
+				hasAllCafeTagTypes(cafeTags.getCafeTagTypes()),
+				memberCommsEq(searchCriteria.getMemberComms())
 			)
 			.orderBy(
 				getRecruitmentStatusPriority().asc(),

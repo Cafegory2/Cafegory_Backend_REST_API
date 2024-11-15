@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.implement.StudyValidator;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.trash.dto.SliceResponse;
@@ -42,7 +41,7 @@ public class CafeStudyController {
 	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(
 		@Validated @ModelAttribute CafeStudySearchListRequest request) {
 		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(
-			request);
+			request.toSearchCriteria(), request.toCafeTags(), request.toPage());
 		return ResponseEntity.ok(response);
 	}
 
