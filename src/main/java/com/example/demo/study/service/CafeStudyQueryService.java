@@ -2,6 +2,7 @@ package com.example.demo.study.service;
 
 import java.util.List;
 
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,7 @@ import com.example.demo.study.domain.SearchCriteria;
 import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.presentation.CafeStudyDetailResponse;
-import com.example.demo.study.presentation.CafeStudySearchListResponse;
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,9 @@ public class CafeStudyQueryService {
 	private final CommentReader commentReader;
 
 	public SliceResponse<CafeStudySearchListResponse> searchCafeStudiesByDynamicFilter(
-		SearchCriteria searchCriteria, CafeTags cafeTags, Page page
+		CafeStudySearchListRequest request
 	) {
-		SliceResponse<CafeStudyEntity> response = studyReader.searchCafeStudies(searchCriteria, cafeTags, page);
+		SliceResponse<CafeStudyEntity> response = studyReader.searchCafeStudies(request);
 		return response.map(CafeStudySearchListResponse::from);
 	}
 

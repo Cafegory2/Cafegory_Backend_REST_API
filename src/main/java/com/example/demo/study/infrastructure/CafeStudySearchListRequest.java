@@ -1,4 +1,4 @@
-package com.example.demo.study.presentation;
+package com.example.demo.study.infrastructure;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,26 +51,4 @@ public class CafeStudySearchListRequest extends PagedRequest {
 		this.memberComms = memberComms;
 	}
 
-	public SearchCriteria toSearchCriteria() {
-		return SearchCriteria
-			.builder()
-			.keyword(this.keyword)
-			.date(this.date)
-			.cafeStudyTagType(this.cafeStudyTagType)
-			.memberComms(this.memberComms)
-			.build();
-	}
-
-	public CafeTags toCafeTags() {
-		return CafeTags.builder()
-			.cafeTagTypes(this.cafeTagTypes)
-			.build();
-	}
-
-	public Page toPage() {
-		return Page.builder()
-			.page(this.page)
-			.sizePerPage(this.sizePerPage)
-			.build();
-	}
 }

@@ -1,4 +1,4 @@
-package com.example.demo.study.presentation;
+package com.example.demo.study.infrastructure;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,7 +9,6 @@ import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

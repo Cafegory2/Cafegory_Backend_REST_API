@@ -1,5 +1,7 @@
 package com.example.demo.study.presentation;
 
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,7 +43,7 @@ public class CafeStudyController {
 	public ResponseEntity<SliceResponse<CafeStudySearchListResponse>> searchCafeStudies(
 		@Validated @ModelAttribute CafeStudySearchListRequest request) {
 		SliceResponse<CafeStudySearchListResponse> response = cafeStudyQueryService.searchCafeStudiesByDynamicFilter(
-			request.toSearchCriteria(), request.toCafeTags(), request.toPage());
+			request);
 		return ResponseEntity.ok(response);
 	}
 
