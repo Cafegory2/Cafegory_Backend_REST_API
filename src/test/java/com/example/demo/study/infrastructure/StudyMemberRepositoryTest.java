@@ -1,17 +1,57 @@
 package com.example.demo.study.infrastructure;
 
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.*;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.*;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.config.JpaTest;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.CafeStudyMemberSaveHelper;
+import com.example.demo.helper.CafeStudySaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.util.TimeUtil;
 
-class StudyMemberRepositoryTest {
+class StudyMemberRepositoryTest extends JpaTest {
 
-    @Test
-    void findByCafeStudy_IdAndMember_Id () {
-        Assertions.assertThatThrownBy(() -> {
+	@Autowired
+	private StudyMemberRepository sut;
 
-        });
-    }
+	@Autowired
+	private CafeSaveHelper cafeSaveHelper;
+	@Autowired
+	private CafeStudySaveHelper cafeStudySaveHelper;
+	@Autowired
+	private MemberSaveHelper memberSaveHelper;
+	@Autowired
+	private CafeStudyMemberSaveHelper cafeStudyMemberSaveHelper;
+
+	@Autowired
+	private TimeUtil timeUtil;
+
+	@Test
+	void findByCafeStudy_IdAndMember_Id() {
+		// given
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+
+		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
+		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, start.plusHours(2));
+
+		cafeStudyMemberSaveHelper.saveCafeStudyMember(cafeStudy, member);
+
+		// when
+		Optional<CafeStudyMemberEntity> cafeStudyMembers = sut.findByCafeStudy_IdAndMember_Id(cafeStudy.getId(),
+			member.getId());
+
+		// then
+		assertThat(cafeStudyMembers).isPresent();
+	}
 
 }

@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.infrastructure.CafeEntity;
@@ -19,8 +20,6 @@ import com.example.demo.study.infrastructure.StudyPeriod;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.transaction.annotation.Transactional;
-
 @Component
 @RequiredArgsConstructor
 public class StudyEditor {
@@ -28,6 +27,9 @@ public class StudyEditor {
 	private final CafeStudyRepository cafeStudyRepository;
 	private final CafeRepository cafeRepository;
 	private final MemberRepository memberRepository;
+
+	private final StudyMemberEditor studyMemberEditor;
+	private final StudyTagEditor studyTagEditor;
 
 	private final StudyValidator studyValidator;
 
@@ -51,11 +53,13 @@ public class StudyEditor {
 	}
 
 	@Transactional
-	public void remove(Long studyId, Long memberId, LocalDateTime now) {
+	public void removeWithCascade(Long studyId, Long memberId, LocalDateTime now) {
 		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, cafeStudy.getCoordinator().getId());
 
+		studyMemberEditor.remove(studyId, memberId, now);
+		studyTagEditor.removeStudyStudyTagBy(studyId, now);
 		cafeStudy.softDelete(now);
 	}
 

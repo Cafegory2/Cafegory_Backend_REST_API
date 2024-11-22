@@ -1,7 +1,5 @@
 package com.example.demo.study.service;
 
-import static com.example.demo.exception.ExceptionType.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +12,6 @@ import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.BusinessHourValidator;
 import com.example.demo.cafe.implement.CafeReader;
-import com.example.demo.exception.CafegoryException;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.StudyEditor;
@@ -22,28 +19,20 @@ import com.example.demo.study.implement.StudyMemberEditor;
 import com.example.demo.study.implement.StudyMemberReader;
 import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.implement.StudyValidator;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CafeStudyService {
-	private final CafeStudyRepository cafeStudyRepository;
 	private final StudyValidator studyValidator;
 	private final BusinessHourValidator businessHourValidator;
 	private final CafeReader cafeReader;
 	private final BusinessHourReader businessHourReader;
-	private final StudyReader cafeStudyReader;
-	private final StudyEditor studyEditor;
 	private final StudyReader studyReader;
-	private final StudyMemberEditor studyMemberEditor;
+	private final StudyEditor studyEditor;
 	private final StudyMemberReader studyMemberReader;
-
-	public CafeStudyEntity findCafeStudyById(Long cafeStudyId) {
-		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-	}
+	private final StudyMemberEditor studyMemberEditor;
 
 	//TODO 카공 태그 저장하는 로직 추가 필요
 	@Transactional
@@ -63,13 +52,11 @@ public class CafeStudyService {
 	}
 
 	public void deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
-		Study study = cafeStudyReader.read(cafeStudyId);
+		Study study = studyReader.read(cafeStudyId);
 		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
 		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), participantIds);
 
-		studyEditor.remove(study.getId(), memberId, now);
-		studyMemberEditor.remove(study.getId(), memberId, now);
-
+		studyEditor.removeWithCascade(study.getId(), memberId, now);
 	}
 
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {
