@@ -16,7 +16,7 @@ public class Study {
 	private Long id;
 	private String name;
 	private Long cafeId;
-	private Long coordinatorId;
+	private Coordinator coordinator;
 	private Schedule schedule;
 	private MemberComms memberComms;
 	private int maxParticipantCount;
@@ -35,5 +35,9 @@ public class Study {
 
 	public LocalDateTime getEndDateTime() {
 		return schedule.getEndDateTime();
+	}
+
+	public boolean isManagedBy(Long memberId) {
+		return coordinator.isCoordinator(memberId);
 	}
 }

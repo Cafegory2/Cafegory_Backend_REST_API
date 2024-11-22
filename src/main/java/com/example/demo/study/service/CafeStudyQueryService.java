@@ -39,6 +39,6 @@ public class CafeStudyQueryService {
 		ViewCount viewCount = studyReader.readViewCountBy(cafeStudyId);
 		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(cafeStudyId);
 
-		return CafeStudyDetailResponse.of(cafeStudy);
+		return CafeStudyDetailResponse.of(cafeStudy, study, viewCount, participantCount);
 	}
 }

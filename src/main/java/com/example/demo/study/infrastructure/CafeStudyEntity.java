@@ -18,16 +18,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.study.domain.*;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.RecruitmentStatus;
-import com.example.demo.study.domain.Schedule;
-import com.example.demo.study.domain.Study;
-import com.example.demo.study.domain.StudyRole;
-import com.example.demo.study.domain.ViewCount;
 import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
@@ -99,7 +94,11 @@ public class CafeStudyEntity extends BaseEntity {
 			.id(this.id)
 			.name(this.name)
 			.cafeId(this.cafe.getId())
-			.coordinatorId(this.coordinator.getId())
+			.coordinator(
+				Coordinator.builder()
+					.id(this.coordinator.getId())
+					.nickname(this.coordinator.getNickname())
+					.build())
 			.schedule(
 				Schedule.builder()
 					.startDateTime(this.getStudyPeriod().getStartDateTime())
@@ -117,12 +116,6 @@ public class CafeStudyEntity extends BaseEntity {
 		return ViewCount.builder()
 			.totalViews(getViews())
 			.build();
-	}
-
-	public StudyTag toStudyTag() {
-		return StudyTag.builder()
-
-			.build()
 	}
 
 	private void addCoordinatorToStudy(MemberEntity coordinator) {

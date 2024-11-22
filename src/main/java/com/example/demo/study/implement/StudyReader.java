@@ -32,7 +32,7 @@ public class StudyReader {
 	private final CafeStudyQueryRepository cafeStudyQueryRepository;
 
 	public Study read(Long cafeStudyId) {
-		CafeStudyEntity cafeStudyEntity = cafeStudyRepository.findById(cafeStudyId)
+		CafeStudyEntity cafeStudyEntity = cafeStudyRepository.findWithMember(cafeStudyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 
 		return cafeStudyEntity.toStudy();
@@ -42,7 +42,7 @@ public class StudyReader {
 		List<Participant> upcomings = studyMemberReader.readMyUpcomingsBy(memberId);
 		List<Long> studyIds = upcomings.stream().map(Participant::getStudyId).collect(Collectors.toList());
 
-		return cafeStudyRepository.findUpcomingsBy(studyIds, now).stream()
+		return cafeStudyRepository.findUpcomingsWithMemberBy(studyIds, now).stream()
 			.map(CafeStudyEntity::toStudy)
 			.collect(Collectors.toList());
 	}

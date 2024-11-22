@@ -9,11 +9,7 @@ import java.util.stream.Collectors;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.ParticipantCount;
-import com.example.demo.study.domain.Study;
-import com.example.demo.study.domain.ViewCount;
+import com.example.demo.study.domain.*;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.AccessLevel;
@@ -39,7 +35,7 @@ public class CafeStudyDetailResponse {
 
 		// response.commentsInfo = buildCommentTree(cafeStudyComments, response);
 		response.cafeStudyInfo = createCafeStudyInfo(study, viewCount, participantCount);
-		response.coordinatorInfo = createCoordinatorInfo(cafeStudy);
+		response.coordinatorInfo = createCoordinatorInfo(study);
 		response.cafeInfo = createCafeInfo(cafeStudy);
 
 		return response;
@@ -78,8 +74,17 @@ public class CafeStudyDetailResponse {
 			.build();
 	}
 
-	private static CoordinatorInfo createCoordinatorInfo(CafeStudyEntity cafeStudy) {
-		MemberEntity coordinator = cafeStudy.getCoordinator();
+//	private static CoordinatorInfo createCoordinatorInfo(CafeStudyEntity cafeStudy) {
+//		MemberEntity coordinator = cafeStudy.getCoordinator();
+//
+//		return CoordinatorInfo.builder()
+//			.id(coordinator.getId())
+//			.nickname(coordinator.getNickname())
+//			.build();
+//	}
+
+	private static CoordinatorInfo createCoordinatorInfo(Study study) {
+		Coordinator coordinator = study.getCoordinator();
 
 		return CoordinatorInfo.builder()
 			.id(coordinator.getId())
