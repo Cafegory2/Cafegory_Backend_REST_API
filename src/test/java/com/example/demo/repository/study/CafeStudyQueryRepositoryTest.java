@@ -17,12 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
 import com.example.demo.cafe.domain.CafeTagType;
-import com.example.demo.cafe.domain.CafeTags;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
-import com.example.demo.domain.Page;
 import com.example.demo.helper.CafeCafeTagSaveHelper;
 import com.example.demo.helper.CafeKeywordSaveHelper;
 import com.example.demo.helper.CafeSaveHelper;
@@ -34,7 +32,6 @@ import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.SearchCriteria;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
@@ -673,29 +670,6 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 			.cafeStudyTagType(cafeStudyTagType)
 			.cafeTagTypes(cafeTagTypes)
 			.memberComms(memberComms)
-			.page(page)
-			.sizePerPage(sizePerPage)
-			.build();
-	}
-
-	private SearchCriteria createSearchCriteria(String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType,
-		MemberComms memberComms) {
-		return SearchCriteria.builder()
-			.keyword(keyword)
-			.date(date)
-			.cafeStudyTagType(cafeStudyTagType)
-			.memberComms(memberComms)
-			.build();
-	}
-
-	private CafeTags createCafeTags(List<CafeTagType> cafeTagTypes) {
-		return CafeTags.builder()
-			.cafeTagTypes(cafeTagTypes)
-			.build();
-	}
-
-	private Page createPage(int page, int sizePerPage) {
-		return Page.builder()
 			.page(page)
 			.sizePerPage(sizePerPage)
 			.build();

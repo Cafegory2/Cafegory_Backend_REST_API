@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.cafe.infrastructure.CafeEntity;
@@ -31,10 +32,11 @@ public class CafeDetailResponse {
 	private List<CafeStudyInfo> openCafeStudiesInfo = new ArrayList<>();
 	private List<CafeStudyInfo> closeCafeStudiesInfo = new ArrayList<>();
 
-	public static CafeDetailResponse of(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen,
-		List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
+	//TODO 11월 22일 createCafeInfo(cafe) 하다가 중단
+	public static CafeDetailResponse of(Cafe cafe, CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen,
+										List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
 		CafeDetailResponse response = new CafeDetailResponse();
-		response.cafeInfo = createCafeInfo(cafeEntity, businessHourEntity, isOpen);
+		response.cafeInfo = createCafeInfo(cafe, businessHourEntity, isOpen);
 		response.menusInfo = createMenusInfo(cafeEntity);
 		response.openCafeStudiesInfo = createCafeStudiesInfo(openCafeStudies);
 		response.closeCafeStudiesInfo = createCafeStudiesInfo(closeCafeStudies);
@@ -83,21 +85,19 @@ public class CafeDetailResponse {
 			.build();
 	}
 
-	private static CafeInfo createCafeInfo(CafeEntity cafeEntity, BusinessHourEntity businessHourEntity,
+	private static CafeInfo createCafeInfo(Cafe cafe, BusinessHourEntity businessHourEntity,
 		boolean isOpen) {
 		return CafeInfo.builder()
-			.id(cafeEntity.getId())
-			.name(cafeEntity.getName())
-			.imgUrl(cafeEntity.getMainImageUrl())
-			.address(cafeEntity.getAddress().getFullAddress())
+			.id(cafe.getId())
+			.name(cafe.getName())
+			.imgUrl(cafe.getImgUrl())
+			.address(cafe.getAddress().getFullAddress())
 			.openingTime(businessHourEntity.getOpeningTime())
 			.closingTime(businessHourEntity.getClosingTime())
 			.isOpen(isOpen)
-			.sns(cafeEntity.getSns())
+			.sns(cafe.getSns())
 			.tags(
-				cafeEntity.getCafeCafeTags().stream()
-					.map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
-					.collect(Collectors.toList())
+				cafe.getCafeTagTypes()
 			)
 			.build();
 	}

@@ -2,6 +2,7 @@ package com.example.demo.cafe.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.domain.Address;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Cafe;
@@ -38,7 +40,7 @@ public class CafeEntity extends BaseEntity {
 	private String mainImageUrl;
 
 	@Embedded
-	private Address address;
+	private AddressEmbeddable address;
 
 	private String sns;
 
@@ -52,7 +54,7 @@ public class CafeEntity extends BaseEntity {
 	private List<MenuEntity> menus = new ArrayList<>();
 
 	@Builder
-	private CafeEntity(String name, String mainImageUrl, Address address, String sns) {
+	private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {
 		this.name = name;
 		this.mainImageUrl = mainImageUrl;
 		this.address = address;
@@ -64,6 +66,26 @@ public class CafeEntity extends BaseEntity {
 			.id(this.id)
 			.name(this.name)
 			.imgUrl(this.mainImageUrl)
+			.build();
+	}
+
+	public Cafe toCafeWithTags() {
+		return Cafe.builder()
+			.id(this.id)
+			.name(this.name)
+			.imgUrl(this.mainImageUrl)
+			.sns(this.sns)
+			.address(
+				Address.builder()
+					.fullAddress(this.address.getFullAddress())
+					.region(this.address.getRegion())
+					.build()
+			)
+			.cafeTagTypes(
+				this.cafeCafeTags.stream()
+					.map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
+					.collect(Collectors.toList())
+			)
 			.build();
 	}
 }

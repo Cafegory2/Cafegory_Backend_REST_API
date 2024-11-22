@@ -9,11 +9,8 @@ import javax.validation.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.demo.cafe.domain.CafeTagType;
-import com.example.demo.cafe.domain.CafeTags;
-import com.example.demo.domain.Page;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.SearchCriteria;
 import com.example.demo.trash.dto.PagedRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

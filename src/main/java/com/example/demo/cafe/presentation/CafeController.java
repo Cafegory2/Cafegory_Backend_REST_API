@@ -10,6 +10,10 @@ import com.example.demo.cafe.service.CafeQueryService;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.mvc.Controller;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 
 @RestController
 @RequiredArgsConstructor

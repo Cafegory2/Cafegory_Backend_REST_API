@@ -39,7 +39,7 @@ public class CafeQueryService {
 	private final BusinessHourRepository businessHourRepository;
 
 	public CafeDetailResponse getCafeDetail(Long cafeId, LocalDateTime now) {
-		CafeEntity cafeEntity = cafeReader.getWithTags(cafeId);
+		CafeEntity cafeEntity = cafeReader.getWithTagsEntity(cafeId);
 		BusinessHour businessHour = businessHourReader.readBy(cafeId, now.getDayOfWeek());
 
 		List<CafeStudyEntity> cafeStudies = cafeStudyReader.readAllWithCoordinatorBy(cafeId);
@@ -49,7 +49,9 @@ public class CafeQueryService {
 		BusinessHourEntity businessHourEntity = businessHourRepository.findById(businessHour.getId())
 			.orElseThrow(() -> new CafegoryException(CAFE_BUSINESS_HOUR_NOT_FOUND));
 
-		return CafeDetailResponse.of(cafeEntity, businessHourEntity,
+		Cafe cafe = cafeReader.getWithTags(cafeId);
+
+		return CafeDetailResponse.of(cafe, cafeEntity, businessHourEntity,
 			businessHourOpenChecker.checkByNowTime(
 				businessHourEntity.getDayOfWeek(), businessHourEntity.getOpeningTime(),
 				businessHourEntity.getClosingTime(), now),
