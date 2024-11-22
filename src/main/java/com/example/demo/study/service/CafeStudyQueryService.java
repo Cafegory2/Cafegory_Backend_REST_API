@@ -1,5 +1,7 @@
 package com.example.demo.study.service;
 
+import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.implement.CafeReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class CafeStudyQueryService {
 
 	private final StudyReader studyReader;
 	private final StudyMemberReader studyMemberReader;
+	private final CafeReader cafeReader;
 
 	public SliceResponse<CafeStudySearchListResponse> searchCafeStudiesByDynamicFilter(
 		CafeStudySearchListRequest request
@@ -32,13 +35,11 @@ public class CafeStudyQueryService {
 	}
 
 	public CafeStudyDetailResponse getCafeStudyDetail(Long cafeStudyId) {
-		// 사용 안할거임
-		CafeStudyEntity cafeStudy = studyReader.readStudyEntity(cafeStudyId);
-
 		Study study = studyReader.read(cafeStudyId);
 		ViewCount viewCount = studyReader.readViewCountBy(cafeStudyId);
 		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(cafeStudyId);
+		Cafe cafe = cafeReader.read(study.getCafeId());
 
-		return CafeStudyDetailResponse.of(cafeStudy, study, viewCount, participantCount);
+		return CafeStudyDetailResponse.of(cafe, study, viewCount, participantCount);
 	}
 }

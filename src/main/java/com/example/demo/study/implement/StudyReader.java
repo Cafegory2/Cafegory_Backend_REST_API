@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
 import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.ViewCount;
@@ -53,11 +52,6 @@ public class StudyReader {
 
 	public List<CafeStudyEntity> readAllWithCoordinatorBy(Long cafeId) {
 		return cafeStudyRepository.findAllByCafeId(cafeId);
-	}
-
-	public CafeStudyEntity readStudyEntity(Long cafeStudyId) {
-		return cafeStudyRepository.findById(cafeStudyId)
-			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
 	}
 
 	public ViewCount readViewCountBy(Long cafeStudyId) {
