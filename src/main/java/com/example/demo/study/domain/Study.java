@@ -2,6 +2,9 @@ package com.example.demo.study.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.example.demo.domain.DateAudit;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +22,8 @@ public class Study {
 	private int maxParticipantCount;
 	private String introduction;
 	private RecruitmentStatus recruitmentStatus;
+	private List<CafeStudyTagType> tags;
+	private DateAudit dateAudit;
 
 	public DayOfWeek getStartDate() {
 		return schedule.getStartDateTime().getDayOfWeek();

@@ -11,6 +11,9 @@ import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.ParticipantCount;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.AccessLevel;
@@ -27,14 +30,15 @@ public class CafeStudyDetailResponse {
 	private CafeStudyInfo cafeStudyInfo;
 	private CoordinatorInfo coordinatorInfo;
 	private CafeInfo cafeInfo;
-	private List<Comment> commentsInfo = new ArrayList<>();
+	// private List<Comment> commentsInfo = new ArrayList<>();
 
-	public static CafeStudyDetailResponse of(CafeStudyEntity cafeStudy,
-		List<CafeStudyCommentEntity> cafeStudyComments) {
+	public static CafeStudyDetailResponse of(
+		CafeStudyEntity cafeStudy, Study study, ViewCount viewCount, ParticipantCount participantCount
+	) {
 		CafeStudyDetailResponse response = new CafeStudyDetailResponse();
 
-		response.commentsInfo = buildCommentTree(cafeStudyComments, response);
-		response.cafeStudyInfo = createCafeStudyInfo(cafeStudy);
+		// response.commentsInfo = buildCommentTree(cafeStudyComments, response);
+		response.cafeStudyInfo = createCafeStudyInfo(study, viewCount, participantCount);
 		response.coordinatorInfo = createCoordinatorInfo(cafeStudy);
 		response.cafeInfo = createCafeInfo(cafeStudy);
 
@@ -82,21 +86,40 @@ public class CafeStudyDetailResponse {
 			.nickname(coordinator.getNickname())
 			.build();
 	}
+	//
+	// private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
+	// 	return CafeStudyInfo.builder()
+	// 		.id(cafeStudy.getId())
+	// 		.name(cafeStudy.getName())
+	// 		.createdDate(cafeStudy.getCreatedDate())
+	// 		.modifiedDate(cafeStudy.getLastModifiedDate())
+	// 		.startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
+	// 		.endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
+	// 		.maximumParticipants(cafeStudy.getMaxParticipants())
+	// 		.currentParticipants(cafeStudy.getCafeStudyMembers().size())
+	// 		.memberComms(cafeStudy.getMemberComms())
+	// 		.views(cafeStudy.getViews())
+	// 		.introduction(cafeStudy.getIntroduction())
+	// 		.tag(cafeStudy.getCafeStudyCafeStudyTags().get(0).getCafeStudyTag().getType())
+	// 		.build();
+	// }
 
-	private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
+	private static CafeStudyInfo createCafeStudyInfo(
+		Study study, ViewCount viewCount, ParticipantCount participantCount
+	) {
 		return CafeStudyInfo.builder()
-			.id(cafeStudy.getId())
-			.name(cafeStudy.getName())
-			.createdDate(cafeStudy.getCreatedDate())
-			.modifiedDate(cafeStudy.getLastModifiedDate())
-			.startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
-			.endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
-			.maximumParticipants(cafeStudy.getMaxParticipants())
-			.currentParticipants(cafeStudy.getCafeStudyMembers().size())
-			.memberComms(cafeStudy.getMemberComms())
-			.views(cafeStudy.getViews())
-			.introduction(cafeStudy.getIntroduction())
-			.tag(cafeStudy.getCafeStudyCafeStudyTags().get(0).getCafeStudyTag().getType())
+			.id(study.getId())
+			.name(study.getName())
+			.createdDate(study.getDateAudit().getCreatedDate())
+			.modifiedDate(study.getDateAudit().getModifiedDate())
+			.startDateTime(study.getSchedule().getStartDateTime())
+			.endDateTime(study.getSchedule().getEndDateTime())
+			.maximumParticipants(study.getMaxParticipantCount())
+			.currentParticipants(participantCount.getCurrentCount())
+			.memberComms(study.getMemberComms())
+			.views(viewCount.getTotalViews())
+			.introduction(study.getIntroduction())
+			.tag(study.getTags())
 			.build();
 	}
 
@@ -136,7 +159,7 @@ public class CafeStudyDetailResponse {
 		private MemberComms memberComms;
 		private int views;
 		private String introduction;
-		private CafeStudyTagType tag;
+		private List<CafeStudyTagType> tag;
 	}
 
 	@Getter

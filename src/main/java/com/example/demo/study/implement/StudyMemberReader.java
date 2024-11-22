@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.study.domain.Participant;
+import com.example.demo.study.domain.ParticipantCount;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 
@@ -34,4 +35,9 @@ public class StudyMemberReader {
 			.collect(Collectors.toList());
 	}
 
+	public ParticipantCount readParticipantCountBy(Long studyId) {
+		return ParticipantCount.builder()
+			.currentCount(readParticipantIdsBy(studyId).size())
+			.build();
+	}
 }

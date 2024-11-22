@@ -1,20 +1,17 @@
 package com.example.demo.study.service;
 
-import java.util.List;
-
-import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.cafe.domain.CafeTags;
-import com.example.demo.domain.Page;
-import com.example.demo.qna.implement.CommentReader;
-import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
-import com.example.demo.study.domain.SearchCriteria;
+import com.example.demo.study.domain.ParticipantCount;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.ViewCount;
+import com.example.demo.study.implement.StudyMemberReader;
 import com.example.demo.study.implement.StudyReader;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.presentation.CafeStudyDetailResponse;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
+import com.example.demo.study.presentation.CafeStudyDetailResponse;
 import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CafeStudyQueryService {
 
 	private final StudyReader studyReader;
-	private final CommentReader commentReader;
+	private final StudyMemberReader studyMemberReader;
 
 	public SliceResponse<CafeStudySearchListResponse> searchCafeStudiesByDynamicFilter(
 		CafeStudySearchListRequest request
@@ -35,9 +32,13 @@ public class CafeStudyQueryService {
 	}
 
 	public CafeStudyDetailResponse getCafeStudyDetail(Long cafeStudyId) {
+		// 사용 안할거임
 		CafeStudyEntity cafeStudy = studyReader.readStudyEntity(cafeStudyId);
-		List<CafeStudyCommentEntity> comments = commentReader.readAllBy(cafeStudyId);
 
-		return CafeStudyDetailResponse.of(cafeStudy, comments);
+		Study study = studyReader.read(cafeStudyId);
+		ViewCount viewCount = studyReader.readViewCountBy(cafeStudyId);
+		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(cafeStudyId);
+
+		return CafeStudyDetailResponse.of(cafeStudy);
 	}
 }

@@ -6,20 +6,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.cafe.domain.CafeTags;
-import com.example.demo.domain.Page;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.study.domain.Participant;
-import com.example.demo.study.domain.SearchCriteria;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -60,6 +58,12 @@ public class StudyReader {
 	public CafeStudyEntity readStudyEntity(Long cafeStudyId) {
 		return cafeStudyRepository.findById(cafeStudyId)
 			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
+	}
+
+	public ViewCount readViewCountBy(Long cafeStudyId) {
+		return cafeStudyRepository.findById(cafeStudyId)
+			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
+			.toViewCount();
 	}
 
 }

@@ -27,6 +27,7 @@ import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
+import com.example.demo.study.domain.ViewCount;
 import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
@@ -110,6 +111,18 @@ public class CafeStudyEntity extends BaseEntity {
 			.introduction(this.introduction)
 			.recruitmentStatus(this.recruitmentStatus)
 			.build();
+	}
+
+	public ViewCount toViewCount() {
+		return ViewCount.builder()
+			.totalViews(getViews())
+			.build();
+	}
+
+	public StudyTag toStudyTag() {
+		return StudyTag.builder()
+
+			.build()
 	}
 
 	private void addCoordinatorToStudy(MemberEntity coordinator) {
