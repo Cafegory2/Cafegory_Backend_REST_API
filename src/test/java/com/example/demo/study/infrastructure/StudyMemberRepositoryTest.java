@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.JpaTest;
 import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyMemberSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
@@ -28,8 +27,6 @@ class StudyMemberRepositoryTest extends JpaTest {
 	private CafeStudySaveHelper cafeStudySaveHelper;
 	@Autowired
 	private MemberSaveHelper memberSaveHelper;
-	@Autowired
-	private CafeStudyMemberSaveHelper cafeStudyMemberSaveHelper;
 
 	@Autowired
 	private TimeUtil timeUtil;
@@ -40,18 +37,14 @@ class StudyMemberRepositoryTest extends JpaTest {
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
 
 		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
 		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, start.plusHours(2));
 
-		cafeStudyMemberSaveHelper.saveCafeStudyMember(cafeStudy, member);
-
 		// when
 		Optional<CafeStudyMemberEntity> cafeStudyMembers = sut.findByCafeStudy_IdAndMember_Id(cafeStudy.getId(),
-			member.getId());
+			coordinator.getId());
 
 		// then
 		assertThat(cafeStudyMembers).isPresent();
 	}
-
 }

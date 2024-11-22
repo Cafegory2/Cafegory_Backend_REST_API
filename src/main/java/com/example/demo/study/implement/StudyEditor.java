@@ -53,12 +53,12 @@ public class StudyEditor {
 	}
 
 	@Transactional
-	public void removeWithCascade(Long studyId, Long memberId, LocalDateTime now) {
+	public void removeWithCascade(Long studyId, Long coordinatorId, LocalDateTime now) {
 		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, cafeStudy.getCoordinator().getId());
+		studyValidator.validateMemberIsCafeStudyCoordinator(coordinatorId, cafeStudy.getCoordinator().getId());
 
-		studyMemberEditor.remove(studyId, memberId, now);
+		studyMemberEditor.remove(studyId, coordinatorId, now);
 		studyTagEditor.removeStudyStudyTagBy(studyId, now);
 		cafeStudy.softDelete(now);
 	}
