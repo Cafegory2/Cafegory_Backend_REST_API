@@ -54,7 +54,7 @@ public class CafeStudyService {
 	public void deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
 		Study study = studyReader.read(cafeStudyId);
 		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
-		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), participantIds);
+		studyValidator.validateCafeStudyMembersPresent(study, participantIds);
 
 		studyEditor.removeWithCascade(study.getId(), memberId, now);
 	}

@@ -13,6 +13,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.study.domain.Coordinator;
+import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.Study;
 
 class StudyValidatorTest {
 
@@ -74,8 +77,10 @@ class StudyValidatorTest {
 		Long coordinatorId = 1L;
 		List<Long> participantsIds = List.of(coordinatorId);
 
+		Study study = createStudy();
+
 		assertDoesNotThrow(
-			() -> sut.validateCafeStudyMembersPresent(coordinatorId, participantsIds)
+			() -> sut.validateCafeStudyMembersPresent(study, participantsIds)
 		);
 	}
 
@@ -84,11 +89,26 @@ class StudyValidatorTest {
 	void validate_study_member_is_not_coordinator_only() {
 		Long coordinatorId = 1L;
 		List<Long> participantsIds = List.of(coordinatorId, 2L);
+		Study study = createStudy();
 
 		assertThatThrownBy(
-			() -> sut.validateCafeStudyMembersPresent(coordinatorId, participantsIds)
+			() -> sut.validateCafeStudyMembersPresent(study, participantsIds)
 		).isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT.getErrorMessage());
+	}
+
+	private Study createStudy() {
+		Coordinator coordinator = Coordinator.builder()
+			.id(1L)
+			.build();
+
+		return Study.builder()
+			.name("카페고리 스터디")
+			.coordinator(coordinator)
+			.memberComms(MemberComms.WELCOME)
+			.maxParticipantCount(5)
+			.introduction("자기소개 글")
+			.build();
 	}
 
 }

@@ -21,6 +21,7 @@ import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
@@ -210,9 +211,9 @@ class CafeStudyServiceTest extends ServiceTest {
 	void includes_leader_in_participants() {
 		//given
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+		Coordinator coordinator = createCoordinator(memberSaveHelper.saveMember("coordinator@gmail.com"));
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-		Study study = creatStudy(cafe.getId(), coordinator.getId(), now.plusHours(2), now.plusHours(4));
+		Study study = creatStudy(cafe.getId(), coordinator, now.plusHours(2), now.plusHours(4));
 		//when
 		Study savedStudy = sut.createStudy(coordinator.getId(), now, study);
 		//then
@@ -220,11 +221,18 @@ class CafeStudyServiceTest extends ServiceTest {
 		assertThat(result).isEqualTo(1);
 	}
 
-	private Study creatStudy(Long cafeId, Long coordinatorId, LocalDateTime start, LocalDateTime end) {
+	private Coordinator createCoordinator(MemberEntity member) {
+		return Coordinator.builder()
+			.id(member.getId())
+			.nickname(member.getNickname())
+			.build();
+	}
+
+	private Study creatStudy(Long cafeId, Coordinator coordinator, LocalDateTime start, LocalDateTime end) {
 		return Study.builder()
 			.name("카페고리 스터디")
 			.cafeId(cafeId)
-			.coordinatorId(coordinatorId)
+			.coordinator(coordinator)
 			.schedule(
 				Schedule.builder()
 					.startDateTime(start)

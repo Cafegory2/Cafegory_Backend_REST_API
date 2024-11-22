@@ -33,7 +33,7 @@ public class CafeStudyCreateResponse {
 		return CafeStudyCreateResponse.builder()
 			.name(study.getName())
 			.cafeId(study.getCafeId())
-			.coordinatorId(study.getCoordinatorId())
+			.coordinatorId(study.getCoordinator().getId())
 			.startDateTime(study.getStartDateTime())
 			.endDateTime(study.getEndDateTime())
 			.memberComms(study.getMemberComms())
