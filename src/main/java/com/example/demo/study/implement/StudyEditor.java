@@ -51,7 +51,7 @@ public class StudyEditor {
 	}
 
 	@Transactional
-	public void deleteCafeStudy(Long studyId, Long memberId, LocalDateTime now) {
+	public void remove(Long studyId, Long memberId, LocalDateTime now) {
 		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(studyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 		studyValidator.validateMemberIsCafeStudyCoordinator(memberId, cafeStudy.getCoordinator().getId());

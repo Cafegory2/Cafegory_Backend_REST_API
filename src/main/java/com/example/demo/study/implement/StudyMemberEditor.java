@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 import static com.example.demo.exception.ExceptionType.*;
 
 @Component
@@ -41,5 +43,12 @@ public class StudyMemberEditor {
 			.member(member)
 			.studyRole(studyRole)
 			.build();
+	}
+
+	public void remove(Long studyId, Long memberId, LocalDateTime now) {
+		CafeStudyMemberEntity studyMemberEntity = studyMemberRepository.findByCafeStudy_IdAndMember_Id(studyId, memberId)
+			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND));
+
+		studyMemberEntity.softDelete(now);
 	}
 }

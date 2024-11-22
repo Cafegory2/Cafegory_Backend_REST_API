@@ -15,7 +15,6 @@ import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.BusinessHourValidator;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.member.implement.MemberReader;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.StudyEditor;
@@ -38,7 +37,6 @@ public class CafeStudyService {
 	private final BusinessHourReader businessHourReader;
 	private final StudyReader cafeStudyReader;
 	private final StudyEditor studyEditor;
-	private final MemberReader memberReader;
 	private final StudyReader studyReader;
 	private final StudyMemberEditor studyMemberEditor;
 	private final StudyMemberReader studyMemberReader;
@@ -47,6 +45,7 @@ public class CafeStudyService {
 		return cafeStudyRepository.findById(cafeStudyId).orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}
 
+	//TODO 카공 태그 저장하는 로직 추가 필요
 	@Transactional
 	public Study createStudy(Long memberId, LocalDateTime now, Study study) {
 		validateStudyCreation(now, study.getSchedule().getStartDateTime());
@@ -68,7 +67,9 @@ public class CafeStudyService {
 		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
 		studyValidator.validateCafeStudyMembersPresent(study.getCoordinatorId(), participantIds);
 
-		studyEditor.deleteCafeStudy(study.getId(), memberId, now);
+		studyEditor.remove(study.getId(), memberId, now);
+		studyMemberEditor.remove(study.getId(), memberId, now);
+
 	}
 
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {
