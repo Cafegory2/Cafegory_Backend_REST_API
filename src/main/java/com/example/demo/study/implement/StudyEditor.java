@@ -3,6 +3,8 @@ package com.example.demo.study.implement;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +16,12 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
+import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
+import com.example.demo.study.infrastructure.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.StudyPeriod;
 
 import lombok.RequiredArgsConstructor;
@@ -27,12 +33,15 @@ public class StudyEditor {
 	private final CafeStudyRepository cafeStudyRepository;
 	private final CafeRepository cafeRepository;
 	private final MemberRepository memberRepository;
+	private final CafeStudyTagRepository cafeStudyTagRepository;
+	private final CafeStudyCafeStudyTagRepository cafeStudyCafeStudyTagRepository;
 
 	private final StudyMemberEditor studyMemberEditor;
 	private final StudyTagEditor studyTagEditor;
 
 	private final StudyValidator studyValidator;
 
+	// TODO: save할 때 카공장의 기존 스터디를 조회하는 로직에서 toStudy 메서드 사용하여 예외 발생
 	public Long save(Study study, Cafe cafe, Long memberId) {
 		validateStudyDetails(study);
 
@@ -43,6 +52,12 @@ public class StudyEditor {
 
 		CafeStudyEntity savedStudy =
 			cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
+
+		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
+		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
+			buildCafeStudyTags(savedStudy, tags));
+		// savedStudy.addCafeStudyTags(savedTags);
+
 		return savedStudy.getId();
 	}
 
@@ -79,6 +94,18 @@ public class StudyEditor {
 			.startDateTime(study.getStartDateTime())
 			.endDateTime(study.getEndDateTime())
 			.build();
+	}
+
+	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags(
+		CafeStudyEntity cafeStudy, List<CafeStudyTagEntity> cafeStudyTags
+	) {
+		return cafeStudyTags.stream()
+			.map(cafeStudyTag -> CafeStudyCafeStudyTagEntity.builder()
+				.cafeStudy(cafeStudy)
+				.cafeStudyTag(cafeStudyTag)
+				.build()
+			)
+			.collect(Collectors.toList());
 	}
 
 }

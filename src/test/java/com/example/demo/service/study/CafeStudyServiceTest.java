@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +19,11 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
@@ -46,6 +49,8 @@ class CafeStudyServiceTest extends ServiceTest {
 	private TimeUtil timeUtil;
 	@Autowired
 	private CafeStudySaveHelper cafeStudySaveHelper;
+	@Autowired
+	private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
 
 	//	@Autowired
 	//	private StudyOnceRepository studyOnceRepository;
@@ -62,6 +67,8 @@ class CafeStudyServiceTest extends ServiceTest {
 	//	}
 
 	private CafeStudyCreateRequest makeCafeStudyCreateRequest(LocalDateTime start, LocalDateTime end, long cafeId) {
+		List<CafeStudyTagType> tags = List.of(CafeStudyTagType.DESIGN);
+
 		return CafeStudyCreateRequest.builder()
 			.name("테스트 스터디")
 			.cafeId(cafeId)
@@ -70,6 +77,7 @@ class CafeStudyServiceTest extends ServiceTest {
 			.memberComms(MemberComms.WELCOME)
 			.maxParticipants(4)
 			.introduction("스터디 소개글")
+			.tags(tags)
 			.build();
 
 	}
@@ -143,6 +151,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		MemberEntity leader = memberSaveHelper.saveMember();
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+
 		//then
 		assertDoesNotThrow(() ->
 			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy()));

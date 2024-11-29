@@ -82,7 +82,7 @@ public class CafeStudyEntity extends BaseEntity {
 
 	@Builder
 	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
-		MemberComms memberComms, int maxParticipants, String introduction) {
+		MemberComms memberComms, int maxParticipants, String introduction, List<CafeStudyCafeStudyTagEntity> tags) {
 		this.name = name;
 		this.cafe = cafe;
 		this.coordinator = coordinator;
@@ -92,6 +92,7 @@ public class CafeStudyEntity extends BaseEntity {
 		this.introduction = introduction;
 		this.views = 0;
 		this.recruitmentStatus = RecruitmentStatus.OPEN;
+		this.cafeStudyCafeStudyTags = tags;
 
 		addCoordinatorToStudy(coordinator);
 	}
@@ -126,6 +127,10 @@ public class CafeStudyEntity extends BaseEntity {
 		return ViewCount.builder()
 			.totalViews(getViews())
 			.build();
+	}
+
+	public void addCafeStudyTags(List<CafeStudyCafeStudyTagEntity> tags) {
+		this.cafeStudyCafeStudyTags = tags;
 	}
 
 	private void addCoordinatorToStudy(MemberEntity coordinator) {
