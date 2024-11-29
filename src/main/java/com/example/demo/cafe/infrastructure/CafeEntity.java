@@ -61,6 +61,7 @@ public class CafeEntity extends BaseEntity {
 		this.sns = sns;
 	}
 
+	// TODO: cafe 도메인 정의
 	public Cafe toCafe() {
 		return Cafe.builder()
 			.id(this.id)

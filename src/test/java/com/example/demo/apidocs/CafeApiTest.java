@@ -3,8 +3,6 @@ package com.example.demo.apidocs;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +20,6 @@ import com.example.demo.helper.CafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.helper.MenuSaveHelper;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
@@ -64,24 +58,24 @@ public class CafeApiTest extends ApiDocsTest {
 
 		menuSaveHelper.saveMenu("아메리카노", "1500", cafeEntity);
 		menuSaveHelper.saveMenu("카페라떼", "3000", cafeEntity);
-
-		MemberEntity member = memberSaveHelper.saveMember();
-
-		LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
-
-		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
-
-		CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(8),
-			startDateTime.plusHours(10));
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-		cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(2),
-			startDateTime.plusHours(4));
-		cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
-		CafeStudyEntity cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member,
-			startDateTime.plusHours(12), startDateTime.plusHours(14));
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag1);
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag2);
+		//
+		// MemberEntity member = memberSaveHelper.saveMember();
+		//
+		// LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
+		//
+		// CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
+		// CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+		//
+		// CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(8),
+		// 	startDateTime.plusHours(10));
+		// cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
+		// cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(2),
+		// 	startDateTime.plusHours(4));
+		// cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
+		// CafeStudyEntity cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member,
+		// 	startDateTime.plusHours(12), startDateTime.plusHours(14));
+		// cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag1);
+		// cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag2);
 
 		RestAssured.given(spec).log().all()
 			.filter(RestAssuredRestDocumentationWrapper.document(
@@ -101,31 +95,31 @@ public class CafeApiTest extends ApiDocsTest {
 						fieldWithPath("cafeInfo.tags[]").description("카페에 해당하는 태그 리스트"),
 
 						fieldWithPath("menusInfo[].name").description("메뉴 이름"),
-						fieldWithPath("menusInfo[].price").description("메뉴 가격"),
+						fieldWithPath("menusInfo[].price").description("메뉴 가격")
 
-						fieldWithPath("openCafeStudiesInfo[].id").description("오픈된 카공 ID"),
-						fieldWithPath("openCafeStudiesInfo[].name").description("오픈된 카공 이름"),
-						fieldWithPath("openCafeStudiesInfo[].tags[]").description("오픈된 카공 태그 리스트"),
-						fieldWithPath("openCafeStudiesInfo[].startDateTime").description("오픈된 카공 시작 시간"),
-						fieldWithPath("openCafeStudiesInfo[].endDateTime").description("오픈된 카공 종료 시간"),
-						fieldWithPath("openCafeStudiesInfo[].maximumParticipants").description("오픈된 카공 최대 참가자 수"),
-						fieldWithPath("openCafeStudiesInfo[].currentParticipants").description("오픈된 카공 현재 참가자 수"),
-						fieldWithPath("openCafeStudiesInfo[].views").description("오픈된 카공 조회수"),
-						fieldWithPath("openCafeStudiesInfo[].memberComms").description("오픈된 카공 참여자 소통 여부"),
-						fieldWithPath("openCafeStudiesInfo[].recruitmentStatus").description("오픈된 카공 현재 모집 여부"),
-						fieldWithPath("openCafeStudiesInfo[].writer").description("오픈된 카공 작성자"),
-
-						fieldWithPath("closeCafeStudiesInfo[].id").description("닫힌 카공 ID"),
-						fieldWithPath("closeCafeStudiesInfo[].name").description("닫힌 카공 이름"),
-						fieldWithPath("closeCafeStudiesInfo[].tags[]").description("닫힌 카공 태그 리스트"),
-						fieldWithPath("closeCafeStudiesInfo[].startDateTime").description("닫힌 카공 시작 시간"),
-						fieldWithPath("closeCafeStudiesInfo[].endDateTime").description("닫힌 카공 종료 시간"),
-						fieldWithPath("closeCafeStudiesInfo[].maximumParticipants").description("닫힌 카공 최대 참가자 수"),
-						fieldWithPath("closeCafeStudiesInfo[].currentParticipants").description("닫힌 카공 현재 참가자 수"),
-						fieldWithPath("closeCafeStudiesInfo[].views").description("닫힌 카공 조회수"),
-						fieldWithPath("closeCafeStudiesInfo[].memberComms").description("닫힌 카공 참여자 소통 여부"),
-						fieldWithPath("closeCafeStudiesInfo[].recruitmentStatus").description("닫힌 카공 현재 모집 여부"),
-						fieldWithPath("closeCafeStudiesInfo[].writer").description("닫힌 카공 작성자")
+						// fieldWithPath("openCafeStudiesInfo[].id").description("오픈된 카공 ID"),
+						// fieldWithPath("openCafeStudiesInfo[].name").description("오픈된 카공 이름"),
+						// fieldWithPath("openCafeStudiesInfo[].tags[]").description("오픈된 카공 태그 리스트"),
+						// fieldWithPath("openCafeStudiesInfo[].startDateTime").description("오픈된 카공 시작 시간"),
+						// fieldWithPath("openCafeStudiesInfo[].endDateTime").description("오픈된 카공 종료 시간"),
+						// fieldWithPath("openCafeStudiesInfo[].maximumParticipants").description("오픈된 카공 최대 참가자 수"),
+						// fieldWithPath("openCafeStudiesInfo[].currentParticipants").description("오픈된 카공 현재 참가자 수"),
+						// fieldWithPath("openCafeStudiesInfo[].views").description("오픈된 카공 조회수"),
+						// fieldWithPath("openCafeStudiesInfo[].memberComms").description("오픈된 카공 참여자 소통 여부"),
+						// fieldWithPath("openCafeStudiesInfo[].recruitmentStatus").description("오픈된 카공 현재 모집 여부"),
+						// fieldWithPath("openCafeStudiesInfo[].writer").description("오픈된 카공 작성자"),
+						//
+						// fieldWithPath("closeCafeStudiesInfo[].id").description("닫힌 카공 ID"),
+						// fieldWithPath("closeCafeStudiesInfo[].name").description("닫힌 카공 이름"),
+						// fieldWithPath("closeCafeStudiesInfo[].tags[]").description("닫힌 카공 태그 리스트"),
+						// fieldWithPath("closeCafeStudiesInfo[].startDateTime").description("닫힌 카공 시작 시간"),
+						// fieldWithPath("closeCafeStudiesInfo[].endDateTime").description("닫힌 카공 종료 시간"),
+						// fieldWithPath("closeCafeStudiesInfo[].maximumParticipants").description("닫힌 카공 최대 참가자 수"),
+						// fieldWithPath("closeCafeStudiesInfo[].currentParticipants").description("닫힌 카공 현재 참가자 수"),
+						// fieldWithPath("closeCafeStudiesInfo[].views").description("닫힌 카공 조회수"),
+						// fieldWithPath("closeCafeStudiesInfo[].memberComms").description("닫힌 카공 참여자 소통 여부"),
+						// fieldWithPath("closeCafeStudiesInfo[].recruitmentStatus").description("닫힌 카공 현재 모집 여부"),
+						// fieldWithPath("closeCafeStudiesInfo[].writer").description("닫힌 카공 작성자")
 					)
 				)
 			)

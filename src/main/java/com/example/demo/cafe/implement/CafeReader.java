@@ -24,11 +24,6 @@ public class CafeReader {
 		return cafeEntity.toCafe();
 	}
 
-	public CafeEntity getWithTagsEntity(Long cafeId) {
-		return cafeRepository.findWithTags(cafeId)
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-	}
-
 	public Cafe getWithTags(Long cafeId) {
 		CafeEntity cafeEntity = cafeRepository.findWithTags(cafeId)
 			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));

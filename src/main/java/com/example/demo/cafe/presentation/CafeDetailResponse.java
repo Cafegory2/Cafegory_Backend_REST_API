@@ -1,6 +1,5 @@
 package com.example.demo.cafe.presentation;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +9,6 @@ import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.domain.Menu;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.RecruitmentStatus;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -29,45 +23,41 @@ public class CafeDetailResponse {
 
 	private CafeInfo cafeInfo;
 	private List<MenuInfo> menusInfo = new ArrayList<>();
-	private List<CafeStudyInfo> openCafeStudiesInfo = new ArrayList<>();
-	private List<CafeStudyInfo> closeCafeStudiesInfo = new ArrayList<>();
 
-	public static CafeDetailResponse of(Cafe cafe, CafeEntity cafeEntity, BusinessHour businessHour, boolean isOpen,
-		List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
+	public static CafeDetailResponse of(Cafe cafe, BusinessHour businessHour, boolean isOpen
+	) {
 		CafeDetailResponse response = new CafeDetailResponse();
 		response.cafeInfo = createCafeInfo(cafe, businessHour, isOpen);
 		response.menusInfo = createMenusInfo(cafe);
-		response.openCafeStudiesInfo = createCafeStudiesInfo(openCafeStudies);
-		response.closeCafeStudiesInfo = createCafeStudiesInfo(closeCafeStudies);
 
 		return response;
 	}
-
-	private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudyEntity> cafeStudies) {
-		return cafeStudies.stream()
-			.map(CafeDetailResponse::createCafeStudyInfo)
-			.collect(Collectors.toList());
-	}
-
-	private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
-		return CafeStudyInfo.builder()
-			.id(cafeStudy.getId())
-			.name(cafeStudy.getName())
-			.tags(
-				cafeStudy.getCafeStudyCafeStudyTags().stream()
-					.map(cafeStudyCafeStudyTag -> cafeStudyCafeStudyTag.getCafeStudyTag().getType())
-					.collect(Collectors.toList())
-			)
-			.startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
-			.endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
-			.maximumParticipants(cafeStudy.getMaxParticipants())
-			.currentParticipants(cafeStudy.getCafeStudyMembers().size())
-			.views(cafeStudy.getViews())
-			.memberComms(cafeStudy.getMemberComms())
-			.recruitmentStatus(cafeStudy.getRecruitmentStatus())
-			.writer(cafeStudy.getCoordinator().getNickname())
-			.build();
-	}
+	//
+	// private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudyEntity> cafeStudies) {
+	// 	return cafeStudies.stream()
+	// 		.map(CafeDetailResponse::createCafeStudyInfo)
+	// 		.collect(Collectors.toList());
+	// }
+	//
+	// private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
+	// 	return CafeStudyInfo.builder()
+	// 		.id(cafeStudy.getId())
+	// 		.name(cafeStudy.getName())
+	// 		.tags(
+	// 			cafeStudy.getCafeStudyCafeStudyTags().stream()
+	// 				.map(cafeStudyCafeStudyTag -> cafeStudyCafeStudyTag.getCafeStudyTag().getType())
+	// 				.collect(Collectors.toList())
+	// 		)
+	// 		.startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
+	// 		.endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
+	// 		.maximumParticipants(cafeStudy.getMaxParticipants())
+	// 		.currentParticipants(cafeStudy.getCafeStudyMembers().size())
+	// 		.views(cafeStudy.getViews())
+	// 		.memberComms(cafeStudy.getMemberComms())
+	// 		.recruitmentStatus(cafeStudy.getRecruitmentStatus())
+	// 		.writer(cafeStudy.getCoordinator().getNickname())
+	// 		.build();
+	// }
 
 	private static List<MenuInfo> createMenusInfo(Cafe cafe) {
 		List<Menu> menus = cafe.getMenus();
@@ -126,23 +116,23 @@ public class CafeDetailResponse {
 		private String price;
 	}
 
-	@Getter
-	@Setter
-	@Builder
-	private static class CafeStudyInfo {
-
-		private Long id;
-		private String name;
-		private List<CafeStudyTagType> tags;
-		private LocalDateTime startDateTime;
-		private LocalDateTime endDateTime;
-		private int maximumParticipants;
-		private int currentParticipants;
-		private int views;
-		private MemberComms memberComms;
-		private RecruitmentStatus recruitmentStatus;
-
-		private String writer;
-	}
+	// @Getter
+	// @Setter
+	// @Builder
+	// private static class CafeStudyInfo {
+	//
+	// 	private Long id;
+	// 	private String name;
+	// 	private List<CafeStudyTagType> tags;
+	// 	private LocalDateTime startDateTime;
+	// 	private LocalDateTime endDateTime;
+	// 	private int maximumParticipants;
+	// 	private int currentParticipants;
+	// 	private int views;
+	// 	private MemberComms memberComms;
+	// 	private RecruitmentStatus recruitmentStatus;
+	//
+	// 	private String writer;
+	// }
 
 }
