@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface CafeStudyRepository extends JpaRepository<CafeStudyEntity, Long> {
 
+	// TODO: 카공 생성 시 tag 삽입 기능 구현 하면 tag fetch join으로 가져오기
 	@Query(value = "select s from CafeStudyEntity s" +
 		" inner join fetch s.coordinator" +
 		" where s.id = :studyId")
@@ -22,5 +23,6 @@ public interface CafeStudyRepository extends JpaRepository<CafeStudyEntity, Long
 	@Query("SELECT c FROM CafeStudyEntity c"
 		+ " inner join fetch c.coordinator"
 		+ " WHERE c.id IN :studyIds AND c.studyPeriod.startDateTime >= :now")
-	List<CafeStudyEntity> findUpcomingsWithMemberBy(@Param("studyIds") List<Long> studyIds, @Param("now") LocalDateTime now);
+	List<CafeStudyEntity> findUpcomingsWithMemberBy(@Param("studyIds") List<Long> studyIds,
+		@Param("now") LocalDateTime now);
 }

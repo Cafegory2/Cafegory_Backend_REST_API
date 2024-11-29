@@ -23,6 +23,7 @@ public class Study {
 	private String introduction;
 	private RecruitmentStatus recruitmentStatus;
 	private List<CafeStudyTagType> tags;
+
 	private DateAudit dateAudit;
 
 	public DayOfWeek getStartDate() {
