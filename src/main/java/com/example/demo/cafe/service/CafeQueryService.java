@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.example.demo.cafe.domain.Cafe;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.domain.BusinessHour;
+import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.implement.BusinessHourOpenChecker;
 import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.CafeReader;
@@ -51,7 +51,7 @@ public class CafeQueryService {
 
 		Cafe cafe = cafeReader.getWithTags(cafeId);
 
-		return CafeDetailResponse.of(cafe, cafeEntity, businessHourEntity,
+		return CafeDetailResponse.of(cafe, cafeEntity, businessHour,
 			businessHourOpenChecker.checkByNowTime(
 				businessHourEntity.getDayOfWeek(), businessHourEntity.getOpeningTime(),
 				businessHourEntity.getClosingTime(), now),

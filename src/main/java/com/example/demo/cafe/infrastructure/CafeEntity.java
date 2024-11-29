@@ -12,9 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.demo.cafe.domain.Address;
 import org.hibernate.annotations.Where;
 
+import com.example.demo.cafe.domain.Address;
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.trash.implement.BaseEntity;
 
@@ -69,7 +69,7 @@ public class CafeEntity extends BaseEntity {
 			.build();
 	}
 
-	public Cafe toCafeWithTags() {
+	public Cafe toCafeWithTagsAndMenu() {
 		return Cafe.builder()
 			.id(this.id)
 			.name(this.name)
@@ -84,6 +84,11 @@ public class CafeEntity extends BaseEntity {
 			.cafeTagTypes(
 				this.cafeCafeTags.stream()
 					.map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
+					.collect(Collectors.toList())
+			)
+			.menus(
+				this.menus.stream()
+					.map(MenuEntity::toMenu)
 					.collect(Collectors.toList())
 			)
 			.build();

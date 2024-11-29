@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.domain.CafeTagType;
-import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.domain.Menu;
 import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.cafe.infrastructure.MenuEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
@@ -32,12 +32,11 @@ public class CafeDetailResponse {
 	private List<CafeStudyInfo> openCafeStudiesInfo = new ArrayList<>();
 	private List<CafeStudyInfo> closeCafeStudiesInfo = new ArrayList<>();
 
-	//TODO 11월 22일 createCafeInfo(cafe) 하다가 중단
-	public static CafeDetailResponse of(Cafe cafe, CafeEntity cafeEntity, BusinessHourEntity businessHourEntity, boolean isOpen,
-										List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
+	public static CafeDetailResponse of(Cafe cafe, CafeEntity cafeEntity, BusinessHour businessHour, boolean isOpen,
+		List<CafeStudyEntity> openCafeStudies, List<CafeStudyEntity> closeCafeStudies) {
 		CafeDetailResponse response = new CafeDetailResponse();
-		response.cafeInfo = createCafeInfo(cafe, businessHourEntity, isOpen);
-		response.menusInfo = createMenusInfo(cafeEntity);
+		response.cafeInfo = createCafeInfo(cafe, businessHour, isOpen);
+		response.menusInfo = createMenusInfo(cafe);
 		response.openCafeStudiesInfo = createCafeStudiesInfo(openCafeStudies);
 		response.closeCafeStudiesInfo = createCafeStudiesInfo(closeCafeStudies);
 
@@ -70,30 +69,29 @@ public class CafeDetailResponse {
 			.build();
 	}
 
-	private static List<MenuInfo> createMenusInfo(CafeEntity cafeEntity) {
-		List<MenuEntity> menus = cafeEntity.getMenus();
+	private static List<MenuInfo> createMenusInfo(Cafe cafe) {
+		List<Menu> menus = cafe.getMenus();
 
 		return menus.stream()
 			.map(CafeDetailResponse::createMenuInfo)
 			.collect(Collectors.toList());
 	}
 
-	private static MenuInfo createMenuInfo(MenuEntity menu) {
+	private static MenuInfo createMenuInfo(Menu menu) {
 		return MenuInfo.builder()
 			.name(menu.getName())
 			.price(menu.getPrice())
 			.build();
 	}
 
-	private static CafeInfo createCafeInfo(Cafe cafe, BusinessHourEntity businessHourEntity,
-		boolean isOpen) {
+	private static CafeInfo createCafeInfo(Cafe cafe, BusinessHour businessHour, boolean isOpen) {
 		return CafeInfo.builder()
 			.id(cafe.getId())
 			.name(cafe.getName())
 			.imgUrl(cafe.getImgUrl())
 			.address(cafe.getAddress().getFullAddress())
-			.openingTime(businessHourEntity.getOpeningTime())
-			.closingTime(businessHourEntity.getClosingTime())
+			.openingTime(businessHour.getOpeningTme())
+			.closingTime(businessHour.getClosingTme())
 			.isOpen(isOpen)
 			.sns(cafe.getSns())
 			.tags(

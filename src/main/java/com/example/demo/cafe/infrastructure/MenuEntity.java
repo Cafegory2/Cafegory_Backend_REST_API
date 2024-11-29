@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
+import com.example.demo.cafe.domain.Menu;
 import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
@@ -44,5 +45,12 @@ public class MenuEntity extends BaseEntity {
 		this.name = name;
 		this.price = price;
 		this.cafe = cafe;
+	}
+
+	public Menu toMenu() {
+		return Menu.builder()
+			.name(this.name)
+			.price(this.price)
+			.build();
 	}
 }
