@@ -4,7 +4,6 @@ import com.example.demo.implement.member.BeverageSize;
 import com.example.demo.implement.member.Role;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.repository.member.MemberRepository;
-import lombok.Setter;
 
 public class MemberBuilder {
 
@@ -28,7 +27,7 @@ public class MemberBuilder {
         this.beverageSize = copy.beverageSize;
     }
 
-    private MemberBuilder but() {
+    public MemberBuilder but() {
         return new MemberBuilder(this);
     }
 
@@ -48,6 +47,21 @@ public class MemberBuilder {
 
     public MemberBuilder withEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public MemberBuilder whoIsCoordinator() {
+        this.email = "coordinator@test.com";
+        return this;
+    }
+
+    public MemberBuilder whoIsParticipant() {
+        this.email = "participant@test.com";
+        return this;
+    }
+
+    public MemberBuilder whoIsParticipant(int sequence) {
+        this.email = "participant" + sequence + "@test.com";
         return this;
     }
 
@@ -88,7 +102,7 @@ public class MemberBuilder {
     }
 
     public static class MemberSaver {
-        static MemberRepository memberRepository;
+        private static MemberRepository memberRepository;
 
         public static void init(MemberRepository memberRepo) {
             memberRepository = memberRepo;

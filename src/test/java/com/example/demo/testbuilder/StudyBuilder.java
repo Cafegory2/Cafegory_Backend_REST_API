@@ -36,7 +36,7 @@ public class StudyBuilder {
         this.introduction = copy.introduction;
     }
 
-    private StudyBuilder but() {
+    public StudyBuilder but() {
         return new StudyBuilder(this);
     }
 
@@ -60,6 +60,14 @@ public class StudyBuilder {
     }
 
     public StudyBuilder withStudyPeriod(LocalDateTime start, LocalDateTime end) {
+        this.studyPeriod = StudyPeriod.builder().startDateTime(start).endDateTime(end).build();
+        return this;
+    }
+
+    public StudyBuilder withStudyPeriodFrom10To12() {
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 10, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2000, 1, 1, 12, 0, 0);
+
         this.studyPeriod = StudyPeriod.builder().startDateTime(start).endDateTime(end).build();
         return this;
     }
@@ -96,7 +104,7 @@ public class StudyBuilder {
     }
 
     public static class StudySaver {
-        static CafeStudyRepository studyRepository;
+        private static CafeStudyRepository studyRepository;
 
         public static void init(CafeStudyRepository studyRepo) {
             studyRepository = studyRepo;

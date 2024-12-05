@@ -27,6 +27,17 @@ public class TestBusinessHourFactory {
 			.build();
 	}
 
+	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(CafeEntity cafe, DayOfWeek day) {
+		return BusinessHourEntity.builder()
+			.dayOfWeek(day)
+			.openingTime(LocalTime.MIN)
+			.closingTime(LocalTime.of(23, 59, 59))
+			.cafe(cafe)
+			.build();
+	}
+
+
+
 	public static BusinessHourEntity createBusinessHourWithDayAndTime(CafeEntity cafe, DayOfWeek day, LocalTime openingTime,
 																	  LocalTime closingTime) {
 		return BusinessHourEntity.builder()

@@ -1,11 +1,19 @@
 package com.example.demo.repository.study;
 
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.CommentBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyBuilder.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
+import com.example.demo.testbuilder.CafeBuilder;
+import com.example.demo.testbuilder.CommentBuilder;
+import com.example.demo.testbuilder.MemberBuilder;
+import com.example.demo.testbuilder.StudyBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +74,33 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
 			member1, StudyRole.MEMBER, cafeStudy);
 		//when
 		List<CafeStudyCommentEntity> result = sut.findAllBy(cafeStudy.getId());
+		//then
+		assertThat(result.size()).isEqualTo(6);
+	}
+
+	@Test
+	@DisplayName("카공 ID를 사용하여 해당 카공에 달린 모든 댓글과 대댓글을 조회한다.")
+	void find_all_comments_with_replies_in_cafe_study2() {
+		//given
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		CafeStudyEntity study = aStudy()
+			.with(aCafe().saveWith7daysFrom9To21())
+			.with(coordinator)
+			.withStudyPeriodFrom10To12().save();
+
+		MemberEntity member1 = aMember().whoIsParticipant(1).save();
+		MemberEntity member2 = aMember().whoIsParticipant(2).save();
+
+		CommentBuilder comment = aComment().with(study);
+		CafeStudyCommentEntity root1 = comment.but().withMember(member1).save();
+		CafeStudyCommentEntity reply1ToRoot1 = comment.but().replyTo(root1).withCoordinator(coordinator).save();
+		CafeStudyCommentEntity reply2ToReply1 = comment.but().replyTo(reply1ToRoot1).withMember(member2).save();
+
+		CafeStudyCommentEntity root2 = comment.but().withMember(member2).save();
+		CafeStudyCommentEntity reply1ToRoot2 = comment.but().replyTo(root2).withCoordinator(coordinator).save();
+		CafeStudyCommentEntity reply2ToReply2 = comment.but().replyTo(reply1ToRoot2).withMember(member1).save();
+		//when
+		List<CafeStudyCommentEntity> result = sut.findAllBy(study.getId());
 		//then
 		assertThat(result.size()).isEqualTo(6);
 	}

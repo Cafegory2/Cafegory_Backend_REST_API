@@ -1,6 +1,8 @@
 package com.example.demo.service.study;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +12,8 @@ import java.util.stream.Stream;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
+import com.example.demo.testbuilder.CafeBuilder;
+import com.example.demo.testbuilder.MemberBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,25 +45,9 @@ class CafeStudyServiceTest extends ServiceTest {
 	@Autowired
 	private CafeSaveHelper cafeSaveHelper;
 	@Autowired
-	private MemberSaveHelper memberSaveHelper;
-	@Autowired
 	private TimeUtil timeUtil;
 	@Autowired
 	private CafeStudySaveHelper cafeStudySaveHelper;
-
-	//	@Autowired
-	//	private StudyOnceRepository studyOnceRepository;
-	//	@Autowired
-	//	private StudyMemberRepository studyMemberRepository;
-	//	@Autowired
-	//	private ThumbnailImageSaveHelper thumbnailImageSaveHelper;
-
-	//
-	//	@Test
-	//	@DisplayName("정상 목록 조회 테스트")
-	//	void searchStudyByDto() {
-	//
-	//	}
 
 	private CafeStudyCreateRequest makeCafeStudyCreateRequest(LocalDateTime start, LocalDateTime end, long cafeId) {
 		return CafeStudyCreateRequest.builder()
@@ -74,88 +62,31 @@ class CafeStudyServiceTest extends ServiceTest {
 
 	}
 
-	//	@Test
-	//	@DisplayName("회원이 아닐떄 카공을 조회하면 카공의 참석여부는 false를 반환한다.")
-	//	void searchByStudyId_when_not_member() {
-	//		//TODO 테스트 코드, 프로덕션 코드 수정 필요
-	//		LocalDateTime start = LocalDateTime.now().plusHours(3).plusMinutes(1);
-	//		LocalDateTime end = start.plusHours(1);
-	//		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
-	//		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
-	//		long leaderId = memberSaveHelper.saveMember(thumbnailImage).getId();
-	//		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-	//		StudyOnceCreateResponse result = sut.createStudy(leaderId, studyOnceCreateRequest);
-	//
-	//		StudyOnceSearchResponse studyOnceSearchResponse = sut.searchByStudyId(result.getStudyOnceId());
-	//
-	//		assertThat(studyOnceSearchResponse.isAttendance()).isFalse();
-	//	}
-	//
-	//	@Test
-	//	@DisplayName("회원이 카공을 조회할때 카공 멤버라면 참석여부는 true를 반환한다.")
-	//	void searchStudyOnceWithMemberParticipation_when_takes_attendance() {
-	//		//TODO 테스트 코드, 프로덕션 코드 수정 필요
-	//		LocalDateTime start = LocalDateTime.now().plusHours(4);
-	//		LocalDateTime end = start.plusHours(4);
-	//		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
-	//		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-	//		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
-	//		long leaderId = memberSaveHelper.saveMember(thumbnailImage).getId();
-	//		StudyOnceCreateResponse searchResponse = sut.createStudy(leaderId, studyOnceCreateRequest);
-	//		long studyOnceId = searchResponse.getStudyOnceId();
-	//		long memberId = memberSaveHelper.saveMember(thumbnailImage).getId();
-	//		sut.tryJoin(memberId, studyOnceId);
-	//
-	//		StudyOnceSearchResponse response = sut.searchStudyOnceWithMemberParticipation(
-	//			studyOnceId, memberId);
-	//
-	//		assertThat(response.isAttendance()).isTrue();
-	//	}
-	//
-	//	@Test
-	//	@DisplayName("회원이 카공을 조회할때 카공 멤버가 아니라면 참석여부는 false를 반환한다.")
-	//	void searchStudyOnceWithMemberParticipation_when_not_take_attendance() {
-	//		//TODO 테스트 코드, 프로덕션 코드 수정 필요
-	//		LocalDateTime start = LocalDateTime.now().plusHours(4);
-	//		LocalDateTime end = start.plusHours(4);
-	//		long cafeId = cafeSaveHelper.saveCafeWith24For7().getId();
-	//		StudyOnceCreateRequest studyOnceCreateRequest = makeStudyOnceCreateRequest(start, end, cafeId);
-	//		ThumbnailImage thumbnailImage = thumbnailImageSaveHelper.saveThumbnailImage();
-	//		long leaderId = memberSaveHelper.saveMember(thumbnailImage).getId();
-	//		StudyOnceCreateResponse searchResponse = sut.createStudy(leaderId, studyOnceCreateRequest);
-	//		long studyOnceId = searchResponse.getStudyOnceId();
-	//		long memberId = memberSaveHelper.saveMember(thumbnailImage).getId();
-	//
-	//		StudyOnceSearchResponse response = sut.searchStudyOnceWithMemberParticipation(
-	//			studyOnceId, memberId);
-	//
-	//		assertThat(response.isAttendance()).isFalse();
-	//	}
-
 	@Test
 	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
 	void exception_case() {
 		//given
+		CafeEntity cafe  = aCafe().saveWith24For7();
+		MemberEntity coordinator = aMember().save();
+
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
-
-		MemberEntity leader = memberSaveHelper.saveMember();
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() ->
-			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy()));
+			sut.createStudy(coordinator.getId(), now, cafeStudyCreateRequest.toStudy()));
 	}
 
 	@Test
 	@DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
 	void study_starts_1hours_after_now() {
 		//given
-		MemberEntity coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = timeUtil.now().plusHours(1);
+		CafeEntity cafe = aCafe().saveWith24For7();
+		MemberEntity coordinator = aMember().save();
+
+		LocalDateTime start = timeUtil.now().plusHours(2);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
@@ -165,10 +96,11 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 시간으로부터 1시간 이전일 수 없다.")
 	void study_starts_1hours_before_now() {
 		//given
-		MemberEntity coordinator = memberSaveHelper.saveMember();
+		CafeEntity cafe = aCafe().saveWith24For7();
+		MemberEntity coordinator = aMember().save();
+
 		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
@@ -180,10 +112,11 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
 	void study_start_date_before_one_month() {
 		//given
-		MemberEntity coordinator = memberSaveHelper.saveMember();
+		CafeEntity cafe = aCafe().saveWith24For7();
+		MemberEntity coordinator = aMember().save();
+
 		LocalDateTime start = timeUtil.now().plusMonths(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
@@ -193,10 +126,11 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
 	void study_start_date_after_one_month() {
 		//given
-		MemberEntity coordinator = memberSaveHelper.saveMember();
+		CafeEntity cafe = aCafe().saveWith24For7();
+		MemberEntity coordinator = aMember().save();
+
 		LocalDateTime start = timeUtil.now().plusMonths(1).plusDays(1);
 		LocalDateTime end = start.plusHours(1);
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(
@@ -208,8 +142,9 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 생성시 카공장은 참여인원에 포함된다.")
 	void includes_leader_in_participants() {
 		//given
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().save();
+
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 		Study study = creatStudy(cafe.getId(), coordinator.getId(), now.plusHours(2), now.plusHours(4));
 		//when
@@ -241,13 +176,13 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카페 영업시간 밖의 시간에 카공을 만들 수 없다.")
 	void study_can_not_start_outside_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().save();
 
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		MemberEntity leader = memberSaveHelper.saveMember();
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertThatThrownBy(() -> sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy())).isInstanceOf(
+		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), now, cafeStudyCreateRequest.toStudy())).isInstanceOf(
 			CafegoryException.class).hasMessage(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS.getErrorMessage());
 	}
 
@@ -263,13 +198,13 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
 	void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
 		//given
-		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().save();
 
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		MemberEntity leader = memberSaveHelper.saveMember();
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
-		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest.toStudy()));
+		assertDoesNotThrow(() -> sut.createStudy(coordinator.getId(), now, studyOnceCreateRequest.toStudy()));
 	}
 
 	static Stream<Arguments> provideStartAndEndDateTime2() {
@@ -281,12 +216,12 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공장은 카공을 삭제할 수 있다.")
 	void coordinator_can_delete_study() {
 		//given
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafe();
-		MemberEntity coordinator = memberSaveHelper.saveMember();
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().save();
+
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
-		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
-
+		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, end);
 		//then
 		assertDoesNotThrow(() -> sut.deleteStudy(coordinator.getId(), cafeStudy.getId(), timeUtil.now()));
 	}
@@ -296,15 +231,16 @@ class CafeStudyServiceTest extends ServiceTest {
 	void non_coordinator_can_not_delete_study() {
 		//given
 		CafeEntity cafeEntity = cafeSaveHelper.saveCafe();
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity participant = aMember().whoIsParticipant().save();
+
 		LocalDateTime start = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		LocalDateTime end = LocalDateTime.of(2000, 1, 1, 23, 0, 0);
 		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafeEntity, coordinator, start, end);
 
 		//then
 		assertThatThrownBy(
-			() -> sut.deleteStudy(member.getId(), cafeStudy.getId(), timeUtil.now()))
+			() -> sut.deleteStudy(participant.getId(), cafeStudy.getId(), timeUtil.now()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_INVALID_LEADER.getErrorMessage());
 	}

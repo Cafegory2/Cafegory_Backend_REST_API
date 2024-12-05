@@ -76,7 +76,7 @@ public class CafeBuilder {
     }
 
     public static class CafeSaver {
-        static CafeRepository cafeRepository;
+        private static CafeRepository cafeRepository;
 
         public static void init(CafeRepository cafeRepo) {
             cafeRepository = cafeRepo;
