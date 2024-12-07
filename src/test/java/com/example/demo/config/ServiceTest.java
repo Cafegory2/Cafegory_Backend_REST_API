@@ -1,12 +1,5 @@
 package com.example.demo.config;
 
-import com.example.demo.cafe.infrastructure.CafeRepository;
-import com.example.demo.repository.cafe.BusinessHourRepository;
-import com.example.demo.repository.member.MemberRepository;
-import com.example.demo.study.infrastructure.CafeStudyRepository;
-import com.example.demo.testbuilder.CafeBuilder;
-import com.example.demo.testbuilder.MemberBuilder;
-import com.example.demo.testbuilder.StudyBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

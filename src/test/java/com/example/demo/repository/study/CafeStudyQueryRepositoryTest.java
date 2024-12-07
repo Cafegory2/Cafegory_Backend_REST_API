@@ -1,5 +1,9 @@
 package com.example.demo.repository.study;
 
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.CafeKeywordBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyBuilder.aStudy;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -8,6 +12,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.example.demo.testbuilder.CafeBuilder;
+import com.example.demo.testbuilder.CafeKeywordBuilder;
+import com.example.demo.testbuilder.MemberBuilder;
+import com.example.demo.testbuilder.StudyBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -69,28 +77,27 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	@DisplayName("검색어로 카공목록을 조회한다.")
 	void find_cafe_studies_by_keyword(String keyword, int expected) {
 		//given
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
-		cafeKeywordSaveHelper.saveCafeKeyword("스타벅스 강남대로점", cafe1);
-		cafeKeywordSaveHelper.saveCafeKeyword("서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)", cafe1);
+		CafeEntity cafe1 = aCafe().save();
+		CafeKeywordBuilder keywordWithCafe1 = aCafeKeyword().with(cafe1);
+		keywordWithCafe1.but().withKeyword("강남").save();
+		keywordWithCafe1.but().withKeyword("스타벅스 강남대로점").save();
+		keywordWithCafe1.but().withKeyword("서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)").save();
 
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
-		cafeKeywordSaveHelper.saveCafeKeyword("스타벅스 신논현역점", cafe2);
-		cafeKeywordSaveHelper.saveCafeKeyword("서울 서초구 강남대로 483 (반포동) 청호빌딩", cafe2);
-		cafeKeywordSaveHelper.saveCafeKeyword("카공하기 좋은 카페", cafe2);
+		CafeEntity cafe2 = aCafe().save();
+		CafeKeywordBuilder keywordWithCafe2 = aCafeKeyword().with(cafe2);
+		keywordWithCafe2.but().withKeyword("강남").save();
+		keywordWithCafe2.but().withKeyword("스타벅스 신논현역점").save();
+		keywordWithCafe2.but().withKeyword("서울 서초구 강남대로 483 (반포동) 청호빌딩").save();
+		keywordWithCafe2.but().withKeyword("카공하기 좋은 카페").save();
 
-		MemberEntity member = memberSaveHelper.saveMember();
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
 
-		LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+		StudyBuilder studyWithCafe1 = aStudy().with(cafe1).with(coordinator);
+		studyWithCafe1.but().withName("카페고리 스터디1").save();
+		studyWithCafe1.but().withName("카공하기 좋은 카페에서 스터디해요").save();
 
-		cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4),
-			"카페고리 스터디1");
-		cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7),
-			"카공하기 좋은 카페에서 스터디해요");
-
-		cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(8),
-			startDateTime.plusHours(10), "카페고리 스터디2");
+		StudyBuilder studyWithCafe2 = aStudy().with(cafe2).with(coordinator);
+		studyWithCafe2.but().withName("카페고리 스터디2").save();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
 			createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)

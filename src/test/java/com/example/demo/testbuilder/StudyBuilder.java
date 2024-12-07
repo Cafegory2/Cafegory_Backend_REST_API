@@ -3,6 +3,7 @@ package com.example.demo.testbuilder;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyPeriod;
@@ -18,8 +19,8 @@ public class StudyBuilder {
     private CafeEntity cafe = aCafe().build();
     private MemberEntity coordinator = aMember().build();
     private StudyPeriod studyPeriod = StudyPeriod.builder()
-        .startDateTime(LocalDateTime.of(2999, 1, 1, 12, 0))
-        .endDateTime(LocalDateTime.of(2999, 1, 1, 14, 0)).build();
+        .startDateTime(LocalDateTime.of(2999, 1, 1, 10, 0))
+        .endDateTime(LocalDateTime.of(2999, 1, 1, 12, 0)).build();
     private MemberComms memberComms = MemberComms.WELCOME;
     private int maxParticipants = 6;
     private String introduction = "테스트 카공 소개글";
@@ -64,6 +65,14 @@ public class StudyBuilder {
         return this;
     }
 
+    public StudyBuilder shiftDays(int days) {
+        LocalDateTime start = this.studyPeriod.getStartDateTime().plusDays(1);
+        LocalDateTime end = this.studyPeriod.getEndDateTime().plusDays(1);
+
+        this.studyPeriod = StudyPeriod.builder().startDateTime(start).endDateTime(end).build();
+        return this;
+    }
+
     public StudyBuilder withStudyPeriodFrom10To12() {
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 10, 0, 0);
         LocalDateTime end = LocalDateTime.of(2000, 1, 1, 12, 0, 0);
@@ -89,13 +98,13 @@ public class StudyBuilder {
 
     public CafeStudyEntity build() {
         return CafeStudyEntity.builder()
-            .name(name)
-            .cafe(cafe)
-            .coordinator(coordinator)
-            .studyPeriod(studyPeriod)
-            .memberComms(memberComms)
-            .maxParticipants(maxParticipants)
-            .introduction(introduction)
+            .name(this.name)
+            .cafe(this.cafe)
+            .coordinator(this.coordinator)
+            .studyPeriod(this.studyPeriod)
+            .memberComms(this.memberComms)
+            .maxParticipants(this.maxParticipants)
+            .introduction(this.introduction)
             .build();
     }
 

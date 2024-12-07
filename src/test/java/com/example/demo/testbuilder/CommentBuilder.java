@@ -74,11 +74,11 @@ public class CommentBuilder {
 
     public CafeStudyCommentEntity build() {
         return CafeStudyCommentEntity.builder()
-            .author(author)
-            .studyRole(studyRole)
-            .content(content)
-            .parentComment(parentComment)
-            .cafeStudy(cafeStudy)
+            .author(this.author)
+            .studyRole(this.studyRole)
+            .content(this.content)
+            .parentComment(this.parentComment)
+            .cafeStudy(this.cafeStudy)
             .build();
     }
 

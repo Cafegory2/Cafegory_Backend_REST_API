@@ -15,7 +15,7 @@ public class CafeBuilder {
     private String name = "테스트 카페 이름";
     private String mainImageUrl = "https://testimageurl.com/testimages";
     private Address address = new Address("서울 테스트구 테스트로1길 1 1층", "테스트동");
-    private String sns = "testsns.com/testsns";
+    private String sns = "https://www.testsns.com/testsns";
 
     private CafeBuilder() {}
 
@@ -71,7 +71,7 @@ public class CafeBuilder {
         return BusinessHourSaver.saveWith24For7(save());
     }
 
-    private CafeEntity save() {
+    public CafeEntity save() {
         return CafeSaver.cafeRepository.save(build());
     }
 
