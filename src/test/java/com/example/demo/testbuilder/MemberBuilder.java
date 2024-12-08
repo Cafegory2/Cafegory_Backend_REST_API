@@ -97,10 +97,6 @@ public class MemberBuilder {
             .build();
     }
 
-    public MemberEntity save() {
-        return MemberSaver.memberRepository.save(build());
-    }
-
     public static class MemberSaver {
         private static MemberRepository memberRepository;
 
@@ -108,4 +104,9 @@ public class MemberBuilder {
             memberRepository = memberRepo;
         }
     }
+
+    public MemberEntity save() {
+        return MemberSaver.memberRepository.save(build());
+    }
+
 }

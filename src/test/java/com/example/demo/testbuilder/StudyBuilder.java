@@ -1,17 +1,20 @@
 package com.example.demo.testbuilder;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.implement.study.CafeStudyTagEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyPeriod;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.demo.testbuilder.CafeBuilder.aCafe;
 import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyStudyTagBuilder.*;
 
 public class StudyBuilder {
 
@@ -25,6 +28,8 @@ public class StudyBuilder {
     private int maxParticipants = 6;
     private String introduction = "테스트 카공 소개글";
 
+    private List<CafeStudyTagEntity> studyTags = new ArrayList<>();
+
     private StudyBuilder() {}
 
     private StudyBuilder(StudyBuilder copy) {
@@ -35,6 +40,7 @@ public class StudyBuilder {
         this.memberComms = copy.memberComms;
         this.maxParticipants = copy.maxParticipants;
         this.introduction = copy.introduction;
+        this.studyTags = copy.studyTags;
     }
 
     public StudyBuilder but() {
@@ -96,6 +102,11 @@ public class StudyBuilder {
         return this;
     }
 
+    public StudyBuilder with(CafeStudyTagEntity... studyTags) {
+        this.studyTags.addAll(List.of(studyTags));
+        return this;
+    }
+
     public CafeStudyEntity build() {
         return CafeStudyEntity.builder()
             .name(this.name)
@@ -108,15 +119,18 @@ public class StudyBuilder {
             .build();
     }
 
-    public CafeStudyEntity save() {
-        return StudySaver.studyRepository.save(build());
-    }
-
     public static class StudySaver {
         private static CafeStudyRepository studyRepository;
 
         public static void init(CafeStudyRepository studyRepo) {
             studyRepository = studyRepo;
         }
+    }
+
+    public CafeStudyEntity save() {
+        CafeStudyEntity study = StudySaver.studyRepository.save(build());
+        studyTags.forEach(studyTag -> aStudyStudyTag().with(study).with(studyTag).save());
+
+        return study;
     }
 }

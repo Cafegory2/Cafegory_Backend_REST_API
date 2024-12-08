@@ -9,6 +9,11 @@ import com.example.demo.repository.cafe.BusinessHourRepository;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.demo.testbuilder.BusinessHourBuilder.*;
+import static com.example.demo.testbuilder.CafeKeywordBuilder.*;
 
 public class CafeBuilder {
 
@@ -17,6 +22,8 @@ public class CafeBuilder {
     private Address address = new Address("서울 테스트구 테스트로1길 1 1층", "테스트동");
     private String sns = "https://www.testsns.com/testsns";
 
+    private List<String> keywords = new ArrayList<>();
+
     private CafeBuilder() {}
 
     private CafeBuilder(CafeBuilder copy) {
@@ -24,6 +31,7 @@ public class CafeBuilder {
         this.mainImageUrl = copy.mainImageUrl;
         this.address = copy.address;
         this.sns = copy.sns;
+        this.keywords = copy.keywords;
     }
 
     public CafeBuilder but() {
@@ -54,6 +62,11 @@ public class CafeBuilder {
         return this;
     }
 
+    public CafeBuilder withKeywords(String... keywords) {
+        this.keywords.addAll(List.of(keywords));
+        return this;
+    }
+
     public CafeEntity build() {
         return CafeEntity.builder()
             .name(this.name)
@@ -61,18 +74,6 @@ public class CafeBuilder {
             .address(this.address)
             .sns(this.sns)
             .build();
-    }
-
-    public CafeEntity saveWith7daysFrom9To21() {
-        return BusinessHourSaver.saveWith7daysFrom9To21(save());
-    }
-
-    public CafeEntity saveWith24For7() {
-        return BusinessHourSaver.saveWith24For7(save());
-    }
-
-    public CafeEntity save() {
-        return CafeSaver.cafeRepository.save(build());
     }
 
     public static class CafeSaver {
@@ -83,46 +84,56 @@ public class CafeBuilder {
         }
     }
 
-    public static class BusinessHourSaver {
-        static BusinessHourRepository businessHourRepository;
+    public CafeEntity save() {
+        CafeEntity cafe = saveCafe();
+        saveKeywords(cafe);
 
-        public static void init(BusinessHourRepository businessHourRepo) {
-            businessHourRepository = businessHourRepo;
+        return cafe;
+    }
+
+    public CafeEntity saveWith7daysFrom9To21() {
+        CafeEntity cafe = saveCafe();
+        saveBusinessHoursWith7daysFrom9To21(cafe);
+        saveKeywords(cafe);
+
+        return cafe;
+    }
+
+    public CafeEntity saveWith24For7() {
+        CafeEntity cafe = saveCafe();
+        saveBusinessHoursWith24For7(cafe);
+        saveKeywords(cafe);
+
+        return cafe;
+    }
+
+    private CafeEntity saveCafe() {
+        return CafeSaver.cafeRepository.save(build());
+    }
+
+    private void saveKeywords(CafeEntity cafe) {
+        keywords.forEach(keyword -> aCafeKeyword().withKeyword(keyword).with(cafe).save());
+    }
+
+    private void saveBusinessHoursWith7daysFrom9To21(CafeEntity cafe) {
+        for (DayOfWeek day : DayOfWeek.values()) {
+            aBusinessHour()
+                .withDayOfWeek(day)
+                .withOpeningTime(9, 0)
+                .withClosingTime(21, 0)
+                .with(cafe)
+                .save();
         }
+    }
 
-        static CafeEntity saveWith7daysFrom9To21(CafeEntity cafeEntity) {
-            saveBusinessHoursWith7daysFrom9To21(cafeEntity);
-            return cafeEntity;
-        }
-
-        static CafeEntity saveWith24For7(CafeEntity cafeEntity) {
-            saveBusinessHourWith24For7(cafeEntity);
-            return cafeEntity;
-        }
-
-        private static void saveBusinessHoursWith7daysFrom9To21(CafeEntity cafe) {
-            for (DayOfWeek day : DayOfWeek.values()) {
-                BusinessHourEntity businessHour = buildBusinessHourWithDayAndTime(cafe, day,
-                    LocalTime.of(9, 0), LocalTime.of(21, 0));
-                businessHourRepository.save(businessHour);
-            }
-        }
-
-        private static void saveBusinessHourWith24For7(CafeEntity cafe) {
-            for (DayOfWeek day : DayOfWeek.values()) {
-                BusinessHourEntity businessHour = TestBusinessHourFactory.createBusinessHourWithDayAnd24For7(cafe, day);
-                businessHourRepository.save(businessHour);
-            }
-        }
-
-        private static BusinessHourEntity buildBusinessHourWithDayAndTime(
-            CafeEntity cafe, DayOfWeek day, LocalTime openingTime, LocalTime closingTime) {
-            return BusinessHourEntity.builder()
-                .dayOfWeek(day)
-                .openingTime(openingTime)
-                .closingTime(closingTime)
-                .cafe(cafe)
-                .build();
+    private void saveBusinessHoursWith24For7(CafeEntity cafe) {
+        for (DayOfWeek day : DayOfWeek.values()) {
+            aBusinessHour()
+                .withDayOfWeek(day)
+                .withOpeningTime(0, 0)
+                .withClosingEndOfDay()
+                .with(cafe)
+                .save();
         }
     }
 }

@@ -43,15 +43,15 @@ public class CafeKeywordBuilder {
             .build();
     }
 
-    public CafeKeywordEntity save() {
-        return CafeKeywordSaver.keywordRepository.save(build());
-    }
-
     public static class CafeKeywordSaver {
         private static CafeKeywordRepository keywordRepository;
 
         public static void init(CafeKeywordRepository keywordRepo) {
             keywordRepository = keywordRepo;
         }
+    }
+
+    public CafeKeywordEntity save() {
+        return CafeKeywordSaver.keywordRepository.save(build());
     }
 }

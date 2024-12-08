@@ -5,6 +5,8 @@ import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.repository.cafe.BusinessHourRepository;
 import com.example.demo.repository.cafe.CafeKeywordRepository;
 import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
+import com.example.demo.repository.study.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.testbuilder.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +27,21 @@ public class SaverConfig {
     private CafeStudyCommentRepository commentRepository;
     @Autowired
     private CafeKeywordRepository cafeKeywordRepository;
+    @Autowired
+    private CafeStudyTagRepository studyTagRepository;
+    @Autowired
+    private CafeStudyCafeStudyTagRepository studyStudyTagRepository;
 
     public void init() {
         CafeBuilder.CafeSaver.init(cafeRepository);
-        CafeBuilder.BusinessHourSaver.init(businessHourRepository);
+        BusinessHourBuilder.BusinessHourSaver.init(businessHourRepository);
+        CafeKeywordBuilder.CafeKeywordSaver.init(cafeKeywordRepository);
 
         MemberBuilder.MemberSaver.init(memberRepository);
 
         StudyBuilder.StudySaver.init(studyRepository);
-
-        CafeKeywordBuilder.CafeKeywordSaver.init(cafeKeywordRepository);
+        StudyTagBuilder.StudyTagSaver.init(studyTagRepository);
+        StudyStudyTagBuilder.StudyStudyTagSaver.init(studyStudyTagRepository);
 
         CommentBuilder.CommentSaver.init(commentRepository);
     }

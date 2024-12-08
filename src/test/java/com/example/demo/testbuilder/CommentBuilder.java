@@ -82,15 +82,15 @@ public class CommentBuilder {
             .build();
     }
 
-    public CafeStudyCommentEntity save() {
-        return CommentSaver.commentRepository.save(build());
-    }
-
     public static class CommentSaver {
         private static CafeStudyCommentRepository commentRepository;
 
         public static void init(CafeStudyCommentRepository commentRepo) {
             commentRepository = commentRepo;
         }
+    }
+
+    public CafeStudyCommentEntity save() {
+        return CommentSaver.commentRepository.save(build());
     }
 }
