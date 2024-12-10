@@ -38,4 +38,14 @@ public class FakeTimeUtil implements TimeUtil {
 	public LocalDateTime localDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
 		return LocalDateTime.of(year, month, dayOfMonth, hour, minute);
 	}
+
+	@Override
+	public LocalDateTime minLocalDateTime(LocalDateTime now) {
+		return now.withHour(0).withMinute(0).withSecond(0);
+	}
+
+	@Override
+	public LocalDateTime maxLocalDateTime(LocalDateTime now) {
+		return now.withHour(23).withMinute(59).withSecond(59);
+	}
 }
