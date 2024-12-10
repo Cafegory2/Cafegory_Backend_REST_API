@@ -1,9 +1,9 @@
 package com.example.demo.factory;
 
-import static com.example.demo.implement.member.BeverageSize.*;
+import static com.example.demo.member.domain.BeverageSize.*;
 
+import com.example.demo.member.domain.Role;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.implement.member.Role;
 
 public class TestMemberFactory {
 

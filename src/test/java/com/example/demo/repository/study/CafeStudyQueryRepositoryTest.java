@@ -16,11 +16,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
-import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
 import com.example.demo.helper.CafeCafeTagSaveHelper;
 import com.example.demo.helper.CafeKeywordSaveHelper;
 import com.example.demo.helper.CafeSaveHelper;
@@ -29,14 +29,14 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.CafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.implement.study.CafeStudyTagEntity;
-import com.example.demo.implement.study.CafeStudyTagType;
-import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.CafeStudyTagType;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 @Import(CafeStudyQueryRepository.class)
@@ -91,9 +91,10 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
 		cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(8),
 			startDateTime.plusHours(10), "카페고리 스터디2");
+
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
+			 createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -151,7 +152,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
+			 createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -267,7 +268,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
+			 createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -313,7 +314,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		cafeStudySaveHelper.saveCafeStudy(cafeEntity2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, List.of(type), null, 0, 10)
+			 createCafeStudySearchListRequest("강남", null, null, List.of(type), null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -360,7 +361,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		cafeStudySaveHelper.saveCafeStudy(cafeEntity2, member, startDateTime.plusHours(8), startDateTime.plusHours(10));
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, List.of(type1, type2), null, 0, 10)
+			 createCafeStudySearchListRequest(
+				 "강남", null, null, List.of(type1, type2), null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -403,7 +405,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 			cafeEntity2, member, startDateTime.plusHours(8), startDateTime.plusHours(10), MemberComms.WELCOME);
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, null, memberComms, 0, 10)
+			 createCafeStudySearchListRequest("강남", null, null, null, memberComms, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -446,7 +448,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 			startDateTime.plusHours(12), startDateTime.plusHours(14));
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
+			 createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
 		);
 		//then
 		List<CafeStudyEntity> content = result.getContent();
@@ -474,7 +476,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		//when
 
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, null, null, 0, 5)
+			 createCafeStudySearchListRequest("강남", null, null, null, null, 0, 5)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(5);
@@ -498,7 +500,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		}
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, null, null, 1, 5)
+			 createCafeStudySearchListRequest("강남", null, null, null, null, 1, 5)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(5);
@@ -522,7 +524,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		}
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, null, null, null, 2, 5)
+			 createCafeStudySearchListRequest("강남", null, null, null, null, 2, 5)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(1);
@@ -579,7 +581,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag2);
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
+			 createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
 		);
 		assertThat(result.getContent().size()).isEqualTo(expected);
 	}

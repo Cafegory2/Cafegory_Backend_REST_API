@@ -1,8 +1,8 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.study.CafeStudyCafeStudyTagEntity;
-import com.example.demo.implement.study.CafeStudyTagEntity;
+import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 
 public class TestCafeStudyCafeStudyTagFactory {
 

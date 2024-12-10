@@ -3,12 +3,12 @@ package com.example.demo.helper;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.factory.TestCafeStudyCafeStudyTagFactory;
-import com.example.demo.implement.study.CafeStudyCafeStudyTagEntity;
-import com.example.demo.implement.study.CafeStudyTagEntity;
-import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
-import com.example.demo.repository.study.CafeStudyTagRepository;
+import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
+import com.example.demo.study.infrastructure.CafeStudyTagRepository;
+import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 
 import lombok.RequiredArgsConstructor;
 

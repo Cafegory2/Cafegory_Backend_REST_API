@@ -1,23 +1,33 @@
 package com.example.demo.cafe.infrastructure;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.domain.Review;
 import com.example.demo.domain.DateAudit;
-import com.example.demo.implement.BaseEntity;
-import org.hibernate.annotations.Where;
-
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

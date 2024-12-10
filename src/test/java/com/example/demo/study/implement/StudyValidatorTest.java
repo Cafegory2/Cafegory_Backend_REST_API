@@ -4,12 +4,18 @@ import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.study.domain.Coordinator;
+import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.Study;
 
 class StudyValidatorTest {
 
@@ -56,4 +62,53 @@ class StudyValidatorTest {
 	void validate_max_participants(int value) {
 		assertDoesNotThrow(() -> sut.validateMaxParticipants(value));
 	}
+
+	@Test
+	@DisplayName("멤버가 작성자인지 검증한다.")
+	void isAuthor() {
+		assertDoesNotThrow(
+			() -> sut.validateMemberIsCafeStudyCoordinator(1L, 1L)
+		);
+	}
+
+	@Test
+	@DisplayName("스터디에 카공장만 존재한다")
+	void validate_study_member_is_coordinator_only() {
+		Long coordinatorId = 1L;
+		List<Long> participantsIds = List.of(coordinatorId);
+
+		Study study = createStudy();
+
+		assertDoesNotThrow(
+			() -> sut.validateCafeStudyMembersPresent(study, participantsIds)
+		);
+	}
+
+	@Test
+	@DisplayName("스터디에 카공장외에 다른 참가자도 존재한다")
+	void validate_study_member_is_not_coordinator_only() {
+		Long coordinatorId = 1L;
+		List<Long> participantsIds = List.of(coordinatorId, 2L);
+		Study study = createStudy();
+
+		assertThatThrownBy(
+			() -> sut.validateCafeStudyMembersPresent(study, participantsIds)
+		).isInstanceOf(CafegoryException.class)
+			.hasMessage(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT.getErrorMessage());
+	}
+
+	private Study createStudy() {
+		Coordinator coordinator = Coordinator.builder()
+			.id(1L)
+			.build();
+
+		return Study.builder()
+			.name("카페고리 스터디")
+			.coordinator(coordinator)
+			.memberComms(MemberComms.WELCOME)
+			.maxParticipantCount(5)
+			.introduction("자기소개 글")
+			.build();
+	}
+
 }

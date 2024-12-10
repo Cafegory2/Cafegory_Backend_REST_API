@@ -1,6 +1,6 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.cafe.CafeTagEntity;
+import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.cafe.infrastructure.ReviewCafeTagEntity;
 import com.example.demo.cafe.infrastructure.ReviewEntity;
 

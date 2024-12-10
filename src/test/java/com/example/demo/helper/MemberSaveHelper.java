@@ -4,7 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.factory.TestMemberFactory;
-import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.member.infrastructure.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 

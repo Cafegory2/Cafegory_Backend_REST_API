@@ -11,13 +11,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.example.demo.implement.BaseEntity;
+import org.hibernate.annotations.Where;
+
+import com.example.demo.cafe.domain.Menu;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
@@ -43,5 +45,12 @@ public class MenuEntity extends BaseEntity {
 		this.name = name;
 		this.price = price;
 		this.cafe = cafe;
+	}
+
+	public Menu toMenu() {
+		return Menu.builder()
+			.name(this.name)
+			.price(this.price)
+			.build();
 	}
 }

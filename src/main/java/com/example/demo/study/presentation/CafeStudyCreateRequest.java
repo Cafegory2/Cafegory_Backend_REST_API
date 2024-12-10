@@ -1,9 +1,11 @@
 package com.example.demo.study.presentation;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
@@ -25,10 +27,11 @@ public class CafeStudyCreateRequest {
 	private int maxParticipants;
 	@NotBlank
 	private String introduction;
+	private List<CafeStudyTagType> tags;
 
 	@Builder
 	private CafeStudyCreateRequest(String name, Long cafeId, LocalDateTime startDateTime, LocalDateTime endDateTime,
-		MemberComms memberComms, int maxParticipants, String introduction) {
+		MemberComms memberComms, int maxParticipants, String introduction, List<CafeStudyTagType> tags) {
 		this.name = name;
 		this.cafeId = cafeId;
 		this.startDateTime = startDateTime;
@@ -36,6 +39,7 @@ public class CafeStudyCreateRequest {
 		this.memberComms = memberComms;
 		this.maxParticipants = maxParticipants;
 		this.introduction = introduction;
+		this.tags = tags;
 	}
 
 	public Study toStudy() {
@@ -51,6 +55,7 @@ public class CafeStudyCreateRequest {
 			.maxParticipantCount(this.maxParticipants)
 			.memberComms(this.memberComms)
 			.introduction(this.introduction)
+			.tags(this.tags)
 			.build();
 	}
 }

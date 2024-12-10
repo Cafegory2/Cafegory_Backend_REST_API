@@ -13,8 +13,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.cafe.CafeTagEntity;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

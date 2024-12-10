@@ -1,6 +1,6 @@
 package com.example.demo.factory;
 
-import com.example.demo.implement.cafe.Address;
+import com.example.demo.cafe.infrastructure.AddressEmbeddable;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 
 public class TestCafeFactory {
@@ -9,7 +9,7 @@ public class TestCafeFactory {
 		return CafeEntity.builder()
 			.name("카페고리")
 			.mainImageUrl("카페 대표 이미지")
-			.address(new Address("서울 마포구 합정동", "합정동"))
+			.address(new AddressEmbeddable("서울 마포구 합정동", "합정동"))
 			.sns("카페 sns")
 			.build();
 	}

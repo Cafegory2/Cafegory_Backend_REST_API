@@ -3,24 +3,33 @@ package com.example.demo.apidocs;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-import com.example.demo.helper.*;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.implement.cafe.CafeTagEntity;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.implement.MemberReader;
-import com.example.demo.cafe.infrastructure.ReviewEntity;
-import com.example.demo.implement.study.CafeTagType;
-import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
+import com.example.demo.cafe.domain.CafeTagType;
+import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeTagEntity;
+import com.example.demo.cafe.infrastructure.ReviewEntity;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.implement.token.JwtToken;
+import com.example.demo.helper.CafeCafeTagSaveHelper;
+import com.example.demo.helper.CafeKeywordSaveHelper;
+import com.example.demo.helper.CafeSaveHelper;
+import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
+import com.example.demo.helper.CafeStudySaveHelper;
+import com.example.demo.helper.CafeStudyTagSaveHelper;
+import com.example.demo.helper.CafeTagSaveHelper;
+import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.helper.ReviewCafeTagSaveHelper;
+import com.example.demo.helper.ReviewSaveHelper;
+import com.example.demo.member.implement.MemberReader;
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ProfileControllerApiTest extends ApiDocsTest {
 

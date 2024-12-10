@@ -11,11 +11,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.domain.DateAudit;
-import com.example.demo.implement.BaseEntity;
-import com.example.demo.implement.member.BeverageSize;
-import com.example.demo.implement.member.Role;
+import com.example.demo.member.domain.BeverageSize;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.member.domain.Role;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

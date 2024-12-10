@@ -1,5 +1,7 @@
 package com.example.demo.study.presentation;
 
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,17 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.SliceResponse;
-import com.example.demo.dto.study.CafeStudyDeleteResponse;
-import com.example.demo.dto.study.CafeStudyDetailResponse;
-import com.example.demo.dto.study.CafeStudySearchListRequest;
-import com.example.demo.dto.study.CafeStudySearchListResponse;
-import com.example.demo.mapper.CafeStudyMapper;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.implement.StudyValidator;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
+import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -35,8 +30,6 @@ public class CafeStudyController {
 
 	private final CafeStudyService cafeStudyService;
 	private final CafeStudyQueryService cafeStudyQueryService;
-	private final CafeStudyMapper cafeStudyMapper;
-	private final StudyValidator studyValidator;
 
 	private final TimeUtil timeUtil;
 
@@ -54,170 +47,23 @@ public class CafeStudyController {
 		return ResponseEntity.ok(response);
 	}
 
-	// TODO: 11.1일 릭팩터링
 	@PostMapping
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-
-		//TODO 트랜잭션 확인
 		Study study = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
 
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(study.getId());
-		CafeStudyCreateResponse response = cafeStudyMapper.toStudyOnceCreateResponse(cafeStudy);
-
+		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);
 		return ResponseEntity.ok(response);
 	}
 
 	@DeleteMapping("/{cafeStudyId:[0-9]+}")
-	public ResponseEntity<CafeStudyDeleteResponse> delete(@PathVariable Long cafeStudyId,
+	public ResponseEntity<Void> delete(@PathVariable Long cafeStudyId,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
+		cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
 
-		Long deletedCafeStudyId = cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
-		CafeStudyEntity cafeStudy = cafeStudyService.findCafeStudyById(deletedCafeStudyId);
-		CafeStudyDeleteResponse response = cafeStudyMapper.toCafeStudyDeleteResponse(cafeStudy);
-
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok().build();
 	}
-
-	// @PatchMapping("/{studyOnceId:[0-9]+}")
-	// public ResponseEntity<StudyOnceResponse> update(@PathVariable Long studyOnceId,
-	// 	@RequestBody @Validated StudyOnceUpdateRequest request,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	long leaderId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	if (studyOnceService.doesOnlyStudyLeaderExist(studyOnceId)) {
-	// 		studyOnceService.updateStudyOnce(leaderId, studyOnceId, request, LocalDateTime.now());
-	// 	} else {
-	// 		studyOnceService.updateStudyOncePartially(leaderId, studyOnceId, request);
-	// 	}
-	// 	StudyOnceResponse response = studyOnceService.findStudyOnce(studyOnceId, LocalDateTime.now());
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @PostMapping("/{studyOnceId:[0-9]+}")
-	// public ResponseEntity<StudyOnceJoinResult> tryJoin(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	studyOnceService.tryJoin(memberId, studyOnceId);
-	// 	return ResponseEntity.ok(new StudyOnceJoinResult(LOCAL_DATE_TIME_NOW, true));
-	// }
-	//
-	// @DeleteMapping("/{studyOnceId:[0-9]+}")
-	// public ResponseEntity<StudyOnceQuitResponse> tryQuit(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	LocalDateTime requestTime = LocalDateTime.now();
-	// 	studyOnceService.tryQuit(memberId, studyOnceId);
-	// 	return ResponseEntity.ok(
-	// 		new StudyOnceQuitResponse(truncateDateTimeToSecond(requestTime), true));
-	// }
-	//
-	// @PatchMapping("/{studyOnceId:[0-9]+}/attendance")
-	// public ResponseEntity<UpdateAttendanceResponse> takeAttendance(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization,
-	// 	@RequestBody UpdateAttendanceRequest request) {
-	// 	long leaderId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	UpdateAttendanceResponse response = studyOnceService.updateAttendances(leaderId, studyOnceId,
-	// 		request, LOCAL_DATE_TIME_NOW);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @PatchMapping("/{studyOnceId:[0-9]+}/location")
-	// public ResponseEntity<CafeSearchListResponse> changeCafe(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization,
-	// 	@RequestBody Long cafeId) {
-	// 	long leaderId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	Long changedCafeId = studyOnceService.changeCafe(leaderId, studyOnceId, cafeId);
-	// 	CafeSearchListResponse response = cafeService.searchCafeBasicInfoById(changedCafeId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @GetMapping("/{studyOnceId:[0-9]+}/member/list")
-	// public ResponseEntity<StudyMemberListResponse> searchStudyMemberList(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	long leaderId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	if (!studyOnceService.isStudyOnceLeader(leaderId, studyOnceId)) {
-	// 		throw new CafegoryException(STUDY_ONCE_LEADER_PERMISSION_DENIED);
-	// 	}
-	// 	StudyMemberListResponse response = studyOnceService.findStudyMembersById(studyOnceId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @PostMapping("/{studyOnceId:[0-9]+}/question")
-	// public ResponseEntity<StudyOnceCommentResponse> saveQuestion(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization,
-	// 	@RequestBody @Validated StudyOnceCommentSaveRequest request) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	Long savedCommentId = studyOnceCommentService.saveQuestion(memberId, studyOnceId, request);
-	// 	StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(
-	// 		savedCommentId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @PatchMapping("/question/{commentId:[0-9]+}")
-	// public ResponseEntity<StudyOnceCommentResponse> updateQuestion(@PathVariable final Long commentId,
-	// 	@RequestHeader("Authorization") String authorization,
-	// 	@RequestBody @Validated StudyOnceCommentUpdateRequest request) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	studyOnceCommentService.updateQuestion(memberId, commentId, request);
-	// 	StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @DeleteMapping("/question/{commentId:[0-9]+}")
-	// public ResponseEntity<StudyOnceCommentResponse> deleteQuestion(@PathVariable final Long commentId,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	if (!studyOnceCommentService.isPersonWhoAskedComment(memberId, commentId)) {
-	// 		throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
-	// 	}
-	// 	StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
-	// 	studyOnceCommentService.deleteQuestion(commentId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @PostMapping("/{studyOnceId:[0-9]+}/question/{parentCommentId:[0-9]+}/reply")
-	// public ResponseEntity<StudyOnceCommentResponse> saveReply(@PathVariable Long studyOnceId,
-	// 	@PathVariable Long parentCommentId,
-	// 	@RequestHeader("Authorization") String authorization,
-	// 	@RequestBody @Validated StudyOnceCommentRequest request) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	Long savedCommentId = studyOnceCommentService.saveReply(memberId, studyOnceId, parentCommentId, request);
-	// 	StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(
-	// 		savedCommentId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @PatchMapping("/reply/{commentId:[0-9]+}")
-	// public ResponseEntity<StudyOnceCommentResponse> updateReply(@PathVariable final Long commentId,
-	// 	@RequestHeader("Authorization") String authorization,
-	// 	@RequestBody @Validated StudyOnceCommentUpdateRequest request) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	studyOnceCommentService.updateReply(memberId, commentId, request);
-	// 	StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @DeleteMapping("/reply/{commentId:[0-9]+}")
-	// public ResponseEntity<StudyOnceCommentResponse> deleteReply(@PathVariable final Long commentId,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	long memberId = cafegoryTokenManager.getIdentityId(authorization);
-	// 	if (!studyOnceCommentService.isPersonWhoAskedComment(memberId, commentId)) {
-	// 		throw new CafegoryException(STUDY_ONCE_COMMENT_PERMISSION_DENIED);
-	// 	}
-	// 	StudyOnceCommentResponse response = studyOnceQAndAQueryService.searchComment(commentId);
-	// 	studyOnceCommentService.deleteReply(commentId);
-	// 	return ResponseEntity.ok(response);
-	// }
-	//
-	// @GetMapping("/{studyOnceId:[0-9]+}/comment/list")
-	// public ResponseEntity<StudyOnceCommentSearchListResponse> searchComments(@PathVariable Long studyOnceId,
-	// 	@RequestHeader("Authorization") String authorization) {
-	// 	cafegoryTokenManager.getIdentityId(authorization);
-	// 	StudyOnceCommentSearchListResponse response = studyOnceCommentQueryService.searchSortedCommentsByStudyOnceId(
-	// 		studyOnceId);
-	// 	return ResponseEntity.ok(response);
-	// }
 }

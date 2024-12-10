@@ -1,8 +1,10 @@
 package com.example.demo.member.implement;
 
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.repository.member.MemberRepository;
+import com.example.demo.member.infrastructure.MemberRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemberAppender {
 
-    private final MemberRepository memberRepository;
+	private final MemberRepository memberRepository;
 
-    public Long append(MemberEntity member) {
-        return memberRepository.save(member).getId();
-    }
+	public Long append(MemberEntity member) {
+		return memberRepository.save(member).getId();
+	}
 }

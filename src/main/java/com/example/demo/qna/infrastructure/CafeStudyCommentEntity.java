@@ -15,16 +15,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Where;
+
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.study.domain.StudyRole;
-import org.hibernate.annotations.Where;
-
-import com.example.demo.implement.BaseEntity;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

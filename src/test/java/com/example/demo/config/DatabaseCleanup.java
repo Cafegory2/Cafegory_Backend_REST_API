@@ -26,6 +26,7 @@ public class DatabaseCleanup {
 			.collect(Collectors.toList());
 	}
 
+	//TODO 초기화 코드 Jdbc Template 을 이용해 리팩터링하기
 	private String getTableName(EntityType<?> entityType) {
 		Class<?> javaType = entityType.getJavaType();
 		// @Table 어노테이션이 있는 경우 테이블 이름 가져오기

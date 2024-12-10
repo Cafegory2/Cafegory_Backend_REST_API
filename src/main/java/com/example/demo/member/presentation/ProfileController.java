@@ -1,11 +1,7 @@
 package com.example.demo.member.presentation;
 
-import com.example.demo.cafe.domain.Review;
-import com.example.demo.cafe.service.ReviewService;
-import com.example.demo.dto.profile.WelcomeProfileResponse;
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.service.MemberService;
-import com.example.demo.member.service.ProfileService;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.dto.profile.MyPageResponse;
+import com.example.demo.cafe.domain.Review;
+import com.example.demo.cafe.service.ReviewService;
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.service.MemberService;
+import com.example.demo.member.service.ProfileService;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
