@@ -1,4 +1,4 @@
-package com.example.demo.cafe.service;
+package com.example.demo.cafe.presentation;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
