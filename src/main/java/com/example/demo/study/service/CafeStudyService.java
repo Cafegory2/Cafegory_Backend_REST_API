@@ -45,7 +45,7 @@ public class CafeStudyService {
 		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
-		Long savedStudyId = studyEditor.save(study, memberId);
+		Long savedStudyId = studyEditor.saveWithCascade(study, memberId);
 		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
 
 		return studyReader.read(savedStudyId);

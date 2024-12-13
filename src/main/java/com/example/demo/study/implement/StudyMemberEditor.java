@@ -4,17 +4,20 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
+import javax.jdo.annotations.Transactional;
+
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
+import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
+import com.example.demo.study.infrastructure.repository2.StudyMemberRepository2;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,16 +28,20 @@ public class StudyMemberEditor {
 	private final StudyMemberRepository studyMemberRepository;
 	private final MemberRepository memberRepository;
 	private final CafeStudyRepository cafeStudyRepository;
+	private final StudyMemberRepository2 studyMemberRepository2;
 
 	public Long save(Long memberId, Long studyId, StudyRole studyRole) {
-		MemberEntity memberEntity = memberRepository.findById(memberId)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		CafeStudyEntity cafeStudyEntity = cafeStudyRepository.findById(studyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-		CafeStudyMemberEntity studyMember = createStudyMember(memberEntity, cafeStudyEntity, studyRole);
+		// MemberEntity memberEntity = memberRepository.findById(memberId)
+		// 	.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+		// CafeStudyEntity cafeStudyEntity = cafeStudyRepository.findById(studyId)
+		// 	.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+		// CafeStudyMemberEntity studyMember = createStudyMember(memberEntity, cafeStudyEntity, studyRole);
+		//
+		// CafeStudyMemberEntity saved = studyMemberRepository.save(studyMember);
 
-		CafeStudyMemberEntity saved = studyMemberRepository.save(studyMember);
-		return saved.getId();
+		Participant participant = studyMemberRepository2.save(studyId, memberId, studyRole);
+
+		return participant.getId();
 	}
 
 	private CafeStudyMemberEntity createStudyMember(

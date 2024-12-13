@@ -1,8 +1,11 @@
 package com.example.demo.apidocs;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
+import com.example.demo.trash.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
@@ -56,41 +60,40 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 	@Autowired
 	private TimeUtil timeUtil;
 
-	// TODO: push 위해 주석 처리
-	// @Test
-	// void create() {
-	// 	//given
-	// 	CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
-	//
-	// 	LocalDateTime startDateTime = timeUtil.now().plusHours(2);
-	// 	LocalDateTime endDateTime = startDateTime.plusHours(1);
-	//
-	// 	Map<String, String> params = new HashMap<>();
-	// 	params.put("name", "카페고리 스터디");
-	// 	params.put("cafeId", String.valueOf(cafe.getId()));
-	// 	params.put("startDateTime", startDateTime.toString());
-	// 	params.put("endDateTime", endDateTime.toString());
-	// 	params.put("memberComms", "WELCOME");
-	// 	params.put("maxParticipants", String.valueOf(4));
-	// 	params.put("introduction", "카페고리 스터디 소개글");
-	//
-	// 	JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
-	//
-	// 	RestAssured.given(spec).log().all()
-	// 		.filter(RestAssuredRestDocumentationWrapper.document(
-	// 				"카공 생성 API",
-	// 				requestHeaders(
-	// 					headerWithName("Authorization").description("JWT 액세스 토큰"))
-	// 			)
-	// 		)
-	// 		.contentType(ContentType.JSON)
-	// 		.header("Authorization", "Bearer " + jwtToken.getAccessToken())
-	// 		.body(params)
-	// 		.when()
-	// 		.post("/cafe-studies")
-	// 		.then().log().all()
-	// 		.statusCode(200);
-	// }
+	@Test
+	void create() {
+		//given
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+
+		LocalDateTime startDateTime = timeUtil.now().plusHours(2);
+		LocalDateTime endDateTime = startDateTime.plusHours(1);
+
+		Map<String, String> params = new HashMap<>();
+		params.put("name", "카페고리 스터디");
+		params.put("cafeId", String.valueOf(cafe.getId()));
+		params.put("startDateTime", startDateTime.toString());
+		params.put("endDateTime", endDateTime.toString());
+		params.put("memberComms", "WELCOME");
+		params.put("maxParticipants", String.valueOf(4));
+		params.put("introduction", "카페고리 스터디 소개글");
+
+		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
+
+		RestAssured.given(spec).log().all()
+			.filter(RestAssuredRestDocumentationWrapper.document(
+					"카공 생성 API",
+					requestHeaders(
+						headerWithName("Authorization").description("JWT 액세스 토큰"))
+				)
+			)
+			.contentType(ContentType.JSON)
+			.header("Authorization", "Bearer " + jwtToken.getAccessToken())
+			.body(params)
+			.when()
+			.post("/cafe-studies")
+			.then().log().all()
+			.statusCode(200);
+	}
 
 	@Test
 	void searchCafeStudies() {
