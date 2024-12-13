@@ -42,6 +42,7 @@ public class StudyEditor {
 	private final StudyValidator studyValidator;
 
 	// TODO: save할 때 카공장의 기존 스터디를 조회하는 로직에서 toStudy 메서드 사용하여 예외 발생
+	@Transactional
 	public Long save(Study study, Cafe cafe, Long memberId) {
 		validateStudyDetails(study);
 
@@ -56,7 +57,7 @@ public class StudyEditor {
 		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
 		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
 			buildCafeStudyTags(savedStudy, tags));
-		// savedStudy.addCafeStudyTags(savedTags);
+		savedStudy.addCafeStudyTags(savedTags);
 
 		return savedStudy.getId();
 	}

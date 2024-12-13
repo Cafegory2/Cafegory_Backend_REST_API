@@ -1,7 +1,9 @@
 package com.example.demo.service.study;
 
 import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.study.domain.CafeStudyTagType.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +29,8 @@ import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
+import com.example.demo.study.infrastructure.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.study.presentation.CafeStudyCreateRequest;
 import com.example.demo.study.service.CafeStudyService;
@@ -51,6 +55,9 @@ class CafeStudyServiceTest extends ServiceTest {
 	@Autowired
 	private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
 
+	@Autowired
+	private CafeStudyTagRepository cafeStudyTagRepository;
+
 	//	@Autowired
 	//	private StudyOnceRepository studyOnceRepository;
 	//	@Autowired
@@ -66,7 +73,8 @@ class CafeStudyServiceTest extends ServiceTest {
 	//	}
 
 	private CafeStudyCreateRequest makeCafeStudyCreateRequest(LocalDateTime start, LocalDateTime end, long cafeId) {
-		List<CafeStudyTagType> tags = List.of(CafeStudyTagType.DESIGN);
+		List<CafeStudyTagType> tags = List.of(DESIGN);
+		saveCafeStudyTag();
 
 		return CafeStudyCreateRequest.builder()
 			.name("테스트 스터디")
@@ -79,6 +87,14 @@ class CafeStudyServiceTest extends ServiceTest {
 			.tags(tags)
 			.build();
 
+	}
+
+	private void saveCafeStudyTag() {
+		CafeStudyTagEntity tag = CafeStudyTagEntity.builder()
+			.type(DESIGN)
+			.build();
+
+		cafeStudyTagRepository.save(tag);
 	}
 
 	//	@Test
@@ -139,38 +155,37 @@ class CafeStudyServiceTest extends ServiceTest {
 	//		assertThat(response.isAttendance()).isFalse();
 	//	}
 
-	// TODO: push 위해 주석 처리
-	// @Test
-	// @DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
-	// void exception_case() {
-	// 	//given
-	// 	LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
-	// 	LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
-	// 	LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
-	//
-	// 	MemberEntity leader = memberSaveHelper.saveMember();
-	// 	CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
-	// 	CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-	//
-	// 	//then
-	// 	assertDoesNotThrow(() ->
-	// 		sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy()));
-	// }
+	@Test
+	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
+	void exception_case() {
+		//given
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
+		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
 
-	// TODO: push 위해 주석 처리
-	// @Test
-	// @DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
-	// void study_starts_1hours_after_now() {
-	// 	//given
-	// 	MemberEntity coordinator = memberSaveHelper.saveMember();
-	// 	LocalDateTime start = timeUtil.now().plusHours(1);
-	// 	LocalDateTime end = start.plusHours(1);
-	// 	CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
-	// 	CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-	// 	//then
-	// 	assertDoesNotThrow(
-	// 		() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
-	// }
+		MemberEntity leader = memberSaveHelper.saveMember();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+
+		//then
+		assertDoesNotThrow(() ->
+			sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy()));
+	}
+
+	@Test
+	@DisplayName("카공 시작은 현재 시간으로부터 최소 1시간 이후여야 한다.")
+	void study_starts_1hours_after_now() {
+		//given
+		MemberEntity coordinator = memberSaveHelper.saveMember();
+		LocalDateTime start = timeUtil.now().plusHours(1);
+		LocalDateTime end = start.plusHours(1);
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+
+		//then
+		assertDoesNotThrow(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
+	}
 
 	@Test
 	@DisplayName("카공 시작은 현재 시간으로부터 1시간 이전일 수 없다.")
@@ -187,20 +202,19 @@ class CafeStudyServiceTest extends ServiceTest {
 			CafegoryException.class).hasMessage(STUDY_ONCE_WRONG_START_TIME.getErrorMessage());
 	}
 
-	// TODO: push 위해 주석 처리
-	// @Test
-	// @DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
-	// void study_start_date_before_one_month() {
-	// 	//given
-	// 	MemberEntity coordinator = memberSaveHelper.saveMember();
-	// 	LocalDateTime start = timeUtil.now().plusMonths(1);
-	// 	LocalDateTime end = start.plusHours(1);
-	// 	CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
-	// 	CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-	// 	//then
-	// 	assertDoesNotThrow(
-	// 		() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
-	// }
+	@Test
+	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
+	void study_start_date_before_one_month() {
+		//given
+		MemberEntity coordinator = memberSaveHelper.saveMember();
+		LocalDateTime start = timeUtil.now().plusMonths(1);
+		LocalDateTime end = start.plusHours(1);
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+		//then
+		assertDoesNotThrow(
+			() -> sut.createStudy(coordinator.getId(), timeUtil.now(), cafeStudyCreateRequest.toStudy()));
+	}
 
 	@Test
 	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
@@ -217,21 +231,20 @@ class CafeStudyServiceTest extends ServiceTest {
 			CafegoryException.class).hasMessage(CAFE_STUDY_WRONG_START_DATE.getErrorMessage());
 	}
 
-	// TODO: push 위해 주석 처리
-	// @Test
-	// @DisplayName("카공 생성시 카공장은 참여인원에 포함된다.")
-	// void includes_leader_in_participants() {
-	// 	//given
-	// 	CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-	// 	Coordinator coordinator = createCoordinator(memberSaveHelper.saveMember("coordinator@gmail.com"));
-	// 	LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-	// 	Study study = creatStudy(cafe.getId(), coordinator, now.plusHours(2), now.plusHours(4));
-	// 	//when
-	// 	Study savedStudy = sut.createStudy(coordinator.getId(), now, study);
-	// 	//then
-	// 	int result = studyMemberRepository.countByCafeStudy_Id(savedStudy.getId());
-	// 	assertThat(result).isEqualTo(1);
-	// }
+	@Test
+	@DisplayName("카공 생성시 카공장은 참여인원에 포함된다.")
+	void includes_leader_in_participants() {
+		//given
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		Coordinator coordinator = createCoordinator(memberSaveHelper.saveMember("coordinator@gmail.com"));
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+		Study study = creatStudy(cafe.getId(), coordinator, now.plusHours(2), now.plusHours(4));
+		//when
+		Study savedStudy = sut.createStudy(coordinator.getId(), now, study);
+		//then
+		int result = studyMemberRepository.countByCafeStudy_Id(savedStudy.getId());
+		assertThat(result).isEqualTo(1);
+	}
 
 	private Coordinator createCoordinator(MemberEntity member) {
 		return Coordinator.builder()
@@ -279,20 +292,19 @@ class CafeStudyServiceTest extends ServiceTest {
 			Arguments.of(LocalDateTime.of(2000, 1, 1, 20, 59, 59), LocalDateTime.of(2000, 1, 1, 22, 0)));
 	}
 
-	// TODO: push 위해 주석 처리
-	// @ParameterizedTest()
-	// @MethodSource("provideStartAndEndDateTime2")
-	// @DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
-	// void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
-	// 	//given
-	// 	LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
-	//
-	// 	CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-	// 	MemberEntity leader = memberSaveHelper.saveMember();
-	// 	CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
-	// 	//then
-	// 	assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest.toStudy()));
-	// }
+	@ParameterizedTest()
+	@MethodSource("provideStartAndEndDateTime2")
+	@DisplayName("카페 영업시간 내의 시간에 카공을 만들 수 있다.")
+	void study_can_start_between_cafe_business_hours(LocalDateTime start, LocalDateTime end) {
+		//given
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		MemberEntity leader = memberSaveHelper.saveMember();
+		CafeStudyCreateRequest studyOnceCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+		//then
+		assertDoesNotThrow(() -> sut.createStudy(leader.getId(), now, studyOnceCreateRequest.toStudy()));
+	}
 
 	static Stream<Arguments> provideStartAndEndDateTime2() {
 		return Stream.of(Arguments.of(LocalDateTime.of(2000, 1, 1, 9, 0), LocalDateTime.of(2000, 1, 1, 10, 0)),
