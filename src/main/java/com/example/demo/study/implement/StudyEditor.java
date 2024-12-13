@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,14 +33,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudyEditor {
 
-	private final CafeStudyRepository cafeStudyRepository;
 	private final StudyRepository2 studyRepository2;
-
-	private final StudyMemberEditor studyMemberEditor;
-	private final StudyTagEditor studyTagEditor;
+	private final StudyQueryRepository2 studyQueryRepository2;
 
 	private final StudyValidator studyValidator;
 
+	// TODO 트랜잭션 제거?
 	// TODO: save할 때 카공장의 기존 스터디를 조회하는 로직에서 toStudy 메서드 사용하여 예외 발생
 	@Transactional
 	public Long save(Study study, Long memberId) {
@@ -55,14 +54,12 @@ public class StudyEditor {
 		studyValidator.validateMaxParticipants(study.getMaxParticipantCount());
 	}
 
+	//TODO 트랜잭션 제거?
 	@Transactional
 	public void removeWithCascade(Long studyId, Long candidateCoordinatorId, LocalDateTime now) {
-		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(studyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId, cafeStudy.getCoordinator().getId());
+		Study study = studyQueryRepository2.findById(studyId);
+		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId, study.getCoordinator().getId());
 
-		studyMemberEditor.remove(studyId, candidateCoordinatorId, now);
-		studyTagEditor.removeStudyStudyTagBy(studyId, now);
-		cafeStudy.softDelete(now);
+		studyRepository2.deleteWithCascade(studyId, candidateCoordinatorId, now);
 	}
 }

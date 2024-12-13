@@ -12,17 +12,19 @@ import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import static com.example.demo.exception.ExceptionType.*;
+
 @Repository
 @RequiredArgsConstructor
 public class StudyQueryRepositoryImpl implements StudyQueryRepository2 {
 
-	private final CafeStudyRepository cafeStudyJpaRepository;
+	private final CafeStudyRepository studyJpaRepository;
 
 	// TODO: test 확인하기
 	@Override
 	public Study findWithMember(Long studyId) {
-		return cafeStudyJpaRepository.findWithMember(studyId)
-			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND))
+		return studyJpaRepository.findWithMember(studyId)
+			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
 			.toStudy();
 	}
 
@@ -34,5 +36,12 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository2 {
 	@Override
 	public List<Study> findUpcomingsWithMemberBy(List<Long> studyIds, LocalDateTime now) {
 		return List.of();
+	}
+
+	@Override
+	public Study findById(Long studyId) {
+		return studyJpaRepository.findById(studyId)
+			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
+			.toStudy();
 	}
 }

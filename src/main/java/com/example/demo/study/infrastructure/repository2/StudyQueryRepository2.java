@@ -15,4 +15,5 @@ public interface StudyQueryRepository2 {
 
 	List<Study> findUpcomingsWithMemberBy(@Param("studyIds") List<Long> studyIds, @Param("now") LocalDateTime now);
 
+	Study findById(Long studyId);
 }
