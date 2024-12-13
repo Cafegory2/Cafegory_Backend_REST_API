@@ -2,6 +2,7 @@ package com.example.demo.cafe.implement;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import com.example.demo.cafe.infrastructure.repository2.CafeRepository2;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.cafe.domain.Cafe;
@@ -15,19 +16,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CafeReader {
 
-	private final CafeRepository cafeRepository;
+	private final CafeRepository2 cafeRepository2;
 
 	public Cafe read(Long cafeId) {
-		CafeEntity cafeEntity = cafeRepository.findById(cafeId)
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-
-		return cafeEntity.toCafe();
+		return cafeRepository2.findById(cafeId);
 	}
 
 	public Cafe getWithTags(Long cafeId) {
-		CafeEntity cafeEntity = cafeRepository.findWithTags(cafeId)
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-
-		return cafeEntity.toCafeWithTagsAndMenu();
+		return cafeRepository2.findWithTags(cafeId);
 	}
 }

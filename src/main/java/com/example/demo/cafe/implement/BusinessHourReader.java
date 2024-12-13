@@ -2,6 +2,7 @@ package com.example.demo.cafe.implement;
 
 import java.time.DayOfWeek;
 
+import com.example.demo.cafe.infrastructure.repository2.BusinessHourQueryRepository2;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -14,12 +15,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BusinessHourReader {
 
-	private final BusinessHourQueryRepository businessHourQueryRepository;
+	private final BusinessHourQueryRepository2 businessHourQueryRepository2;
 
 	public BusinessHour readBy(Long cafeId, DayOfWeek startDate) {
-		BusinessHourEntity businessHourEntity = businessHourQueryRepository.findBy(cafeId, startDate);
-
-		return businessHourEntity.toBusinessHour();
+		return businessHourQueryRepository2.findBy(cafeId, startDate);
 	}
-
 }
