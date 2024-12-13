@@ -31,10 +31,11 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	private final StudyTagRepositoryImpl studyTagRepositoryImpl;
 	private final CafeStudyCafeStudyTagRepository studyStudyTagJpaRepository;
 
-	public Study save(Study study) {
+	@Override
+	public Study save(Study study, Long memberId) {
 		CafeEntity cafeEntity = cafeJpaRepository.findById(study.getCafeId())
 			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_NOT_FOUND));
-		MemberEntity memberEntity = memberJpaRepository.findById(study.getCoordinator().getId())
+		MemberEntity memberEntity = memberJpaRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
 
 		CafeStudyEntity studyEntity = cafeStudyJpaRepository.save(

@@ -33,12 +33,6 @@ import lombok.RequiredArgsConstructor;
 public class StudyEditor {
 
 	private final CafeStudyRepository cafeStudyRepository;
-	private final CafeRepository cafeRepository;
-	private final MemberRepository memberRepository;
-	private final CafeStudyTagRepository cafeStudyTagRepository;
-	private final CafeStudyCafeStudyTagRepository cafeStudyCafeStudyTagRepository;
-
-	private final CafeRepository2 cafeRepository2;
 	private final StudyRepository2 studyRepository2;
 
 	private final StudyMemberEditor studyMemberEditor;
@@ -48,24 +42,10 @@ public class StudyEditor {
 
 	// TODO: save할 때 카공장의 기존 스터디를 조회하는 로직에서 toStudy 메서드 사용하여 예외 발생
 	@Transactional
-	public Long save(Study study, Cafe cafe, Long memberId) {
+	public Long save(Study study, Long memberId) {
 		validateStudyDetails(study);
 
-		// MemberEntity memberEntity = memberRepository.findById(memberId)
-		// 	.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		// CafeEntity cafeEntity = cafeRepository.findById(cafe.getId())
-		// 	.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-
-		Study savedStudy = studyRepository2.save(study);
-
-		// CafeStudyEntity savedStudy =
-		// 	cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
-		//
-		// List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
-		// List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
-		// 	buildCafeStudyTags(savedStudy, tags));
-		// savedStudy.addCafeStudyTags(savedTags);
-
+		Study savedStudy = studyRepository2.save(study, memberId);
 		return savedStudy.getId();
 	}
 
@@ -85,35 +65,4 @@ public class StudyEditor {
 		studyTagEditor.removeStudyStudyTagBy(studyId, now);
 		cafeStudy.softDelete(now);
 	}
-
-	private CafeStudyEntity buildCafeStudyEntity(Study study, CafeEntity cafeEntity, MemberEntity memberEntity) {
-		return CafeStudyEntity.builder()
-			.name(study.getName())
-			.cafe(cafeEntity)
-			.coordinator(memberEntity)
-			.studyPeriod(buildStudyPeriod(study))
-			.memberComms(study.getMemberComms())
-			.maxParticipants(study.getMaxParticipantCount())
-			.build();
-	}
-
-	private StudyPeriod buildStudyPeriod(Study study) {
-		return StudyPeriod.builder()
-			.startDateTime(study.getStartDateTime())
-			.endDateTime(study.getEndDateTime())
-			.build();
-	}
-
-	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags(
-		CafeStudyEntity cafeStudy, List<CafeStudyTagEntity> cafeStudyTags
-	) {
-		return cafeStudyTags.stream()
-			.map(cafeStudyTag -> CafeStudyCafeStudyTagEntity.builder()
-				.cafeStudy(cafeStudy)
-				.cafeStudyTag(cafeStudyTag)
-				.build()
-			)
-			.collect(Collectors.toList());
-	}
-
 }

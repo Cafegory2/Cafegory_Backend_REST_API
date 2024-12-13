@@ -4,6 +4,6 @@ import com.example.demo.study.domain.Study;
 
 public interface StudyRepository2 {
 
-	public Study save(Study study);
+	public Study save(Study study, Long memberId);
 
 }
