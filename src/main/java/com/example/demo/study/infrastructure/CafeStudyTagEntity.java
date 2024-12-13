@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.study.domain.CafeStudyTagType;
+import com.example.demo.study.domain.StudyTag;
 import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
@@ -36,5 +37,11 @@ public class CafeStudyTagEntity extends BaseEntity {
 	@Builder
 	private CafeStudyTagEntity(CafeStudyTagType type) {
 		this.type = type;
+	}
+
+	public StudyTag toStudyTag() {
+		return StudyTag.builder()
+			.tagId(id)
+			.build();
 	}
 }

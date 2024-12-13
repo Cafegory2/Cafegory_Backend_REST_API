@@ -146,4 +146,20 @@ public class CafeStudyEntity extends BaseEntity {
 		return this.recruitmentStatus.isRecruitmentOpen();
 	}
 
+	public static CafeStudyEntity from(Study study, CafeEntity cafe, MemberEntity member) {
+		return CafeStudyEntity.builder()
+			.name(cafe.getName())
+			.cafe(cafe)
+			.coordinator(member)
+			.studyPeriod(
+				StudyPeriod.builder()
+					.startDateTime(study.getStartDateTime())
+					.endDateTime(study.getEndDateTime())
+					.build()
+			)
+			.memberComms(study.getMemberComms())
+			.maxParticipants(study.getMaxParticipantCount())
+			.introduction(study.getIntroduction())
+			.build();
+	}
 }

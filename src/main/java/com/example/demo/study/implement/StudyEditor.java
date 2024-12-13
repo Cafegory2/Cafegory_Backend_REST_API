@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeRepository;
+import com.example.demo.cafe.infrastructure.repository2.CafeRepository2;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
@@ -23,6 +24,7 @@ import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.StudyPeriod;
+import com.example.demo.study.infrastructure.repository2.StudyRepository2;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +38,9 @@ public class StudyEditor {
 	private final CafeStudyTagRepository cafeStudyTagRepository;
 	private final CafeStudyCafeStudyTagRepository cafeStudyCafeStudyTagRepository;
 
+	private final CafeRepository2 cafeRepository2;
+	private final StudyRepository2 studyRepository2;
+
 	private final StudyMemberEditor studyMemberEditor;
 	private final StudyTagEditor studyTagEditor;
 
@@ -46,18 +51,20 @@ public class StudyEditor {
 	public Long save(Study study, Cafe cafe, Long memberId) {
 		validateStudyDetails(study);
 
-		MemberEntity memberEntity = memberRepository.findById(memberId)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		CafeEntity cafeEntity = cafeRepository.findById(cafe.getId())
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+		// MemberEntity memberEntity = memberRepository.findById(memberId)
+		// 	.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+		// CafeEntity cafeEntity = cafeRepository.findById(cafe.getId())
+		// 	.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
 
-		CafeStudyEntity savedStudy =
-			cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
+		Study savedStudy = studyRepository2.save(study);
 
-		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
-		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
-			buildCafeStudyTags(savedStudy, tags));
-		savedStudy.addCafeStudyTags(savedTags);
+		// CafeStudyEntity savedStudy =
+		// 	cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
+		//
+		// List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
+		// List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
+		// 	buildCafeStudyTags(savedStudy, tags));
+		// savedStudy.addCafeStudyTags(savedTags);
 
 		return savedStudy.getId();
 	}
