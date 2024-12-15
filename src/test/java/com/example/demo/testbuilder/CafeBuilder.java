@@ -1,18 +1,16 @@
 package com.example.demo.testbuilder;
 
-import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeRepository;
-import com.example.demo.factory.TestBusinessHourFactory;
 import com.example.demo.implement.cafe.Address;
-import com.example.demo.repository.cafe.BusinessHourRepository;
+import com.example.demo.implement.cafe.CafeTagEntity;
 
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.demo.testbuilder.BusinessHourBuilder.*;
+import static com.example.demo.testbuilder.CafeCafeTagBuilder.aCafeCafeTag;
 import static com.example.demo.testbuilder.CafeKeywordBuilder.*;
 
 public class CafeBuilder {
@@ -23,6 +21,7 @@ public class CafeBuilder {
     private String sns = "https://www.testsns.com/testsns";
 
     private List<String> keywords = new ArrayList<>();
+    private List<CafeTagEntity> cafeTags = new ArrayList<>();
 
     private CafeBuilder() {}
 
@@ -32,6 +31,7 @@ public class CafeBuilder {
         this.address = copy.address;
         this.sns = copy.sns;
         this.keywords = copy.keywords;
+        this.cafeTags = copy.cafeTags;
     }
 
     public CafeBuilder but() {
@@ -67,6 +67,11 @@ public class CafeBuilder {
         return this;
     }
 
+    public CafeBuilder with(CafeTagEntity... cafeTags) {
+        this.cafeTags.addAll(List.of(cafeTags));
+        return this;
+    }
+
     public CafeEntity build() {
         return CafeEntity.builder()
                 .name(this.name)
@@ -87,6 +92,7 @@ public class CafeBuilder {
     public CafeEntity save() {
         CafeEntity cafe = saveCafe();
         saveKeywords(cafe);
+        saveCafeTags(cafe);
 
         return cafe;
     }
@@ -95,6 +101,7 @@ public class CafeBuilder {
         CafeEntity cafe = saveCafe();
         saveBusinessHoursWith7daysFrom9To21(cafe);
         saveKeywords(cafe);
+        saveCafeTags(cafe);
 
         return cafe;
     }
@@ -103,6 +110,7 @@ public class CafeBuilder {
         CafeEntity cafe = saveCafe();
         saveBusinessHoursWith24For7(cafe);
         saveKeywords(cafe);
+        saveCafeTags(cafe);
 
         return cafe;
     }
@@ -124,6 +132,10 @@ public class CafeBuilder {
                     .with(cafe)
                     .save();
         }
+    }
+
+    private void saveCafeTags(CafeEntity cafe) {
+        cafeTags.forEach(cafeTag -> aCafeCafeTag().with(cafe).with(cafeTag).save());
     }
 
     private void saveBusinessHoursWith24For7(CafeEntity cafe) {

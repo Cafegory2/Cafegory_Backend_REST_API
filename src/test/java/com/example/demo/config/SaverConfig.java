@@ -3,7 +3,9 @@ package com.example.demo.config;
 import com.example.demo.cafe.infrastructure.CafeRepository;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.repository.cafe.BusinessHourRepository;
+import com.example.demo.repository.cafe.CafeCafeTagRepository;
 import com.example.demo.repository.cafe.CafeKeywordRepository;
+import com.example.demo.repository.cafe.CafeTagRepository;
 import com.example.demo.repository.member.MemberRepository;
 import com.example.demo.repository.study.CafeStudyCafeStudyTagRepository;
 import com.example.demo.repository.study.CafeStudyTagRepository;
@@ -31,11 +33,17 @@ public class SaverConfig {
     private CafeStudyTagRepository studyTagRepository;
     @Autowired
     private CafeStudyCafeStudyTagRepository studyStudyTagRepository;
+    @Autowired
+    private CafeTagRepository cafeTagRepository;
+    @Autowired
+    private CafeCafeTagRepository cafeCafeTagRepository;
 
     public void init() {
         CafeBuilder.CafeSaver.init(cafeRepository);
         BusinessHourBuilder.BusinessHourSaver.init(businessHourRepository);
         CafeKeywordBuilder.CafeKeywordSaver.init(cafeKeywordRepository);
+        CafeTagBuilder.CafeTagSaver.init(cafeTagRepository);
+        CafeCafeTagBuilder.CafeCafeTagSaver.init(cafeCafeTagRepository);
 
         MemberBuilder.MemberSaver.init(memberRepository);
 
