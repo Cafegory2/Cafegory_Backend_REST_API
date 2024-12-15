@@ -1,5 +1,10 @@
 package com.example.demo.repository.study;
 
+import static com.example.demo.implement.study.CafeStudyTagType.*;
+import static com.example.demo.testbuilder.CafeBuilder.aCafe;
+import static com.example.demo.testbuilder.MemberBuilder.aMember;
+import static com.example.demo.testbuilder.StudyBuilder.aStudy;
+import static com.example.demo.testbuilder.StudyTagBuilder.aTag;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -8,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.example.demo.testbuilder.StudyBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -69,35 +75,27 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	@DisplayName("검색어로 카공목록을 조회한다.")
 	void find_cafe_studies_by_keyword(String keyword, int expected) {
 		//given
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
-		cafeKeywordSaveHelper.saveCafeKeyword("스타벅스 강남대로점", cafe1);
-		cafeKeywordSaveHelper.saveCafeKeyword("서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)", cafe1);
+		CafeEntity cafe1 = aCafe()
+				.withKeywords("강남", "스타벅스 강남대로점", "서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)").save();
+		CafeEntity cafe2 = aCafe()
+				.withKeywords("강남", "스타벅스 신논현역점", "서울 서초구 강남대로 483 (반포동) 청호빌딩", "카공하기 좋은 카페").save();
 
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
-		cafeKeywordSaveHelper.saveCafeKeyword("스타벅스 신논현역점", cafe2);
-		cafeKeywordSaveHelper.saveCafeKeyword("서울 서초구 강남대로 483 (반포동) 청호빌딩", cafe2);
-		cafeKeywordSaveHelper.saveCafeKeyword("카공하기 좋은 카페", cafe2);
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
 
-		MemberEntity member = memberSaveHelper.saveMember();
+		StudyBuilder studyWithCafe1 = aStudy().with(cafe1).with(coordinator);
+		studyWithCafe1.but().withName("카페고리 스터디1").save();
+		studyWithCafe1.but().withName("카공하기 좋은 카페에서 스터디해요").save();
 
-		LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-
-		cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(2), startDateTime.plusHours(4),
-			"카페고리 스터디1");
-		cafeStudySaveHelper.saveCafeStudyWithName(cafe1, member, startDateTime.plusHours(5), startDateTime.plusHours(7),
-			"카공하기 좋은 카페에서 스터디해요");
-
-		cafeStudySaveHelper.saveCafeStudyWithName(cafe2, member, startDateTime.plusHours(8),
-			startDateTime.plusHours(10), "카페고리 스터디2");
+		StudyBuilder studyWithCafe2 = aStudy().with(cafe2).with(coordinator);
+		studyWithCafe2.but().withName("카페고리 스터디2").save();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
+				createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
 	}
+
 
 	private static Stream<Arguments> provideKeywords1() {
 		return Stream.of(
@@ -131,27 +129,23 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	@MethodSource("provideTime1")
 	@DisplayName("특정 날짜로 필터링한 카공 목록을 조회한다.")
 	void find_cafe_studies_by_start_date_time(
-		LocalDateTime startFor1, LocalDateTime endFor1,
-		LocalDateTime startFor2, LocalDateTime endFor2,
-		LocalDateTime startFor3, LocalDateTime endFor3,
-		LocalDate specificDate, int expected
+			LocalDateTime startFor1, LocalDateTime endFor1,
+			LocalDateTime startFor2, LocalDateTime endFor2,
+			LocalDateTime startFor3, LocalDateTime endFor3,
+			LocalDate specificDate, int expected
 	) {
 		//given
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith24For7();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+		CafeEntity cafe1 = aCafe().withKeywords("강남").saveWith24For7();
+		CafeEntity cafe2 = aCafe().withKeywords("강남").saveWith24For7();
 
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
 
-		MemberEntity member = memberSaveHelper.saveMember();
-
-		cafeStudySaveHelper.saveCafeStudy(cafe1, member, startFor1, endFor1);
-		cafeStudySaveHelper.saveCafeStudy(cafe1, member, startFor2, endFor2);
-
-		cafeStudySaveHelper.saveCafeStudy(cafe2, member, startFor3, endFor3);
+		aStudy().with(cafe1).withStudyPeriod(startFor1, endFor1).with(coordinator).save();
+		aStudy().with(cafe1).withStudyPeriod(startFor2, endFor2).with(coordinator).save();
+		aStudy().with(cafe2).withStudyPeriod(startFor3, endFor3).with(coordinator).save();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
+				createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -242,32 +236,21 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	@DisplayName("카공 태그로 필터링한 카공 목록을 조회한다.")
 	void find_cafe_studies_by_cafe_study_tag(CafeStudyTagType type, int expected) {
 		//given
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+		CafeEntity cafe1 = aCafe().withKeywords("강남").saveWith7daysFrom9To21();
+		CafeEntity cafe2 = aCafe().withKeywords("강남").saveWith7daysFrom9To21();
 
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
 
-		MemberEntity member = memberSaveHelper.saveMember();
+		CafeStudyTagEntity development = aTag().withType(DEVELOPMENT).save();
+		CafeStudyTagEntity design = aTag().withType(DESIGN).save();
 
-		LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
+		aStudy().with(development).with(cafe1).with(coordinator).save();
+		aStudy().with(design).with(cafe1).with(coordinator).save();
 
-		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
-
-		CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(2),
-			startDateTime.plusHours(4));
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-		CafeStudyEntity cafeStudy2 = cafeStudySaveHelper.saveCafeStudy(cafe1, member, startDateTime.plusHours(5),
-			startDateTime.plusHours(7));
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
-
-		CafeStudyEntity cafeStudy3 = cafeStudySaveHelper.saveCafeStudy(cafe2, member, startDateTime.plusHours(8),
-			startDateTime.plusHours(10));
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy3, cafeStudyTag1);
+		aStudy().with(development).with(cafe2).with(coordinator).save();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-			createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
+				createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -276,13 +259,13 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	private static Stream<Arguments> provideCafeStudyTag1() {
 		return Stream.of(
 			//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
-			Arguments.of(CafeStudyTagType.SALES, 0),
+			Arguments.of(SALES, 0),
 
 			//CafeStudy1, CafeStudy3과 관련된 테스트
-			Arguments.of(CafeStudyTagType.DEVELOPMENT, 2),
+			Arguments.of(DEVELOPMENT, 2),
 
 			//CafeStudy2과 관련된 테스트
-			Arguments.of(CafeStudyTagType.DESIGN, 1)
+			Arguments.of(DESIGN, 1)
 		);
 	}
 
@@ -554,8 +537,8 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
 		MemberEntity member = memberSaveHelper.saveMember();
 
-		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(DEVELOPMENT);
+		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(DESIGN);
 
 		CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafeEntity1, member,
 			timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
@@ -626,7 +609,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 				// 카페 태그
 				Collections.EMPTY_LIST,
 				// 카공 태그
-				CafeStudyTagType.DESIGN,
+				DESIGN,
 				// 소통 여부
 				null,
 				// 기댓값
