@@ -1,9 +1,19 @@
 package com.example.demo.study.implement;
 
+import static com.example.demo.study.domain.StudyRole.*;
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyMemberBuilder.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.study.domain.StudyRole;
+import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
+import com.example.demo.testbuilder.CafeBuilder;
+import com.example.demo.testbuilder.MemberBuilder;
+import com.example.demo.testbuilder.StudyBuilder;
+import com.example.demo.testbuilder.StudyMemberBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +33,18 @@ class StudyEditorTest extends ServiceTest {
 	private StudyEditor sut;
 
 	@Autowired
-	private CafeSaveHelper cafeSaveHelper;
-	@Autowired
-	private CafeStudySaveHelper cafeStudySaveHelper;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
-
-	@Autowired
 	private TimeUtil timeUtil;
 
 	@Test
 	@DisplayName("카공을 삭제할 때 관련된 데이터를 같이 삭제한다.")
 	void remove_study_with_cascade() {
 		//given
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().whoIsCoordinator().save();
 
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-		CafeStudyEntity study = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, start.plusHours(2));
-
-		//when
-		//then
+		CafeStudyEntity study = StudyBuilder.aStudy().with(cafe).with(coordinator).save();
+		aStudyMember().with(study).with(coordinator).withStudyRole(COORDINATOR).save();
+		//when & then
 		assertDoesNotThrow(
 			() -> sut.removeWithCascade(study.getId(), coordinator.getId(), timeUtil.now())
 		);

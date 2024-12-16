@@ -6,6 +6,7 @@ import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagRepository;
+import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.testbuilder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
@@ -33,6 +34,8 @@ public class SaverConfig {
     private CafeTagRepository cafeTagRepository;
     @Autowired
     private CafeCafeTagRepository cafeCafeTagRepository;
+    @Autowired
+    private StudyMemberRepository studyMemberRepository;
 
     public void init() {
         CafeBuilder.CafeSaver.init(cafeRepository);
@@ -46,6 +49,7 @@ public class SaverConfig {
         StudyBuilder.StudySaver.init(studyRepository);
         StudyTagBuilder.StudyTagSaver.init(studyTagRepository);
         StudyStudyTagBuilder.StudyStudyTagSaver.init(studyStudyTagRepository);
+        StudyMemberBuilder.StudyMemberSaver.init(studyMemberRepository);
 
         CommentBuilder.CommentSaver.init(commentRepository);
     }
