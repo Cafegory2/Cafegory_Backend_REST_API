@@ -28,14 +28,14 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
     @DisplayName("카공 ID를 사용하여 해당 카공에 달린 모든 댓글과 대댓글을 조회한다.")
     void find_all_comments_with_replies_in_cafe_study2() {
         //given
-        MemberEntity coordinator = aMember().whoIsCoordinator().save();
+        MemberEntity coordinator = aMember().asCoordinator().save();
         CafeStudyEntity study = aStudy()
                 .with(aCafe().saveWith7daysFrom9To21())
                 .with(coordinator)
                 .withStudyPeriodFrom10To12().save();
 
-        MemberEntity member1 = aMember().whoIsParticipant(1).save();
-        MemberEntity member2 = aMember().whoIsParticipant(2).save();
+        MemberEntity member1 = aMember().asParticipant(1).save();
+        MemberEntity member2 = aMember().asParticipant(2).save();
 
         CommentBuilder comment = aComment().with(study);
         CafeStudyCommentEntity root1 = comment.but().withMember(member1).save();

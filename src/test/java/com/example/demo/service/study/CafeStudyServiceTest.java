@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.example.demo.testbuilder.CafeBuilder;
-import com.example.demo.testbuilder.MemberBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,17 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.study.presentation.CafeStudyCreateRequest;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.util.TimeUtil;
@@ -104,7 +97,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	void study_starts_1hours_before_now() {
 		//given
 		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
@@ -135,7 +128,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	void study_start_date_after_one_month() {
 		//given
 		CafeEntity cafe = aCafe().saveWith24For7();
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		LocalDateTime start = timeUtil.now().plusMonths(1).plusDays(1);
 		LocalDateTime end = start.plusHours(1);
@@ -194,7 +187,7 @@ class CafeStudyServiceTest extends ServiceTest {
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 
 		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), now, cafeStudyCreateRequest.toStudy())).isInstanceOf(

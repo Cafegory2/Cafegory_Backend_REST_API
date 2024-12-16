@@ -59,7 +59,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe2 = aCafe()
 				.withKeywords("강남", "스타벅스 신논현역점", "서울 서초구 강남대로 483 (반포동) 청호빌딩", "카공하기 좋은 카페").save();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		StudyBuilder studyWithCafe1 = aStudy().with(cafe1).with(coordinator);
 		studyWithCafe1.but().withName("카페고리 스터디1").save();
@@ -117,7 +117,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe1 = aCafe().withKeywords("강남").saveWith24For7();
 		CafeEntity cafe2 = aCafe().withKeywords("강남").saveWith24For7();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		aStudy().with(cafe1).withStudyPeriod(startFor1, endFor1).with(coordinator).save();
 		aStudy().with(cafe1).withStudyPeriod(startFor2, endFor2).with(coordinator).save();
@@ -218,7 +218,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe1 = aCafe().withKeywords("강남").saveWith7daysFrom9To21();
 		CafeEntity cafe2 = aCafe().withKeywords("강남").saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		CafeStudyTagEntity development = aTag().withType(DEVELOPMENT).save();
 		CafeStudyTagEntity design = aTag().withType(DESIGN).save();
@@ -259,7 +259,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe1 = aCafe().with(wifi).withKeywords("강남").saveWith7daysFrom9To21();
 		CafeEntity cafe2 = aCafe().with(wifi, outlet).withKeywords("강남").saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		aStudy().with(cafe1).with(coordinator).save();
 		aStudy().with(cafe1).with(coordinator).shiftDays(1).save();
@@ -296,7 +296,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe1 = aCafe().with(wifi, outlet).withKeywords("강남").saveWith7daysFrom9To21();
 		CafeEntity cafe2 = aCafe().with(wifi, comfortableSeating).withKeywords("강남").saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		aStudy().with(cafe1).with(coordinator).save();
 		aStudy().with(cafe1).with(coordinator).shiftDays(1).save();
@@ -330,7 +330,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe1 = aCafe().withKeywords("강남").saveWith7daysFrom9To21();
 		CafeEntity cafe2 = aCafe().withKeywords("강남").saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		aStudy().withMemberComms(WELCOME).with(cafe1).with(coordinator).save();
 		aStudy().withMemberComms(AVOID).with(cafe1).with(coordinator).shiftDays(1).save();
@@ -362,7 +362,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		//given
 		CafeEntity cafe = aCafe().withKeywords("강남").saveWith24For7();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		CafeStudyEntity study1 = aStudy().with(cafe).with(coordinator).save();
 		CafeStudyEntity finishedStudy2 = aStudy().shiftDays(1).with(cafe).with(coordinator).save();
@@ -385,7 +385,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	void find_cafe_studies_with_first_page() {
 		//given
 		CafeEntity cafe = aCafe().withKeywords("강남").saveWith24For7();
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		for (int i = 0; i < 6; i++) {
 			aStudy().with(cafe).with(coordinator).shiftDays(i).save();
@@ -404,7 +404,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	void find_cafe_studies_with_second_page() {
 		//given
 		CafeEntity cafe = aCafe().withKeywords("강남").saveWith24For7();
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		for (int i = 0; i < 11; i++) {
 			aStudy().with(cafe).with(coordinator).shiftDays(i).save();
@@ -423,7 +423,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	void find_cafe_studies_with_last_page() {
 		//given
 		CafeEntity cafe = aCafe().withKeywords("강남").saveWith24For7();
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		for (int i = 0; i < 11; i++) {
 			aStudy().with(cafe).with(coordinator).shiftDays(i).save();
@@ -453,7 +453,7 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 		CafeEntity cafe1 = aCafe().withKeywords("강남").with(wifi, outlet).saveWith7daysFrom9To21();
 		CafeEntity cafe2 = aCafe().withKeywords("강남").with(wifi, comfortableSeating).saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().whoIsCoordinator().save();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
 		CafeStudyTagEntity development = aTag().withType(DEVELOPMENT).save();
 		CafeStudyTagEntity design = aTag().withType(DESIGN).save();

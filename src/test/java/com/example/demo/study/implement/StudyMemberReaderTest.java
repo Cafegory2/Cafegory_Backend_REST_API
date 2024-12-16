@@ -1,5 +1,9 @@
 package com.example.demo.study.implement;
 
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyBuilder.*;
+import static com.example.demo.testbuilder.StudyMemberBuilder.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
@@ -24,31 +28,20 @@ class StudyMemberReaderTest extends ServiceTest {
 	@Autowired
 	private StudyMemberReader sut;
 
-	@Autowired
-	private CafeSaveHelper cafeSaveHelper;
-	@Autowired
-	private CafeStudySaveHelper cafeStudySaveHelper;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
-	@Autowired
-	private CafeStudyMemberSaveHelper cafeStudyMemberSaveHelper;
-	@Autowired
-	private TimeUtil timeUtil;
-
 	@Test
 	@DisplayName("카공에 참여한 현재 인원수를 찾는다.")
 	void find_current_participants() {
 		//given
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
-		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, start.plusHours(2));
+		MemberEntity coordinator = aMember().asCoordinator().save();
+		MemberEntity participant = aMember().asParticipant().save();
 
-		cafeStudyMemberSaveHelper.saveCafeStudyMember(cafeStudy, member);
+		CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
+		aStudyMember().with(study).with(coordinator).asCoordinator().save();
+		aStudyMember().with(study).with(participant).asParticipant().save();
 		//when
-		int result = sut.loadParticipantCount(cafeStudy.getId());
+		int result = sut.loadParticipantCount(study.getId());
 		//then
 		assertThat(result).isEqualTo(2);
 	}
@@ -57,19 +50,17 @@ class StudyMemberReaderTest extends ServiceTest {
 	@DisplayName("카공에 참여한 사람들의 아이디를 찾는다.")
 	void find_current_participantIds() {
 		//given
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
 
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		MemberEntity member = memberSaveHelper.saveMember("member@gmail.com");
-		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, start.plusHours(2));
+		MemberEntity coordinator = aMember().asCoordinator().save();
+		MemberEntity participant = aMember().asParticipant().save();
 
-		cafeStudyMemberSaveHelper.saveCafeStudyMember(cafeStudy, member);
+		CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
+		aStudyMember().with(study).with(coordinator).asCoordinator().save();
+		aStudyMember().with(study).with(participant).asParticipant().save();
 		//when
-		List<Long> result = sut.readParticipantIdsBy(cafeStudy.getId());
+		List<Long> result = sut.readParticipantIdsBy(study.getId());
 		//then
-
 		assertThat(result).hasSize(2);
 	}
-
 }

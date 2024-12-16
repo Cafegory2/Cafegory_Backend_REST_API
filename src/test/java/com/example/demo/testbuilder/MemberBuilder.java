@@ -50,17 +50,17 @@ public class MemberBuilder {
         return this;
     }
 
-    public MemberBuilder whoIsCoordinator() {
+    public MemberBuilder asCoordinator() {
         this.email = "coordinator@test.com";
         return this;
     }
 
-    public MemberBuilder whoIsParticipant() {
+    public MemberBuilder asParticipant() {
         this.email = "participant@test.com";
         return this;
     }
 
-    public MemberBuilder whoIsParticipant(int sequence) {
+    public MemberBuilder asParticipant(int sequence) {
         this.email = "participant" + sequence + "@test.com";
         return this;
     }

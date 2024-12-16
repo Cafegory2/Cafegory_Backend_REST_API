@@ -49,6 +49,16 @@ public class StudyMemberBuilder {
         return this;
     }
 
+    public StudyMemberBuilder asParticipant() {
+        this.studyRole = StudyRole.MEMBER;
+        return this;
+    }
+
+    public StudyMemberBuilder asCoordinator() {
+        this.studyRole = StudyRole.COORDINATOR;
+        return this;
+    }
+
     public StudyMemberBuilder withAttendance(Attendance attendance) {
         this.attendance = attendance;
         return this;
