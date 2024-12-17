@@ -1,10 +1,18 @@
 package com.example.demo.study.infrastructure;
 
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyBuilder.*;
+import static com.example.demo.testbuilder.StudyMemberBuilder.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.example.demo.testbuilder.CafeBuilder;
+import com.example.demo.testbuilder.MemberBuilder;
+import com.example.demo.testbuilder.StudyBuilder;
+import com.example.demo.testbuilder.StudyMemberBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,29 +29,17 @@ class StudyMemberRepositoryTest extends JpaTest {
 	@Autowired
 	private StudyMemberRepository sut;
 
-	@Autowired
-	private CafeSaveHelper cafeSaveHelper;
-	@Autowired
-	private CafeStudySaveHelper cafeStudySaveHelper;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
-
-	@Autowired
-	private TimeUtil timeUtil;
-
 	@Test
 	void findByCafeStudy_IdAndMember_Id() {
 		// given
-		CafeEntity cafe = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().asCoordinator().save();
 
-		MemberEntity coordinator = memberSaveHelper.saveMember("coordinator@gmail.com");
-		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-		CafeStudyEntity cafeStudy = cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, start, start.plusHours(2));
-
+		CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
+		aStudyMember().asCoordinator().with(coordinator).with(study).save();
 		// when
-		Optional<CafeStudyMemberEntity> cafeStudyMembers = sut.findByCafeStudy_IdAndMember_Id(cafeStudy.getId(),
+		Optional<CafeStudyMemberEntity> cafeStudyMembers = sut.findByCafeStudy_IdAndMember_Id(study.getId(),
 			coordinator.getId());
-
 		// then
 		assertThat(cafeStudyMembers).isPresent();
 	}

@@ -3,6 +3,8 @@ package com.example.demo.testbuilder;
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.cafe.infrastructure.BusinessHourRepository;
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.config.FakeTimeUtil;
+import com.example.demo.util.TimeUtil;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -11,12 +13,15 @@ import static com.example.demo.testbuilder.CafeBuilder.*;
 
 public class BusinessHourBuilder {
 
+    private TimeUtil timeUtil = new FakeTimeUtil();
+
     private DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
-    private LocalTime openingTime = LocalTime.of(9, 0);
-    private LocalTime closingTime = LocalTime.of(21, 0);
+    private LocalTime openingTime = timeUtil.localTime(9, 0, 0);
+    private LocalTime closingTime = timeUtil.localTime(21, 0, 0);
     private CafeEntity cafe = aCafe().build();
 
-    private BusinessHourBuilder() {}
+    private BusinessHourBuilder() {
+    }
 
     private BusinessHourBuilder(BusinessHourBuilder copy) {
         this.dayOfWeek = copy.dayOfWeek;
@@ -48,8 +53,13 @@ public class BusinessHourBuilder {
         return this;
     }
 
+    public BusinessHourBuilder withOpeningStartOfDay() {
+        this.openingTime = timeUtil.localTime(0, 0, 0);
+        return this;
+    }
+
     public BusinessHourBuilder withClosingEndOfDay() {
-        this.closingTime = LocalTime.of(23, 59, 59);
+        this.closingTime = timeUtil.maxLocalTime();
         return this;
     }
 
