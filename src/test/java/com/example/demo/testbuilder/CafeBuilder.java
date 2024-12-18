@@ -1,17 +1,17 @@
 package com.example.demo.testbuilder;
 
-import com.example.demo.cafe.infrastructure.AddressEmbeddable;
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.cafe.infrastructure.CafeRepository;
-import com.example.demo.cafe.infrastructure.CafeTagEntity;
+import com.example.demo.cafe.infrastructure.*;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.example.demo.testbuilder.BusinessHourBuilder.*;
 import static com.example.demo.testbuilder.CafeCafeTagBuilder.aCafeCafeTag;
 import static com.example.demo.testbuilder.CafeKeywordBuilder.*;
+import static com.example.demo.testbuilder.MenuBuilder.*;
 
 public class CafeBuilder {
 
@@ -22,8 +22,10 @@ public class CafeBuilder {
 
     private List<String> keywords = new ArrayList<>();
     private List<CafeTagEntity> cafeTags = new ArrayList<>();
+    private Map<String, String> menus = new HashMap<>();
 
-    private CafeBuilder() {}
+    private CafeBuilder() {
+    }
 
     private CafeBuilder(CafeBuilder copy) {
         this.name = copy.name;
@@ -32,6 +34,7 @@ public class CafeBuilder {
         this.sns = copy.sns;
         this.keywords = copy.keywords;
         this.cafeTags = copy.cafeTags;
+        this.menus = copy.menus;
     }
 
     public CafeBuilder but() {
@@ -72,6 +75,7 @@ public class CafeBuilder {
         return this;
     }
 
+    // TODO 도메인과 엔티티가 격리되면, build() 를 통해서 엔티티를 반환할 이유가 없다. 테스트 빌더는 DB에 저장하기 위한 핼퍼 클래스로 변한다. build() 를 private 으로 변경을 고려하고 외부 클래스와 static 클래스의 위치를 변경한다.
     public CafeEntity build() {
         return CafeEntity.builder()
                 .name(this.name)
@@ -93,6 +97,7 @@ public class CafeBuilder {
         CafeEntity cafe = saveCafe();
         saveKeywords(cafe);
         saveCafeTags(cafe);
+        saveMenus(cafe);
 
         return cafe;
     }
@@ -102,6 +107,7 @@ public class CafeBuilder {
         saveBusinessHoursWith7daysFrom9To21(cafe);
         saveKeywords(cafe);
         saveCafeTags(cafe);
+        saveMenus(cafe);
 
         return cafe;
     }
@@ -111,6 +117,7 @@ public class CafeBuilder {
         saveBusinessHoursWith24For7(cafe);
         saveKeywords(cafe);
         saveCafeTags(cafe);
+        saveMenus(cafe);
 
         return cafe;
     }
@@ -134,16 +141,27 @@ public class CafeBuilder {
         }
     }
 
-    private void saveCafeTags(CafeEntity cafe) {
-        cafeTags.forEach(cafeTag -> aCafeCafeTag().with(cafe).with(cafeTag).save());
-    }
-
     private void saveBusinessHoursWith24For7(CafeEntity cafe) {
         for (DayOfWeek day : DayOfWeek.values()) {
             aBusinessHour()
                     .withDayOfWeek(day)
                     .withOpeningTime(0, 0)
                     .withClosingEndOfDay()
+                    .with(cafe)
+                    .save();
+        }
+    }
+
+    private void saveCafeTags(CafeEntity cafe) {
+        cafeTags.forEach(cafeTag -> aCafeCafeTag().with(cafe).with(cafeTag).save());
+    }
+
+    private void saveMenus(CafeEntity cafe) {
+        for (String menuName : menus.keySet()) {
+            String menuPrice = menus.get(menuName);
+
+            aMenu().withName(menuName)
+                    .withPrice(menuPrice)
                     .with(cafe)
                     .save();
         }

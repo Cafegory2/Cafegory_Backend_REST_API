@@ -108,5 +108,4 @@ public class MemberBuilder {
     public MemberEntity save() {
         return MemberSaver.memberRepository.save(build());
     }
-
 }

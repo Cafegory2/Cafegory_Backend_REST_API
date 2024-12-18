@@ -1,8 +1,15 @@
 package com.example.demo.apidocs;
 
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.CafeTagBuilder.*;
+import static com.example.demo.testbuilder.CafeTagBuilder.aCafeTag;
+import static com.example.demo.testbuilder.MenuBuilder.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
+import com.example.demo.testbuilder.CafeBuilder;
+import com.example.demo.testbuilder.CafeTagBuilder;
+import com.example.demo.testbuilder.MenuBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +56,16 @@ public class CafeApiTest extends ApiDocsTest {
 	@Test
 	@DisplayName("카페 상세정보 조회 API")
 	void getCafeStudyDetail() throws Exception {
-		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
+		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
+//		CafeTagEntity wifi = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+//		CafeTagEntity outlet = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
 
-		CafeEntity cafeEntity = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity, cafeTag1);
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafeEntity, cafeTag2);
-
-		menuSaveHelper.saveMenu("아메리카노", "1500", cafeEntity);
-		menuSaveHelper.saveMenu("카페라떼", "3000", cafeEntity);
+		CafeEntity cafeEntity = aCafe().with(wifi, outlet).saveWith7daysFrom9To21();
+		aMenu().with(cafeEntity).withName("아메리카노").withPrice("1500").save();
+		aMenu().with(cafeEntity).withName("카페라떼").withPrice("3000").save();
+//		menuSaveHelper.saveMenu("아메리카노", "1500", cafeEntity);
+//		menuSaveHelper.saveMenu("카페라떼", "3000", cafeEntity);
 		//
 		// MemberEntity member = memberSaveHelper.saveMember();
 		//

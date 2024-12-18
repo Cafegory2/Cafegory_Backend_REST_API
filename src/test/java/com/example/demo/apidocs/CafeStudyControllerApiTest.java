@@ -1,9 +1,14 @@
 package com.example.demo.apidocs;
 
+import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.testbuilder.CafeTagBuilder.*;
+import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.testbuilder.StudyBuilder.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.testbuilder.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;
@@ -94,34 +99,26 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
 	@Test
 	void searchCafeStudies() {
-		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
-		CafeTagEntity cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
+		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
+		CafeTagEntity comfortableSeating = aCafeTag().withType(CafeTagType.COMFORTABLE_SEATING).save();
 
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag2);
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
-		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag2);
-		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag3);
+		CafeEntity cafe1 = aCafe().withKeywords("강남").with(wifi, outlet).saveWith7daysFrom9To21();
+		CafeEntity cafe2 = aCafe().withKeywords("강남").with(wifi, outlet, comfortableSeating).saveWith24For7();
 
-		MemberEntity member = memberSaveHelper.saveMember("cafegory@gmail.com");
+		MemberEntity member = aMember().asCoordinator().save();
 
-		CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-		CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
+		CafeStudyTagEntity development = StudyTagBuilder.aTag().withType(CafeStudyTagType.DEVELOPMENT).save();
+		CafeStudyTagEntity design = StudyTagBuilder.aTag().withType(CafeStudyTagType.DESIGN).save();
 
-		LocalDateTime startDateTime1 = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
-
-		CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe1, member,
-			startDateTime1.plusHours(2), startDateTime1.plusHours(4), MemberComms.WELCOME);
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-		CafeStudyEntity cafeStudy2 = cafeStudySaveHelper.saveCafeStudyWithMemberComms(cafe2, member,
-			startDateTime1.plusHours(4), startDateTime1.plusHours(6), MemberComms.WELCOME);
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag1);
-		cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy2, cafeStudyTag2);
+		aStudy().with(cafe1).with(development).with(member).withMemberComms(MemberComms.WELCOME).withStudyPeriod(
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0)
+		).save();
+		aStudy().with(cafe2).with(development, design).with(member).withMemberComms(MemberComms.WELCOME).withStudyPeriod(
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 16, 0, 0)
+		).save();
 
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("keyword", "강남");

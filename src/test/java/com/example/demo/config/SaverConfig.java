@@ -36,6 +36,8 @@ public class SaverConfig {
     private CafeCafeTagRepository cafeCafeTagRepository;
     @Autowired
     private StudyMemberRepository studyMemberRepository;
+    @Autowired
+    private MenuRepository menuRepository;
 
     public void init() {
         CafeBuilder.CafeSaver.init(cafeRepository);
@@ -43,6 +45,7 @@ public class SaverConfig {
         CafeKeywordBuilder.CafeKeywordSaver.init(cafeKeywordRepository);
         CafeTagBuilder.CafeTagSaver.init(cafeTagRepository);
         CafeCafeTagBuilder.CafeCafeTagSaver.init(cafeCafeTagRepository);
+        MenuBuilder.MenuSaver.init(menuRepository);
 
         MemberBuilder.MemberSaver.init(memberRepository);
 
