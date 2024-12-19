@@ -28,12 +28,12 @@ public class StudyStudyTagBuilder {
         return new StudyStudyTagBuilder();
     }
 
-    public StudyStudyTagBuilder with(CafeStudyEntity study) {
+    public StudyStudyTagBuilder withStudy(CafeStudyEntity study) {
         this.study = study;
         return this;
     }
 
-    public StudyStudyTagBuilder with(CafeStudyTagEntity studyTag) {
+    public StudyStudyTagBuilder withTag(CafeStudyTagEntity studyTag) {
         this.studyTag = studyTag;
         return this;
     }

@@ -32,8 +32,8 @@ class StudyEditorTest extends ServiceTest {
 		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
 		MemberEntity coordinator = aMember().asCoordinator().save();
 
-		CafeStudyEntity study = StudyBuilder.aStudy().with(cafe).with(coordinator).save();
-		aStudyMember().with(study).with(coordinator).withStudyRole(COORDINATOR).save();
+		CafeStudyEntity study = StudyBuilder.aStudy().withCafe(cafe).withMember(coordinator).save();
+		aStudyMember().withStudy(study).withMember(coordinator).withStudyRole(COORDINATOR).save();
 		//when & then
 		assertDoesNotThrow(
 			() -> sut.removeWithCascade(study.getId(), coordinator.getId(), timeUtil.now())

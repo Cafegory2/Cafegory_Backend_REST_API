@@ -65,17 +65,22 @@ public class CafeBuilder {
         return this;
     }
 
-    public CafeBuilder withKeywords(String... keywords) {
+    public CafeBuilder includeKeywords(String... keywords) {
         this.keywords.addAll(List.of(keywords));
         return this;
     }
 
-    public CafeBuilder with(CafeTagEntity... cafeTags) {
+    public CafeBuilder includeTags(CafeTagEntity... cafeTags) {
         this.cafeTags.addAll(List.of(cafeTags));
         return this;
     }
 
-    // TODO 도메인과 엔티티가 격리되면, build() 를 통해서 엔티티를 반환할 이유가 없다. 테스트 빌더는 DB에 저장하기 위한 핼퍼 클래스로 변한다. build() 를 private 으로 변경을 고려하고 외부 클래스와 static 클래스의 위치를 변경한다.
+    public CafeBuilder includeMenu(String name, String price) {
+        this.menus.put(name, price);
+        return this;
+    }
+
+    // TODO 도메인과 엔티티가 격리되면, build() 를 통해서 엔티티를 반환할 이유가 없다. 테스트 빌더는 DB에 저장하기 위한 핼퍼 클래스로 변한다. build() 를 private 으로 변경
     public CafeEntity build() {
         return CafeEntity.builder()
                 .name(this.name)
@@ -127,7 +132,7 @@ public class CafeBuilder {
     }
 
     private void saveKeywords(CafeEntity cafe) {
-        keywords.forEach(keyword -> aCafeKeyword().withKeyword(keyword).with(cafe).save());
+        keywords.forEach(keyword -> aCafeKeyword().withKeyword(keyword).withCafe(cafe).save());
     }
 
     private void saveBusinessHoursWith7daysFrom9To21(CafeEntity cafe) {
@@ -136,7 +141,7 @@ public class CafeBuilder {
                     .withDayOfWeek(day)
                     .withOpeningTime(9, 0)
                     .withClosingTime(21, 0)
-                    .with(cafe)
+                    .withCafe(cafe)
                     .save();
         }
     }
@@ -147,13 +152,13 @@ public class CafeBuilder {
                     .withDayOfWeek(day)
                     .withOpeningTime(0, 0)
                     .withClosingEndOfDay()
-                    .with(cafe)
+                    .withCafe(cafe)
                     .save();
         }
     }
 
     private void saveCafeTags(CafeEntity cafe) {
-        cafeTags.forEach(cafeTag -> aCafeCafeTag().with(cafe).with(cafeTag).save());
+        cafeTags.forEach(cafeTag -> aCafeCafeTag().withCafe(cafe).withTag(cafeTag).save());
     }
 
     private void saveMenus(CafeEntity cafe) {
@@ -162,7 +167,7 @@ public class CafeBuilder {
 
             aMenu().withName(menuName)
                     .withPrice(menuPrice)
-                    .with(cafe)
+                    .withCafe(cafe)
                     .save();
         }
     }

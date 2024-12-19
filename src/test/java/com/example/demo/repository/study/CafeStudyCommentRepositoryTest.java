@@ -30,14 +30,14 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
         //given
         MemberEntity coordinator = aMember().asCoordinator().save();
         CafeStudyEntity study = aStudy()
-                .with(aCafe().saveWith7daysFrom9To21())
-                .with(coordinator)
+                .withCafe(aCafe().saveWith7daysFrom9To21())
+                .withMember(coordinator)
                 .withStudyPeriodFrom10To12().save();
 
         MemberEntity member1 = aMember().asParticipant(1).save();
         MemberEntity member2 = aMember().asParticipant(2).save();
 
-        CommentBuilder comment = aComment().with(study);
+        CommentBuilder comment = aComment().withStudy(study);
         CafeStudyCommentEntity root1 = comment.but().withMember(member1).save();
         CafeStudyCommentEntity reply1ToRoot1 = comment.but().replyTo(root1).withCoordinator(coordinator).save();
         CafeStudyCommentEntity reply2ToReply1 = comment.but().replyTo(reply1ToRoot1).withMember(member2).save();

@@ -38,9 +38,9 @@ class QnaServiceTest extends ServiceTest {
         MemberEntity coordinator = aMember().asCoordinator().save();
         MemberEntity member = aMember().asParticipant().save();
 
-        CafeStudyEntity study = aStudy().with(cafe).with(member).save();
-        CafeStudyCommentEntity rootComment = aComment().with(study).with(member).withStudyRole(MEMBER).save();
-        aComment().replyTo(rootComment).with(study).with(coordinator).withStudyRole(COORDINATOR).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).save();
+        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).save();
+        aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).save();
         CommentContent commentContent = createCommentContent("변경된 댓글 내용", rootComment.getId());
         //when & then
         assertThatThrownBy(() -> sut.editComment(commentContent, member.getId()))
@@ -64,9 +64,9 @@ class QnaServiceTest extends ServiceTest {
         MemberEntity coordinator = aMember().asCoordinator().save();
         MemberEntity member = aMember().asParticipant().save();
 
-        CafeStudyEntity study = aStudy().with(cafe).with(member).save();
-        CafeStudyCommentEntity rootComment = aComment().with(study).with(member).withStudyRole(MEMBER).save();
-        aComment().replyTo(rootComment).with(study).with(coordinator).withStudyRole(COORDINATOR).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).save();
+        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).save();
+        aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).save();
         //when & then
         assertThatThrownBy(() -> sut.removeComment(rootComment.getId(), member.getId(), timeUtil.now()))
             .isInstanceOf(CafegoryException.class)

@@ -31,7 +31,7 @@ public class CafeKeywordBuilder {
         return this;
     }
 
-    public CafeKeywordBuilder with(CafeEntity cafe) {
+    public CafeKeywordBuilder withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }

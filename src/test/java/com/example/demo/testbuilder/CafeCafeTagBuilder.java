@@ -30,12 +30,12 @@ public class CafeCafeTagBuilder {
         return new CafeCafeTagBuilder();
     }
 
-    public CafeCafeTagBuilder with(CafeEntity cafe) {
+    public CafeCafeTagBuilder withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }
 
-    public CafeCafeTagBuilder with(CafeTagEntity cafeTag) {
+    public CafeCafeTagBuilder withTag(CafeTagEntity cafeTag) {
         this.cafeTag = cafeTag;
         return this;
     }

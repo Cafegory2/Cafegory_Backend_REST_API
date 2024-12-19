@@ -2,10 +2,6 @@ package com.example.demo.qna.implement;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyCommentSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.Comment;
@@ -45,7 +41,7 @@ class CommentEditorTest extends ServiceTest {
         CafeEntity cafe = aCafe().save();
 
         MemberEntity coordinator = aMember().asCoordinator().save();
-        CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
         Comment comment = createComment("댓글 내용", study.getId(), coordinator, null);
         //when
         Long savedCommentId = sut.save(comment, coordinator.getId());
@@ -62,8 +58,8 @@ class CommentEditorTest extends ServiceTest {
         MemberEntity coordinator = aMember().asCoordinator().save();
         MemberEntity member = aMember().asParticipant().save();
 
-        CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
-        CafeStudyCommentEntity rootComment = aComment().with(study).with(member).withStudyRole(MEMBER).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
+        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).save();
         Comment comment = createComment("대댓글 내용", study.getId(), coordinator, rootComment.getId());
         //when
         Long savedCommentId = sut.save(comment, member.getId());
@@ -99,8 +95,8 @@ class CommentEditorTest extends ServiceTest {
         MemberEntity coordinator = aMember().asCoordinator().save();
         MemberEntity member = aMember().asParticipant().save();
 
-        CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
-        CafeStudyCommentEntity commentEntity = aComment().with(study).with(member).withStudyRole(MEMBER).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
+        CafeStudyCommentEntity commentEntity = aComment().withStudy(study).withMember(member).save();
         Comment comment = createComment("변경된 댓글 내용", commentEntity.getId());
         //when
         sut.edit(comment);
@@ -129,8 +125,8 @@ class CommentEditorTest extends ServiceTest {
         MemberEntity coordinator = aMember().asCoordinator().save();
         MemberEntity member = aMember().asParticipant().save();
 
-        CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
-        CafeStudyCommentEntity commentEntity = aComment().with(study).with(member).withStudyRole(MEMBER).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
+        CafeStudyCommentEntity commentEntity = aComment().withStudy(study).withMember(member).save();
         //when
         sut.remove(commentEntity.getId(), timeUtil.now());
         //then

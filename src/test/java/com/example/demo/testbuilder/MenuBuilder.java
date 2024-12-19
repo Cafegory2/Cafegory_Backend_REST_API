@@ -38,7 +38,7 @@ public class MenuBuilder {
         return this;
     }
 
-    public MenuBuilder with(CafeEntity cafe) {
+    public MenuBuilder withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }

@@ -56,12 +56,12 @@ public class StudyBuilder {
         return this;
     }
 
-    public StudyBuilder with(CafeEntity cafeEntity) {
+    public StudyBuilder withCafe(CafeEntity cafeEntity) {
         this.cafe = cafeEntity;
         return this;
     }
 
-    public StudyBuilder with(MemberEntity memberEntity) {
+    public StudyBuilder withMember(MemberEntity memberEntity) {
         this.coordinator = memberEntity;
         return this;
     }
@@ -102,7 +102,7 @@ public class StudyBuilder {
         return this;
     }
 
-    public StudyBuilder with(CafeStudyTagEntity... studyTags) {
+    public StudyBuilder includeTags(CafeStudyTagEntity... studyTags) {
         this.studyTags.addAll(List.of(studyTags));
         return this;
     }
@@ -129,7 +129,7 @@ public class StudyBuilder {
 
     public CafeStudyEntity save() {
         CafeStudyEntity study = StudySaver.studyRepository.save(build());
-        studyTags.forEach(studyTag -> aStudyStudyTag().with(study).with(studyTag).save());
+        studyTags.forEach(studyTag -> aStudyStudyTag().withStudy(study).withTag(studyTag).save());
 
         return study;
     }

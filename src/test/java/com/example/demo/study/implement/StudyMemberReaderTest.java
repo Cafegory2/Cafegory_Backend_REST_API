@@ -6,7 +6,6 @@ import static com.example.demo.testbuilder.StudyBuilder.*;
 import static com.example.demo.testbuilder.StudyMemberBuilder.*;
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,13 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyMemberSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.util.TimeUtil;
 
 class StudyMemberReaderTest extends ServiceTest {
 
@@ -37,9 +31,9 @@ class StudyMemberReaderTest extends ServiceTest {
 		MemberEntity coordinator = aMember().asCoordinator().save();
 		MemberEntity participant = aMember().asParticipant().save();
 
-		CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
-		aStudyMember().with(study).with(coordinator).asCoordinator().save();
-		aStudyMember().with(study).with(participant).asParticipant().save();
+		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
+		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().save();
+		aStudyMember().withStudy(study).withMember(participant).asParticipant().save();
 		//when
 		int result = sut.loadParticipantCount(study.getId());
 		//then
@@ -55,9 +49,9 @@ class StudyMemberReaderTest extends ServiceTest {
 		MemberEntity coordinator = aMember().asCoordinator().save();
 		MemberEntity participant = aMember().asParticipant().save();
 
-		CafeStudyEntity study = aStudy().with(cafe).with(coordinator).save();
-		aStudyMember().with(study).with(coordinator).asCoordinator().save();
-		aStudyMember().with(study).with(participant).asParticipant().save();
+		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
+		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().save();
+		aStudyMember().withStudy(study).withMember(participant).asParticipant().save();
 		//when
 		List<Long> result = sut.readParticipantIdsBy(study.getId());
 		//then

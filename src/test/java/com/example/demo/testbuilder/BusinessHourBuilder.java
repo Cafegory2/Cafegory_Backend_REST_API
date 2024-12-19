@@ -63,7 +63,7 @@ public class BusinessHourBuilder {
         return this;
     }
 
-    public BusinessHourBuilder with(CafeEntity cafe) {
+    public BusinessHourBuilder withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }

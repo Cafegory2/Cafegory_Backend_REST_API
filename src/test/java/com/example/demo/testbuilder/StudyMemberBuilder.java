@@ -34,12 +34,12 @@ public class StudyMemberBuilder {
         return new StudyMemberBuilder();
     }
 
-    public StudyMemberBuilder with(CafeStudyEntity study) {
+    public StudyMemberBuilder withStudy(CafeStudyEntity study) {
         this.study = study;
         return this;
     }
 
-    public StudyMemberBuilder with(MemberEntity member) {
+    public StudyMemberBuilder withMember(MemberEntity member) {
         this.member = member;
         return this;
     }

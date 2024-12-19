@@ -35,7 +35,7 @@ public class CommentBuilder {
         return new CommentBuilder();
     }
 
-    public CommentBuilder with(MemberEntity author) {
+    public CommentBuilder withAuthor(MemberEntity author) {
         this.author = author;
         return this;
     }
@@ -67,7 +67,7 @@ public class CommentBuilder {
         return this;
     }
 
-    public CommentBuilder with(CafeStudyEntity cafeStudy) {
+    public CommentBuilder withStudy(CafeStudyEntity cafeStudy) {
         this.cafeStudy = cafeStudy;
         return this;
     }
