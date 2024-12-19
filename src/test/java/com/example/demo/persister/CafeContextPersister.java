@@ -90,7 +90,7 @@ public class CafeContextPersister {
                 .build();
     }
 
-    public static class CafeSaver {
+    public static class CafeRepoHolder {
         private static CafeRepository cafeRepository;
 
         public static void init(CafeRepository cafeRepo) {
@@ -128,7 +128,7 @@ public class CafeContextPersister {
     }
 
     private CafeEntity saveCafe() {
-        return CafeSaver.cafeRepository.save(build());
+        return CafeRepoHolder.cafeRepository.save(build());
     }
 
     private void saveKeywords(CafeEntity cafe) {

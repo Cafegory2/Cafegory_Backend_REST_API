@@ -51,7 +51,7 @@ public class MenuPersister {
                 .build();
     }
 
-    public static class MenuSaver {
+    public static class MenuRepoHolder {
         private static MenuRepository menuRepository;
 
         public static void init(MenuRepository menuRepo) {
@@ -60,6 +60,6 @@ public class MenuPersister {
     }
 
     public MenuEntity save() {
-        return MenuSaver.menuRepository.save(build());
+        return MenuRepoHolder.menuRepository.save(build());
     }
 }

@@ -119,7 +119,7 @@ public class StudyConextPersister {
                 .build();
     }
 
-    public static class StudySaver {
+    public static class StudyRepoHolder {
         private static CafeStudyRepository studyRepository;
 
         public static void init(CafeStudyRepository studyRepo) {
@@ -128,7 +128,7 @@ public class StudyConextPersister {
     }
 
     public CafeStudyEntity save() {
-        CafeStudyEntity study = StudySaver.studyRepository.save(build());
+        CafeStudyEntity study = StudyRepoHolder.studyRepository.save(build());
         studyTags.forEach(studyTag -> aStudyStudyTag().withStudy(study).withTag(studyTag).save());
 
         return study;

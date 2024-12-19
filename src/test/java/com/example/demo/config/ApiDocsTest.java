@@ -18,7 +18,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import({HelperConfig.class, SignupAcceptanceTestConfig.class, DatabaseCleanup.class, SaverConfig.class})
+@Import({HelperConfig.class, SignupAcceptanceTestConfig.class, DatabaseCleanup.class, RepositoryHolderConfig.class})
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class ApiDocsTest extends TestContainer{
 
@@ -32,7 +32,7 @@ public abstract class ApiDocsTest extends TestContainer{
     @Autowired
     protected MemberSignupAcceptanceTestHelper memberSignupHelper;
     @Autowired
-    private SaverConfig saverConfig;
+    private RepositoryHolderConfig repositoryHolderConfig;
 
     @BeforeEach
     public void setUp(RestDocumentationContextProvider provider) {
@@ -42,7 +42,7 @@ public abstract class ApiDocsTest extends TestContainer{
         }
 
         databaseCleanup.execute();
-        saverConfig.init();
+        repositoryHolderConfig.init();
 
         this.spec = new RequestSpecBuilder().addFilter(documentationConfiguration(provider))
             .build();

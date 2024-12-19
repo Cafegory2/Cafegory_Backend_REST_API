@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
 @TestComponent
-public class SaverConfig {
+public class RepositoryHolderConfig {
 
     @Autowired
     private CafeRepository cafeRepository;
@@ -40,20 +40,20 @@ public class SaverConfig {
     private MenuRepository menuRepository;
 
     public void init() {
-        CafeContextPersister.CafeSaver.init(cafeRepository);
-        BusinessHourPersister.BusinessHourSaver.init(businessHourRepository);
-        CafeKeywordPersister.CafeKeywordSaver.init(cafeKeywordRepository);
-        CafeTagPersister.CafeTagSaver.init(cafeTagRepository);
-        CafeCafeTagPersister.CafeCafeTagSaver.init(cafeCafeTagRepository);
-        MenuPersister.MenuSaver.init(menuRepository);
+        CafeContextPersister.CafeRepoHolder.init(cafeRepository);
+        BusinessHourPersister.BusinessHourRepoHolder.init(businessHourRepository);
+        CafeKeywordPersister.CafeKeywordRepoHolder.init(cafeKeywordRepository);
+        CafeTagPersister.CafeTagRepoHolder.init(cafeTagRepository);
+        CafeCafeTagPersister.CafeCafeTagRepoHolder.init(cafeCafeTagRepository);
+        MenuPersister.MenuRepoHolder.init(menuRepository);
 
-        MemberPersister.MemberSaver.init(memberRepository);
+        MemberPersister.MemberRepoHolder.init(memberRepository);
 
-        StudyConextPersister.StudySaver.init(studyRepository);
-        StudyTagPersister.StudyTagSaver.init(studyTagRepository);
-        StudyStudyTagBuilder.StudyStudyTagSaver.init(studyStudyTagRepository);
-        StudyMemberPersister.StudyMemberSaver.init(studyMemberRepository);
+        StudyConextPersister.StudyRepoHolder.init(studyRepository);
+        StudyTagPersister.StudyTagRepoHolder.init(studyTagRepository);
+        StudyStudyTagBuilder.StudyStudyTagRepoHolder.init(studyStudyTagRepository);
+        StudyMemberPersister.StudyMemberRepoHolder.init(studyMemberRepository);
 
-        CommentPersister.CommentSaver.init(commentRepository);
+        CommentPersister.CommentRepoHolder.init(commentRepository);
     }
 }

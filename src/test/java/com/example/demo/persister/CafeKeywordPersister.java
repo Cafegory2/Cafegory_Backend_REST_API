@@ -43,7 +43,7 @@ public class CafeKeywordPersister {
                 .build();
     }
 
-    public static class CafeKeywordSaver {
+    public static class CafeKeywordRepoHolder {
         private static CafeKeywordRepository keywordRepository;
 
         public static void init(CafeKeywordRepository keywordRepo) {
@@ -52,6 +52,6 @@ public class CafeKeywordPersister {
     }
 
     public CafeKeywordEntity save() {
-        return CafeKeywordSaver.keywordRepository.save(build());
+        return CafeKeywordRepoHolder.keywordRepository.save(build());
     }
 }

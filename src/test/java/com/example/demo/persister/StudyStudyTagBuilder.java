@@ -45,7 +45,7 @@ public class StudyStudyTagBuilder {
                 .build();
     }
 
-    public static class StudyStudyTagSaver {
+    public static class StudyStudyTagRepoHolder {
         private static CafeStudyCafeStudyTagRepository studyStudyTagRepository;
 
         public static void init(CafeStudyCafeStudyTagRepository studyStudyTagRepo) {
@@ -54,6 +54,6 @@ public class StudyStudyTagBuilder {
     }
 
     public CafeStudyCafeStudyTagEntity save() {
-        return StudyStudyTagSaver.studyStudyTagRepository.save(build());
+        return StudyStudyTagRepoHolder.studyStudyTagRepository.save(build());
     }
 }

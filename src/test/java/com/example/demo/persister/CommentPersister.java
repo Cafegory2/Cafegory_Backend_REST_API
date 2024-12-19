@@ -82,7 +82,7 @@ public class CommentPersister {
                 .build();
     }
 
-    public static class CommentSaver {
+    public static class CommentRepoHolder {
         private static CafeStudyCommentRepository commentRepository;
 
         public static void init(CafeStudyCommentRepository commentRepo) {
@@ -91,6 +91,6 @@ public class CommentPersister {
     }
 
     public CafeStudyCommentEntity save() {
-        return CommentSaver.commentRepository.save(build());
+        return CommentRepoHolder.commentRepository.save(build());
     }
 }

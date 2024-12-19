@@ -52,7 +52,7 @@ public class CafeCafeTagPersister {
                 .build();
     }
 
-    public static class CafeCafeTagSaver {
+    public static class CafeCafeTagRepoHolder {
         private static CafeCafeTagRepository cafeCafeTagRepository;
 
         public static void init(CafeCafeTagRepository cafeCafeTagRepo) {
@@ -61,6 +61,6 @@ public class CafeCafeTagPersister {
     }
 
     public CafeCafeTagEntity save() {
-        return CafeCafeTagSaver.cafeCafeTagRepository.save(build());
+        return CafeCafeTagRepoHolder.cafeCafeTagRepository.save(build());
     }
 }

@@ -77,7 +77,7 @@ public class BusinessHourPersister {
                 .build();
     }
 
-    public static class BusinessHourSaver {
+    public static class BusinessHourRepoHolder {
         private static BusinessHourRepository businessHourRepository;
 
         public static void init(BusinessHourRepository businessHOurRepo) {
@@ -86,6 +86,6 @@ public class BusinessHourPersister {
     }
 
     public BusinessHourEntity save() {
-        return BusinessHourSaver.businessHourRepository.save(build());
+        return BusinessHourRepoHolder.businessHourRepository.save(build());
     }
 }

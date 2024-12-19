@@ -34,7 +34,7 @@ public class StudyTagPersister {
                 .build();
     }
 
-    public static class StudyTagSaver {
+    public static class StudyTagRepoHolder {
         private static CafeStudyTagRepository studyTagRepository;
 
         public static void init(CafeStudyTagRepository studyTagRepo) {
@@ -43,6 +43,6 @@ public class StudyTagPersister {
     }
 
     public CafeStudyTagEntity save() {
-        return StudyTagSaver.studyTagRepository.save(build());
+        return StudyTagRepoHolder.studyTagRepository.save(build());
     }
 }

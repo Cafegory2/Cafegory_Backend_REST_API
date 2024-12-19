@@ -75,7 +75,7 @@ public class StudyMemberPersister {
         return studyMemberEntity;
     }
 
-    public static class StudyMemberSaver {
+    public static class StudyMemberRepoHolder {
         private static StudyMemberRepository studyMemberRepository;
 
         public static void init(StudyMemberRepository studyMemberRepo) {
@@ -84,6 +84,6 @@ public class StudyMemberPersister {
     }
 
     public CafeStudyMemberEntity save() {
-        return StudyMemberSaver.studyMemberRepository.save(build());
+        return StudyMemberRepoHolder.studyMemberRepository.save(build());
     }
 }

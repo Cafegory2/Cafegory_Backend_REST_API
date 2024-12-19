@@ -8,17 +8,17 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest()
 @ActiveProfiles("test")
-@Import({HelperConfig.class, DatabaseCleanup.class, FakeTimeUtil.class, SaverConfig.class})
+@Import({HelperConfig.class, DatabaseCleanup.class, FakeTimeUtil.class, RepositoryHolderConfig.class})
 public abstract class ServiceTest extends TestContainer {
 
 	@Autowired
 	private DatabaseCleanup databaseCleanup;
 	@Autowired
-	private SaverConfig saverConfig;
+	private RepositoryHolderConfig repositoryHolderConfig;
 
 	@BeforeEach
 	public void setUp() {
 		databaseCleanup.execute();
-		saverConfig.init();
+		repositoryHolderConfig.init();
 	}
 }

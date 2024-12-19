@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 @DataJpaTest
 @ActiveProfiles("test")
 @Import({HelperConfig.class, DataJpaConfig.class, DatabaseCleanup.class,
-		FakeTimeUtil.class, TestAuditingConfig.class, SaverConfig.class})
+		FakeTimeUtil.class, TestAuditingConfig.class, RepositoryHolderConfig.class})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class JpaTest extends TestContainer {
@@ -20,11 +20,11 @@ public abstract class JpaTest extends TestContainer {
 	@Autowired
 	private DatabaseCleanup databaseCleanup;
 	@Autowired
-	private SaverConfig saverConfig;
+	private RepositoryHolderConfig repositoryHolderConfig;
 
 	@BeforeEach
 	public void setUp() {
 		databaseCleanup.execute();
-		saverConfig.init();
+		repositoryHolderConfig.init();
 	}
 }

@@ -97,7 +97,7 @@ public class MemberPersister {
                 .build();
     }
 
-    public static class MemberSaver {
+    public static class MemberRepoHolder {
         private static MemberRepository memberRepository;
 
         public static void init(MemberRepository memberRepo) {
@@ -106,6 +106,6 @@ public class MemberPersister {
     }
 
     public MemberEntity save() {
-        return MemberSaver.memberRepository.save(build());
+        return MemberRepoHolder.memberRepository.save(build());
     }
 }
