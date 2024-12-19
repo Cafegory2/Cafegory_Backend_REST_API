@@ -1,4 +1,4 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.testbuilder.CafeBuilder.aCafe;
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyStudyTagBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.aCafe;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyStudyTagBuilder.*;
 
-public class StudyBuilder {
+public class StudyConextPersister {
 
     private String name = "테스트 카공 이름";
     private CafeEntity cafe = aCafe().build();
@@ -30,9 +30,9 @@ public class StudyBuilder {
 
     private List<CafeStudyTagEntity> studyTags = new ArrayList<>();
 
-    private StudyBuilder() {}
+    private StudyConextPersister() {}
 
-    private StudyBuilder(StudyBuilder copy) {
+    private StudyConextPersister(StudyConextPersister copy) {
         this.name = copy.name;
         this.cafe = copy.cafe;
         this.coordinator = copy.coordinator;
@@ -43,35 +43,35 @@ public class StudyBuilder {
         this.studyTags = copy.studyTags;
     }
 
-    public StudyBuilder but() {
-        return new StudyBuilder(this);
+    public StudyConextPersister but() {
+        return new StudyConextPersister(this);
     }
 
-    public static StudyBuilder aStudy() {
-        return new StudyBuilder();
+    public static StudyConextPersister aStudy() {
+        return new StudyConextPersister();
     }
 
-    public StudyBuilder withName(String name) {
+    public StudyConextPersister withName(String name) {
         this.name = name;
         return this;
     }
 
-    public StudyBuilder withCafe(CafeEntity cafeEntity) {
+    public StudyConextPersister withCafe(CafeEntity cafeEntity) {
         this.cafe = cafeEntity;
         return this;
     }
 
-    public StudyBuilder withMember(MemberEntity memberEntity) {
+    public StudyConextPersister withMember(MemberEntity memberEntity) {
         this.coordinator = memberEntity;
         return this;
     }
 
-    public StudyBuilder withStudyPeriod(LocalDateTime start, LocalDateTime end) {
+    public StudyConextPersister withStudyPeriod(LocalDateTime start, LocalDateTime end) {
         this.studyPeriod = StudyPeriod.builder().startDateTime(start).endDateTime(end).build();
         return this;
     }
 
-    public StudyBuilder shiftDays(int days) {
+    public StudyConextPersister shiftDays(int days) {
         LocalDateTime start = this.studyPeriod.getStartDateTime().plusDays(1);
         LocalDateTime end = this.studyPeriod.getEndDateTime().plusDays(1);
 
@@ -79,7 +79,7 @@ public class StudyBuilder {
         return this;
     }
 
-    public StudyBuilder withStudyPeriodFrom10To12() {
+    public StudyConextPersister withStudyPeriodFrom10To12() {
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 10, 0, 0);
         LocalDateTime end = LocalDateTime.of(2000, 1, 1, 12, 0, 0);
 
@@ -87,22 +87,22 @@ public class StudyBuilder {
         return this;
     }
 
-    public StudyBuilder withMemberComms(MemberComms memberComms) {
+    public StudyConextPersister withMemberComms(MemberComms memberComms) {
         this.memberComms = memberComms;
         return this;
     }
 
-    public StudyBuilder withMaxParticipants(int maxParticipants) {
+    public StudyConextPersister withMaxParticipants(int maxParticipants) {
         this.maxParticipants = maxParticipants;
         return this;
     }
 
-    public StudyBuilder withIntroduction(String introduction) {
+    public StudyConextPersister withIntroduction(String introduction) {
         this.introduction = introduction;
         return this;
     }
 
-    public StudyBuilder includeTags(CafeStudyTagEntity... studyTags) {
+    public StudyConextPersister includeTags(CafeStudyTagEntity... studyTags) {
         this.studyTags.addAll(List.of(studyTags));
         return this;
     }

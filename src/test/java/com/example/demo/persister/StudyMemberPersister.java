@@ -1,4 +1,4 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Attendance;
@@ -7,59 +7,59 @@ import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyBuilder.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
 
-public class StudyMemberBuilder {
+public class StudyMemberPersister {
 
     private CafeStudyEntity study = aStudy().build();
     private MemberEntity member = aMember().build();
     private StudyRole studyRole = StudyRole.MEMBER;
     private Attendance attendance = Attendance.YES;
 
-    private StudyMemberBuilder() {}
+    private StudyMemberPersister() {}
 
-    private StudyMemberBuilder(StudyMemberBuilder copy) {
+    private StudyMemberPersister(StudyMemberPersister copy) {
         this.study = copy.study;
         this.member = copy.member;
         this.studyRole = copy.studyRole;
         this.attendance = copy.attendance;
     }
 
-    public StudyMemberBuilder but() {
-        return new StudyMemberBuilder(this);
+    public StudyMemberPersister but() {
+        return new StudyMemberPersister(this);
     }
 
-    public static StudyMemberBuilder aStudyMember() {
-        return new StudyMemberBuilder();
+    public static StudyMemberPersister aStudyMember() {
+        return new StudyMemberPersister();
     }
 
-    public StudyMemberBuilder withStudy(CafeStudyEntity study) {
+    public StudyMemberPersister withStudy(CafeStudyEntity study) {
         this.study = study;
         return this;
     }
 
-    public StudyMemberBuilder withMember(MemberEntity member) {
+    public StudyMemberPersister withMember(MemberEntity member) {
         this.member = member;
         return this;
     }
 
-    public StudyMemberBuilder withStudyRole(StudyRole studyRole) {
+    public StudyMemberPersister withStudyRole(StudyRole studyRole) {
         this.studyRole = studyRole;
         return this;
     }
 
-    public StudyMemberBuilder asParticipant() {
+    public StudyMemberPersister asParticipant() {
         this.studyRole = StudyRole.MEMBER;
         return this;
     }
 
-    public StudyMemberBuilder asCoordinator() {
+    public StudyMemberPersister asCoordinator() {
         this.studyRole = StudyRole.COORDINATOR;
         return this;
     }
 
-    public StudyMemberBuilder withAttendance(Attendance attendance) {
+    public StudyMemberPersister withAttendance(Attendance attendance) {
         this.attendance = attendance;
         return this;
     }

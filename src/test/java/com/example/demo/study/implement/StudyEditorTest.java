@@ -1,12 +1,12 @@
 package com.example.demo.study.implement;
 
 import static com.example.demo.study.domain.StudyRole.*;
-import static com.example.demo.testbuilder.CafeBuilder.*;
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyMemberBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyMemberPersister.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.demo.testbuilder.StudyBuilder;
+import com.example.demo.persister.StudyConextPersister;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ class StudyEditorTest extends ServiceTest {
 		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
 		MemberEntity coordinator = aMember().asCoordinator().save();
 
-		CafeStudyEntity study = StudyBuilder.aStudy().withCafe(cafe).withMember(coordinator).save();
+		CafeStudyEntity study = StudyConextPersister.aStudy().withCafe(cafe).withMember(coordinator).save();
 		aStudyMember().withStudy(study).withMember(coordinator).withStudyRole(COORDINATOR).save();
 		//when & then
 		assertDoesNotThrow(

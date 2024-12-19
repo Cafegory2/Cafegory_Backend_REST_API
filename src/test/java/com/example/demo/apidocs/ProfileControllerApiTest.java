@@ -1,5 +1,7 @@
 package com.example.demo.apidocs;
 
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.CafeTagPersister.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
@@ -86,20 +88,20 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 	@Test
 	@DisplayName("마이페이지 조회 API")
 	void mypage() {
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith24For7();
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe1 = aCafe().saveWith24For7();
+		CafeEntity cafe2 = aCafe().saveWith24For7();
 
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
 		MemberEntity member = memberReader.read("test@gmail.com");
 
-		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
+		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
 
 		ReviewEntity review1 = reviewSaveHelper.saveReview(cafe1, member);
-		reviewCafeTagSaveHelper.saveReview(review1, cafeTag1);
+		reviewCafeTagSaveHelper.saveReview(review1, wifi);
 		ReviewEntity review2 = reviewSaveHelper.saveReview(cafe2, member);
-		reviewCafeTagSaveHelper.saveReview(review2, cafeTag1);
-		reviewCafeTagSaveHelper.saveReview(review2, cafeTag2);
+		reviewCafeTagSaveHelper.saveReview(review2, wifi);
+		reviewCafeTagSaveHelper.saveReview(review2, outlet);
 
 		RestAssured.given(spec).log().all()
 			.filter(RestAssuredRestDocumentationWrapper.document(

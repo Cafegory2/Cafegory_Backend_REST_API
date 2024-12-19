@@ -1,8 +1,8 @@
 package com.example.demo.service.study;
 
 import static com.example.demo.exception.ExceptionType.*;
-import static com.example.demo.testbuilder.CafeBuilder.*;
-import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.MemberPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;

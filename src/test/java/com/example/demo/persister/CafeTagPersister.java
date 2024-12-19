@@ -1,28 +1,28 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.cafe.infrastructure.CafeTagRepository;
 
-public class CafeTagBuilder {
+public class CafeTagPersister {
 
     private CafeTagType type = CafeTagType.WIFI;
 
-    private CafeTagBuilder() {}
+    private CafeTagPersister() {}
 
-    private CafeTagBuilder(CafeTagBuilder copy) {
+    private CafeTagPersister(CafeTagPersister copy) {
         this.type = copy.type;
     }
 
-    public CafeTagBuilder but() {
-        return new CafeTagBuilder(this);
+    public CafeTagPersister but() {
+        return new CafeTagPersister(this);
     }
 
-    public static CafeTagBuilder aCafeTag() {
-        return new CafeTagBuilder();
+    public static CafeTagPersister aCafeTag() {
+        return new CafeTagPersister();
     }
 
-    public CafeTagBuilder withType(CafeTagType type) {
+    public CafeTagPersister withType(CafeTagType type) {
         this.type = type;
         return this;
     }

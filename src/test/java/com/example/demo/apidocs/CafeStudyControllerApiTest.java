@@ -1,13 +1,12 @@
 package com.example.demo.apidocs;
 
-import static com.example.demo.testbuilder.CafeBuilder.*;
-import static com.example.demo.testbuilder.CafeTagBuilder.*;
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyBuilder.*;
-import static com.example.demo.testbuilder.StudyTagBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.CafeTagPersister.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
+import static com.example.demo.persister.StudyTagPersister.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
-import com.example.demo.testbuilder.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.LinkedMultiValueMap;

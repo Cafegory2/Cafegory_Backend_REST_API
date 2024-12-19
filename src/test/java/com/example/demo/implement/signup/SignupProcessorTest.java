@@ -1,6 +1,6 @@
 package com.example.demo.implement.signup;
 
-import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.persister.MemberPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;

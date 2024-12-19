@@ -1,7 +1,6 @@
 package com.example.demo.implement.cafe;
 
-import static com.example.demo.factory.TestBusinessHourFactory.*;
-import static com.example.demo.testbuilder.BusinessHourBuilder.*;
+import static com.example.demo.persister.BusinessHourPersister.*;
 import static java.time.DayOfWeek.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -13,7 +12,7 @@ import java.util.stream.Stream;
 import com.example.demo.cafe.implement.BusinessHourOpenChecker;
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.config.FakeTimeUtil;
-import com.example.demo.testbuilder.BusinessHourBuilder;
+import com.example.demo.persister.BusinessHourPersister;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -79,7 +78,7 @@ public class BusinessHourOpenCheckerTest {
     @MethodSource("provideLocalDateTime2")
     @DisplayName("24시간 영업한다.")
     void open_24Hours(LocalDateTime now) {
-        BusinessHourBuilder businessHour24 =
+        BusinessHourPersister businessHour24 =
                 aBusinessHour().withOpeningStartOfDay().withClosingEndOfDay();
 
         List<BusinessHourEntity> businessHourEntities = List.of(
@@ -103,7 +102,7 @@ public class BusinessHourOpenCheckerTest {
     @MethodSource("provideLocalDateTime3")
     @DisplayName("다음날 새벽까지 영업한다.")
     void open_until_early_morning_the_next_day(LocalDateTime now, boolean expected) {
-        BusinessHourBuilder businessHour9To26 =
+        BusinessHourPersister businessHour9To26 =
                 aBusinessHour().withOpeningTime(9, 0).withClosingTime(2, 0);
 
         List<BusinessHourEntity> businessHourEntities = List.of(
@@ -131,13 +130,13 @@ public class BusinessHourOpenCheckerTest {
     @DisplayName("평일은 일찍마감, 금토는 24시간 오픈, 일요일은 일찍 마감")
     void business_hours_are_different_each_day(LocalDateTime now,
                                                boolean expected) {
-        BusinessHourBuilder businessHour9To22 =
+        BusinessHourPersister businessHour9To22 =
                 aBusinessHour().withOpeningTime(9, 0).withClosingTime(22, 0);
-        BusinessHourBuilder businessHour9To24 =
+        BusinessHourPersister businessHour9To24 =
                 aBusinessHour().withOpeningTime(9, 0).withClosingEndOfDay();
-        BusinessHourBuilder businessHour24 =
+        BusinessHourPersister businessHour24 =
                 aBusinessHour().withOpeningStartOfDay().withClosingEndOfDay();
-        BusinessHourBuilder businessHour0To22 =
+        BusinessHourPersister businessHour0To22 =
                 aBusinessHour().withOpeningStartOfDay().withClosingTime(22, 0);
 
         List<BusinessHourEntity> businessHourEntities = List.of(

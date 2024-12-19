@@ -1,15 +1,15 @@
 package com.example.demo.repository.study;
 
-import static com.example.demo.testbuilder.CafeBuilder.aCafe;
-import static com.example.demo.testbuilder.CommentBuilder.aComment;
-import static com.example.demo.testbuilder.MemberBuilder.aMember;
-import static com.example.demo.testbuilder.StudyBuilder.aStudy;
+import static com.example.demo.persister.CafeContextPersister.aCafe;
+import static com.example.demo.persister.CommentPersister.aComment;
+import static com.example.demo.persister.MemberPersister.aMember;
+import static com.example.demo.persister.StudyConextPersister.aStudy;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
-import com.example.demo.testbuilder.CommentBuilder;
+import com.example.demo.persister.CommentPersister;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ class CafeStudyCommentRepositoryTest extends JpaTest {
         MemberEntity member1 = aMember().asParticipant(1).save();
         MemberEntity member2 = aMember().asParticipant(2).save();
 
-        CommentBuilder comment = aComment().withStudy(study);
+        CommentPersister comment = aComment().withStudy(study);
         CafeStudyCommentEntity root1 = comment.but().withMember(member1).save();
         CafeStudyCommentEntity reply1ToRoot1 = comment.but().replyTo(root1).withCoordinator(coordinator).save();
         CafeStudyCommentEntity reply2ToReply1 = comment.but().replyTo(reply1ToRoot1).withMember(member2).save();

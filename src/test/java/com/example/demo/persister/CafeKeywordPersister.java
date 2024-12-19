@@ -1,37 +1,37 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeKeywordEntity;
 import com.example.demo.cafe.infrastructure.CafeKeywordRepository;
 
-import static com.example.demo.testbuilder.CafeBuilder.aCafe;
+import static com.example.demo.persister.CafeContextPersister.aCafe;
 
-public class CafeKeywordBuilder {
+public class CafeKeywordPersister {
 
     private String keyword = "테스트 키워드";
     private CafeEntity cafe = aCafe().build();
 
-    private CafeKeywordBuilder() {}
+    private CafeKeywordPersister() {}
 
-    private CafeKeywordBuilder(CafeKeywordBuilder copy) {
+    private CafeKeywordPersister(CafeKeywordPersister copy) {
         this.keyword = copy.keyword;
         this.cafe = copy.cafe;
     }
 
-    public CafeKeywordBuilder but() {
-        return new CafeKeywordBuilder(this);
+    public CafeKeywordPersister but() {
+        return new CafeKeywordPersister(this);
     }
 
-    public static CafeKeywordBuilder aCafeKeyword() {
-        return new CafeKeywordBuilder();
+    public static CafeKeywordPersister aCafeKeyword() {
+        return new CafeKeywordPersister();
     }
 
-    public CafeKeywordBuilder withKeyword(String keyword) {
+    public CafeKeywordPersister withKeyword(String keyword) {
         this.keyword = keyword;
         return this;
     }
 
-    public CafeKeywordBuilder withCafe(CafeEntity cafe) {
+    public CafeKeywordPersister withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }

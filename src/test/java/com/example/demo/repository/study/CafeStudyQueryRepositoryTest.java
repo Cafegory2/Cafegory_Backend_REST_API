@@ -4,11 +4,11 @@ import static com.example.demo.cafe.domain.CafeTagType.*;
 import static com.example.demo.study.domain.CafeStudyTagType.*;
 import static com.example.demo.study.domain.MemberComms.AVOID;
 import static com.example.demo.study.domain.MemberComms.WELCOME;
-import static com.example.demo.testbuilder.CafeBuilder.aCafe;
-import static com.example.demo.testbuilder.CafeTagBuilder.aCafeTag;
-import static com.example.demo.testbuilder.MemberBuilder.aMember;
-import static com.example.demo.testbuilder.StudyBuilder.aStudy;
-import static com.example.demo.testbuilder.StudyTagBuilder.aTag;
+import static com.example.demo.persister.CafeContextPersister.aCafe;
+import static com.example.demo.persister.CafeTagPersister.aCafeTag;
+import static com.example.demo.persister.MemberPersister.aMember;
+import static com.example.demo.persister.StudyConextPersister.aStudy;
+import static com.example.demo.persister.StudyTagPersister.aTag;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
-import com.example.demo.testbuilder.StudyBuilder;
+import com.example.demo.persister.StudyConextPersister;
 import com.example.demo.trash.dto.SliceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -61,11 +61,11 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 
 		MemberEntity coordinator = aMember().asCoordinator().save();
 
-		StudyBuilder studyWithCafe1 = aStudy().withCafe(cafe1).withMember(coordinator);
+		StudyConextPersister studyWithCafe1 = aStudy().withCafe(cafe1).withMember(coordinator);
 		studyWithCafe1.but().withName("카페고리 스터디1").save();
 		studyWithCafe1.but().withName("카공하기 좋은 카페에서 스터디해요").save();
 
-		StudyBuilder studyWithCafe2 = aStudy().withCafe(cafe2).withMember(coordinator);
+		StudyConextPersister studyWithCafe2 = aStudy().withCafe(cafe2).withMember(coordinator);
 		studyWithCafe2.but().withName("카페고리 스터디2").save();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(

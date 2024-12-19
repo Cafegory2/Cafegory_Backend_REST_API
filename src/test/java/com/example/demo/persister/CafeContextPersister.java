@@ -1,4 +1,4 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.cafe.infrastructure.*;
 
@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.demo.testbuilder.BusinessHourBuilder.*;
-import static com.example.demo.testbuilder.CafeCafeTagBuilder.aCafeCafeTag;
-import static com.example.demo.testbuilder.CafeKeywordBuilder.*;
-import static com.example.demo.testbuilder.MenuBuilder.*;
+import static com.example.demo.persister.BusinessHourPersister.*;
+import static com.example.demo.persister.CafeCafeTagPersister.aCafeCafeTag;
+import static com.example.demo.persister.CafeKeywordPersister.*;
+import static com.example.demo.persister.MenuPersister.*;
 
-public class CafeBuilder {
+public class CafeContextPersister {
 
     private String name = "테스트 카페 이름";
     private String mainImageUrl = "https://testimageurl.com/testimages";
@@ -24,10 +24,10 @@ public class CafeBuilder {
     private List<CafeTagEntity> cafeTags = new ArrayList<>();
     private Map<String, String> menus = new HashMap<>();
 
-    private CafeBuilder() {
+    private CafeContextPersister() {
     }
 
-    private CafeBuilder(CafeBuilder copy) {
+    private CafeContextPersister(CafeContextPersister copy) {
         this.name = copy.name;
         this.mainImageUrl = copy.mainImageUrl;
         this.address = copy.address;
@@ -37,45 +37,45 @@ public class CafeBuilder {
         this.menus = copy.menus;
     }
 
-    public CafeBuilder but() {
-        return new CafeBuilder(this);
+    public CafeContextPersister but() {
+        return new CafeContextPersister(this);
     }
 
-    public static CafeBuilder aCafe() {
-        return new CafeBuilder();
+    public static CafeContextPersister aCafe() {
+        return new CafeContextPersister();
     }
 
-    public CafeBuilder withName(String name) {
+    public CafeContextPersister withName(String name) {
         this.name = name;
         return this;
     }
 
-    public CafeBuilder withMainImageUrl(String mainImageUrl) {
+    public CafeContextPersister withMainImageUrl(String mainImageUrl) {
         this.mainImageUrl = mainImageUrl;
         return this;
     }
 
-    public CafeBuilder withAddress(String fullAddress, String region) {
+    public CafeContextPersister withAddress(String fullAddress, String region) {
         this.address = new AddressEmbeddable(fullAddress, region);
         return this;
     }
 
-    public CafeBuilder withSns(String sns) {
+    public CafeContextPersister withSns(String sns) {
         this.sns = sns;
         return this;
     }
 
-    public CafeBuilder includeKeywords(String... keywords) {
+    public CafeContextPersister includeKeywords(String... keywords) {
         this.keywords.addAll(List.of(keywords));
         return this;
     }
 
-    public CafeBuilder includeTags(CafeTagEntity... cafeTags) {
+    public CafeContextPersister includeTags(CafeTagEntity... cafeTags) {
         this.cafeTags.addAll(List.of(cafeTags));
         return this;
     }
 
-    public CafeBuilder includeMenu(String name, String price) {
+    public CafeContextPersister includeMenu(String name, String price) {
         this.menus.put(name, price);
         return this;
     }

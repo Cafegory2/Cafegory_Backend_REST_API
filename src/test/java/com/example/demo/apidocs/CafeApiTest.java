@@ -1,7 +1,7 @@
 package com.example.demo.apidocs;
 
-import static com.example.demo.testbuilder.CafeBuilder.*;
-import static com.example.demo.testbuilder.CafeTagBuilder.aCafeTag;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.CafeTagPersister.aCafeTag;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
@@ -53,8 +53,6 @@ public class CafeApiTest extends ApiDocsTest {
     void getCafeStudyDetail() throws Exception {
         CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
         CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
-//		CafeTagEntity wifi = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-//		CafeTagEntity outlet = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
 
         CafeEntity cafeEntity = aCafe()
                 .includeTags(wifi, outlet)

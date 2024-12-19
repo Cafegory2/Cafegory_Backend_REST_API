@@ -1,44 +1,44 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.MenuEntity;
 import com.example.demo.cafe.infrastructure.MenuRepository;
 
-import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
 
-public class MenuBuilder {
+public class MenuPersister {
 
     private String name = "테스트 메뉴 이름";
     private String price = "테스트 가격 10000 (글자가 들어갈 수 도 있다)";
     private CafeEntity cafe = aCafe().build();
 
-    private MenuBuilder() {}
+    private MenuPersister() {}
 
-    private MenuBuilder(MenuBuilder copy) {
+    private MenuPersister(MenuPersister copy) {
         this.name = copy.name;
         this.price = copy.price;
         this.cafe = copy.cafe;
     }
 
-    public MenuBuilder but() {
-        return new MenuBuilder(this);
+    public MenuPersister but() {
+        return new MenuPersister(this);
     }
 
-    public static MenuBuilder aMenu() {
-        return new MenuBuilder();
+    public static MenuPersister aMenu() {
+        return new MenuPersister();
     }
 
-    public MenuBuilder withName(String name) {
+    public MenuPersister withName(String name) {
         this.name = name;
         return this;
     }
 
-    public MenuBuilder withPrice(String price) {
+    public MenuPersister withPrice(String price) {
         this.price = price;
         return this;
     }
 
-    public MenuBuilder withCafe(CafeEntity cafe) {
+    public MenuPersister withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }

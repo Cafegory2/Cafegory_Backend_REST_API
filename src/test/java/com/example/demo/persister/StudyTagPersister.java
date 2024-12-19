@@ -1,29 +1,29 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyTagRepository;
 
-public class StudyTagBuilder {
+public class StudyTagPersister {
 
     private CafeStudyTagType type = CafeStudyTagType.DEVELOPMENT;
 
-    private StudyTagBuilder() {}
+    private StudyTagPersister() {}
 
-    private StudyTagBuilder(StudyTagBuilder copy) {
+    private StudyTagPersister(StudyTagPersister copy) {
         this.type = copy.type;
     }
 
-    public StudyTagBuilder but() {
-        return new StudyTagBuilder(this);
+    public StudyTagPersister but() {
+        return new StudyTagPersister(this);
     }
 
-    public static StudyTagBuilder aTag() {
-        return new StudyTagBuilder();
+    public static StudyTagPersister aTag() {
+        return new StudyTagPersister();
     }
 
-    public StudyTagBuilder withType(CafeStudyTagType type) {
+    public StudyTagPersister withType(CafeStudyTagType type) {
         this.type = type;
         return this;
     }

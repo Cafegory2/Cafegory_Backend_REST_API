@@ -1,4 +1,4 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
@@ -6,10 +6,10 @@ import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyBuilder.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
 
-public class CommentBuilder {
+public class CommentPersister {
 
     private MemberEntity author = aMember().build();
     private StudyRole studyRole = StudyRole.MEMBER;
@@ -17,9 +17,9 @@ public class CommentBuilder {
     private CafeStudyCommentEntity parentComment;
     private CafeStudyEntity cafeStudy = aStudy().build();
 
-    private CommentBuilder() {}
+    private CommentPersister() {}
 
-    private CommentBuilder(CommentBuilder copy) {
+    private CommentPersister(CommentPersister copy) {
         this.author = copy.author;
         this.studyRole = copy.studyRole;
         this.content = copy.content;
@@ -27,47 +27,47 @@ public class CommentBuilder {
         this.cafeStudy = copy.cafeStudy;
     }
 
-    public CommentBuilder but() {
-        return new CommentBuilder(this);
+    public CommentPersister but() {
+        return new CommentPersister(this);
     }
 
-    public static CommentBuilder aComment() {
-        return new CommentBuilder();
+    public static CommentPersister aComment() {
+        return new CommentPersister();
     }
 
-    public CommentBuilder withAuthor(MemberEntity author) {
+    public CommentPersister withAuthor(MemberEntity author) {
         this.author = author;
         return this;
     }
 
-    public CommentBuilder withCoordinator(MemberEntity coordinator) {
+    public CommentPersister withCoordinator(MemberEntity coordinator) {
         this.author = coordinator;
         this.studyRole = StudyRole.COORDINATOR;
         return this;
     }
 
-    public CommentBuilder withMember(MemberEntity author) {
+    public CommentPersister withMember(MemberEntity author) {
         this.author = author;
         this.studyRole = StudyRole.MEMBER;
         return this;
     }
 
-    public CommentBuilder withStudyRole(StudyRole studyRole) {
+    public CommentPersister withStudyRole(StudyRole studyRole) {
         this.studyRole = studyRole;
         return this;
     }
 
-    public CommentBuilder withContent(String content) {
+    public CommentPersister withContent(String content) {
         this.content = content;
         return this;
     }
 
-    public CommentBuilder replyTo(CafeStudyCommentEntity parentComment) {
+    public CommentPersister replyTo(CafeStudyCommentEntity parentComment) {
         this.parentComment = parentComment;
         return this;
     }
 
-    public CommentBuilder withStudy(CafeStudyEntity cafeStudy) {
+    public CommentPersister withStudy(CafeStudyEntity cafeStudy) {
         this.cafeStudy = cafeStudy;
         return this;
     }

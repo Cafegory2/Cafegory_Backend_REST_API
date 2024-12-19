@@ -1,4 +1,4 @@
-package com.example.demo.testbuilder;
+package com.example.demo.builder;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

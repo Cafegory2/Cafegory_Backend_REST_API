@@ -1,9 +1,8 @@
 package com.example.demo.implement.login;
 
-import static com.example.demo.testbuilder.MemberBuilder.*;
+import static com.example.demo.persister.MemberPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
-import com.example.demo.testbuilder.MemberBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

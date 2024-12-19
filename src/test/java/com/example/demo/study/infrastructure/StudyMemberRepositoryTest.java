@@ -1,9 +1,9 @@
 package com.example.demo.study.infrastructure;
 
-import static com.example.demo.testbuilder.CafeBuilder.*;
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyBuilder.*;
-import static com.example.demo.testbuilder.StudyMemberBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
+import static com.example.demo.persister.StudyMemberPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;

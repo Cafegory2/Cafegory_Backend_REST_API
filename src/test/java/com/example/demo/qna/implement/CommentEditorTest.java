@@ -16,11 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.example.demo.study.domain.StudyRole.*;
-import static com.example.demo.testbuilder.CafeBuilder.*;
-import static com.example.demo.testbuilder.CommentBuilder.*;
-import static com.example.demo.testbuilder.MemberBuilder.*;
-import static com.example.demo.testbuilder.StudyBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.CommentPersister.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
 class CommentEditorTest extends ServiceTest {

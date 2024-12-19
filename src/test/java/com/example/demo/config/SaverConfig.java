@@ -7,7 +7,7 @@ import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
-import com.example.demo.testbuilder.*;
+import com.example.demo.persister.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
@@ -40,20 +40,20 @@ public class SaverConfig {
     private MenuRepository menuRepository;
 
     public void init() {
-        CafeBuilder.CafeSaver.init(cafeRepository);
-        BusinessHourBuilder.BusinessHourSaver.init(businessHourRepository);
-        CafeKeywordBuilder.CafeKeywordSaver.init(cafeKeywordRepository);
-        CafeTagBuilder.CafeTagSaver.init(cafeTagRepository);
-        CafeCafeTagBuilder.CafeCafeTagSaver.init(cafeCafeTagRepository);
-        MenuBuilder.MenuSaver.init(menuRepository);
+        CafeContextPersister.CafeSaver.init(cafeRepository);
+        BusinessHourPersister.BusinessHourSaver.init(businessHourRepository);
+        CafeKeywordPersister.CafeKeywordSaver.init(cafeKeywordRepository);
+        CafeTagPersister.CafeTagSaver.init(cafeTagRepository);
+        CafeCafeTagPersister.CafeCafeTagSaver.init(cafeCafeTagRepository);
+        MenuPersister.MenuSaver.init(menuRepository);
 
-        MemberBuilder.MemberSaver.init(memberRepository);
+        MemberPersister.MemberSaver.init(memberRepository);
 
-        StudyBuilder.StudySaver.init(studyRepository);
-        StudyTagBuilder.StudyTagSaver.init(studyTagRepository);
+        StudyConextPersister.StudySaver.init(studyRepository);
+        StudyTagPersister.StudyTagSaver.init(studyTagRepository);
         StudyStudyTagBuilder.StudyStudyTagSaver.init(studyStudyTagRepository);
-        StudyMemberBuilder.StudyMemberSaver.init(studyMemberRepository);
+        StudyMemberPersister.StudyMemberSaver.init(studyMemberRepository);
 
-        CommentBuilder.CommentSaver.init(commentRepository);
+        CommentPersister.CommentSaver.init(commentRepository);
     }
 }

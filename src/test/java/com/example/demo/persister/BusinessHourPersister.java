@@ -1,4 +1,4 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.cafe.infrastructure.BusinessHourEntity;
 import com.example.demo.cafe.infrastructure.BusinessHourRepository;
@@ -9,9 +9,9 @@ import com.example.demo.util.TimeUtil;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import static com.example.demo.testbuilder.CafeBuilder.*;
+import static com.example.demo.persister.CafeContextPersister.*;
 
-public class BusinessHourBuilder {
+public class BusinessHourPersister {
 
     private TimeUtil timeUtil = new FakeTimeUtil();
 
@@ -20,50 +20,50 @@ public class BusinessHourBuilder {
     private LocalTime closingTime = timeUtil.localTime(21, 0, 0);
     private CafeEntity cafe = aCafe().build();
 
-    private BusinessHourBuilder() {
+    private BusinessHourPersister() {
     }
 
-    private BusinessHourBuilder(BusinessHourBuilder copy) {
+    private BusinessHourPersister(BusinessHourPersister copy) {
         this.dayOfWeek = copy.dayOfWeek;
         this.openingTime = copy.openingTime;
         this.closingTime = copy.closingTime;
         this.cafe = copy.cafe;
     }
 
-    public BusinessHourBuilder but() {
-        return new BusinessHourBuilder(this);
+    public BusinessHourPersister but() {
+        return new BusinessHourPersister(this);
     }
 
-    public static BusinessHourBuilder aBusinessHour() {
-        return new BusinessHourBuilder();
+    public static BusinessHourPersister aBusinessHour() {
+        return new BusinessHourPersister();
     }
 
-    public BusinessHourBuilder withDayOfWeek(DayOfWeek dayOfWeek) {
+    public BusinessHourPersister withDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
         return this;
     }
 
-    public BusinessHourBuilder withOpeningTime(int hour, int minute) {
+    public BusinessHourPersister withOpeningTime(int hour, int minute) {
         this.openingTime = LocalTime.of(hour, minute);
         return this;
     }
 
-    public BusinessHourBuilder withClosingTime(int hour, int minute) {
+    public BusinessHourPersister withClosingTime(int hour, int minute) {
         this.closingTime = LocalTime.of(hour, minute);
         return this;
     }
 
-    public BusinessHourBuilder withOpeningStartOfDay() {
+    public BusinessHourPersister withOpeningStartOfDay() {
         this.openingTime = timeUtil.localTime(0, 0, 0);
         return this;
     }
 
-    public BusinessHourBuilder withClosingEndOfDay() {
+    public BusinessHourPersister withClosingEndOfDay() {
         this.closingTime = timeUtil.maxLocalTime();
         return this;
     }
 
-    public BusinessHourBuilder withCafe(CafeEntity cafe) {
+    public BusinessHourPersister withCafe(CafeEntity cafe) {
         this.cafe = cafe;
         return this;
     }

@@ -1,6 +1,6 @@
 package com.example.demo.implement.auth;
 
-import static com.example.demo.testbuilder.JwtTokenBuilder.*;
+import static com.example.demo.builder.JwtTokenBuilder.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 

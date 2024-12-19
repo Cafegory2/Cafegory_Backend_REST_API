@@ -1,12 +1,12 @@
-package com.example.demo.testbuilder;
+package com.example.demo.persister;
 
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 
-import static com.example.demo.testbuilder.StudyBuilder.*;
-import static com.example.demo.testbuilder.StudyTagBuilder.*;
+import static com.example.demo.persister.StudyConextPersister.*;
+import static com.example.demo.persister.StudyTagPersister.*;
 
 public class StudyStudyTagBuilder {
 
