@@ -4,13 +4,11 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.MenuEntity;
 import com.example.demo.cafe.infrastructure.MenuRepository;
 
-import static com.example.demo.persister.CafeContextPersister.*;
-
 public class MenuPersister {
 
     private String name = "테스트 메뉴 이름";
     private String price = "테스트 가격 10000 (글자가 들어갈 수 도 있다)";
-    private CafeEntity cafe = aCafe().build();
+    private CafeEntity cafe;
 
     private MenuPersister() {}
 

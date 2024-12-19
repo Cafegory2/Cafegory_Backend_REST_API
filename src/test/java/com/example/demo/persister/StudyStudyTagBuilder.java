@@ -5,13 +5,10 @@ import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 
-import static com.example.demo.persister.StudyConextPersister.*;
-import static com.example.demo.persister.StudyTagPersister.*;
-
 public class StudyStudyTagBuilder {
 
-    private CafeStudyEntity study = aStudy().build();
-    private CafeStudyTagEntity studyTag = aTag().build();
+    private CafeStudyEntity study;
+    private CafeStudyTagEntity studyTag;
 
     private StudyStudyTagBuilder() {}
 

@@ -7,13 +7,10 @@ import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 
-import static com.example.demo.persister.MemberPersister.*;
-import static com.example.demo.persister.StudyConextPersister.*;
-
 public class StudyMemberPersister {
 
-    private CafeStudyEntity study = aStudy().build();
-    private MemberEntity member = aMember().build();
+    private CafeStudyEntity study;
+    private MemberEntity member;
     private StudyRole studyRole = StudyRole.MEMBER;
     private Attendance attendance = Attendance.YES;
 

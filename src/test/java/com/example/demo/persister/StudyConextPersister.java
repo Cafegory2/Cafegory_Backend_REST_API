@@ -12,15 +12,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.demo.persister.CafeContextPersister.aCafe;
-import static com.example.demo.persister.MemberPersister.*;
 import static com.example.demo.persister.StudyStudyTagBuilder.*;
 
 public class StudyConextPersister {
 
     private String name = "테스트 카공 이름";
-    private CafeEntity cafe = aCafe().build();
-    private MemberEntity coordinator = aMember().build();
+    private CafeEntity cafe;
+    private MemberEntity coordinator;
     private StudyPeriod studyPeriod = StudyPeriod.builder()
             .startDateTime(LocalDateTime.of(2999, 1, 1, 10, 0))
             .endDateTime(LocalDateTime.of(2999, 1, 1, 12, 0)).build();

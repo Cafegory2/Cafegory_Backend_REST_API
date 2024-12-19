@@ -6,16 +6,13 @@ import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
-import static com.example.demo.persister.MemberPersister.*;
-import static com.example.demo.persister.StudyConextPersister.*;
-
 public class CommentPersister {
 
-    private MemberEntity author = aMember().build();
+    private MemberEntity author;
     private StudyRole studyRole = StudyRole.MEMBER;
     private String content = "테스트 댓글 내용";
     private CafeStudyCommentEntity parentComment;
-    private CafeStudyEntity cafeStudy = aStudy().build();
+    private CafeStudyEntity cafeStudy;
 
     private CommentPersister() {}
 

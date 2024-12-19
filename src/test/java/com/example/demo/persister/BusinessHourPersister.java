@@ -9,8 +9,6 @@ import com.example.demo.util.TimeUtil;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import static com.example.demo.persister.CafeContextPersister.*;
-
 public class BusinessHourPersister {
 
     private TimeUtil timeUtil = new FakeTimeUtil();
@@ -18,7 +16,7 @@ public class BusinessHourPersister {
     private DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
     private LocalTime openingTime = timeUtil.localTime(9, 0, 0);
     private LocalTime closingTime = timeUtil.localTime(21, 0, 0);
-    private CafeEntity cafe = aCafe().build();
+    private CafeEntity cafe;
 
     private BusinessHourPersister() {
     }

@@ -5,13 +5,10 @@ import com.example.demo.cafe.infrastructure.CafeCafeTagRepository;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
 
-import static com.example.demo.persister.CafeContextPersister.aCafe;
-import static com.example.demo.persister.CafeTagPersister.aCafeTag;
-
 public class CafeCafeTagPersister {
 
-    private CafeEntity cafe = aCafe().build();
-    private CafeTagEntity cafeTag = aCafeTag().build();
+    private CafeEntity cafe;
+    private CafeTagEntity cafeTag;
     private int taggingCount = 0;
 
     private CafeCafeTagPersister() {}

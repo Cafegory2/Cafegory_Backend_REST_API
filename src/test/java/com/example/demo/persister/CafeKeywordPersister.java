@@ -4,12 +4,10 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeKeywordEntity;
 import com.example.demo.cafe.infrastructure.CafeKeywordRepository;
 
-import static com.example.demo.persister.CafeContextPersister.aCafe;
-
 public class CafeKeywordPersister {
 
     private String keyword = "테스트 키워드";
-    private CafeEntity cafe = aCafe().build();
+    private CafeEntity cafe;
 
     private CafeKeywordPersister() {}
 
