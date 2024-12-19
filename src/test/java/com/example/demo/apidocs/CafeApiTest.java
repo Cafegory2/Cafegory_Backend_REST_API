@@ -51,14 +51,14 @@ public class CafeApiTest extends ApiDocsTest {
     @Test
     @DisplayName("카페 상세정보 조회 API")
     void getCafeStudyDetail() throws Exception {
-        CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
-        CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
+        CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).persist();
+        CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).persist();
 
         CafeEntity cafeEntity = aCafe()
                 .includeTags(wifi, outlet)
                 .includeMenu("아메리카노", "1500")
                 .includeMenu("카페라떼", "3000")
-                .saveWith7daysFrom9To21();
+                .persistWith7daysFrom9To21();
 //		CafeEntity cafeEntity = aCafe().with(wifi, outlet).saveWith7daysFrom9To21();
 //		aMenu().with(cafeEntity).withName("아메리카노").withPrice("1500").save();
 //		aMenu().with(cafeEntity).withName("카페라떼").withPrice("3000").save();

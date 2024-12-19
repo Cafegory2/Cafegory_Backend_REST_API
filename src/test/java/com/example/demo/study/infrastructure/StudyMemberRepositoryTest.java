@@ -23,11 +23,11 @@ class StudyMemberRepositoryTest extends JpaTest {
 	@Test
 	void findByCafeStudy_IdAndMember_Id() {
 		// given
-		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
-		MemberEntity coordinator = aMember().asCoordinator().save();
+		CafeEntity cafe = aCafe().persistWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
 
-		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
-		aStudyMember().asCoordinator().withMember(coordinator).withStudy(study).save();
+		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
+		aStudyMember().asCoordinator().withMember(coordinator).withStudy(study).persist();
 		// when
 		Optional<CafeStudyMemberEntity> cafeStudyMembers = sut.findByCafeStudy_IdAndMember_Id(study.getId(),
 			coordinator.getId());

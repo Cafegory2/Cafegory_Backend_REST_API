@@ -87,7 +87,7 @@ public class CommentPersister {
         }
     }
 
-    public CafeStudyCommentEntity save() {
+    public CafeStudyCommentEntity persist() {
         return CommentRepoHolder.commentRepository.save(build());
     }
 }

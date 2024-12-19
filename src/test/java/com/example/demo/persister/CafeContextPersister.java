@@ -107,7 +107,7 @@ public class CafeContextPersister {
         return cafe;
     }
 
-    public CafeEntity saveWith7daysFrom9To21() {
+    public CafeEntity persistWith7daysFrom9To21() {
         CafeEntity cafe = saveCafe();
         saveBusinessHoursWith7daysFrom9To21(cafe);
         saveKeywords(cafe);
@@ -117,7 +117,7 @@ public class CafeContextPersister {
         return cafe;
     }
 
-    public CafeEntity saveWith24For7() {
+    public CafeEntity persistWith24For7() {
         CafeEntity cafe = saveCafe();
         saveBusinessHoursWith24For7(cafe);
         saveKeywords(cafe);
@@ -132,7 +132,7 @@ public class CafeContextPersister {
     }
 
     private void saveKeywords(CafeEntity cafe) {
-        keywords.forEach(keyword -> aCafeKeyword().withKeyword(keyword).withCafe(cafe).save());
+        keywords.forEach(keyword -> aCafeKeyword().withKeyword(keyword).withCafe(cafe).persist());
     }
 
     private void saveBusinessHoursWith7daysFrom9To21(CafeEntity cafe) {
@@ -142,7 +142,7 @@ public class CafeContextPersister {
                     .withOpeningTime(9, 0)
                     .withClosingTime(21, 0)
                     .withCafe(cafe)
-                    .save();
+                    .persist();
         }
     }
 
@@ -153,12 +153,12 @@ public class CafeContextPersister {
                     .withOpeningTime(0, 0)
                     .withClosingEndOfDay()
                     .withCafe(cafe)
-                    .save();
+                    .persist();
         }
     }
 
     private void saveCafeTags(CafeEntity cafe) {
-        cafeTags.forEach(cafeTag -> aCafeCafeTag().withCafe(cafe).withTag(cafeTag).save());
+        cafeTags.forEach(cafeTag -> aCafeCafeTag().withCafe(cafe).withTag(cafeTag).persist());
     }
 
     private void saveMenus(CafeEntity cafe) {
@@ -168,7 +168,7 @@ public class CafeContextPersister {
             aMenu().withName(menuName)
                     .withPrice(menuPrice)
                     .withCafe(cafe)
-                    .save();
+                    .persist();
         }
     }
 }

@@ -96,17 +96,17 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
 
     @Test
     void searchCafeStudies() {
-        CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
-        CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
-        CafeTagEntity comfortableSeating = aCafeTag().withType(CafeTagType.COMFORTABLE_SEATING).save();
+        CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).persist();
+        CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).persist();
+        CafeTagEntity comfortableSeating = aCafeTag().withType(CafeTagType.COMFORTABLE_SEATING).persist();
 
-        CafeEntity cafe1 = aCafe().includeKeywords("강남").includeTags(wifi, outlet).saveWith7daysFrom9To21();
-        CafeEntity cafe2 = aCafe().includeKeywords("강남").includeTags(wifi, outlet, comfortableSeating).saveWith24For7();
+        CafeEntity cafe1 = aCafe().includeKeywords("강남").includeTags(wifi, outlet).persistWith7daysFrom9To21();
+        CafeEntity cafe2 = aCafe().includeKeywords("강남").includeTags(wifi, outlet, comfortableSeating).persistWith24For7();
 
-        MemberEntity member = aMember().asCoordinator().save();
+        MemberEntity member = aMember().asCoordinator().persist();
 
-        CafeStudyTagEntity development = aTag().withType(CafeStudyTagType.DEVELOPMENT).save();
-        CafeStudyTagEntity design = aTag().withType(CafeStudyTagType.DESIGN).save();
+        CafeStudyTagEntity development = aTag().withType(CafeStudyTagType.DEVELOPMENT).persist();
+        CafeStudyTagEntity design = aTag().withType(CafeStudyTagType.DESIGN).persist();
 
         aStudy().withCafe(cafe1).withMember(member).withMemberComms(MemberComms.WELCOME)
                 .withStudyPeriod(
@@ -114,14 +114,14 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
                         timeUtil.localDateTime(2000, 1, 1, 14, 0, 0)
                 )
                 .includeTags(development)
-                .save();
+                .persist();
         aStudy().withCafe(cafe2).withMember(member).withMemberComms(MemberComms.WELCOME)
                 .withStudyPeriod(
                         timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
                         timeUtil.localDateTime(2000, 1, 1, 16, 0, 0)
                 )
                 .includeTags(development, design)
-                .save();
+                .persist();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("keyword", "강남");

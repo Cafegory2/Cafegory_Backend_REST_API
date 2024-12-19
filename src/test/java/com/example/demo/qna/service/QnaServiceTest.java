@@ -34,12 +34,12 @@ class QnaServiceTest extends ServiceTest {
         //given
         CafeEntity cafe = aCafe().save();
 
-        MemberEntity coordinator = aMember().asCoordinator().save();
-        MemberEntity member = aMember().asParticipant().save();
+        MemberEntity coordinator = aMember().asCoordinator().persist();
+        MemberEntity member = aMember().asParticipant().persist();
 
-        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).save();
-        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).save();
-        aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).persist();
+        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).persist();
+        aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).persist();
         CommentContent commentContent = createCommentContent("변경된 댓글 내용", rootComment.getId());
         //when & then
         assertThatThrownBy(() -> sut.editComment(commentContent, member.getId()))
@@ -60,12 +60,12 @@ class QnaServiceTest extends ServiceTest {
         //given
         CafeEntity cafe = aCafe().save();
 
-        MemberEntity coordinator = aMember().asCoordinator().save();
-        MemberEntity member = aMember().asParticipant().save();
+        MemberEntity coordinator = aMember().asCoordinator().persist();
+        MemberEntity member = aMember().asParticipant().persist();
 
-        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).save();
-        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).save();
-        aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).save();
+        CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).persist();
+        CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).persist();
+        aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).persist();
         //when & then
         assertThatThrownBy(() -> sut.removeComment(rootComment.getId(), member.getId(), timeUtil.now()))
             .isInstanceOf(CafegoryException.class)

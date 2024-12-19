@@ -83,7 +83,7 @@ public class BusinessHourPersister {
         }
     }
 
-    public BusinessHourEntity save() {
+    public BusinessHourEntity persist() {
         return BusinessHourRepoHolder.businessHourRepository.save(build());
     }
 }

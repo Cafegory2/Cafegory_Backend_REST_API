@@ -105,7 +105,7 @@ public class MemberPersister {
         }
     }
 
-    public MemberEntity save() {
+    public MemberEntity persist() {
         return MemberRepoHolder.memberRepository.save(build());
     }
 }

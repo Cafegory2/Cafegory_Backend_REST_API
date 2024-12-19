@@ -125,9 +125,9 @@ public class StudyConextPersister {
         }
     }
 
-    public CafeStudyEntity save() {
+    public CafeStudyEntity persist() {
         CafeStudyEntity study = StudyRepoHolder.studyRepository.save(build());
-        studyTags.forEach(studyTag -> aStudyStudyTag().withStudy(study).withTag(studyTag).save());
+        studyTags.forEach(studyTag -> aStudyStudyTag().withStudy(study).withTag(studyTag).persist());
 
         return study;
     }

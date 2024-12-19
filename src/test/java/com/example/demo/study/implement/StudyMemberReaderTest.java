@@ -26,14 +26,14 @@ class StudyMemberReaderTest extends ServiceTest {
 	@DisplayName("카공에 참여한 현재 인원수를 찾는다.")
 	void find_current_participants() {
 		//given
-		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		CafeEntity cafe = aCafe().persistWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().asCoordinator().save();
-		MemberEntity participant = aMember().asParticipant().save();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
+		MemberEntity participant = aMember().asParticipant().persist();
 
-		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
-		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().save();
-		aStudyMember().withStudy(study).withMember(participant).asParticipant().save();
+		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
+		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().persist();
+		aStudyMember().withStudy(study).withMember(participant).asParticipant().persist();
 		//when
 		int result = sut.loadParticipantCount(study.getId());
 		//then
@@ -44,14 +44,14 @@ class StudyMemberReaderTest extends ServiceTest {
 	@DisplayName("카공에 참여한 사람들의 아이디를 찾는다.")
 	void find_current_participantIds() {
 		//given
-		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
+		CafeEntity cafe = aCafe().persistWith7daysFrom9To21();
 
-		MemberEntity coordinator = aMember().asCoordinator().save();
-		MemberEntity participant = aMember().asParticipant().save();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
+		MemberEntity participant = aMember().asParticipant().persist();
 
-		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).save();
-		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().save();
-		aStudyMember().withStudy(study).withMember(participant).asParticipant().save();
+		CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
+		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().persist();
+		aStudyMember().withStudy(study).withMember(participant).asParticipant().persist();
 		//when
 		List<Long> result = sut.readParticipantIdsBy(study.getId());
 		//then

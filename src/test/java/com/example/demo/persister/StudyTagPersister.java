@@ -42,7 +42,7 @@ public class StudyTagPersister {
         }
     }
 
-    public CafeStudyTagEntity save() {
+    public CafeStudyTagEntity persist() {
         return StudyTagRepoHolder.studyTagRepository.save(build());
     }
 }

@@ -2,7 +2,6 @@ package com.example.demo.apidocs;
 
 import static com.example.demo.persister.CafeContextPersister.*;
 import static com.example.demo.persister.CafeTagPersister.*;
-import static com.example.demo.persister.ReviewCafeTagPersister.*;
 import static com.example.demo.persister.ReviewContextPersister.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -15,22 +14,10 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
-import com.example.demo.cafe.infrastructure.ReviewEntity;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.helper.CafeCafeTagSaveHelper;
-import com.example.demo.helper.CafeKeywordSaveHelper;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.CafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeTagSaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.helper.ReviewCafeTagSaveHelper;
-import com.example.demo.helper.ReviewSaveHelper;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.trash.implement.token.JwtToken;
-import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -67,14 +54,14 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 	@Test
 	@DisplayName("마이페이지 조회 API")
 	void mypage() {
-		CafeEntity cafe1 = aCafe().saveWith24For7();
-		CafeEntity cafe2 = aCafe().saveWith24For7();
+		CafeEntity cafe1 = aCafe().persistWith24For7();
+		CafeEntity cafe2 = aCafe().persistWith24For7();
 
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
 		MemberEntity member = memberReader.read("test@gmail.com");
 
-		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
-		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
+		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).persist();
+		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).persist();
 
 		aReview().withCafe(cafe1).withMember(member).includeTags(wifi).save();
 		aReview().withCafe(cafe2).withMember(member).includeTags(wifi, outlet).save();

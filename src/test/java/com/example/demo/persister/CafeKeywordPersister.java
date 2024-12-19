@@ -49,7 +49,7 @@ public class CafeKeywordPersister {
         }
     }
 
-    public CafeKeywordEntity save() {
+    public CafeKeywordEntity persist() {
         return CafeKeywordRepoHolder.keywordRepository.save(build());
     }
 }

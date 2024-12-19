@@ -50,7 +50,7 @@ public class StudyStudyTagBuilder {
         }
     }
 
-    public CafeStudyCafeStudyTagEntity save() {
+    public CafeStudyCafeStudyTagEntity persist() {
         return StudyStudyTagRepoHolder.studyStudyTagRepository.save(build());
     }
 }

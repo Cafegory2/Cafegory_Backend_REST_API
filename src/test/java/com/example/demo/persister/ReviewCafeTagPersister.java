@@ -50,7 +50,7 @@ public class ReviewCafeTagPersister {
         }
     }
 
-    public ReviewCafeTagEntity save() {
+    public ReviewCafeTagEntity persist() {
         return ReviewCafeTagRepoHolder.reviewCafeTagRepository.save(build());
     }
 }

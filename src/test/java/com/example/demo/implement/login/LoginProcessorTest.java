@@ -23,7 +23,7 @@ class LoginProcessorTest extends ServiceTest {
 	@DisplayName("로그인이 성공하면 토큰을 발급한다.")
 	void login_succeed() {
 		//given
-		MemberEntity member = aMember().save();
+		MemberEntity member = aMember().persist();
 		//when
 		JwtToken token = sut.login(member.getEmail());
 		//then

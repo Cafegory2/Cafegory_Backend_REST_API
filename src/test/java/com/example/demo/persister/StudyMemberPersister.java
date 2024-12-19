@@ -80,7 +80,7 @@ public class StudyMemberPersister {
         }
     }
 
-    public CafeStudyMemberEntity save() {
+    public CafeStudyMemberEntity persist() {
         return StudyMemberRepoHolder.studyMemberRepository.save(build());
     }
 }

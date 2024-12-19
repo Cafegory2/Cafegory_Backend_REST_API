@@ -57,7 +57,7 @@ public class CafeCafeTagPersister {
         }
     }
 
-    public CafeCafeTagEntity save() {
+    public CafeCafeTagEntity persist() {
         return CafeCafeTagRepoHolder.cafeCafeTagRepository.save(build());
     }
 }

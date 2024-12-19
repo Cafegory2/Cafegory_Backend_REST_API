@@ -57,7 +57,7 @@ public class MenuPersister {
         }
     }
 
-    public MenuEntity save() {
+    public MenuEntity persist() {
         return MenuRepoHolder.menuRepository.save(build());
     }
 }

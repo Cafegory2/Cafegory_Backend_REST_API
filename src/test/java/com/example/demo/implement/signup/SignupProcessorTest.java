@@ -37,7 +37,7 @@ class SignupProcessorTest extends ServiceTest {
 	@DisplayName("이미 등록된 이메일로는 회원가입을 할 수 없다.")
 	void email_already_registered_prevents_signup() {
 		//given
-		aMember().withEmail("new@gmail.com").save();
+		aMember().withEmail("new@gmail.com").persist();
 		//then
 		assertThatThrownBy(() -> sut.signup("new@gmail.com", "newUser"))
 			.isInstanceOf(CafegoryException.class)

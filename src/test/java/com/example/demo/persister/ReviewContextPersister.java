@@ -66,7 +66,7 @@ public class ReviewContextPersister {
 
     public ReviewEntity save() {
         ReviewEntity review = ReviewRepoHolder.reviewRepository.save(build());
-        cafeTags.forEach(cafeTag -> aReviewCafeTag().withReview(review).withCafeTag(cafeTag).save());
+        cafeTags.forEach(cafeTag -> aReviewCafeTag().withReview(review).withCafeTag(cafeTag).persist());
 
         return review;
     }

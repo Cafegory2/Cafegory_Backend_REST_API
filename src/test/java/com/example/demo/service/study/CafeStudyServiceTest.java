@@ -96,8 +96,8 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 시간으로부터 1시간 이전일 수 없다.")
 	void study_starts_1hours_before_now() {
 		//given
-		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
-		MemberEntity coordinator = aMember().asCoordinator().save();
+		CafeEntity cafe = aCafe().persistWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
 
 		LocalDateTime start = timeUtil.now().plusHours(1).minusMinutes(1);
 		LocalDateTime end = start.plusHours(1);
@@ -127,8 +127,8 @@ class CafeStudyServiceTest extends ServiceTest {
 	@DisplayName("카공 시작은 현재 날짜로부터 한달 이내여야 한다.")
 	void study_start_date_after_one_month() {
 		//given
-		CafeEntity cafe = aCafe().saveWith24For7();
-		MemberEntity coordinator = aMember().asCoordinator().save();
+		CafeEntity cafe = aCafe().persistWith24For7();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
 
 		LocalDateTime start = timeUtil.now().plusMonths(1).plusDays(1);
 		LocalDateTime end = start.plusHours(1);
@@ -186,8 +186,8 @@ class CafeStudyServiceTest extends ServiceTest {
 		//given
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
 
-		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
-		MemberEntity coordinator = aMember().asCoordinator().save();
+		CafeEntity cafe = aCafe().persistWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
 		//then
 		assertThatThrownBy(() -> sut.createStudy(coordinator.getId(), now, cafeStudyCreateRequest.toStudy())).isInstanceOf(

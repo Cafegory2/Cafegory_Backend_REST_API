@@ -29,11 +29,11 @@ class StudyEditorTest extends ServiceTest {
 	@DisplayName("카공을 삭제할 때 관련된 데이터를 같이 삭제한다.")
 	void remove_study_with_cascade() {
 		//given
-		CafeEntity cafe = aCafe().saveWith7daysFrom9To21();
-		MemberEntity coordinator = aMember().asCoordinator().save();
+		CafeEntity cafe = aCafe().persistWith7daysFrom9To21();
+		MemberEntity coordinator = aMember().asCoordinator().persist();
 
-		CafeStudyEntity study = StudyConextPersister.aStudy().withCafe(cafe).withMember(coordinator).save();
-		aStudyMember().withStudy(study).withMember(coordinator).withStudyRole(COORDINATOR).save();
+		CafeStudyEntity study = StudyConextPersister.aStudy().withCafe(cafe).withMember(coordinator).persist();
+		aStudyMember().withStudy(study).withMember(coordinator).withStudyRole(COORDINATOR).persist();
 		//when & then
 		assertDoesNotThrow(
 			() -> sut.removeWithCascade(study.getId(), coordinator.getId(), timeUtil.now())
