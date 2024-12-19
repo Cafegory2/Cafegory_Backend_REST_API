@@ -38,6 +38,10 @@ public class RepositoryHolderConfig {
     private StudyMemberRepository studyMemberRepository;
     @Autowired
     private MenuRepository menuRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
+    @Autowired
+    private ReviewCafeTagRepository reviewCafeTagRepository;
 
     public void init() {
         CafeContextPersister.CafeRepoHolder.init(cafeRepository);
@@ -46,6 +50,8 @@ public class RepositoryHolderConfig {
         CafeTagPersister.CafeTagRepoHolder.init(cafeTagRepository);
         CafeCafeTagPersister.CafeCafeTagRepoHolder.init(cafeCafeTagRepository);
         MenuPersister.MenuRepoHolder.init(menuRepository);
+        ReviewContextPersister.ReviewRepoHolder.init(reviewRepository);
+        ReviewCafeTagPersister.ReviewCafeTagRepoHolder.init(reviewCafeTagRepository);
 
         MemberPersister.MemberRepoHolder.init(memberRepository);
 

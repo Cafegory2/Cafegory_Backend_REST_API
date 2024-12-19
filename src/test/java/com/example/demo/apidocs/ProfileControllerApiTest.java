@@ -2,6 +2,8 @@ package com.example.demo.apidocs;
 
 import static com.example.demo.persister.CafeContextPersister.*;
 import static com.example.demo.persister.CafeTagPersister.*;
+import static com.example.demo.persister.ReviewCafeTagPersister.*;
+import static com.example.demo.persister.ReviewContextPersister.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
@@ -36,30 +38,7 @@ import io.restassured.http.ContentType;
 public class ProfileControllerApiTest extends ApiDocsTest {
 
 	@Autowired
-	private CafeSaveHelper cafeSaveHelper;
-	@Autowired
-	private CafeKeywordSaveHelper cafeKeywordSaveHelper;
-	@Autowired
-	private CafeStudyTagSaveHelper cafeStudyTagSaveHelper;
-	@Autowired
-	private CafeStudySaveHelper cafeStudySaveHelper;
-	@Autowired
-	private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
-	@Autowired
-	private CafeTagSaveHelper cafeTagSaveHelper;
-	@Autowired
-	private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
-	@Autowired
-	private ReviewSaveHelper reviewSaveHelper;
-	@Autowired
-	private ReviewCafeTagSaveHelper reviewCafeTagSaveHelper;
-	@Autowired
 	private MemberReader memberReader;
-
-	@Autowired
-	private TimeUtil timeUtil;
 
 	@Test
 	void welcome() {
@@ -97,11 +76,8 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).save();
 		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).save();
 
-		ReviewEntity review1 = reviewSaveHelper.saveReview(cafe1, member);
-		reviewCafeTagSaveHelper.saveReview(review1, wifi);
-		ReviewEntity review2 = reviewSaveHelper.saveReview(cafe2, member);
-		reviewCafeTagSaveHelper.saveReview(review2, wifi);
-		reviewCafeTagSaveHelper.saveReview(review2, outlet);
+		aReview().withCafe(cafe1).withMember(member).includeTags(wifi).save();
+		aReview().withCafe(cafe2).withMember(member).includeTags(wifi, outlet).save();
 
 		RestAssured.given(spec).log().all()
 			.filter(RestAssuredRestDocumentationWrapper.document(

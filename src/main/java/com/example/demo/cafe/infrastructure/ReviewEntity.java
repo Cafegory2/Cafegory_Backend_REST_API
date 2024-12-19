@@ -45,6 +45,7 @@ public class ReviewEntity extends BaseEntity {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeEntity cafe;
 
+	//TODO 멤버 대신 StudyMember가 필요할 것 같다.
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private MemberEntity member;
