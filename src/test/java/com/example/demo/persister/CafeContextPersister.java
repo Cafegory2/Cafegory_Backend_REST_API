@@ -98,7 +98,7 @@ public class CafeContextPersister {
         }
     }
 
-    public CafeEntity save() {
+    public CafeEntity persist() {
         CafeEntity cafe = saveCafe();
         saveKeywords(cafe);
         saveCafeTags(cafe);

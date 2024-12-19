@@ -51,6 +51,17 @@ public class JwtTokenBuilder {
         return this;
     }
 
+    public JwtTokenBuilder expiresInOneHour() {
+        this.expiration = Date.from(Instant.now().plusSeconds(3600));
+        return this;
+    }
+
+    public JwtTokenBuilder expired() {
+        this.expiration = Date.from(Instant.now().plusSeconds(0));
+        return this;
+    }
+
+
     public JwtTokenBuilder withKey(String secretKey) {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
         return this;

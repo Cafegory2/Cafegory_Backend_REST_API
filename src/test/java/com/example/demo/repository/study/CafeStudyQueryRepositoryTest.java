@@ -55,9 +55,9 @@ class CafeStudyQueryRepositoryTest extends JpaTest {
 	void find_cafe_studies_by_keyword(String keyword, int expected) {
 		//given
 		CafeEntity cafe1 = aCafe()
-				.includeKeywords("강남", "스타벅스 강남대로점", "서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)").save();
+				.includeKeywords("강남", "스타벅스 강남대로점", "서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)").persist();
 		CafeEntity cafe2 = aCafe()
-				.includeKeywords("강남", "스타벅스 신논현역점", "서울 서초구 강남대로 483 (반포동) 청호빌딩", "카공하기 좋은 카페").save();
+				.includeKeywords("강남", "스타벅스 신논현역점", "서울 서초구 강남대로 483 (반포동) 청호빌딩", "카공하기 좋은 카페").persist();
 
 		MemberEntity coordinator = aMember().asCoordinator().persist();
 

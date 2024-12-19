@@ -32,7 +32,7 @@ class QnaServiceTest extends ServiceTest {
     @DisplayName("답변이 작성된 댓글은 수정할 수 없다.")
     void can_not_edit_comment_WithReplies() {
         //given
-        CafeEntity cafe = aCafe().save();
+        CafeEntity cafe = aCafe().persist();
 
         MemberEntity coordinator = aMember().asCoordinator().persist();
         MemberEntity member = aMember().asParticipant().persist();
@@ -58,7 +58,7 @@ class QnaServiceTest extends ServiceTest {
     @DisplayName("답변이 작성된 댓글은 삭제할 수 없다.")
     void can_not_remove_comment_WithReplies() {
         //given
-        CafeEntity cafe = aCafe().save();
+        CafeEntity cafe = aCafe().persist();
 
         MemberEntity coordinator = aMember().asCoordinator().persist();
         MemberEntity member = aMember().asParticipant().persist();

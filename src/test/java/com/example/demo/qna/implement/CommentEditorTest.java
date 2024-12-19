@@ -37,7 +37,7 @@ class CommentEditorTest extends ServiceTest {
     @DisplayName("댓글을 저장한다.")
     void save_question() {
         //given
-        CafeEntity cafe = aCafe().save();
+        CafeEntity cafe = aCafe().persist();
 
         MemberEntity coordinator = aMember().asCoordinator().persist();
         CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
@@ -52,7 +52,7 @@ class CommentEditorTest extends ServiceTest {
     @DisplayName("대댓글을 저장한다.")
     void save_reply() {
         //given
-        CafeEntity cafe = aCafe().save();
+        CafeEntity cafe = aCafe().persist();
 
         MemberEntity coordinator = aMember().asCoordinator().persist();
         MemberEntity member = aMember().asParticipant().persist();
