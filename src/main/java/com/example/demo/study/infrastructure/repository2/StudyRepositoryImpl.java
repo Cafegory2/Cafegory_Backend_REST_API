@@ -21,6 +21,8 @@ import com.example.demo.study.infrastructure.StudyMemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.EntityManager;
+
 @Repository
 @RequiredArgsConstructor
 public class StudyRepositoryImpl implements StudyRepository2 {
@@ -34,29 +36,49 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	private final StudyTagRepository2Impl studyTagRepositoryImpl;
 	private final CafeStudyCafeStudyTagRepository studyStudyTagJpaRepository;
 
-	@Override
-	public Long save(Long studyId, Long cafeId, Long memberId) {
-		return studyJpaRepository.save(new CafeStudyEntity(studyId, cafeId, memberId)).getId();
-	}
+//	@Override
+//	@Transactional
+//	public Long save(Long studyId, Long cafeId, Long memberId) {
+//		CafeEntity cafeEntity = em.getReference(CafeEntity.class, cafeId);
+//		MemberEntity memberEntity = em.getReference(MemberEntity.class, memberId);
+//		return studyJpaRepository.save(new CafeStudyEntity(studyId, cafeEntity, memberEntity)).getId();
+//	}
+
+
+//	@Override
+//	@Transactional
+//	public Long save(Study study, Long cafeId, Long memberId) {
+//		CafeEntity cafeEntity = cafeJpaRepository.findById(cafeId).orElseThrow();
+//		MemberEntity memberEntity = memberJpaRepository.findById(memberId).orElseThrow();
+////		CafeEntity cafeEntity = em.getReference(CafeEntity.class, cafeId);
+////		MemberEntity memberEntity = em.getReference(MemberEntity.class, memberId);
+//		return studyJpaRepository.save(new CafeStudyEntity(study, cafeEntity, memberEntity)).getId();
+//	}
 
 	@Override
 	@Transactional
-	public Study saveWithCascade(Study study, Long memberId) {
-		CafeEntity cafeEntity = cafeJpaRepository.findById(study.getCafeId())
-			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_NOT_FOUND));
-		MemberEntity memberEntity = memberJpaRepository.findById(memberId)
-			.orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
-
-		CafeStudyEntity studyEntity = studyJpaRepository.save(
-			CafeStudyEntity.from(study, cafeEntity, memberEntity));
-
-		// List<CafeStudyTagEntity> tagEntities = studyTagRepositoryImpl.findEntityByTags(study.getTags());
-		// List<CafeStudyCafeStudyTagEntity> studyStudyTagEntities = studyStudyTagJpaRepository.saveAll(
-		// 	buildStudyTagEntities(studyEntity, tagEntities));
-		// studyEntity.addCafeStudyTags(studyStudyTagEntities);
-
-		return studyEntity.toStudy();
+	public Long save(Study study, Long memberId) {
+		return studyJpaRepository.save(new CafeStudyEntity(study, memberId)).getId();
 	}
+
+//	@Override
+//	@Transactional
+//	public Study saveWithCascade(Study study, Long memberId) {
+//		CafeEntity cafeEntity = cafeJpaRepository.findById(study.getCafeId())
+//			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_NOT_FOUND));
+//		MemberEntity memberEntity = memberJpaRepository.findById(memberId)
+//			.orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
+//
+//		CafeStudyEntity studyEntity = studyJpaRepository.save(
+//			CafeStudyEntity.from(study, cafeEntity, memberEntity));
+//
+//		// List<CafeStudyTagEntity> tagEntities = studyTagRepositoryImpl.findEntityByTags(study.getTags());
+//		// List<CafeStudyCafeStudyTagEntity> studyStudyTagEntities = studyStudyTagJpaRepository.saveAll(
+//		// 	buildStudyTagEntities(studyEntity, tagEntities));
+//		// studyEntity.addCafeStudyTags(studyStudyTagEntities);
+//
+//		return studyEntity.toStudy();
+//	}
 
 	// private List<CafeStudyCafeStudyTagEntity> buildStudyTagEntities(
 	// 	CafeStudyEntity studyEntity, List<CafeStudyTagEntity> tagEntities

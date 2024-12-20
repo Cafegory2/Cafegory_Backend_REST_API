@@ -33,37 +33,18 @@ public class StudyEditor {
 	private final StudyRepository2 studyRepository2;
 	private final StudyQueryRepository2 studyQueryRepository2;
 
-	private final MemberRepository memberRepository;
-	private final CafeRepository cafeRepository;
-	private final CafeStudyRepository cafeStudyRepository;
-
 	private final StudyTagRepository2 studyTagRepository2;
 	private final StudyStudyTagRepository2 studyStudyTagRepository2;
 
 	private final StudyValidator studyValidator;
 
-	// TODO: save할 때 카공장의 기존 스터디를 조회하는 로직에서 toStudy 메서드 사용하여 예외 발생
 	@Transactional
 	public Long saveWithCascade(Study study, Long memberId) {
 		validateStudyDetails(study);
 
-		Long savedStudyId = studyRepository2.save(study.getId(), study.getCafeId(), memberId);
-
+		Long savedStudyId = studyRepository2.save(study, memberId);
 		List<Long> studyTagIds = studyTagRepository2.countByTags(study.getTags());
 		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
-
-		// MemberEntity memberEntity = memberRepository.findById(memberId)
-		// 	.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		// CafeEntity cafeEntity = cafeRepository.findById(study.getCafeId())
-		// 	.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-
-		// CafeStudyEntity savedStudy2 =
-		// 	cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
-
-		//		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
-		//		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
-		//			buildCafeStudyTags(savedStudy, tags));
-		//		 savedStudy.addCafeStudyTags(savedTags);
 
 		return savedStudyId;
 	}

@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.example.demo.study.infrastructure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,9 +30,6 @@ import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.CafeStudyTagEntity;
-import com.example.demo.study.infrastructure.CafeStudyTagRepository;
-import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.study.presentation.CafeStudyCreateRequest;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.util.TimeUtil;
@@ -154,6 +152,27 @@ class CafeStudyServiceTest extends ServiceTest {
 	//
 	//		assertThat(response.isAttendance()).isFalse();
 	//	}
+
+	@Autowired
+	private CafeStudyRepository cafeStudyRepository;
+
+	@Test
+	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")
+	void a() {
+		//given
+		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 0, 0, 0);
+		LocalDateTime start = timeUtil.localDateTime(2000, 1, 1, 23, 0, 0);
+		LocalDateTime end = timeUtil.localDateTime(2000, 1, 1, 23, 59, 59);
+
+		MemberEntity leader = memberSaveHelper.saveMember();
+		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
+		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());
+
+		//then
+		Long studyId = sut.createStudy(leader.getId(), now, cafeStudyCreateRequest.toStudy());
+		CafeStudyEntity study = cafeStudyRepository.findById(studyId).orElseThrow();
+
+	}
 
 	@Test
 	@DisplayName("카공 시작시간이 23시이고 종료시간이 24시(23시 59분 59초)이면 카공이 생성된다.")

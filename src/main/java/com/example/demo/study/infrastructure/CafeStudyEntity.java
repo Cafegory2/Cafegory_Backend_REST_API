@@ -4,20 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.Where;
 
@@ -84,10 +71,34 @@ public class CafeStudyEntity extends BaseEntity {
 		this.id = studyId;
 	}
 
-	public CafeStudyEntity(Long studyId, Long cafeId, Long memberId) {
-		this.id = studyId;
-		this.cafe = new CafeEntity(cafeId);
+//	public CafeStudyEntity(Study study, CafeEntity cafe, MemberEntity coordinator) {
+//		this.name = study.getName();
+//		this.cafe = cafe;
+//		this.coordinator = coordinator;
+//		this.studyPeriod = StudyPeriod.builder()
+//				.startDateTime(study.getStartDateTime())
+//				.endDateTime(study.getEndDateTime())
+//				.build();
+//		this.memberComms = study.getMemberComms();
+//		this.maxParticipants = study.getMaxParticipantCount();
+//		this.introduction = study.getIntroduction();
+//		this.views = 0;
+//		this.recruitmentStatus = RecruitmentStatus.OPEN;
+//	}
+
+	public CafeStudyEntity(Study study, Long memberId) {
+		this.name = study.getName();
+		this.cafe = new CafeEntity(study.getCafeId());
 		this.coordinator = new MemberEntity(memberId);
+		this.studyPeriod = StudyPeriod.builder()
+				.startDateTime(study.getStartDateTime())
+				.endDateTime(study.getEndDateTime())
+				.build();
+		this.memberComms = study.getMemberComms();
+		this.maxParticipants = study.getMaxParticipantCount();
+		this.introduction = study.getIntroduction();
+		this.views = 0;
+		this.recruitmentStatus = RecruitmentStatus.OPEN;
 	}
 
 	@Builder
