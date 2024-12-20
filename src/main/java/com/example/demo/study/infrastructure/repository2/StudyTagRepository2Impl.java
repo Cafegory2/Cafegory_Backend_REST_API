@@ -29,8 +29,4 @@ public class StudyTagRepository2Impl implements StudyTagRepository2 {
 	public List<Long> countByTags(List<CafeStudyTagType> tags) {
 		return cafeStudyTagJpaRepository.countByTags(tags);
 	}
-
-	public List<CafeStudyTagEntity> findEntityByTags(List<CafeStudyTagType> tags) {
-		return cafeStudyTagJpaRepository.findByTags(tags);
-	}
 }

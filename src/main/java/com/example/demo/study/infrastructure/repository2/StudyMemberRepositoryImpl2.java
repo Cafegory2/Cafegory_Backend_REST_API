@@ -1,5 +1,9 @@
 package com.example.demo.study.infrastructure.repository2;
 
+import static com.example.demo.exception.ExceptionType.*;
+
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.exception.CafegoryException;
@@ -35,6 +39,13 @@ public class StudyMemberRepositoryImpl2 implements StudyMemberRepository2 {
 
 		return studyMemberJpaRepository.save(studyMemberEntity)
 			.toParticipant();
+	}
+
+	@Override
+	public void remove(Long studyId, Long memberId, LocalDateTime now) {
+		studyMemberJpaRepository.findByCafeStudy_IdAndMember_Id(studyId, memberId)
+			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND))
+			.softDelete(now);
 	}
 
 	private CafeStudyMemberEntity createStudyMember(

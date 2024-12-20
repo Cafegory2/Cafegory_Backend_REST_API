@@ -4,21 +4,12 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.cafe.infrastructure.CafeRepository;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyRepository;
-import com.example.demo.study.infrastructure.CafeStudyTagEntity;
-import com.example.demo.study.infrastructure.StudyPeriod;
+import com.example.demo.study.infrastructure.repository2.StudyMemberRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyStudyTagRepository2;
@@ -35,6 +26,7 @@ public class StudyEditor {
 
 	private final StudyTagRepository2 studyTagRepository2;
 	private final StudyStudyTagRepository2 studyStudyTagRepository2;
+	private final StudyMemberRepository2 studyMemberRepository2;
 
 	private final StudyValidator studyValidator;
 
@@ -55,40 +47,13 @@ public class StudyEditor {
 		studyValidator.validateMaxParticipants(study.getMaxParticipantCount());
 	}
 
-	private CafeStudyEntity buildCafeStudyEntity(Study study, CafeEntity cafeEntity, MemberEntity memberEntity) {
-		return CafeStudyEntity.builder()
-			.name(study.getName())
-			.cafe(cafeEntity)
-			.coordinator(memberEntity)
-			.studyPeriod(buildStudyPeriod(study))
-			.memberComms(study.getMemberComms())
-			.maxParticipants(study.getMaxParticipantCount())
-			.build();
-	}
-
-	private StudyPeriod buildStudyPeriod(Study study) {
-		return StudyPeriod.builder()
-			.startDateTime(study.getStartDateTime())
-			.endDateTime(study.getEndDateTime())
-			.build();
-	}
-
-	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags(
-		CafeStudyEntity cafeStudy, List<CafeStudyTagEntity> cafeStudyTags
-	) {
-		return cafeStudyTags.stream()
-			.map(cafeStudyTag -> CafeStudyCafeStudyTagEntity.builder()
-				.cafeStudy(cafeStudy)
-				.cafeStudyTag(cafeStudyTag)
-				.build()
-			)
-			.collect(Collectors.toList());
-	}
-
 	@Transactional
 	public void removeWithCascade(Long studyId, Long candidateCoordinatorId, LocalDateTime now) {
 		Study study = studyQueryRepository2.findById(studyId);
 		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId, study.getCoordinator().getId());
+
+		studyMemberRepository2.remove(studyId, candidateCoordinatorId, now);
+		studyStudyTagRepository2.remove(studyId, now);
 
 		studyRepository2.deleteWithCascade(studyId, candidateCoordinatorId, now);
 	}
