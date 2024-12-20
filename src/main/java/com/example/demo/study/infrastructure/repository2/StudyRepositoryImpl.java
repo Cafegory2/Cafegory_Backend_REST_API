@@ -35,6 +35,11 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	private final CafeStudyCafeStudyTagRepository studyStudyTagJpaRepository;
 
 	@Override
+	public Long save(Long studyId, Long cafeId, Long memberId) {
+		return studyJpaRepository.save(new CafeStudyEntity(studyId, cafeId, memberId)).getId();
+	}
+
+	@Override
 	@Transactional
 	public Study saveWithCascade(Study study, Long memberId) {
 		CafeEntity cafeEntity = cafeJpaRepository.findById(study.getCafeId())

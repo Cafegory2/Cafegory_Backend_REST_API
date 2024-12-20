@@ -6,6 +6,8 @@ import com.example.demo.study.domain.Study;
 
 public interface StudyRepository2 {
 
+	Long save(Long studyId, Long cafeId, Long memberId);
+
 	//TODO 이름 cascade 변경
 	public Study saveWithCascade(Study study, Long memberId);
 

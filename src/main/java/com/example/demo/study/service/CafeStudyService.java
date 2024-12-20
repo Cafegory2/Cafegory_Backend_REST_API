@@ -36,7 +36,7 @@ public class CafeStudyService {
 
 	//TODO 카공 태그 저장하는 로직 추가 필요
 	@Transactional
-	public Study createStudy(Long memberId, LocalDateTime now, Study study) {
+	public Long createStudy(Long memberId, LocalDateTime now, Study study) {
 		validateStudyCreation(now, study.getSchedule().getStartDateTime());
 		List<Study> participantStudies = studyReader.readUpcomingBy(memberId, now);
 		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
@@ -48,7 +48,7 @@ public class CafeStudyService {
 		Long savedStudyId = studyEditor.saveWithCascade(study, memberId);
 		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
 
-		return studyReader.read(savedStudyId);
+		return savedStudyId;
 	}
 
 	public void deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {

@@ -239,10 +239,12 @@ class CafeStudyServiceTest extends ServiceTest {
 		Coordinator coordinator = createCoordinator(memberSaveHelper.saveMember("coordinator@gmail.com"));
 		LocalDateTime now = timeUtil.localDateTime(2000, 1, 1, 10, 0, 0);
 		Study study = creatStudy(cafe.getId(), coordinator, now.plusHours(2), now.plusHours(4));
+
 		//when
-		Study savedStudy = sut.createStudy(coordinator.getId(), now, study);
+		Long studyId = sut.createStudy(coordinator.getId(), now, study);
+
 		//then
-		int result = studyMemberRepository.countByCafeStudy_Id(savedStudy.getId());
+		int result = studyMemberRepository.countByCafeStudy_Id(studyId);
 		assertThat(result).isEqualTo(1);
 	}
 

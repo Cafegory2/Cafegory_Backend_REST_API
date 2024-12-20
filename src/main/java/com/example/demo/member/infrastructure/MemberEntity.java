@@ -57,6 +57,10 @@ public class MemberEntity extends BaseEntity {
 		this.profileUrl = profileUrl;
 	}
 
+	public MemberEntity(Long id) {
+		this.id = id;
+	}
+
 	@Builder
 	private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio,
 		int participationCount, BeverageSize beverageSize, String refreshToken) {

@@ -53,6 +53,10 @@ public class CafeEntity extends BaseEntity {
 	@OneToMany(mappedBy = "cafe")
 	private List<MenuEntity> menus = new ArrayList<>();
 
+	public CafeEntity(Long id) {
+		this.id = id;
+	}
+
 	@Builder
 	private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {
 		this.name = name;

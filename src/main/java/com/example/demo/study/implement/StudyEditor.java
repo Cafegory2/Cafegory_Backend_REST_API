@@ -6,14 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.study.infrastructure.repository2.StudyStudyTagRepository2;
-import com.example.demo.study.infrastructure.repository2.StudyTagRepository2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeRepository;
-import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Study;
@@ -24,6 +21,8 @@ import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.study.infrastructure.StudyPeriod;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyRepository2;
+import com.example.demo.study.infrastructure.repository2.StudyStudyTagRepository2;
+import com.example.demo.study.infrastructure.repository2.StudyTagRepository2;
 
 import lombok.RequiredArgsConstructor;
 
@@ -48,22 +47,25 @@ public class StudyEditor {
 	public Long saveWithCascade(Study study, Long memberId) {
 		validateStudyDetails(study);
 
-		MemberEntity memberEntity = memberRepository.findById(memberId)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		CafeEntity cafeEntity = cafeRepository.findById(study.getCafeId())
-			.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
-
-		CafeStudyEntity savedStudy =
-			cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
+		Long savedStudyId = studyRepository2.save(study.getId(), study.getCafeId(), memberId);
 
 		List<Long> studyTagIds = studyTagRepository2.countByTags(study.getTags());
-		studyStudyTagRepository2.saveAll(savedStudy.getId(), studyTagIds);
-//		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
-//		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
-//			buildCafeStudyTags(savedStudy, tags));
-//		 savedStudy.addCafeStudyTags(savedTags);
+		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
 
-		return savedStudy.getId();
+		// MemberEntity memberEntity = memberRepository.findById(memberId)
+		// 	.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+		// CafeEntity cafeEntity = cafeRepository.findById(study.getCafeId())
+		// 	.orElseThrow(() -> new CafegoryException(CAFE_NOT_FOUND));
+
+		// CafeStudyEntity savedStudy2 =
+		// 	cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
+
+		//		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
+		//		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
+		//			buildCafeStudyTags(savedStudy, tags));
+		//		 savedStudy.addCafeStudyTags(savedTags);
+
+		return savedStudyId;
 	}
 
 	private void validateStudyDetails(Study study) {

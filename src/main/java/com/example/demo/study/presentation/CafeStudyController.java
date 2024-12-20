@@ -1,7 +1,5 @@
 package com.example.demo.study.presentation;
 
-import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
-import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
 import com.example.demo.trash.dto.SliceResponse;
@@ -52,7 +52,8 @@ public class CafeStudyController {
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		Long memberId = Long.parseLong(userDetails.getUsername());
-		Study study = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
+		Long studyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
+		Study study = cafeStudyQueryService.getStudy(studyId);
 
 		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);
 		return ResponseEntity.ok(response);
