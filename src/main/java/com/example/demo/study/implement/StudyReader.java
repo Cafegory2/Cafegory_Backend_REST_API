@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
+import com.example.demo.study.infrastructure.studyQueryDslRepository;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.trash.dto.SliceResponse;
@@ -26,38 +27,30 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class StudyReader {
 
-	private final CafeStudyRepository cafeStudyRepository;
-	private final StudyMemberReader studyMemberReader;
-	private final CafeStudyQueryRepository cafeStudyQueryRepository;
+    private final StudyMemberReader studyMemberReader;
 
-	public Study read(Long cafeStudyId) {
-		CafeStudyEntity cafeStudyEntity = cafeStudyRepository.findWithMember(cafeStudyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+    private final StudyQueryRepository2 studyQueryRepository2;
+    //TODO 구현체 제거 필수
+    private final studyQueryDslRepository studyQueryDslRepository;
 
-		return cafeStudyEntity.toStudy();
-	}
+    public Study read(Long studyId) {
+        return studyQueryRepository2.findWithMember(studyId)
+                .orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+    }
 
-	public List<Study> readUpcomingBy(Long memberId, LocalDateTime now) {
-		List<Participant> upcomings = studyMemberReader.readMyUpcomingsBy(memberId);
-		List<Long> studyIds = upcomings.stream().map(Participant::getStudyId).collect(Collectors.toList());
+    public List<Study> readUpcomingBy(Long memberId, LocalDateTime now) {
+        List<Participant> upcomings = studyMemberReader.readMyUpcomingsBy(memberId);
+        List<Long> studyIds = upcomings.stream().map(Participant::getStudyId).collect(Collectors.toList());
 
-		return cafeStudyRepository.findUpcomingsWithMemberBy(studyIds, now).stream()
-			.map(CafeStudyEntity::toStudy)
-			.collect(Collectors.toList());
-	}
+        return studyQueryRepository2.findUpcomingsWithMemberBy(studyIds, now);
+    }
 
-	public SliceResponse<CafeStudyEntity> searchCafeStudies(CafeStudySearchListRequest request) {
-		return cafeStudyQueryRepository.findCafeStudies(request);
-	}
+    public SliceResponse<CafeStudyEntity> searchCafeStudies(CafeStudySearchListRequest request) {
+        return studyQueryDslRepository.findCafeStudies(request);
+    }
 
-	public List<CafeStudyEntity> readAllWithCoordinatorBy(Long cafeId) {
-		return cafeStudyRepository.findAllByCafeId(cafeId);
-	}
-
-	public ViewCount readViewCountBy(Long cafeStudyId) {
-		return cafeStudyRepository.findById(cafeStudyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
-			.toViewCount();
-	}
-
+    public ViewCount readViewCountBy(Long studyId) {
+        return studyQueryRepository2.findViewCountBy(studyId)
+                .orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+    }
 }

@@ -33,17 +33,17 @@ import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyQueryRepository;
+import com.example.demo.study.infrastructure.studyQueryDslRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
-@Import(CafeStudyQueryRepository.class)
-class CafeStudyQueryRepositoryTest extends JpaTest {
+@Import(studyQueryDslRepository.class)
+class studyQueryDslRepositoryTest extends JpaTest {
 
 	@Autowired
-	private CafeStudyQueryRepository sut;
+	private studyQueryDslRepository sut;
 
 	@Autowired
 	private CafeStudySaveHelper cafeStudySaveHelper;

@@ -196,7 +196,7 @@ class CafeStudyServiceTest extends ServiceTest {
 	void study_starts_1hours_after_now() {
 		//given
 		MemberEntity coordinator = memberSaveHelper.saveMember();
-		LocalDateTime start = timeUtil.now().plusHours(1);
+		LocalDateTime start = timeUtil.now().plusHours(2);
 		LocalDateTime end = start.plusHours(1);
 		CafeEntity cafe = cafeSaveHelper.saveCafeWith24For7();
 		CafeStudyCreateRequest cafeStudyCreateRequest = makeCafeStudyCreateRequest(start, end, cafe.getId());

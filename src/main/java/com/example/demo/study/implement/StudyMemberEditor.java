@@ -25,19 +25,9 @@ import lombok.RequiredArgsConstructor;
 public class StudyMemberEditor {
 
 	private final StudyMemberRepository studyMemberRepository;
-	private final MemberRepository memberRepository;
-	private final CafeStudyRepository cafeStudyRepository;
 	private final StudyMemberRepository2 studyMemberRepository2;
 
 	public Long save(Long memberId, Long studyId, StudyRole studyRole) {
-		// MemberEntity memberEntity = memberRepository.findById(memberId)
-		// 	.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		// CafeStudyEntity cafeStudyEntity = cafeStudyRepository.findById(studyId)
-		// 	.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-		// CafeStudyMemberEntity studyMember = createStudyMember(memberEntity, cafeStudyEntity, studyRole);
-		//
-		// CafeStudyMemberEntity saved = studyMemberRepository.save(studyMember);
-
 		Participant participant = studyMemberRepository2.save(memberId, studyId, studyRole);
 
 		return participant.getId();

@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.study.domain.Study;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.domain.DateAudit;
@@ -61,6 +62,10 @@ public class CafeStudyCommentEntity extends BaseEntity {
 	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeStudyEntity cafeStudy;
 
+	public CafeStudyCommentEntity(Long id) {
+		this.id = id;
+	}
+
 	@Builder
 	private CafeStudyCommentEntity(MemberEntity author, StudyRole studyRole, String content,
 		CafeStudyCommentEntity parentComment, CafeStudyEntity cafeStudy) {
@@ -93,6 +98,16 @@ public class CafeStudyCommentEntity extends BaseEntity {
 					.build()
 			)
 			.build();
+	}
+
+	public static CafeStudyCommentEntity from(Comment comment, StudyRole studyRole) {
+		return CafeStudyCommentEntity.builder()
+				.author(new MemberEntity(comment.getAuthor().getId()))
+				.content(comment.getContent())
+				.parentComment(new CafeStudyCommentEntity(comment.getParentCommentId()))
+				.studyRole(studyRole)
+				.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
+				.build();
 	}
 
 	public void changeContent(String content) {
