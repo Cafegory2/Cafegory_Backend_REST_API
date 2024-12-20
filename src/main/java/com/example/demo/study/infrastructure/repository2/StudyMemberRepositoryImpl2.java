@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class StudyMemberRepositoryImpl implements StudyMemberRepository2 {
+public class StudyMemberRepositoryImpl2 implements StudyMemberRepository2 {
 
 	private final StudyMemberRepository studyMemberJpaRepository;
 	private final MemberRepository memberJpaRepository;

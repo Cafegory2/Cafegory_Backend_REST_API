@@ -3,8 +3,6 @@ package com.example.demo.study.infrastructure.repository2;
 import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +14,9 @@ import com.example.demo.exception.ExceptionType;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
-import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -49,25 +45,25 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 		CafeStudyEntity studyEntity = studyJpaRepository.save(
 			CafeStudyEntity.from(study, cafeEntity, memberEntity));
 
-		List<CafeStudyTagEntity> tagEntities = studyTagRepositoryImpl.findEntityByTags(study.getTags());
-		List<CafeStudyCafeStudyTagEntity> studyStudyTagEntities = studyStudyTagJpaRepository.saveAll(
-			buildStudyTagEntities(studyEntity, tagEntities));
-		studyEntity.addCafeStudyTags(studyStudyTagEntities);
+		// List<CafeStudyTagEntity> tagEntities = studyTagRepositoryImpl.findEntityByTags(study.getTags());
+		// List<CafeStudyCafeStudyTagEntity> studyStudyTagEntities = studyStudyTagJpaRepository.saveAll(
+		// 	buildStudyTagEntities(studyEntity, tagEntities));
+		// studyEntity.addCafeStudyTags(studyStudyTagEntities);
 
 		return studyEntity.toStudy();
 	}
 
-	private List<CafeStudyCafeStudyTagEntity> buildStudyTagEntities(
-		CafeStudyEntity studyEntity, List<CafeStudyTagEntity> tagEntities
-	) {
-		return tagEntities.stream()
-			.map(cafeStudyTag -> CafeStudyCafeStudyTagEntity.builder()
-				.cafeStudy(studyEntity)
-				.cafeStudyTag(cafeStudyTag)
-				.build()
-			)
-			.collect(Collectors.toList());
-	}
+	// private List<CafeStudyCafeStudyTagEntity> buildStudyTagEntities(
+	// 	CafeStudyEntity studyEntity, List<CafeStudyTagEntity> tagEntities
+	// ) {
+	// 	return tagEntities.stream()
+	// 		.map(cafeStudyTag -> CafeStudyCafeStudyTagEntity.builder()
+	// 			.cafeStudy(studyEntity)
+	// 			.cafeStudyTag(cafeStudyTag)
+	// 			.build()
+	// 		)
+	// 		.collect(Collectors.toList());
+	// }
 
 	@Override
 	@Transactional

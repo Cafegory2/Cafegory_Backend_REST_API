@@ -4,9 +4,8 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
-import javax.jdo.annotations.Transactional;
-
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.infrastructure.MemberEntity;
@@ -39,7 +38,7 @@ public class StudyMemberEditor {
 		//
 		// CafeStudyMemberEntity saved = studyMemberRepository.save(studyMember);
 
-		Participant participant = studyMemberRepository2.save(studyId, memberId, studyRole);
+		Participant participant = studyMemberRepository2.save(memberId, studyId, studyRole);
 
 		return participant.getId();
 	}
