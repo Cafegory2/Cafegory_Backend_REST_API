@@ -1,35 +1,50 @@
 package com.example.demo.qna.presentation;
 
-import com.example.demo.qna.domain.Comment;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.lang.Nullable;
+
+import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.ParentCommentId;
+import com.example.demo.qna.domain.RootComment;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QnaCommentSaveRequest {
 
-    @NotBlank
-    private String content;
-    @Nullable
-    private Long parentCommentId;
-    private Long cafeStudyId;
+	@NotBlank
+	private String content;
+	@Nullable
+	private Long parentCommentId;
+	private Long cafeStudyId;
 
-    public Comment toComment() {
-        return Comment.builder()
-            .commentContent(
-                CommentContent.builder()
-                    .content(content)
-                    .build()
-            )
-            .parentCommentId(parentCommentId)
-            .cafeStudyId(cafeStudyId)
-            .build();
-    }
+	public RootComment toRootComment() {
+		return RootComment.builder()
+			.commentContent(
+				CommentContent.builder()
+					.content(content)
+					.build()
+			)
+			.cafeStudyId(cafeStudyId)
+			.build();
+	}
+
+	public ChildComment toChildComment() {
+		return ChildComment.builder()
+			.commentContent(
+				CommentContent.builder()
+					.content(content)
+					.build()
+			)
+			.parentCommentId(new ParentCommentId(parentCommentId))
+			.cafeStudyId(cafeStudyId)
+			.build();
+	}
 }

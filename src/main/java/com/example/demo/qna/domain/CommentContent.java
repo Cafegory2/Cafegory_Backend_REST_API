@@ -7,6 +7,5 @@ import lombok.Getter;
 @Builder
 public class CommentContent {
 
-    private Long commentId;
-    private String content;
+	private String content;
 }

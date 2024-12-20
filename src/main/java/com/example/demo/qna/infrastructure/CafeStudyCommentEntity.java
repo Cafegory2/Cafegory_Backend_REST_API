@@ -15,14 +15,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.demo.study.domain.Study;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.RootComment;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.trash.implement.BaseEntity;
@@ -76,11 +77,11 @@ public class CafeStudyCommentEntity extends BaseEntity {
 		this.cafeStudy = cafeStudy;
 	}
 
-	public Comment toComment() {
-		return Comment.builder()
+	public ChildComment toComment() {
+		return ChildComment.builder()
+			.commentId(new CommentId(this.id))
 			.commentContent(
 				CommentContent.builder()
-					.commentId(this.id)
 					.content(this.content)
 					.build()
 			)
@@ -100,14 +101,24 @@ public class CafeStudyCommentEntity extends BaseEntity {
 			.build();
 	}
 
-	public static CafeStudyCommentEntity from(Comment comment, StudyRole studyRole) {
+	public static CafeStudyCommentEntity from(RootComment comment, StudyRole studyRole) {
 		return CafeStudyCommentEntity.builder()
-				.author(new MemberEntity(comment.getAuthor().getId()))
-				.content(comment.getContent())
-				.parentComment(new CafeStudyCommentEntity(comment.getParentCommentId()))
-				.studyRole(studyRole)
-				.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
-				.build();
+			.author(new MemberEntity(comment.getAuthor().getId()))
+			.content(comment.getContent())
+			.parentComment(null)
+			.studyRole(studyRole)
+			.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
+			.build();
+	}
+
+	public static CafeStudyCommentEntity from(ChildComment comment, StudyRole studyRole) {
+		return CafeStudyCommentEntity.builder()
+			.author(new MemberEntity(comment.getAuthor().getId()))
+			.content(comment.getContent())
+			.parentComment(new CafeStudyCommentEntity(comment.getParentCommentId().getId()))
+			.studyRole(studyRole)
+			.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
+			.build();
 	}
 
 	public void changeContent(String content) {

@@ -14,5 +14,6 @@ public class Review {
 	private Long id;
 	private List<CafeTagType> tags;
 	private Cafe cafe;
+	
 	private DateAudit dateAudit;
 }

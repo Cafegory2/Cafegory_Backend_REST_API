@@ -1,26 +1,30 @@
 package com.example.demo.qna.implement;
 
+import static com.example.demo.exception.ExceptionType.*;
+
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.qna.domain.Comment;
-import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.member.infrastructure.MemberRepository;
+import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
+import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
+import com.example.demo.qna.infrastructure.repository2.CommentRepository2;
+import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-
-import static com.example.demo.exception.ExceptionType.*;
-
 @Component
 @RequiredArgsConstructor
 public class CommentEditor {
+
+	private final CommentRepository2 commentRepository2;
 
 	private final CafeStudyCommentRepository commentRepository;
 	private final MemberRepository memberRepository;
@@ -28,20 +32,23 @@ public class CommentEditor {
 
 	private final CommentValidator commentValidator;
 
-	public Long save(Comment comment, Long memberId) {
+	public Long save(ChildComment comment, Long memberId) {
 		commentValidator.validateContentNotBlank(comment.getContent());
 
 		MemberEntity author = memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-		CafeStudyCommentEntity parentComment = findParentCommentEntity(comment.getParentCommentId());
+		CafeStudyCommentEntity parentComment = findParentCommentEntity(comment.getParentCommentId().getId());
 		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(comment.getCafeStudyId())
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 
 		CafeStudyCommentEntity commentEntity = createCafeStudyCommentEntity(comment.getContent(), author, parentComment,
 			cafeStudy);
-		CafeStudyCommentEntity saved = commentRepository.save(commentEntity);
 
-		return saved.getId();
+		// TODO: StudyReader Entity 도입할 때 수정할 것
+		return commentRepository2.save(comment, StudyRole.MEMBER);
+		// CafeStudyCommentEntity saved = commentRepository.save(commentEntity);
+
+		// return saved.getId();
 	}
 
 	private CafeStudyCommentEntity findParentCommentEntity(Long parentCommentId) {
@@ -67,10 +74,10 @@ public class CommentEditor {
 	}
 
 	@Transactional
-	public void edit(Comment comment) {
+	public void edit(ChildComment comment) {
 		commentValidator.validateContentNotBlank(comment.getContent());
 
-		CafeStudyCommentEntity commentEntity = findCommentEntity(comment.getCommentId());
+		CafeStudyCommentEntity commentEntity = findCommentEntity(comment.getCommentId().getId());
 		commentEntity.changeContent(comment.getContent());
 	}
 
