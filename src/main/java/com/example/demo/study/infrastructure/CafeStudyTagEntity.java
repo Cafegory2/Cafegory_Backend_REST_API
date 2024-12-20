@@ -39,6 +39,10 @@ public class CafeStudyTagEntity extends BaseEntity {
 		this.type = type;
 	}
 
+	public CafeStudyTagEntity(Long id) {
+		this.id = id;
+	}
+
 	public StudyTag toStudyTag() {
 		return StudyTag.builder()
 			.tagId(id)

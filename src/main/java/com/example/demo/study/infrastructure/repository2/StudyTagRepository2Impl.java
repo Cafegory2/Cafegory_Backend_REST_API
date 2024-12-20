@@ -14,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class
-StudyTagRepositoryImpl implements StudyTagRepository {
+public class StudyTagRepository2Impl implements StudyTagRepository2 {
 
 	private final CafeStudyTagRepository cafeStudyTagJpaRepository;
 
@@ -24,6 +23,11 @@ StudyTagRepositoryImpl implements StudyTagRepository {
 		return cafeStudyTagJpaRepository.findByTags(tags).stream()
 			.map(CafeStudyTagEntity::toStudyTag)
 			.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<Long> countByTags(List<CafeStudyTagType> tags) {
+		return cafeStudyTagJpaRepository.countByTags(tags);
 	}
 
 	public List<CafeStudyTagEntity> findEntityByTags(List<CafeStudyTagType> tags) {

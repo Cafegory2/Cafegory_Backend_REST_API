@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.infrastructure.repository2.StudyStudyTagRepository2;
+import com.example.demo.study.infrastructure.repository2.StudyTagRepository2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +18,9 @@ import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
-import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
-import com.example.demo.study.infrastructure.CafeStudyTagRepository;
 import com.example.demo.study.infrastructure.StudyPeriod;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyRepository2;
@@ -37,12 +37,14 @@ public class StudyEditor {
 	private final MemberRepository memberRepository;
 	private final CafeRepository cafeRepository;
 	private final CafeStudyRepository cafeStudyRepository;
-	private final CafeStudyTagRepository cafeStudyTagRepository;
-	private final CafeStudyCafeStudyTagRepository cafeStudyCafeStudyTagRepository;
+
+	private final StudyTagRepository2 studyTagRepository2;
+	private final StudyStudyTagRepository2 studyStudyTagRepository2;
 
 	private final StudyValidator studyValidator;
 
 	// TODO: save할 때 카공장의 기존 스터디를 조회하는 로직에서 toStudy 메서드 사용하여 예외 발생
+	@Transactional
 	public Long saveWithCascade(Study study, Long memberId) {
 		validateStudyDetails(study);
 
@@ -54,10 +56,12 @@ public class StudyEditor {
 		CafeStudyEntity savedStudy =
 			cafeStudyRepository.save(buildCafeStudyEntity(study, cafeEntity, memberEntity));
 
-		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
-		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
-			buildCafeStudyTags(savedStudy, tags));
-		// savedStudy.addCafeStudyTags(savedTags);
+		List<Long> studyTagIds = studyTagRepository2.countByTags(study.getTags());
+		studyStudyTagRepository2.saveAll(savedStudy.getId(), studyTagIds);
+//		List<CafeStudyTagEntity> tags = cafeStudyTagRepository.findByTags(study.getTags());
+//		List<CafeStudyCafeStudyTagEntity> savedTags = cafeStudyCafeStudyTagRepository.saveAll(
+//			buildCafeStudyTags(savedStudy, tags));
+//		 savedStudy.addCafeStudyTags(savedTags);
 
 		return savedStudy.getId();
 	}

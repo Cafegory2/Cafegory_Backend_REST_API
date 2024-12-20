@@ -80,6 +80,10 @@ public class CafeStudyEntity extends BaseEntity {
 	@OneToMany(mappedBy = "cafeStudy")
 	private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
 
+	public CafeStudyEntity(Long id) {
+		this.id = id;
+	}
+
 	@Builder
 	private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
 		MemberComms memberComms, int maxParticipants, String introduction, List<CafeStudyCafeStudyTagEntity> tags) {

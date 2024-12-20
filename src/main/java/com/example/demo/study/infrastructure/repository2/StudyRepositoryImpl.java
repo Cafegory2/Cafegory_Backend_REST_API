@@ -31,7 +31,7 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	private final StudyMemberRepository studyMemberJpaRepository;
 	private final MemberRepository memberJpaRepository;
 
-	private final StudyTagRepositoryImpl studyTagRepositoryImpl;
+	private final StudyTagRepository2Impl studyTagRepositoryImpl;
 	private final CafeStudyCafeStudyTagRepository studyStudyTagJpaRepository;
 
 	@Override
