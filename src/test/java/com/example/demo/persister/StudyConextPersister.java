@@ -3,6 +3,7 @@ package com.example.demo.persister;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
@@ -25,6 +26,8 @@ public class StudyConextPersister {
     private MemberComms memberComms = MemberComms.WELCOME;
     private int maxParticipants = 6;
     private String introduction = "테스트 카공 소개글";
+    private RecruitmentStatus recruitmentStatus = RecruitmentStatus.OPEN;
+
 
     private List<CafeStudyTagEntity> studyTags = new ArrayList<>();
 
@@ -39,6 +42,7 @@ public class StudyConextPersister {
         this.maxParticipants = copy.maxParticipants;
         this.introduction = copy.introduction;
         this.studyTags = copy.studyTags;
+        this.recruitmentStatus = copy.recruitmentStatus;
     }
 
     public StudyConextPersister but() {
@@ -100,13 +104,23 @@ public class StudyConextPersister {
         return this;
     }
 
+    public StudyConextPersister withRecruitmentStatus(RecruitmentStatus recruitmentStatus) {
+        this.recruitmentStatus = recruitmentStatus;
+        return this;
+    }
+
+    public StudyConextPersister markAsClosed() {
+        this.recruitmentStatus = RecruitmentStatus.CLOSED;
+        return this;
+    }
+
     public StudyConextPersister includeTags(CafeStudyTagEntity... studyTags) {
         this.studyTags.addAll(List.of(studyTags));
         return this;
     }
 
     public CafeStudyEntity build() {
-        return CafeStudyEntity.builder()
+        CafeStudyEntity study = CafeStudyEntity.builder()
                 .name(this.name)
                 .cafe(this.cafe)
                 .coordinator(this.coordinator)
@@ -115,6 +129,9 @@ public class StudyConextPersister {
                 .maxParticipants(this.maxParticipants)
                 .introduction(this.introduction)
                 .build();
+
+        study.setRecruitmentStatus(this.recruitmentStatus);
+        return study;
     }
 
     public static class StudyRepoHolder {

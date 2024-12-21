@@ -2,9 +2,16 @@ package com.example.demo.apidocs;
 
 import static com.example.demo.persister.CafeContextPersister.*;
 import static com.example.demo.persister.CafeTagPersister.aCafeTag;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
+import static com.example.demo.persister.StudyTagPersister.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 
+import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.CafeStudyTagType;
+import com.example.demo.study.domain.RecruitmentStatus;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +21,7 @@ import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.helper.CafeCafeTagSaveHelper;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.CafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeTagSaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.helper.MenuSaveHelper;
+
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
@@ -29,22 +29,6 @@ import io.restassured.http.ContentType;
 
 public class CafeApiTest extends ApiDocsTest {
 
-    @Autowired
-    private CafeSaveHelper cafeSaveHelper;
-    @Autowired
-    private CafeTagSaveHelper cafeTagSaveHelper;
-    @Autowired
-    private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
-    @Autowired
-    private MenuSaveHelper menuSaveHelper;
-    @Autowired
-    private CafeStudySaveHelper cafeStudySaveHelper;
-    @Autowired
-    private MemberSaveHelper memberSaveHelper;
-    @Autowired
-    private CafeStudyTagSaveHelper cafeStudyTagSaveHelper;
-    @Autowired
-    private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
     @Autowired
     private TimeUtil timeUtil;
 
@@ -59,29 +43,49 @@ public class CafeApiTest extends ApiDocsTest {
                 .includeMenu("아메리카노", "1500")
                 .includeMenu("카페라떼", "3000")
                 .persistWith7daysFrom9To21();
-//		CafeEntity cafeEntity = aCafe().with(wifi, outlet).saveWith7daysFrom9To21();
-//		aMenu().with(cafeEntity).withName("아메리카노").withPrice("1500").save();
-//		aMenu().with(cafeEntity).withName("카페라떼").withPrice("3000").save();
-//		menuSaveHelper.saveMenu("아메리카노", "1500", cafeEntity);
-//		menuSaveHelper.saveMenu("카페라떼", "3000", cafeEntity);
-        //
-        // MemberEntity member = memberSaveHelper.saveMember();
-        //
-        // LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 9, 0, 0);
-        //
-        // CafeStudyTagEntity cafeStudyTag1 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DEVELOPMENT);
-        // CafeStudyTagEntity cafeStudyTag2 = cafeStudyTagSaveHelper.saveCafeStudyTag(CafeStudyTagType.DESIGN);
-        //
-        // CafeStudyEntity cafeStudy1 = cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(8),
-        // 	startDateTime.plusHours(10));
-        // cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy1, cafeStudyTag1);
-        // cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member, startDateTime.plusHours(2),
-        // 	startDateTime.plusHours(4));
-        // cafeStudySaveHelper.saveCafeStudy(cafeEntity, member, startDateTime.plusHours(5), startDateTime.plusHours(7));
-        // CafeStudyEntity cafeStudy4 = cafeStudySaveHelper.saveFinishedCafeStudy(cafeEntity, member,
-        // 	startDateTime.plusHours(12), startDateTime.plusHours(14));
-        // cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag1);
-        // cafeStudyCafeStudyTagSaveHelper.saveCafeStudyCafeStudyTag(cafeStudy4, cafeStudyTag2);
+
+        MemberEntity coordinator = aMember().asCoordinator().persist();
+
+        CafeStudyTagEntity development = aTag().withType(CafeStudyTagType.DEVELOPMENT).persist();
+        CafeStudyTagEntity design = aTag().withType(CafeStudyTagType.DESIGN).persist();
+
+        aStudy().withStudyPeriod(
+                        timeUtil.localDateTime(2000, 1, 1, 17, 0, 0),
+                        timeUtil.localDateTime(2000, 1, 1, 19, 0, 0)
+                )
+                .withRecruitmentStatus(RecruitmentStatus.OPEN)
+                .withCafe(cafeEntity)
+                .withMember(coordinator)
+                .includeTags(development)
+                .persist();
+
+        aStudy().withStudyPeriod(
+                        timeUtil.localDateTime(2000, 1, 1, 11, 0, 0),
+                        timeUtil.localDateTime(2000, 1, 1, 13, 0, 0)
+                )
+                .withRecruitmentStatus(RecruitmentStatus.CLOSED)
+                .withCafe(cafeEntity)
+                .withMember(coordinator)
+                .persist();
+
+        aStudy().withStudyPeriod(
+                        timeUtil.localDateTime(2000, 1, 1, 13, 0, 0),
+                        timeUtil.localDateTime(2000, 1, 1, 15, 0, 0)
+                )
+                .withRecruitmentStatus(RecruitmentStatus.OPEN)
+                .withCafe(cafeEntity)
+                .withMember(coordinator)
+                .persist();
+
+        aStudy().withStudyPeriod(
+                        timeUtil.localDateTime(2000, 1, 1, 21, 0, 0),
+                        timeUtil.localDateTime(2000, 1, 1, 23, 0, 0)
+                )
+                .withRecruitmentStatus(RecruitmentStatus.CLOSED)
+                .withCafe(cafeEntity)
+                .withMember(coordinator)
+                .includeTags(development, design)
+                .persist();
 
         RestAssured.given(spec).log().all()
                 .filter(RestAssuredRestDocumentationWrapper.document(

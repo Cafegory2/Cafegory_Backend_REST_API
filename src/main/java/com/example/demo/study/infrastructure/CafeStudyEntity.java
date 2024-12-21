@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
@@ -31,11 +32,6 @@ import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.trash.implement.BaseEntity;
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -71,6 +67,8 @@ public class CafeStudyEntity extends BaseEntity {
 	private String introduction;
 	private int views;
 
+	// TODO 클래스 레벨에 Setter 여는 것에 대한 논의 필요
+	@Setter
 	@Enumerated(EnumType.STRING)
 	private RecruitmentStatus recruitmentStatus;
 
