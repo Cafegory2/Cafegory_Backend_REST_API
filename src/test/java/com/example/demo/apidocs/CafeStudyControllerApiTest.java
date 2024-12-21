@@ -58,7 +58,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
     @Autowired
     private TimeUtil timeUtil;
 
-    // TODO: push 위해 주석 처리
+    // TODO feat/mypage 12.20에 수정된 코드 pull 되면 수정할 것
     // @Test
     // void create() {
     // 	//given
@@ -155,7 +155,7 @@ class CafeStudyControllerApiTest extends ApiDocsTest {
                 .statusCode(200);
     }
 
-    // TODO: 로그인 되어 있음 메서드 수정
+    // TODO: mypage 12.20 코드 pull 한 뒤에 수정하기
     // @Test
     // void deleteCafeStudy() {
     // 	LocalDateTime startDateTime = timeUtil.localDateTime(2000, 1, 1, 1, 0, 0);
