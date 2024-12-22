@@ -1,11 +1,15 @@
 package com.example.demo.study.implement;
 
+import static com.example.demo.builder.CoordinatorBuilder.*;
+import static com.example.demo.builder.StudyBuilder.*;
 import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import com.example.demo.builder.CoordinatorBuilder;
+import com.example.demo.builder.StudyBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,41 +78,21 @@ class StudyValidatorTest {
 	@Test
 	@DisplayName("스터디에 카공장만 존재한다")
 	void validate_study_member_is_coordinator_only() {
-		Long coordinatorId = 1L;
-		List<Long> participantsIds = List.of(coordinatorId);
-
-		Study study = createStudy();
-
 		assertDoesNotThrow(
-			() -> sut.validateCafeStudyMembersPresent(study, participantsIds)
-		);
+			() -> sut.validateCafeStudyMembersPresent(
+					aStudy().with(aCoordinator().withId(1L)).build(),
+					List.of(1L)
+			));
 	}
 
 	@Test
 	@DisplayName("스터디에 카공장외에 다른 참가자도 존재한다")
 	void validate_study_member_is_not_coordinator_only() {
-		Long coordinatorId = 1L;
-		List<Long> participantsIds = List.of(coordinatorId, 2L);
-		Study study = createStudy();
-
 		assertThatThrownBy(
-			() -> sut.validateCafeStudyMembersPresent(study, participantsIds)
-		).isInstanceOf(CafegoryException.class)
+			() -> sut.validateCafeStudyMembersPresent(
+					aStudy().with(aCoordinator().withId(1L)).build(),
+					List.of(1L, 2L)
+			)).isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT.getErrorMessage());
 	}
-
-	private Study createStudy() {
-		Coordinator coordinator = Coordinator.builder()
-			.id(1L)
-			.build();
-
-		return Study.builder()
-			.name("카페고리 스터디")
-			.coordinator(coordinator)
-			.memberComms(MemberComms.WELCOME)
-			.maxParticipantCount(5)
-			.introduction("자기소개 글")
-			.build();
-	}
-
 }
