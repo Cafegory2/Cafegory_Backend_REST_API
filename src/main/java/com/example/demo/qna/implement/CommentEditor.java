@@ -34,7 +34,7 @@ public class CommentEditor {
 		MemberEntity author = memberRepository.findById(memberId)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 		CafeStudyCommentEntity parentComment = findParentCommentEntity(comment.getParentCommentId());
-		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(comment.getCafeStudyId())
+		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(comment.getStudyId())
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 
 		CafeStudyCommentEntity commentEntity = createCafeStudyCommentEntity(comment.getContent(), author, parentComment,

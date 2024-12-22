@@ -29,7 +29,7 @@ public class QnaCommentSaveRequest {
                     .build()
             )
             .parentCommentId(parentCommentId)
-            .cafeStudyId(cafeStudyId)
+            .studyId(cafeStudyId)
             .build();
     }
 }

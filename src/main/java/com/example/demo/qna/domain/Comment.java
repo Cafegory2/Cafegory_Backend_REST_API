@@ -11,7 +11,7 @@ public class Comment {
 
     private CommentContent commentContent;
     private Long parentCommentId;
-    private Long cafeStudyId;
+    private Long studyId;
     private MemberIdentity author;
     private DateAudit date;
 
