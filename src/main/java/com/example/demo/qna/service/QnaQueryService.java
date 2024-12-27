@@ -20,6 +20,6 @@ public class QnaQueryService {
 	}
 
 	public Comment getComment(CommentId commentId) {
-		return commentReader.read(commentId.getId());
+		return commentReader.read(commentId);
 	}
 }

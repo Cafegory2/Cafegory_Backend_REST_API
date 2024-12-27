@@ -36,7 +36,15 @@ public class QnaService {
 		return commentEditor.saveSubComment(content, parentCommentId, studyId, memberId);
 	}
 
-	public void editComment(Long commentId, CommentContent comment, Long memberId) {
+	public void editComment2(CommentContent content, CommentId commentId, MemberId memberId) {
+		ChildComment readComment = commentReader.readOld(commentId.getId());
+		commentValidator.validateCommentAuthor(readComment, memberId.getId());
+		validateNoReplies(readComment);
+
+		commentEditor.edit(readComment);
+	}
+
+	public void editComment(Long commentId, CommentContent content, Long memberId) {
 		ChildComment readComment = commentReader.readOld(commentId);
 		commentValidator.validateCommentAuthor(readComment, memberId);
 		validateNoReplies(readComment);

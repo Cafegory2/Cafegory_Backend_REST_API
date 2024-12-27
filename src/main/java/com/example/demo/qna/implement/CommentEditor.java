@@ -4,6 +4,7 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.qna.infrastructure.repository2.CommentQueryRepository2;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class CommentEditor {
 
 	private final CommentRepository2 commentRepository2;
+	private final CommentQueryRepository2 commentQueryRepository2;
 
-	private final CafeStudyCommentRepository commentRepository;
 	private final CommentValidator commentValidator;
 
 	public CommentId saveRootComment(CommentContent content, StudyId studyId, MemberId memberId) {
@@ -43,7 +44,7 @@ public class CommentEditor {
 	}
 
 	private CafeStudyCommentEntity findCommentEntity(Long commentId) {
-		return commentRepository.findById(commentId)
+		return commentQueryRepository2.findById(commentId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_COMMENT_NOT_FOUND));
 	}
 

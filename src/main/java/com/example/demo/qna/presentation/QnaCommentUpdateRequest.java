@@ -4,6 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.example.demo.qna.domain.CommentContent;
 
+import com.example.demo.qna.domain.CommentId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,5 +23,9 @@ public class QnaCommentUpdateRequest {
 		return CommentContent.builder()
 			.content(content)
 			.build();
+	}
+
+	public CommentId toCommentId() {
+		return new CommentId(commentId);
 	}
 }

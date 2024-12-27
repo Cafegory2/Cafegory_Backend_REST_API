@@ -51,8 +51,10 @@ public class QnaController {
 		@Validated @RequestBody QnaCommentUpdateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		qnaService.editComment(request.getCommentId(), request.toCommentContent(), memberId);
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+//		Long memberId = Long.parseLong(userDetails.getUsername());
+//		qnaService.editComment(request.getCommentId(), request.toCommentContent(), memberId);
+		qnaService.editComment2(request.toCommentContent(), request.toCommentId(), memberId);
 
 		ChildComment comment = qnaQueryService.getCommentOld(request.getCommentId());
 		QnaCommentUpdateResponse response = QnaCommentUpdateResponse.from(comment);
