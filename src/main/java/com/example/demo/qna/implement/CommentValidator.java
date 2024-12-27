@@ -24,10 +24,4 @@ public class CommentValidator {
 			throw new CafegoryException(CAFE_STUDY_COMMENT_PERMISSION_DENIED);
 		}
 	}
-
-	public void validateCommentAuthorOld(ChildComment comment, Long memberId) {
-		if (!comment.isAuthor(memberId)) {
-			throw new CafegoryException(CAFE_STUDY_COMMENT_PERMISSION_DENIED);
-		}
-	}
 }

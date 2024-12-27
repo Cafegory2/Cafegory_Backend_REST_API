@@ -30,14 +30,6 @@ public class CommentReader {
 		return commentEntity.toComment();
 	}
 
-	@Transactional(readOnly = true)
-	public ChildComment readOld(Long commentId) {
-		CafeStudyCommentEntity commentEntity = commentQueryRepository2.findWithMember(commentId)
-			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_COMMENT_NOT_FOUND));
-
-		return commentEntity.toCommentOld();
-	}
-
 	public boolean existsReplies(Long commentId) {
 		return commentQueryRepository2.existsByParentComment_Id(commentId);
 	}

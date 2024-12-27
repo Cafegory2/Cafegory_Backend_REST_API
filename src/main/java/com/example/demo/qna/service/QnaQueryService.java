@@ -15,10 +15,6 @@ public class QnaQueryService {
 
 	private final CommentReader commentReader;
 
-	public ChildComment getCommentOld(Long commentId) {
-		return commentReader.readOld(commentId);
-	}
-
 	public Comment getComment(CommentId commentId) {
 		return commentReader.read(commentId);
 	}

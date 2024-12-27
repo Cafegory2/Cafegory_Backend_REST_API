@@ -14,6 +14,7 @@ import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,6 +40,7 @@ public class CommentRepositoryImpl2 implements CommentRepository2 {
 	}
 
 	@Override
+	@Transactional
 	public void edit(CommentContent content, CommentId commentId) {
 		commentJpaRepository.findById(commentId.getId())
 			.orElseThrow(() -> new IllegalCallerException("comment가 존재하지 않습니다."))
@@ -46,6 +48,7 @@ public class CommentRepositoryImpl2 implements CommentRepository2 {
 	}
 
 	@Override
+	@Transactional
 	public void remove(CommentId commentId, LocalDateTime now) {
 		commentJpaRepository.findById(commentId.getId())
 			.orElseThrow(() -> new IllegalCallerException("comment가 존재하지 않습니다."))

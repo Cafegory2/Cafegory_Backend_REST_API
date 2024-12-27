@@ -35,15 +35,12 @@ public class CommentEditor {
 		return commentRepository2.saveSubComment(content, parentCommentId, studyId, memberId);
 	}
 
-	@Transactional
 	public void edit(CommentContent content, CommentId commentId) {
 		commentValidator.validateContentNotBlank(content.getContent());
 		commentRepository2.edit(content, commentId);
 	}
 
-	@Transactional
 	public void remove(CommentId commentId, LocalDateTime now) {
 		commentRepository2.remove(commentId, now);
 	}
-
 }

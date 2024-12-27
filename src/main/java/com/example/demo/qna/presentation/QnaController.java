@@ -52,11 +52,10 @@ public class QnaController {
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
 		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
-		//		Long memberId = Long.parseLong(userDetails.getUsername());
-		//		qnaService.editComment(request.getCommentId(), request.toCommentContent(), memberId);
-		qnaService.editComment(request.toCommentContent(), request.toCommentId(), memberId);
 
-		ChildComment comment = qnaQueryService.getCommentOld(request.getCommentId());
+		qnaService.editComment(request.toCommentContent(), request.toCommentId(), memberId);
+		Comment comment = qnaQueryService.getComment(request.toCommentId());
+
 		QnaCommentUpdateResponse response = QnaCommentUpdateResponse.from(comment);
 		return ResponseEntity.ok(response);
 	}
