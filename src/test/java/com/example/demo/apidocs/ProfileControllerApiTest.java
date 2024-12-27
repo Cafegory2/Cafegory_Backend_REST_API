@@ -3,6 +3,8 @@ package com.example.demo.apidocs;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.infrastructure.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,8 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 	private ReviewCafeTagSaveHelper reviewCafeTagSaveHelper;
 	@Autowired
 	private MemberReader memberReader;
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private TimeUtil timeUtil;
@@ -90,7 +94,7 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
 
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
-		MemberEntity member = memberReader.read("test@gmail.com");
+		MemberEntity member = memberRepository.findByEmail("test@gmail.com").get();
 
 		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
 		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);

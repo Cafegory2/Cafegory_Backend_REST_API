@@ -29,8 +29,12 @@ public class MemberRepositoryImpl2 implements MemberRepository2 {
 		MemberEntity memberEntity = memberJpaRepository.findById(memberId.getId())
 			.orElseThrow(() -> new IllegalArgumentException("member가 존재하지 않습니다."));
 
-		memberEntity.setNickname(content.getNickname());
-		memberEntity.setProfileUrl(content.getImgUrl());
+		if (content.getNickname() != null) {
+			memberEntity.setNickname(content.getNickname());
+		}
+		if (content.getImgUrl() != null) {
+			memberEntity.setProfileUrl(content.getImgUrl());
+		}
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.member.implement.MemberEditor;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -17,8 +18,8 @@ public class SignupAcceptanceTestConfig {
 	@Bean
 	@Primary
 	public LoginService spyLoginService(MemberReader memberReader, LoginProcessor loginProcessor,
-		SignupProcessor signupProcessor) {
-		return new SpyLoginService(memberReader, loginProcessor, signupProcessor);
+										SignupProcessor signupProcessor, MemberEditor memberEditor) {
+		return new SpyLoginService(memberReader, loginProcessor, signupProcessor, memberEditor);
 	}
 
 	@Bean

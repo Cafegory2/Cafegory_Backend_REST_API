@@ -55,7 +55,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	private void updateMemberRefreshTokenAndProfile(OAuth2Profile profile, JwtToken token) {
-		Member member = memberReader.read2(profile.getEmailAddress());
+		Member member = memberReader.read(profile.getEmailAddress());
 
 		String profileUrl = uploadProfileImageToS3(profile.getProfileImgUrl());
 

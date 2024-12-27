@@ -16,6 +16,7 @@ import static com.example.demo.exception.ExceptionType.MEMBER_NOT_FOUND;
 @RequiredArgsConstructor
 public class MemberReader {
 
+	//TODO 12.27 엔티티 제거부터 해야됨
 	private final MemberRepository memberRepository;
 	private final MemberQueryRepository2 memberQueryRepository;
 
@@ -23,12 +24,7 @@ public class MemberReader {
 		return memberRepository.existsByEmail(email);
 	}
 
-	public MemberEntity read(String email) {
-		return memberRepository.findByEmail(email)
-			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
-	}
-
-	public Member read2(String email) {
+	public Member read(String email) {
 		return memberQueryRepository.findByEmail(email)
 				.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}

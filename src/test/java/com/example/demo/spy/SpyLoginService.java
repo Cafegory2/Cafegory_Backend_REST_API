@@ -2,11 +2,14 @@ package com.example.demo.spy;
 
 import java.util.UUID;
 
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.domain.MemberContent;
+import com.example.demo.member.domain.MemberId;
+import com.example.demo.member.implement.MemberEditor;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.implement.MemberReader;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.trash.dto.oauth2.OAuth2Profile;
 import com.example.demo.trash.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.trash.implement.login.LoginProcessor;
@@ -23,6 +26,7 @@ public class SpyLoginService implements LoginService {
 
 	private final LoginProcessor loginProcessor;
 	private final SignupProcessor signupProcessor;
+	private final MemberEditor memberEditor;
 
 	@Transactional
 	public JwtToken socialLogin(OAuth2TokenRequest oAuth2TokenRequest) {
@@ -45,11 +49,17 @@ public class SpyLoginService implements LoginService {
 
 		JwtToken token = loginOrSignup(profile);
 
-		MemberEntity member = memberReader.read(profile.getEmailAddress());
-		member.setRefreshToken(token.getRefreshToken());
+		Member member = memberReader.read(profile.getEmailAddress());
+		memberEditor.updateRefreshToken(new MemberId(member.getId()), token.getRefreshToken());
 
 		String filename = UUID.randomUUID().toString();
-		member.changeProfileUrl(filename);
+		memberEditor.edit(
+				MemberContent.builder()
+						.imgUrl(filename)
+						.build()
+				, new MemberId(member.getId())
+		);
+//		member.changeProfileUrl(filename);
 
 		return token;
 	}
