@@ -22,6 +22,7 @@ import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.domain.CommentId;
 import com.example.demo.qna.domain.ParentCommentId;
@@ -71,8 +72,10 @@ public class CafeStudyCommentEntity extends BaseEntity {
 	}
 
 	@Builder
-	private CafeStudyCommentEntity(MemberEntity author, StudyRole studyRole, String content,
-		CafeStudyCommentEntity parentComment, CafeStudyEntity cafeStudy) {
+	private CafeStudyCommentEntity(
+		MemberEntity author, StudyRole studyRole, String content, CafeStudyCommentEntity parentComment,
+		CafeStudyEntity cafeStudy
+	) {
 		this.author = author;
 		this.studyRole = studyRole;
 		this.content = content;
@@ -80,9 +83,31 @@ public class CafeStudyCommentEntity extends BaseEntity {
 		this.cafeStudy = cafeStudy;
 	}
 
+	public Comment toComment() {
+		return Comment.builder()
+			.commentId(new CommentId(this.id))
+			.commentContent(
+				CommentContent.builder()
+					.content(this.content)
+					.build()
+			)
+			.author(
+				MemberIdentity.builder()
+					.id(this.author.getId())
+					.nickname(this.author.getNickname())
+					.build()
+			)
+			.cafeStudyId(this.cafeStudy.getId())
+			.date(
+				DateAudit.builder()
+					.createdDate(getCreatedDate())
+					.modifiedDate(getLastModifiedDate())
+					.build()
+			)
+			.build();
+	}
 
-
-	public ChildComment toComment() {
+	public ChildComment toCommentOld() {
 		return ChildComment.builder()
 			.commentId(new CommentId(this.id))
 			.commentContent(
@@ -127,27 +152,15 @@ public class CafeStudyCommentEntity extends BaseEntity {
 			.build();
 	}
 
-	public static CafeStudyCommentEntity createChildComment(
-			CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+	public static CafeStudyCommentEntity createSubComment(
+		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
 	) {
 		return CafeStudyCommentEntity.builder()
-				.author(new MemberEntity(authorId.getId()))
-				.content(content.getContent())
-				.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
-				.studyRole(studyRole)
-				.cafeStudy(new CafeStudyEntity(studyId.getId()))
-				.build();
-	}
-
-
-
-	public static CafeStudyCommentEntity from(ChildComment comment, StudyRole studyRole) {
-		return CafeStudyCommentEntity.builder()
-			.author(new MemberEntity(comment.getAuthor().getId()))
-			.content(comment.getContent())
-//			.parentComment(new CafeStudyCommentEntity(comment.getParentCommentId().getId()))
+			.author(new MemberEntity(authorId.getId()))
+			.content(content.getContent())
+			.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
 			.studyRole(studyRole)
-			.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
+			.cafeStudy(new CafeStudyEntity(studyId.getId()))
 			.build();
 	}
 

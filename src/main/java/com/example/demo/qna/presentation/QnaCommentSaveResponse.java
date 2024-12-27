@@ -2,7 +2,7 @@ package com.example.demo.qna.presentation;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class QnaCommentSaveResponse {
 	private CommentInfo commentInfo;
 	private WriterInfo writerInfo;
 
-	public static QnaCommentSaveResponse from(ChildComment comment) {
+	public static QnaCommentSaveResponse from(Comment comment) {
 		QnaCommentSaveResponse response = new QnaCommentSaveResponse();
 
 		response.commentInfo = createCommentInfo(comment);
@@ -27,20 +27,44 @@ public class QnaCommentSaveResponse {
 		return response;
 	}
 
-	private static WriterInfo createWriterinfo(ChildComment comment) {
+	// public static QnaCommentSaveResponse from(ChildComment comment) {
+	// 	QnaCommentSaveResponse response = new QnaCommentSaveResponse();
+	//
+	// 	response.commentInfo = createCommentInfo(comment);
+	// 	response.writerInfo = createWriterinfo(comment);
+	//
+	// 	return response;
+	// }
+
+	private static WriterInfo createWriterinfo(Comment comment) {
 		return WriterInfo.builder()
 			.id(comment.getAuthor().getId())
 			.nickname(comment.getAuthor().getNickname())
 			.build();
 	}
 
-	private static CommentInfo createCommentInfo(ChildComment comment) {
+	private static CommentInfo createCommentInfo(Comment comment) {
 		return CommentInfo.builder()
 			.id(comment.getCommentId().getId())
 			.content(comment.getContent())
 			.createdDate(comment.getDate().getCreatedDate())
 			.build();
 	}
+
+	// private static WriterInfo createWriterinfo(ChildComment comment) {
+	// 	return WriterInfo.builder()
+	// 		.id(comment.getAuthor().getId())
+	// 		.nickname(comment.getAuthor().getNickname())
+	// 		.build();
+	// }
+	//
+	// private static CommentInfo createCommentInfo(ChildComment comment) {
+	// 	return CommentInfo.builder()
+	// 		.id(comment.getCommentId().getId())
+	// 		.content(comment.getContent())
+	// 		.createdDate(comment.getDate().getCreatedDate())
+	// 		.build();
+	// }
 
 	@Getter
 	@Setter

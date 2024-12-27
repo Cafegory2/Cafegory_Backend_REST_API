@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentId;
 import com.example.demo.qna.service.QnaQueryService;
 import com.example.demo.qna.service.QnaService;
 import com.example.demo.util.TimeUtil;
@@ -41,10 +43,16 @@ public class QnaController {
 		// 	qnaService.leaveComment(memberId);
 		// }
 
-//		 ChildComment comment = qnaService.leaveComment(request.toChildComment(), memberId.getId());
-		ChildComment comment = qnaService.leaveComment(request.toCommentContent(),
-			request.toParentCommentId(), request.toStudyId(),
-			memberId);
+		//		 ChildComment comment = qnaService.leaveComment(request.toChildComment(), memberId.getId());
+
+		// 		ChildComment comment = qnaService.leaveComment(request.toCommentContent(),
+		// 			request.toParentCommentId(), request.toStudyId(),
+		// 			memberId);
+
+		CommentId commentId = qnaService.leaveComment(request.toCommentContent(), request.toParentCommentId(),
+			request.toStudyId(), memberId);
+
+		Comment comment = qnaQueryService.getComment(commentId);
 
 		QnaCommentSaveResponse response = QnaCommentSaveResponse.from(comment);
 		return ResponseEntity.ok(response);
@@ -58,7 +66,7 @@ public class QnaController {
 		Long memberId = Long.parseLong(userDetails.getUsername());
 		qnaService.editComment(request.getCommentId(), request.toCommentContent(), memberId);
 
-		ChildComment comment = qnaQueryService.getComment(request.getCommentId());
+		ChildComment comment = qnaQueryService.getCommentOld(request.getCommentId());
 		QnaCommentUpdateResponse response = QnaCommentUpdateResponse.from(comment);
 		return ResponseEntity.ok(response);
 	}

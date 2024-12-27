@@ -5,8 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.member.domain.MemberId;
-import com.example.demo.study.domain.StudyId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudyCommentSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.ChildComment;
@@ -25,6 +24,7 @@ import com.example.demo.qna.domain.CommentId;
 import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
@@ -62,8 +62,9 @@ class CommentEditorTest extends ServiceTest {
 
 		ChildComment comment = createComment("댓글 내용", cafeStudy.getId(), member, null);
 		//when
-		Long savedCommentId = sut.saveRootComment(
-				CommentContent.builder().content("테스트 댓글 내용").build(), new StudyId(cafeStudy.getId()), new MemberId(member.getId()));
+		CommentId savedCommentId = sut.saveRootComment(
+			CommentContent.builder().content("테스트 댓글 내용").build(), new StudyId(cafeStudy.getId()),
+			new MemberId(member.getId()));
 		//then
 		assertThat(savedCommentId).isNotNull();
 	}
@@ -84,9 +85,9 @@ class CommentEditorTest extends ServiceTest {
 
 		ChildComment comment = createComment("대댓글 내용", cafeStudy.getId(), coordinator, rootComment.getId());
 		//when
-		Long savedCommentId = sut.saveChildComment(
-				CommentContent.builder().content("테스트 댓글 내용").build(), new ParentCommentId(rootComment.getId()),
-				new StudyId(cafeStudy.getId()), new MemberId(member.getId()));
+		CommentId savedCommentId = sut.saveSubComment(
+			CommentContent.builder().content("테스트 댓글 내용").build(), new ParentCommentId(rootComment.getId()),
+			new StudyId(cafeStudy.getId()), new MemberId(member.getId()));
 		//then
 		assertThat(savedCommentId).isNotNull();
 	}
