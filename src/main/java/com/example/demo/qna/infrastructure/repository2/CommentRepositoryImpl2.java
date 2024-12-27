@@ -43,7 +43,7 @@ public class CommentRepositoryImpl2 implements CommentRepository2 {
 	@Transactional
 	public void edit(CommentContent content, CommentId commentId) {
 		commentJpaRepository.findById(commentId.getId())
-			.orElseThrow(() -> new IllegalCallerException("comment가 존재하지 않습니다."))
+			.orElseThrow(() -> new IllegalArgumentException("comment가 존재하지 않습니다."))
 			.changeContent(content.getContent());
 	}
 
@@ -51,7 +51,7 @@ public class CommentRepositoryImpl2 implements CommentRepository2 {
 	@Transactional
 	public void remove(CommentId commentId, LocalDateTime now) {
 		commentJpaRepository.findById(commentId.getId())
-			.orElseThrow(() -> new IllegalCallerException("comment가 존재하지 않습니다."))
+			.orElseThrow(() -> new IllegalArgumentException("comment가 존재하지 않습니다."))
 			.softDelete(now);
 	}
 }

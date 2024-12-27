@@ -58,9 +58,9 @@ public class MyPageResponse {
 
 	private static MyInfo createMyInfo(Member member) {
 		return MyInfo.builder()
-			.nickname(member.getIdentity().getNickname())
+			.nickname(member.getContent().getNickname())
 			.email(member.getEmail())
-			.profileUrl(member.getImgUrl())
+			.profileUrl(member.getContent().getImgUrl())
 			.bio(member.getBio())
 			.beverageSize(member.getBeverageSize())
 			.createdDate(member.getDateAudit().getCreatedDate())

@@ -5,6 +5,7 @@ import com.example.demo.member.domain.Member;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 
+import com.example.demo.member.infrastructure.repository2.MemberQueryRepository2;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import static com.example.demo.exception.ExceptionType.MEMBER_NOT_FOUND;
 public class MemberReader {
 
 	private final MemberRepository memberRepository;
+	private final MemberQueryRepository2 memberQueryRepository;
 
 	public boolean exists(String email) {
 		return memberRepository.existsByEmail(email);
@@ -24,6 +26,11 @@ public class MemberReader {
 	public MemberEntity read(String email) {
 		return memberRepository.findByEmail(email)
 			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+	}
+
+	public Member read2(String email) {
+		return memberQueryRepository.findByEmail(email)
+				.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
 	}
 
 	public Member read(Long memberId) {

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class MemberAppender {
+public class MemberEditor {
 
 	private final MemberRepository memberRepository;
 

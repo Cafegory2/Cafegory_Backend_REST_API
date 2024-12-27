@@ -4,6 +4,7 @@ import static com.example.demo.trash.implement.tokenmanagerment.TokenClaims.*;
 
 import java.util.Map;
 
+import com.example.demo.member.domain.Member;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.member.implement.MemberReader;
@@ -21,11 +22,10 @@ public class LoginProcessor {
 	private final MemberReader memberReader;
 
 	public JwtToken login(String email) {
-		MemberEntity member = memberReader.read(email);
+		Member member = memberReader.read2(email);
 
 		return jwtCafegoryTokenManager.createAccessAndRefreshToken(
 			Map.of(SUBJECT.getValue(), String.valueOf(member.getId()))
 		);
 	}
-
 }
