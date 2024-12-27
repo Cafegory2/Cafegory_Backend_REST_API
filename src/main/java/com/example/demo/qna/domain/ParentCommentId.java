@@ -9,4 +9,7 @@ public class ParentCommentId {
 
 	private final Long id;
 
+	public boolean isNull() {
+		return id == null;
+	}
 }

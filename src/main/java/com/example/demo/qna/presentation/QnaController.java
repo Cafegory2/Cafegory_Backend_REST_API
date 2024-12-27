@@ -38,20 +38,8 @@ public class QnaController {
 	) {
 		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
 
-		// TODO : 12.27일에 여기부터 할 것!
-		// if (request.getParentCommentId() == null) {
-		// 	qnaService.leaveComment(memberId);
-		// }
-
-		//		 ChildComment comment = qnaService.leaveComment(request.toChildComment(), memberId.getId());
-
-		// 		ChildComment comment = qnaService.leaveComment(request.toCommentContent(),
-		// 			request.toParentCommentId(), request.toStudyId(),
-		// 			memberId);
-
 		CommentId commentId = qnaService.leaveComment(request.toCommentContent(), request.toParentCommentId(),
 			request.toStudyId(), memberId);
-
 		Comment comment = qnaQueryService.getComment(commentId);
 
 		QnaCommentSaveResponse response = QnaCommentSaveResponse.from(comment);

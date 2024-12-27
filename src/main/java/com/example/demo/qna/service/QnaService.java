@@ -30,7 +30,7 @@ public class QnaService {
 	public CommentId leaveComment(
 		CommentContent content, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId
 	) {
-		if (parentCommentId == null) {
+		if (parentCommentId.isNull()) {
 			return commentEditor.saveRootComment(content, studyId, memberId);
 		}
 		return commentEditor.saveSubComment(content, parentCommentId, studyId, memberId);

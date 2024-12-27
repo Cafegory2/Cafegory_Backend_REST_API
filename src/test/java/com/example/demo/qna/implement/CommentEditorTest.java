@@ -66,7 +66,7 @@ class CommentEditorTest extends ServiceTest {
 			CommentContent.builder().content("테스트 댓글 내용").build(), new StudyId(cafeStudy.getId()),
 			new MemberId(member.getId()));
 		//then
-		assertThat(savedCommentId).isNotNull();
+		assertThat(savedCommentId.getId()).isNotNull();
 	}
 
 	@Test
@@ -89,7 +89,7 @@ class CommentEditorTest extends ServiceTest {
 			CommentContent.builder().content("테스트 댓글 내용").build(), new ParentCommentId(rootComment.getId()),
 			new StudyId(cafeStudy.getId()), new MemberId(member.getId()));
 		//then
-		assertThat(savedCommentId).isNotNull();
+		assertThat(savedCommentId.getId()).isNotNull();
 	}
 
 	private ChildComment createComment(
