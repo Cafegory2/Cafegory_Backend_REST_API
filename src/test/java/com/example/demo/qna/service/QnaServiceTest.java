@@ -16,8 +16,10 @@ import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudyCommentSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.CommentId;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
@@ -57,7 +59,9 @@ class QnaServiceTest extends ServiceTest {
 		cafeStudyCommentSaveHelper.saveReplyToParentComment(rootComment, coordinator, StudyRole.COORDINATOR, cafeStudy);
 		CommentContent commentContent = createCommentContent("변경된 댓글 내용");
 		//when, then
-		assertThatThrownBy(() -> sut.editComment(rootComment.getId(), commentContent, member.getId()))
+		assertThatThrownBy(
+			() -> sut.editComment(commentContent, new CommentId(rootComment.getId()), new MemberId(member.getId()))
+		)
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
 	}
@@ -84,7 +88,8 @@ class QnaServiceTest extends ServiceTest {
 			cafeStudy);
 		cafeStudyCommentSaveHelper.saveReplyToParentComment(rootComment, coordinator, StudyRole.COORDINATOR, cafeStudy);
 		//when, then
-		assertThatThrownBy(() -> sut.removeComment(rootComment.getId(), member.getId(), timeUtil.now()))
+		assertThatThrownBy(
+			() -> sut.removeComment(new CommentId(rootComment.getId()), new MemberId(member.getId()), timeUtil.now()))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
 	}

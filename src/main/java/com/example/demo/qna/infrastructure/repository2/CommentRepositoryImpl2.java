@@ -1,5 +1,7 @@
 package com.example.demo.qna.infrastructure.repository2;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.member.domain.MemberId;
@@ -17,11 +19,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentRepositoryImpl2 implements CommentRepository2 {
 
-	private final CafeStudyCommentRepository commentRepository;
+	private final CafeStudyCommentRepository commentJpaRepository;
 
 	@Override
 	public CommentId saveRootComment(CommentContent content, StudyId studyId, MemberId memberId) {
-		return new CommentId(commentRepository.save(
+		return new CommentId(commentJpaRepository.save(
 			CafeStudyCommentEntity.createRootComment(content, memberId, studyId, StudyRole.MEMBER)).getId());
 	}
 
@@ -31,8 +33,22 @@ public class CommentRepositoryImpl2 implements CommentRepository2 {
 	) {
 		//TODO STUDYROLE 수정 필요
 		return new CommentId(
-			commentRepository.save(
+			commentJpaRepository.save(
 					CafeStudyCommentEntity.createSubComment(content, parentCommentId, memberId, studyId, StudyRole.MEMBER))
 				.getId());
+	}
+
+	@Override
+	public void edit(CommentContent content, CommentId commentId) {
+		commentJpaRepository.findById(commentId.getId())
+			.orElseThrow(() -> new IllegalCallerException("comment가 존재하지 않습니다."))
+			.changeContent(content.getContent());
+	}
+
+	@Override
+	public void remove(CommentId commentId, LocalDateTime now) {
+		commentJpaRepository.findById(commentId.getId())
+			.orElseThrow(() -> new IllegalCallerException("comment가 존재하지 않습니다."))
+			.softDelete(now);
 	}
 }

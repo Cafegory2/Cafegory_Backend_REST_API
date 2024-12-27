@@ -10,8 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.MemberIdentity;
-import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
 
 class CommentValidatorTest {
 
@@ -35,19 +36,20 @@ class CommentValidatorTest {
 	@Test
 	@DisplayName("댓글 작성자와 수정을 요청한 사용자가 일치한다.")
 	void success_validate_comment_author_() {
-		ChildComment comment = ChildComment.builder()
+		Comment comment = Comment.builder()
 			.author(MemberIdentity.builder().id(1L).build())
 			.build();
-		assertDoesNotThrow(() -> sut.validateCommentAuthor(comment, 1L));
+
+		assertDoesNotThrow(() -> sut.validateCommentAuthor(comment, new MemberId(1L)));
 	}
 
 	@Test
 	@DisplayName("댓글 작성자와 수정을 요청한 사용자가 일치하지 않는다.")
 	void fail_validate_comment_author2() {
-		ChildComment comment = ChildComment.builder()
+		Comment comment = Comment.builder()
 			.author(MemberIdentity.builder().id(1L).build())
 			.build();
-		assertThatThrownBy(() -> sut.validateCommentAuthor(comment, 2L))
+		assertThatThrownBy(() -> sut.validateCommentAuthor(comment, new MemberId(2L)))
 			.isInstanceOf(CafegoryException.class)
 			.hasMessage(CAFE_STUDY_COMMENT_PERMISSION_DENIED.getErrorMessage());
 	}

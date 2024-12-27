@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
 
 @Component
 public class CommentValidator {
@@ -17,7 +19,13 @@ public class CommentValidator {
 		}
 	}
 
-	public void validateCommentAuthor(ChildComment comment, Long memberId) {
+	public void validateCommentAuthor(Comment comment, MemberId memberId) {
+		if (!comment.isAuthor(memberId.getId())) {
+			throw new CafegoryException(CAFE_STUDY_COMMENT_PERMISSION_DENIED);
+		}
+	}
+
+	public void validateCommentAuthorOld(ChildComment comment, Long memberId) {
 		if (!comment.isAuthor(memberId)) {
 			throw new CafegoryException(CAFE_STUDY_COMMENT_PERMISSION_DENIED);
 		}

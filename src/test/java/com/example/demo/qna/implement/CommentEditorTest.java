@@ -19,6 +19,7 @@ import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.domain.CommentId;
 import com.example.demo.qna.domain.ParentCommentId;
@@ -126,16 +127,25 @@ class CommentEditorTest extends ServiceTest {
 			cafeStudySaveHelper.saveCafeStudy(cafe, coordinator, startDateTime, startDateTime.plusHours(2));
 		CafeStudyCommentEntity commentEntity =
 			cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
-		ChildComment comment = createComment("변경된 댓글 내용", commentEntity.getId());
+		Comment comment = createComment("변경된 댓글 내용", commentEntity.getId());
+		CommentContent content = createCommentContent("변경된 댓글 내용");
+
 		//when
-		sut.edit(comment);
+		sut.edit(content, comment.getCommentId());
+
 		//then
 		CafeStudyCommentEntity result = cafeStudyCommentRepository.findById(commentEntity.getId()).orElse(null);
 		assertThat(result.getContent()).isEqualTo("변경된 댓글 내용");
 	}
 
-	private ChildComment createComment(String content, Long commentId) {
-		return ChildComment.builder()
+	private CommentContent createCommentContent(String content) {
+		return CommentContent.builder()
+			.content(content)
+			.build();
+	}
+
+	private Comment createComment(String content, Long commentId) {
+		return Comment.builder()
 			.commentId(new CommentId(commentId))
 			.commentContent(
 				CommentContent.builder()
@@ -161,7 +171,7 @@ class CommentEditorTest extends ServiceTest {
 		CafeStudyCommentEntity commentEntity =
 			cafeStudyCommentSaveHelper.saveRootComment(member, StudyRole.MEMBER, cafeStudy);
 		//when
-		sut.remove(commentEntity.getId(), timeUtil.now());
+		sut.remove(new CommentId(commentEntity.getId()), timeUtil.now());
 		//then
 		List<CafeStudyCommentEntity> result = cafeStudyCommentRepository.findAll();
 		assertThat(result).hasSize(0);

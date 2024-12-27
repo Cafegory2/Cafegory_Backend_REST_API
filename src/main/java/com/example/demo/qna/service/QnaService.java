@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.domain.MemberId;
-import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.domain.CommentId;
 import com.example.demo.qna.domain.ParentCommentId;
@@ -36,33 +36,25 @@ public class QnaService {
 		return commentEditor.saveSubComment(content, parentCommentId, studyId, memberId);
 	}
 
-	public void editComment2(CommentContent content, CommentId commentId, MemberId memberId) {
-		ChildComment readComment = commentReader.readOld(commentId.getId());
-		commentValidator.validateCommentAuthor(readComment, memberId.getId());
-		validateNoReplies(readComment);
+	public void editComment(CommentContent content, CommentId commentId, MemberId memberId) {
+		Comment comment = commentReader.read(commentId);
+		commentValidator.validateCommentAuthor(comment, memberId);
+		validateNoReplies(commentId);
 
-		commentEditor.edit(readComment);
+		commentEditor.edit(content, commentId);
 	}
 
-	public void editComment(Long commentId, CommentContent content, Long memberId) {
-		ChildComment readComment = commentReader.readOld(commentId);
-		commentValidator.validateCommentAuthor(readComment, memberId);
-		validateNoReplies(readComment);
-
-		commentEditor.edit(readComment);
-	}
-
-	private void validateNoReplies(ChildComment comment) {
-		if (commentReader.existsReplies(comment.getCommentId().getId())) {
-			throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
-		}
-	}
-
-	public void removeComment(Long commentId, Long memberId, LocalDateTime now) {
-		ChildComment readComment = commentReader.readOld(commentId);
-		commentValidator.validateCommentAuthor(readComment, memberId);
-		validateNoReplies(readComment);
+	public void removeComment(CommentId commentId, MemberId memberId, LocalDateTime now) {
+		Comment comment = commentReader.read(commentId);
+		commentValidator.validateCommentAuthor(comment, memberId);
+		validateNoReplies(commentId);
 
 		commentEditor.remove(commentId, now);
+	}
+
+	private void validateNoReplies(CommentId commentId) {
+		if (commentReader.existsReplies(commentId.getId())) {
+			throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
+		}
 	}
 }

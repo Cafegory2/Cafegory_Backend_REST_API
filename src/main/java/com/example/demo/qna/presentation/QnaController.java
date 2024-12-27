@@ -52,9 +52,9 @@ public class QnaController {
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
 		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
-//		Long memberId = Long.parseLong(userDetails.getUsername());
-//		qnaService.editComment(request.getCommentId(), request.toCommentContent(), memberId);
-		qnaService.editComment2(request.toCommentContent(), request.toCommentId(), memberId);
+		//		Long memberId = Long.parseLong(userDetails.getUsername());
+		//		qnaService.editComment(request.getCommentId(), request.toCommentContent(), memberId);
+		qnaService.editComment(request.toCommentContent(), request.toCommentId(), memberId);
 
 		ChildComment comment = qnaQueryService.getCommentOld(request.getCommentId());
 		QnaCommentUpdateResponse response = QnaCommentUpdateResponse.from(comment);
@@ -66,8 +66,8 @@ public class QnaController {
 		@PathVariable Long commentId,
 		@AuthenticationPrincipal UserDetails userDetails
 	) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		qnaService.removeComment(commentId, memberId, timeUtil.now());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+		qnaService.removeComment(new CommentId(commentId), memberId, timeUtil.now());
 
 		return ResponseEntity.ok().build();
 	}
