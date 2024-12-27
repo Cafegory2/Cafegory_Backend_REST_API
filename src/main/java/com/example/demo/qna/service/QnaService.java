@@ -7,11 +7,14 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.implement.CommentEditor;
 import com.example.demo.qna.implement.CommentReader;
 import com.example.demo.qna.implement.CommentValidator;
+import com.example.demo.study.domain.StudyId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +26,10 @@ public class QnaService {
 	private final CommentReader commentReader;
 	private final CommentValidator commentValidator;
 
-	public ChildComment leaveComment(ChildComment comment, Long memberId) {
-		Long commentId = commentEditor.save(comment, memberId);
+	public ChildComment leaveChildComment(
+		CommentContent content, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId
+	) {
+		Long commentId = commentEditor.save(content, parentCommentId, studyId, memberId);
 		return commentReader.read(commentId);
 	}
 

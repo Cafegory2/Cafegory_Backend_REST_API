@@ -8,6 +8,7 @@ import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.domain.RootComment;
+import com.example.demo.study.domain.StudyId;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,5 +47,19 @@ public class QnaCommentSaveRequest {
 			.parentCommentId(new ParentCommentId(parentCommentId))
 			.cafeStudyId(cafeStudyId)
 			.build();
+	}
+
+	public CommentContent toCommentContent() {
+		return CommentContent.builder()
+			.content(content)
+			.build();
+	}
+
+	public ParentCommentId toParentCommentId() {
+		return new ParentCommentId(parentCommentId);
+	}
+
+	public StudyId toStudyId() {
+		return new StudyId(cafeStudyId);
 	}
 }

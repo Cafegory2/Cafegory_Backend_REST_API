@@ -3,9 +3,13 @@ package com.example.demo.qna.infrastructure.repository2;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,15 @@ import lombok.RequiredArgsConstructor;
 public class CommentRepositoryImpl2 implements CommentRepository2 {
 
 	private final CafeStudyCommentRepository commentRepository;
+
+	@Override
+	@Transactional
+	public Long save(
+		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+	) {
+		return commentRepository.save(
+			CafeStudyCommentEntity.from(content, parentCommentId, authorId, studyId, studyRole)).getId();
+	}
 
 	@Override
 	@Transactional

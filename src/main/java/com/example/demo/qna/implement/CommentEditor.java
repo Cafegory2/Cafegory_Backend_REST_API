@@ -8,12 +8,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.qna.domain.ChildComment;
+import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
 import com.example.demo.qna.infrastructure.repository2.CommentRepository2;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
@@ -32,7 +36,30 @@ public class CommentEditor {
 
 	private final CommentValidator commentValidator;
 
-	public Long save(ChildComment comment, Long memberId) {
+	public Long save(
+		CommentContent content, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId
+	) {
+		commentValidator.validateContentNotBlank(content.getContent());
+
+		MemberEntity author = memberRepository.findById(memberId.getId())
+			.orElseThrow(() -> new CafegoryException(MEMBER_NOT_FOUND));
+		CafeStudyCommentEntity parentComment = findParentCommentEntity(parentCommentId.getId());
+		CafeStudyEntity cafeStudy = cafeStudyRepository.findById(studyId.getId())
+			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+
+		CafeStudyCommentEntity commentEntity = createCafeStudyCommentEntity(content.getContent(), author, parentComment,
+			cafeStudy);
+
+		// TODO: StudyReader Entity 도입할 때 수정할 것
+		return commentRepository2.save(comment, StudyRole.MEMBER);
+		// CafeStudyCommentEntity saved = commentRepository.save(commentEntity);
+
+		// return saved.getId();
+	}
+
+	public Long save(
+		ChildComment comment, Long memberId
+	) {
 		commentValidator.validateContentNotBlank(comment.getContent());
 
 		MemberEntity author = memberRepository.findById(memberId)

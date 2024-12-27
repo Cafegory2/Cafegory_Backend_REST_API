@@ -18,12 +18,15 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.domain.DateAudit;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.domain.RootComment;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.trash.implement.BaseEntity;
@@ -108,6 +111,18 @@ public class CafeStudyCommentEntity extends BaseEntity {
 			.parentComment(null)
 			.studyRole(studyRole)
 			.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
+			.build();
+	}
+
+	public static CafeStudyCommentEntity from(
+		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+	) {
+		return CafeStudyCommentEntity.builder()
+			.author(new MemberEntity(authorId.getId()))
+			.content(content.getContent())
+			.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
+			.studyRole(studyRole)
+			.cafeStudy(new CafeStudyEntity(studyId.getId()))
 			.build();
 	}
 

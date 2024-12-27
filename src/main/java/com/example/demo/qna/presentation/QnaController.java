@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.service.QnaQueryService;
 import com.example.demo.qna.service.QnaService;
@@ -33,13 +34,17 @@ public class QnaController {
 	public ResponseEntity<QnaCommentSaveResponse> leaveComment(
 		@Validated @RequestBody QnaCommentSaveRequest request, @AuthenticationPrincipal UserDetails userDetails
 	) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
 
 		// TODO : 12.27일에 여기부터 할 것!
 		// if (request.getParentCommentId() == null) {
 		// 	qnaService.leaveComment(memberId);
 		// }
-		ChildComment comment = qnaService.leaveComment(request.toChildComment(), memberId);
+
+		// ChildComment comment = qnaService.leaveChildComment(request.toChildComment(), memberId);
+		ChildComment comment = qnaService.leaveChildComment(request.toCommentContent(),
+			request.toParentCommentId(), request.toStudyId(),
+			memberId);
 
 		QnaCommentSaveResponse response = QnaCommentSaveResponse.from(comment);
 		return ResponseEntity.ok(response);
