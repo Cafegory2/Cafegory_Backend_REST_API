@@ -80,6 +80,8 @@ public class CafeStudyCommentEntity extends BaseEntity {
 		this.cafeStudy = cafeStudy;
 	}
 
+
+
 	public ChildComment toComment() {
 		return ChildComment.builder()
 			.commentId(new CommentId(this.id))
@@ -114,23 +116,36 @@ public class CafeStudyCommentEntity extends BaseEntity {
 			.build();
 	}
 
-	public static CafeStudyCommentEntity from(
-		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+	public static CafeStudyCommentEntity createRootComment(
+		CommentContent content, MemberId authorId, StudyId studyId, StudyRole studyRole
 	) {
 		return CafeStudyCommentEntity.builder()
 			.author(new MemberEntity(authorId.getId()))
 			.content(content.getContent())
-			.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
 			.studyRole(studyRole)
 			.cafeStudy(new CafeStudyEntity(studyId.getId()))
 			.build();
 	}
 
+	public static CafeStudyCommentEntity createChildComment(
+			CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+	) {
+		return CafeStudyCommentEntity.builder()
+				.author(new MemberEntity(authorId.getId()))
+				.content(content.getContent())
+				.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
+				.studyRole(studyRole)
+				.cafeStudy(new CafeStudyEntity(studyId.getId()))
+				.build();
+	}
+
+
+
 	public static CafeStudyCommentEntity from(ChildComment comment, StudyRole studyRole) {
 		return CafeStudyCommentEntity.builder()
 			.author(new MemberEntity(comment.getAuthor().getId()))
 			.content(comment.getContent())
-			.parentComment(new CafeStudyCommentEntity(comment.getParentCommentId().getId()))
+//			.parentComment(new CafeStudyCommentEntity(comment.getParentCommentId().getId()))
 			.studyRole(studyRole)
 			.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
 			.build();

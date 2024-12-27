@@ -41,8 +41,8 @@ public class QnaController {
 		// 	qnaService.leaveComment(memberId);
 		// }
 
-		// ChildComment comment = qnaService.leaveChildComment(request.toChildComment(), memberId);
-		ChildComment comment = qnaService.leaveChildComment(request.toCommentContent(),
+//		 ChildComment comment = qnaService.leaveComment(request.toChildComment(), memberId.getId());
+		ChildComment comment = qnaService.leaveComment(request.toCommentContent(),
 			request.toParentCommentId(), request.toStudyId(),
 			memberId);
 

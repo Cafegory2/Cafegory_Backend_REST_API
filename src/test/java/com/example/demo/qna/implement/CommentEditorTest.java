@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.member.domain.MemberId;
+import com.example.demo.study.domain.StudyId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,8 @@ class CommentEditorTest extends ServiceTest {
 
 		ChildComment comment = createComment("댓글 내용", cafeStudy.getId(), member, null);
 		//when
-		Long savedCommentId = sut.save(comment, member.getId());
+		Long savedCommentId = sut.saveRootComment(
+				CommentContent.builder().content("테스트 댓글 내용").build(), new StudyId(cafeStudy.getId()), new MemberId(member.getId()));
 		//then
 		assertThat(savedCommentId).isNotNull();
 	}
@@ -81,7 +84,9 @@ class CommentEditorTest extends ServiceTest {
 
 		ChildComment comment = createComment("대댓글 내용", cafeStudy.getId(), coordinator, rootComment.getId());
 		//when
-		Long savedCommentId = sut.save(comment, member.getId());
+		Long savedCommentId = sut.saveChildComment(
+				CommentContent.builder().content("테스트 댓글 내용").build(), new ParentCommentId(rootComment.getId()),
+				new StudyId(cafeStudy.getId()), new MemberId(member.getId()));
 		//then
 		assertThat(savedCommentId).isNotNull();
 	}

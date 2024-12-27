@@ -9,9 +9,9 @@ import com.example.demo.study.domain.StudyRole;
 
 public interface CommentRepository2 {
 
-	Long save(
-		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
-	);
-
 	Long save(ChildComment comment, StudyRole studyRole);
+
+	Long saveRootComment(CommentContent content, StudyId studyId, MemberId memberId);
+
+	Long saveChildComment(CommentContent comment, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId);
 }
