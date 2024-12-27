@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.domain.MemberContent;
+import com.example.demo.member.domain.MemberId;
+import com.example.demo.member.implement.MemberEditor;
 import com.example.demo.member.implement.MemberReader;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.trash.dto.oauth2.OAuth2Profile;
 import com.example.demo.trash.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.trash.implement.login.LoginProcessor;
@@ -28,6 +31,7 @@ public class LoginServiceImpl implements LoginService {
 	private final AwsS3Client awsS3Client;
 
 	private final MemberReader memberReader;
+	private final MemberEditor memberEditor;
 
 	private final LoginProcessor loginProcessor;
 	private final SignupProcessor signupProcessor;
@@ -51,11 +55,18 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	private void updateMemberRefreshTokenAndProfile(OAuth2Profile profile, JwtToken token) {
-		MemberEntity member = memberReader.read(profile.getEmailAddress());
-		member.setRefreshToken(token.getRefreshToken());
+		Member member = memberReader.read2(profile.getEmailAddress());
 
 		String profileUrl = uploadProfileImageToS3(profile.getProfileImgUrl());
-		member.changeProfileUrl(profileUrl);
+
+		memberEditor.updateRefreshToken(new MemberId(member.getId()), token.getRefreshToken());
+		memberEditor.edit(createMemberContent(profileUrl), new MemberId(member.getId()));
+	}
+
+	private MemberContent createMemberContent(String imgUrl) {
+		return MemberContent.builder()
+			.imgUrl(imgUrl)
+			.build();
 	}
 
 	private String uploadProfileImageToS3(String imageUrl) {

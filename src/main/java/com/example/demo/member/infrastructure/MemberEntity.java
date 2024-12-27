@@ -8,10 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.example.demo.member.domain.*;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.domain.DateAudit;
+import com.example.demo.member.domain.BeverageSize;
+import com.example.demo.member.domain.Member;
+import com.example.demo.member.domain.MemberContent;
+import com.example.demo.member.domain.Role;
 import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
@@ -28,69 +31,79 @@ import lombok.Setter;
 @Table(name = "member")
 public class MemberEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "member_id")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "member_id")
+	private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
-    private String nickname;
+	private String nickname;
 
-    @Column(unique = true)
-    private String email;
+	@Column(unique = true)
+	private String email;
 
-    private String profileUrl;
-    private String bio;
-    private int participationCount;
+	private String profileUrl;
+	private String bio;
+	private int participationCount;
 
-    @Enumerated(EnumType.STRING)
-    private BeverageSize beverageSize;
+	@Enumerated(EnumType.STRING)
+	private BeverageSize beverageSize;
 
-    private String refreshToken;
+	private String refreshToken;
 
-    public void changeProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
+	public void changeProfileUrl(String profileUrl) {
+		this.profileUrl = profileUrl;
+	}
 
-    public MemberEntity(Long id) {
-        this.id = id;
-    }
+	public MemberEntity(Long id) {
+		this.id = id;
+	}
 
-    @Builder
-    private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio,
-                         int participationCount, BeverageSize beverageSize, String refreshToken) {
-        this.role = role;
-        this.nickname = nickname;
-        this.email = email;
-        this.profileUrl = profileUrl;
-        this.bio = bio;
-        this.participationCount = participationCount;
-        this.beverageSize = beverageSize;
-        this.refreshToken = refreshToken;
-    }
+	public MemberEntity(Member member) {
+		this.role = member.getRole();
+		this.nickname = member.getContent().getNickname();
+		this.email = member.getEmail();
+		this.profileUrl = member.getContent().getImgUrl();
+		this.bio = member.getBio();
+		this.beverageSize = member.getBeverageSize();
+		this.refreshToken = member.getRefreshToken();
+	}
 
-    public Member toMember() {
-        return Member.builder()
-                .id(this.id)
-                .content(
-                        MemberContent.builder()
-                                .nickname(this.nickname)
-                                .imgUrl(this.profileUrl)
-                                .build()
-                )
-                .role(this.role)
-                .email(this.email)
-                .bio(this.bio)
-                .beverageSize(this.beverageSize)
-                .dateAudit(
-                        DateAudit.builder()
-                                .createdDate(this.getCreatedDate())
-                                .modifiedDate(this.getLastModifiedDate())
-                                .build()
-                )
-                .refreshToken(this.refreshToken)
-                .build();
-    }
+	@Builder
+	private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio,
+		int participationCount, BeverageSize beverageSize, String refreshToken) {
+		this.role = role;
+		this.nickname = nickname;
+		this.email = email;
+		this.profileUrl = profileUrl;
+		this.bio = bio;
+		this.participationCount = participationCount;
+		this.beverageSize = beverageSize;
+		this.refreshToken = refreshToken;
+	}
+
+	public Member toMember() {
+		return Member.builder()
+			.id(this.id)
+			.content(
+				MemberContent.builder()
+					.nickname(this.nickname)
+					.imgUrl(this.profileUrl)
+					.build()
+			)
+			.role(this.role)
+			.email(this.email)
+			.bio(this.bio)
+			.beverageSize(this.beverageSize)
+			.dateAudit(
+				DateAudit.builder()
+					.createdDate(this.getCreatedDate())
+					.modifiedDate(this.getLastModifiedDate())
+					.build()
+			)
+			.refreshToken(this.refreshToken)
+			.build();
+	}
 }
