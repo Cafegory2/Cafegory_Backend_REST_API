@@ -7,8 +7,8 @@ import lombok.Getter;
 @Builder
 public class Participant {
 
-	private Long id;
-	private Long studyId;
+	private StudyMemberId id;
+	private StudyId studyId;
 	private StudyRole studyRole;
 	private ParticipantContent content;
 }

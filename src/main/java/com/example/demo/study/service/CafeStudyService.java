@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.example.demo.cafe.domain.CafeId;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.BusinessHourValidator;
 import com.example.demo.cafe.implement.CafeReader;
@@ -44,7 +44,7 @@ public class CafeStudyService {
 		List<Study> participantStudies = studyReader.readUpcomingBy(memberId, now);
 		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
 
-		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId()));
+		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId().getId()));
 		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
@@ -59,7 +59,7 @@ public class CafeStudyService {
 		List<StudyMemberId> participantIds = studyMemberReader.readParticipantIdsBy(studyId);
 		studyValidator.validateCafeStudyMembersPresent(study, participantIds);
 
-		studyEditor.removeWithCascade(new StudyId(study.getId()), memberId, now);
+		studyEditor.removeWithCascade(new StudyId(study.getId().getId()), memberId, now);
 	}
 
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {

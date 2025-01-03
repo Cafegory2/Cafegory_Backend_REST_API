@@ -97,7 +97,7 @@ public class CafeStudyCommentEntity extends BaseEntity {
 					.nickname(this.author.getNickname())
 					.build()
 			)
-			.cafeStudyId(this.cafeStudy.getId())
+			.studyId(new StudyId(this.cafeStudy.getId()))
 			.date(
 				DateAudit.builder()
 					.createdDate(getCreatedDate())
@@ -137,7 +137,7 @@ public class CafeStudyCommentEntity extends BaseEntity {
 			.content(comment.getContent())
 			.parentComment(null)
 			.studyRole(studyRole)
-			.cafeStudy(new CafeStudyEntity(comment.getCafeStudyId()))
+			.cafeStudy(new CafeStudyEntity(comment.getStudyId().getId()))
 			.build();
 	}
 

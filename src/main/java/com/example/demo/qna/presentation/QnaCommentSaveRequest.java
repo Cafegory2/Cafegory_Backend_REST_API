@@ -33,7 +33,7 @@ public class QnaCommentSaveRequest {
 					.content(content)
 					.build()
 			)
-			.cafeStudyId(cafeStudyId)
+			.studyId(new StudyId(cafeStudyId))
 			.build();
 	}
 

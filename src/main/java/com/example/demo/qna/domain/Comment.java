@@ -2,8 +2,8 @@ package com.example.demo.qna.domain;
 
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberIdentity;
-
 import com.example.demo.study.domain.StudyId;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,7 +14,7 @@ public class Comment {
 	private CommentId id;
 	private CommentContent commentContent;
 	private ParentCommentId parentCommentId;
-	private Long cafeStudyId;
+	private StudyId studyId;
 	private MemberIdentity author;
 
 	private DateAudit date;

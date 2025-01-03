@@ -2,13 +2,13 @@ package com.example.demo.spy;
 
 import java.util.UUID;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberContent;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.implement.MemberEditor;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.trash.dto.oauth2.OAuth2Profile;
 import com.example.demo.trash.dto.oauth2.OAuth2TokenRequest;
@@ -50,16 +50,16 @@ public class SpyLoginService implements LoginService {
 		JwtToken token = loginOrSignup(profile);
 
 		Member member = memberReader.read(profile.getEmailAddress());
-		memberEditor.updateRefreshToken(new MemberId(member.getId()), token.getRefreshToken());
+		memberEditor.updateRefreshToken(new MemberId(member.getId().getId()), token.getRefreshToken());
 
 		String filename = UUID.randomUUID().toString();
 		memberEditor.edit(
-				MemberContent.builder()
-						.imgUrl(filename)
-						.build()
-				, new MemberId(member.getId())
+			MemberContent.builder()
+				.imgUrl(filename)
+				.build()
+			, new MemberId(member.getId().getId())
 		);
-//		member.changeProfileUrl(filename);
+		//		member.changeProfileUrl(filename);
 
 		return token;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Schedule;
@@ -45,7 +46,7 @@ public class CafeStudyCreateRequest {
 	public Study toStudy() {
 		return Study.builder()
 			.name(this.name)
-			.cafeId(this.cafeId)
+			.cafeId(new CafeId(this.cafeId))
 			.schedule(
 				Schedule.builder()
 					.startDateTime(this.startDateTime)

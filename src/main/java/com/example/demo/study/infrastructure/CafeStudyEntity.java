@@ -4,17 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.trash.implement.BaseEntity;
@@ -71,29 +87,29 @@ public class CafeStudyEntity extends BaseEntity {
 		this.id = studyId;
 	}
 
-//	public CafeStudyEntity(Study study, CafeEntity cafe, MemberEntity coordinator) {
-//		this.name = study.getName();
-//		this.cafe = cafe;
-//		this.coordinator = coordinator;
-//		this.studyPeriod = StudyPeriod.builder()
-//				.startDateTime(study.getStartDateTime())
-//				.endDateTime(study.getEndDateTime())
-//				.build();
-//		this.memberComms = study.getMemberComms();
-//		this.maxParticipants = study.getMaxParticipantCount();
-//		this.introduction = study.getIntroduction();
-//		this.views = 0;
-//		this.recruitmentStatus = RecruitmentStatus.OPEN;
-//	}
+	//	public CafeStudyEntity(Study study, CafeEntity cafe, MemberEntity coordinator) {
+	//		this.name = study.getName();
+	//		this.cafe = cafe;
+	//		this.coordinator = coordinator;
+	//		this.studyPeriod = StudyPeriod.builder()
+	//				.startDateTime(study.getStartDateTime())
+	//				.endDateTime(study.getEndDateTime())
+	//				.build();
+	//		this.memberComms = study.getMemberComms();
+	//		this.maxParticipants = study.getMaxParticipantCount();
+	//		this.introduction = study.getIntroduction();
+	//		this.views = 0;
+	//		this.recruitmentStatus = RecruitmentStatus.OPEN;
+	//	}
 
 	public CafeStudyEntity(Study study, Long memberId) {
 		this.name = study.getName();
-		this.cafe = new CafeEntity(study.getCafeId());
+		this.cafe = new CafeEntity(study.getCafeId().getId());
 		this.coordinator = new MemberEntity(memberId);
 		this.studyPeriod = StudyPeriod.builder()
-				.startDateTime(study.getStartDateTime())
-				.endDateTime(study.getEndDateTime())
-				.build();
+			.startDateTime(study.getStartDateTime())
+			.endDateTime(study.getEndDateTime())
+			.build();
 		this.memberComms = study.getMemberComms();
 		this.maxParticipants = study.getMaxParticipantCount();
 		this.introduction = study.getIntroduction();
@@ -120,12 +136,12 @@ public class CafeStudyEntity extends BaseEntity {
 
 	public Study toStudy() {
 		return Study.builder()
-			.id(this.id)
+			.id(new StudyId(this.id))
 			.name(this.name)
-			.cafeId(this.cafe.getId())
+			.cafeId(new CafeId(this.cafe.getId()))
 			.coordinator(
 				Coordinator.builder()
-					.id(this.coordinator.getId())
+					.id(new MemberId(this.coordinator.getId()))
 					.nickname(this.coordinator.getNickname())
 					.build())
 			.schedule(

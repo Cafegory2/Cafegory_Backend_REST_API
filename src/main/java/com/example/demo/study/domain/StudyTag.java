@@ -7,5 +7,5 @@ import lombok.Getter;
 @Builder
 public class StudyTag {
 
-	private Long tagId;
+	private final Long id;
 }

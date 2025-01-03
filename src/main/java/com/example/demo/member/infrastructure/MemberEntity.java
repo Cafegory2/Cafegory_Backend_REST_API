@@ -14,6 +14,7 @@ import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.BeverageSize;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberContent;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.Role;
 import com.example.demo.trash.implement.BaseEntity;
 
@@ -86,7 +87,8 @@ public class MemberEntity extends BaseEntity {
 
 	public Member toMember() {
 		return Member.builder()
-			.id(this.id)
+			.id(new MemberId(this.id))
+			// .id(this.id)
 			.content(
 				MemberContent.builder()
 					.nickname(this.nickname)

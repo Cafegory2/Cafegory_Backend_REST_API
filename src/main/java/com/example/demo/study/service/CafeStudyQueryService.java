@@ -1,10 +1,10 @@
 package com.example.demo.study.service;
 
-import com.example.demo.cafe.domain.CafeId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.study.domain.ParticipantCount;
 import com.example.demo.study.domain.Study;
@@ -40,7 +40,7 @@ public class CafeStudyQueryService {
 		Study study = studyReader.read(studyId);
 		ViewCount viewCount = studyReader.readViewCountBy(studyId);
 		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(studyId);
-		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId()));
+		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId().getId()));
 
 		return CafeStudyDetailResponse.of(cafe, study, viewCount, participantCount);
 	}

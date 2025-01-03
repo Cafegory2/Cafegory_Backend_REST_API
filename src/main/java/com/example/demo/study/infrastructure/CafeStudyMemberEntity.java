@@ -20,6 +20,8 @@ import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Attendance;
 import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.ParticipantContent;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.trash.implement.BaseEntity;
 
@@ -70,8 +72,8 @@ public class CafeStudyMemberEntity extends BaseEntity {
 
 	public Participant toParticipant() {
 		return Participant.builder()
-			.id(this.id)
-			.studyId(this.cafeStudy.getId())
+			.id(new StudyMemberId(this.id))
+			.studyId(new StudyId(this.cafeStudy.getId()))
 			.studyRole(this.studyRole)
 			.content(ParticipantContent.builder()
 				.attendance(this.attendance)

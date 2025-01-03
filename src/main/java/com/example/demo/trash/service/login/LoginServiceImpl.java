@@ -59,8 +59,8 @@ public class LoginServiceImpl implements LoginService {
 
 		String profileUrl = uploadProfileImageToS3(profile.getProfileImgUrl());
 
-		memberEditor.updateRefreshToken(new MemberId(member.getId()), token.getRefreshToken());
-		memberEditor.edit(createMemberContent(profileUrl), new MemberId(member.getId()));
+		memberEditor.updateRefreshToken(new MemberId(member.getId().getId()), token.getRefreshToken());
+		memberEditor.edit(createMemberContent(profileUrl), new MemberId(member.getId().getId()));
 	}
 
 	private MemberContent createMemberContent(String imgUrl) {

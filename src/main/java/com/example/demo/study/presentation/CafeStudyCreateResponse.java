@@ -32,8 +32,8 @@ public class CafeStudyCreateResponse {
 	public static CafeStudyCreateResponse from(Study study) {
 		return CafeStudyCreateResponse.builder()
 			.name(study.getName())
-			.cafeId(study.getCafeId())
-			.coordinatorId(study.getCoordinator().getId())
+			.cafeId(study.getCafeId().getId())
+			.coordinatorId(study.getCoordinator().getId().getId())
 			.startDateTime(study.getStartDateTime())
 			.endDateTime(study.getEndDateTime())
 			.memberComms(study.getMemberComms())

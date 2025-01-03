@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.domain.DateAudit;
 
 import lombok.Builder;
@@ -13,9 +14,9 @@ import lombok.Getter;
 @Builder
 public class Study {
 
-	private Long id;
+	private StudyId id;
 	private String name;
-	private Long cafeId;
+	private CafeId cafeId;
 	private Coordinator coordinator;
 	private Schedule schedule;
 	private MemberComms memberComms;

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import com.example.demo.study.domain.StudyMemberId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,9 +13,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyMemberId;
 
 class StudyValidatorTest {
 
@@ -99,7 +100,7 @@ class StudyValidatorTest {
 
 	private Study createStudy() {
 		Coordinator coordinator = Coordinator.builder()
-			.id(1L)
+			.id(new MemberId(1L))
 			.build();
 
 		return Study.builder()

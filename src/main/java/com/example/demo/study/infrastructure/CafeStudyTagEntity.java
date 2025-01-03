@@ -45,7 +45,7 @@ public class CafeStudyTagEntity extends BaseEntity {
 
 	public StudyTag toStudyTag() {
 		return StudyTag.builder()
-			.tagId(id)
+			.id(id)
 			.build();
 	}
 }

@@ -5,13 +5,13 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.study.domain.StudyTagId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyTagId;
 import com.example.demo.study.infrastructure.repository2.StudyMemberRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyRepository2;
@@ -53,7 +53,8 @@ public class StudyEditor {
 	@Transactional
 	public void removeWithCascade(StudyId studyId, MemberId candidateCoordinatorId, LocalDateTime now) {
 		Study study = studyQueryRepository2.findById(studyId);
-		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId.getId(), study.getCoordinator().getId());
+		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId.getId(),
+			study.getCoordinator().getId().getId());
 
 		studyMemberRepository2.remove(studyId, candidateCoordinatorId, now);
 		studyStudyTagRepository2.remove(studyId, now);

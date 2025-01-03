@@ -31,7 +31,7 @@ public class StudyMemberReader {
 	// study에 참여한 참여자를 가져온다.
 	public List<StudyMemberId> readParticipantIdsBy(StudyId studyId) {
 		return studyMemberQueryRepository2.findByStudy_Id(studyId).stream()
-			.map(participant -> new StudyMemberId(participant.getId()))
+			.map(participant -> new StudyMemberId(participant.getId().getId()))
 			.collect(Collectors.toList());
 	}
 

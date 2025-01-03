@@ -9,7 +9,7 @@ import lombok.Getter;
 @Builder
 public class Member {
 
-	private Long id;
+	private MemberId id;
 	private MemberContent content;
 	private Role role;
 	private String email;

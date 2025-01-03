@@ -18,7 +18,6 @@ import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
-import com.example.demo.study.infrastructure.StudyQueryDslRepository;
 import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class StudyReader {
 	public List<Study> readUpcomingBy(MemberId memberId, LocalDateTime now) {
 		List<Participant> upcomings = studyMemberReader.readMyUpcomingsBy(memberId);
 		List<StudyId> studyIds = upcomings.stream()
-				.map(participant -> new StudyId(participant.getStudyId())).collect(Collectors.toList());
+			.map(participant -> new StudyId(participant.getStudyId().getId())).collect(Collectors.toList());
 
 		return studyQueryRepository2.findUpcomingsWithMemberBy(studyIds, now);
 	}
