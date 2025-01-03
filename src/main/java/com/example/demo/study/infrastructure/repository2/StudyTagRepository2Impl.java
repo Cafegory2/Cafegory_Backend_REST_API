@@ -3,6 +3,7 @@ package com.example.demo.study.infrastructure.repository2;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.domain.StudyTagId;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.study.domain.CafeStudyTagType;
@@ -20,21 +21,9 @@ public class StudyTagRepository2Impl implements StudyTagRepository2 {
 	private final CafeStudyTagRepository cafeStudyTagJpaRepository;
 
 	@Override
-	public List<StudyTag> findByTags(List<CafeStudyTagType> tags) {
-		return cafeStudyTagJpaRepository.findByTags(tags).stream()
-			.map(CafeStudyTagEntity::toStudyTag)
-			.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<Long> countByTags(List<CafeStudyTagType> tags) {
-		return cafeStudyTagJpaRepository.countByTags(tags);
-	}
-
-	@Override
-	public List<StudyId> countByTags2(List<CafeStudyTagType> tags) {
+	public List<StudyTagId> countByTags(List<CafeStudyTagType> tags) {
 		return cafeStudyTagJpaRepository.countByTags(tags).stream()
-			.map(StudyId::new)
+			.map(StudyTagId::new)
 			.collect(Collectors.toList());
 	}
 }

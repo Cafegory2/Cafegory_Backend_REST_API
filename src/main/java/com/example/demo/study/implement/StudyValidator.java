@@ -6,6 +6,7 @@ import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.study.domain.StudyMemberId;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
@@ -76,9 +77,9 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateCafeStudyMembersPresent(Study study, List<Long> participantsIds) {
+	public void validateCafeStudyMembersPresent(Study study, List<StudyMemberId> participantsIds) {
 		boolean isNotCoordinatorOnly = participantsIds.stream()
-			.anyMatch(participantId -> !study.isManagedBy(participantId));
+			.anyMatch(participantId -> !study.isManagedBy(participantId.getId()));
 
 		if (isNotCoordinatorOnly) {
 			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);

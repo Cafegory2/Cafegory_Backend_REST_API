@@ -12,8 +12,5 @@ public interface StudyRepository2 {
 
 	StudyId save(Study study, MemberId memberId);
 
-	//TODO 이름 cascade 변경
-	//	public Study saveWithCascade(Study study, Long memberId);
-
-	void deleteWithCascade(Long studyId, Long memberId, LocalDateTime now);
+	void deleteWithCascade(StudyId studyId, MemberId memberId, LocalDateTime now);
 }

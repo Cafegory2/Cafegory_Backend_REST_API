@@ -34,9 +34,8 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	}
 
 	@Override
-	@Transactional
-	public void deleteWithCascade(Long studyId, Long memberId, LocalDateTime now) {
-		studyJpaRepository.findById(studyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND)).softDelete(now);
+	public void deleteWithCascade(StudyId studyId, MemberId memberId, LocalDateTime now) {
+		studyJpaRepository.findById(studyId.getId())
+				.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND)).softDelete(now);
 	}
 }

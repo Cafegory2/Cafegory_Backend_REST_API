@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import com.example.demo.study.domain.StudyMemberId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,8 +75,7 @@ class StudyValidatorTest {
 	@Test
 	@DisplayName("스터디에 카공장만 존재한다")
 	void validate_study_member_is_coordinator_only() {
-		Long coordinatorId = 1L;
-		List<Long> participantsIds = List.of(coordinatorId);
+		List<StudyMemberId> participantsIds = List.of(new StudyMemberId(1L));
 
 		Study study = createStudy();
 
@@ -87,8 +87,8 @@ class StudyValidatorTest {
 	@Test
 	@DisplayName("스터디에 카공장외에 다른 참가자도 존재한다")
 	void validate_study_member_is_not_coordinator_only() {
-		Long coordinatorId = 1L;
-		List<Long> participantsIds = List.of(coordinatorId, 2L);
+		StudyMemberId coordinatorId = new StudyMemberId(1L);
+		List<StudyMemberId> participantsIds = List.of(coordinatorId, new StudyMemberId(2L));
 		Study study = createStudy();
 
 		assertThatThrownBy(

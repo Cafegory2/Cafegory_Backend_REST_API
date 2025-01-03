@@ -5,6 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.study.domain.StudyTagId;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,23 +34,12 @@ public class StudyEditor {
 	private final StudyValidator studyValidator;
 
 	@Transactional
-	public Long saveWithCascade(Study study, Long memberId) {
-		validateStudyDetails(study);
-
-		Long savedStudyId = studyRepository2.save(study, memberId);
-		List<Long> studyTagIds = studyTagRepository2.countByTags(study.getTags());
-		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
-
-		return savedStudyId;
-	}
-
-	@Transactional
-	public StudyId saveWithCascade2(Study study, MemberId memberId) {
+	public StudyId saveWithCascade(Study study, MemberId memberId) {
 		validateStudyDetails(study);
 
 		StudyId savedStudyId = studyRepository2.save(study, memberId);
-		List<StudyId> studyTagIds = studyTagRepository2.countByTags2(study.getTags());
-		studyStudyTagRepository2.saveAll2(savedStudyId, studyTagIds);
+		List<StudyTagId> studyTagIds = studyTagRepository2.countByTags(study.getTags());
+		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
 
 		return savedStudyId;
 	}
@@ -61,9 +51,9 @@ public class StudyEditor {
 	}
 
 	@Transactional
-	public void removeWithCascade(Long studyId, Long candidateCoordinatorId, LocalDateTime now) {
+	public void removeWithCascade(StudyId studyId, MemberId candidateCoordinatorId, LocalDateTime now) {
 		Study study = studyQueryRepository2.findById(studyId);
-		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId, study.getCoordinator().getId());
+		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId.getId(), study.getCoordinator().getId());
 
 		studyMemberRepository2.remove(studyId, candidateCoordinatorId, now);
 		studyStudyTagRepository2.remove(studyId, now);

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.domain.StudyStudyTagId;
+import com.example.demo.study.domain.StudyTagId;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.study.domain.StudyId;
@@ -21,22 +23,12 @@ public class StudyStudyTagRepositoryImpl2 implements StudyStudyTagRepository2 {
 	private final CafeStudyCafeStudyTagRepository studyStudyTagRepository;
 
 	@Override
-	public List<Long> saveAll(Long studyId, List<Long> studyTagIds) {
-		List<CafeStudyCafeStudyTagEntity> savedTags = studyStudyTagRepository.saveAll(
+	public List<StudyStudyTagId> saveAll(StudyId studyId, List<StudyTagId> studyTagIds) {
+		List<CafeStudyCafeStudyTagEntity> studyStudyTags = studyStudyTagRepository.saveAll(
 			buildCafeStudyTags(studyId, studyTagIds));
 
-		return savedTags.stream()
-			.map(CafeStudyCafeStudyTagEntity::getId)
-			.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<StudyId> saveAll2(StudyId studyId, List<StudyId> studyTagIds) {
-		List<CafeStudyCafeStudyTagEntity> savedTags = studyStudyTagRepository.saveAll(
-			buildCafeStudyTags2(studyId, studyTagIds));
-
-		return savedTags.stream()
-			.map(tag -> new StudyId((tag.getId())))
+		return studyStudyTags.stream()
+			.map(studyStudyTag -> new StudyStudyTagId((studyStudyTag.getId())))
 			.collect(Collectors.toList());
 	}
 
@@ -45,17 +37,13 @@ public class StudyStudyTagRepositoryImpl2 implements StudyStudyTagRepository2 {
 			.forEach(studyTag -> studyTag.softDelete(now));
 	}
 
-	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags(Long studyId, List<Long> studyTagIds) {
-		return studyTagIds.stream()
-			.map(studyTagId -> CafeStudyCafeStudyTagEntity.builder()
-				.cafeStudy(new CafeStudyEntity(studyId))
-				.cafeStudyTag(new CafeStudyTagEntity(studyTagId))
-				.build()
-			)
-			.collect(Collectors.toList());
+	@Override
+	public void remove(StudyId studyId, LocalDateTime now) {
+		studyStudyTagRepository.findByCafeStudy_Id(studyId.getId())
+				.forEach(studyTag -> studyTag.softDelete(now));
 	}
 
-	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags2(StudyId studyId, List<StudyId> studyTagIds) {
+	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags(StudyId studyId, List<StudyTagId> studyTagIds) {
 		return studyTagIds.stream()
 			.map(studyTagId -> CafeStudyCafeStudyTagEntity.builder()
 				.cafeStudy(new CafeStudyEntity(studyId.getId()))

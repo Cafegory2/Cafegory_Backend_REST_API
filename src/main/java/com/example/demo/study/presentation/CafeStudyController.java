@@ -54,7 +54,7 @@ public class CafeStudyController {
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
-		StudyId studyId = cafeStudyService.createStudy2(memberId, timeUtil.now(), request.toStudy());
+		StudyId studyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
 		Study study = cafeStudyQueryService.getStudy(studyId);
 
 		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);
@@ -64,8 +64,8 @@ public class CafeStudyController {
 	@DeleteMapping("/{cafeStudyId:[0-9]+}")
 	public ResponseEntity<Void> delete(@PathVariable Long cafeStudyId,
 		@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+		cafeStudyService.deleteStudy(memberId, new StudyId(cafeStudyId), timeUtil.now());
 
 		return ResponseEntity.ok().build();
 	}

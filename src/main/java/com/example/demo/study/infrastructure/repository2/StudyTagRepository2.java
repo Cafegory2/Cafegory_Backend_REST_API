@@ -4,13 +4,9 @@ import java.util.List;
 
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.StudyId;
-import com.example.demo.study.domain.StudyTag;
+import com.example.demo.study.domain.StudyTagId;
 
 public interface StudyTagRepository2 {
 
-	List<StudyTag> findByTags(List<CafeStudyTagType> tags);
-
-	List<Long> countByTags(List<CafeStudyTagType> tags);
-
-	List<StudyId> countByTags2(List<CafeStudyTagType> tags);
+	List<StudyTagId> countByTags(List<CafeStudyTagType> tags);
 }

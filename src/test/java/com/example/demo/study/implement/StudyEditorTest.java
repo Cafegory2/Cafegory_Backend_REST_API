@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.member.domain.MemberId;
+import com.example.demo.study.domain.StudyId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ class StudyEditorTest extends ServiceTest {
 		//when
 		//then
 		assertDoesNotThrow(
-			() -> sut.removeWithCascade(study.getId(), coordinator.getId(), timeUtil.now())
+			() -> sut.removeWithCascade(new StudyId(study.getId()), new MemberId(coordinator.getId()), timeUtil.now())
 		);
 	}
 }

@@ -58,10 +58,10 @@ public class StudyMemberRepositoryImpl2 implements StudyMemberRepository2 {
 	}
 
 	@Override
-	public void remove(Long studyId, Long memberId, LocalDateTime now) {
-		studyMemberJpaRepository.findByCafeStudy_IdAndMember_Id(studyId, memberId)
-			.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND))
-			.softDelete(now);
+	public void remove(StudyId studyId, MemberId memberId, LocalDateTime now) {
+		studyMemberJpaRepository.findByCafeStudy_IdAndMember_Id(studyId.getId(), memberId.getId())
+				.orElseThrow(() -> new CafegoryException(STUDY_MEMBER_NOT_FOUND))
+				.softDelete(now);
 	}
 
 	private CafeStudyMemberEntity createStudyMember(

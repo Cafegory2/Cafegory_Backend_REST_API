@@ -4,12 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyStudyTagId;
+import com.example.demo.study.domain.StudyTagId;
 
 public interface StudyStudyTagRepository2 {
 
-	List<Long> saveAll(Long studyId, List<Long> studyTagIds);
+	List<StudyStudyTagId> saveAll(StudyId studyId, List<StudyTagId> studyTagIds);
 
-	List<StudyId> saveAll2(StudyId studyId, List<StudyId> studyTagIds);
+	void remove(StudyId studyId, LocalDateTime now);
 
-	void remove(Long studyId, LocalDateTime now);
 }

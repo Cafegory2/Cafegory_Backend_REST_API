@@ -2,6 +2,7 @@ package com.example.demo.study.infrastructure.repository2;
 
 import static com.example.demo.exception.ExceptionType.*;
 
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import org.springframework.stereotype.Repository;
@@ -24,11 +25,10 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository2 {
 	private final CafeStudyRepository studyJpaRepository;
 
 	@Override
-	public Study findById(Long studyId) {
-		return studyJpaRepository.findById(studyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
-			.toStudy();
-	}
+	public Study findById(StudyId studyId) {
+		return studyJpaRepository.findById(studyId.getId())
+				.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
+				.toStudy();	}
 
 	@Override
 	public Optional<Study> findWithMember(Long studyId) {

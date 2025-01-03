@@ -1,6 +1,7 @@
 package com.example.demo.study.infrastructure.repository2;
 
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 
 import java.time.LocalDateTime;
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface StudyQueryRepository2 {
 
-	Study findById(Long studyId);
+	Study findById(StudyId studyId);
 
 	Optional<Study> findWithMember(Long studyId);
 

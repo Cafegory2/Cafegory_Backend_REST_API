@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.study.domain.StudyMemberId;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -36,25 +37,8 @@ public class CafeStudyService {
 	private final StudyMemberReader studyMemberReader;
 	private final StudyMemberEditor studyMemberEditor;
 
-	//TODO 카공 태그 저장하는 로직 추가 필요
 	@Transactional
-	public Long createStudy(Long memberId, LocalDateTime now, Study study) {
-		validateStudyCreation(now, study.getSchedule().getStartDateTime());
-		List<Study> participantStudies = studyReader.readUpcomingBy(memberId, now);
-		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
-
-		Cafe cafe = cafeReader.read(study.getCafeId());
-		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
-		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
-
-		Long savedStudyId = studyEditor.saveWithCascade(study, memberId);
-		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
-
-		return savedStudyId;
-	}
-
-	@Transactional
-	public StudyId createStudy2(MemberId memberId, LocalDateTime now, Study study) {
+	public StudyId createStudy(MemberId memberId, LocalDateTime now, Study study) {
 		validateStudyCreation(now, study.getSchedule().getStartDateTime());
 		List<Study> participantStudies = studyReader.readUpcomingBy(memberId.getId(), now);
 		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
@@ -63,18 +47,18 @@ public class CafeStudyService {
 		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
-		StudyId savedStudyId = studyEditor.saveWithCascade2(study, memberId);
+		StudyId savedStudyId = studyEditor.saveWithCascade(study, memberId);
 		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
 
 		return savedStudyId;
 	}
 
-	public void deleteStudy(Long memberId, Long cafeStudyId, LocalDateTime now) {
+	public void deleteStudy(MemberId memberId, StudyId cafeStudyId, LocalDateTime now) {
 		Study study = studyReader.read(cafeStudyId);
-		List<Long> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
+		List<StudyMemberId> participantIds = studyMemberReader.readParticipantIdsBy2(cafeStudyId);
 		studyValidator.validateCafeStudyMembersPresent(study, participantIds);
 
-		studyEditor.removeWithCascade(study.getId(), memberId, now);
+		studyEditor.removeWithCascade(new StudyId(study.getId()), memberId, now);
 	}
 
 	private void validateStudyCreation(LocalDateTime now, LocalDateTime startDateTime) {

@@ -68,9 +68,4 @@ public class CafeStudyMemberEntity extends BaseEntity {
 			.studyId(this.cafeStudy.getId())
 			.build();
 	}
-
-	// public boolean isLeader(Member member) {
-	// 	return this.id.getMemberId().equals(member.getId());
-	// }
-
 }

@@ -13,5 +13,5 @@ public interface StudyMemberRepository2 {
 
 	Participant save(MemberId memberId, StudyId studyId, StudyRole studyRole);
 
-	void remove(Long studyId, Long memberId, LocalDateTime now);
+	void remove(StudyId studyId, MemberId memberId, LocalDateTime now);
 }
