@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class StudyReader {
 
 	private final StudyMemberReader studyMemberReader;

@@ -1,8 +1,5 @@
 package com.example.demo.study.infrastructure;
 
-import static com.example.demo.cafe.infrastructure.QCafeEntity.*;
-import static com.example.demo.study.infrastructure.QCafeStudyEntity.*;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,6 +20,9 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.example.demo.cafe.infrastructure.QCafeEntity.cafeEntity;
+import static com.example.demo.study.infrastructure.QCafeStudyEntity.cafeStudyEntity;
 
 @Repository
 @RequiredArgsConstructor

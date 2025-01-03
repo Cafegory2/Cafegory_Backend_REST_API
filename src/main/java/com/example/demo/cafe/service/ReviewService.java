@@ -15,7 +15,6 @@ public class ReviewService {
 
     private final ReviewReader reviewReader;
 
-    @Transactional(readOnly = true)
     public List<Review> getReviews(MemberId memberId) {
         return reviewReader.readBy(memberId);
     }
