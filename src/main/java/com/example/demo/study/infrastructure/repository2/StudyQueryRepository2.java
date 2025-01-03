@@ -5,6 +5,7 @@ import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.trash.dto.SliceResponse;
 
 import java.time.LocalDateTime;
@@ -21,5 +22,5 @@ public interface StudyQueryRepository2 {
 
 	List<Study> findUpcomingsWithMemberBy(List<StudyId> studyIds, LocalDateTime now);
 
-	SliceResponse<CafeStudyEntity> findCafeStudies(CafeStudySearchListRequest request);
+	SliceResponse<CafeStudySearchListResponse> findCafeStudies(CafeStudySearchListRequest request);
 }

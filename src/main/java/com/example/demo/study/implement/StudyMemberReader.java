@@ -36,8 +36,10 @@ public class StudyMemberReader {
 	}
 
 	public ParticipantCount readParticipantCountBy(StudyId studyId) {
+		List<StudyMemberId> studyMemberIds = readParticipantIdsBy(studyId);
+
 		return ParticipantCount.builder()
-			.currentCount(readParticipantIdsBy(studyId).size())
-			.build();
+				.currentCount(studyMemberIds.size())
+				.build();
 	}
 }

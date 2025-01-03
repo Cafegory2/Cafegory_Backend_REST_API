@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-// TODO: Builder 사용해야 됨!!!
 @NoArgsConstructor
 @AllArgsConstructor
 public class JwtToken {

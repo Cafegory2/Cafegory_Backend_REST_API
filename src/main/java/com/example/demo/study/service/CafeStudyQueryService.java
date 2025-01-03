@@ -32,15 +32,14 @@ public class CafeStudyQueryService {
 	public SliceResponse<CafeStudySearchListResponse> searchCafeStudiesByDynamicFilter(
 		CafeStudySearchListRequest request
 	) {
-		SliceResponse<CafeStudyEntity> response = studyReader.searchCafeStudies(request);
-		return response.map(CafeStudySearchListResponse::from);
+		return studyReader.searchCafeStudies(request);
 	}
 
 	public CafeStudyDetailResponse getCafeStudyDetail(StudyId studyId) {
 		Study study = studyReader.read(studyId);
 		ViewCount viewCount = studyReader.readViewCountBy(studyId);
 		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(studyId);
-		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId().getId()));
+		Cafe cafe = cafeReader.read(study.getCafeId());
 
 		return CafeStudyDetailResponse.of(cafe, study, viewCount, participantCount);
 	}

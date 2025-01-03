@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +45,7 @@ public class StudyReader {
 		return studyQueryRepository2.findUpcomingsWithMemberBy(studyIds, now);
 	}
 
-	public SliceResponse<CafeStudyEntity> searchCafeStudies(CafeStudySearchListRequest request) {
+	public SliceResponse<CafeStudySearchListResponse> searchCafeStudies(CafeStudySearchListRequest request) {
 		return studyQueryRepository2.findCafeStudies(request);
 	}
 

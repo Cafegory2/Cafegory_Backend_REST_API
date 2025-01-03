@@ -24,7 +24,6 @@ public class CommentEditor {
 
 	public CommentId saveRootComment(CommentContent content, StudyId studyId, MemberId memberId) {
 		commentValidator.validateContentNotBlank(content.getContent());
-		// TODO: StudyReader Entity 도입할 때 수정할 것
 		return commentRepository2.saveRootComment(content, studyId, memberId);
 	}
 

@@ -5,6 +5,8 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.cafe.domain.CafeId;
+import com.example.demo.study.domain.StudyContent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,20 +36,20 @@ public class StudyEditor {
 	private final StudyValidator studyValidator;
 
 	@Transactional
-	public StudyId saveWithCascade(Study study, MemberId memberId) {
-		validateStudyDetails(study);
+	public StudyId saveWithCascade(StudyContent content, CafeId cafeId, MemberId memberId) {
+		validateStudyDetails(content);
 
-		StudyId savedStudyId = studyRepository2.save(study, memberId);
-		List<StudyTagId> studyTagIds = studyTagRepository2.countByTags(study.getTags());
+		StudyId savedStudyId = studyRepository2.save(content, cafeId, memberId);
+		List<StudyTagId> studyTagIds = studyTagRepository2.countByTags(content.getTags());
 		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
 
 		return savedStudyId;
 	}
 
-	private void validateStudyDetails(Study study) {
-		studyValidator.validateEmptyOrWhiteSpace(study.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
-		studyValidator.validateNameLength(study.getName());
-		studyValidator.validateMaxParticipants(study.getMaxParticipantCount());
+	private void validateStudyDetails(StudyContent content) {
+		studyValidator.validateEmptyOrWhiteSpace(content.getName(), STUDY_ONCE_NAME_EMPTY_OR_WHITESPACE);
+		studyValidator.validateNameLength(content.getName());
+		studyValidator.validateMaxParticipants(content.getMaxParticipantCount());
 	}
 
 	@Transactional

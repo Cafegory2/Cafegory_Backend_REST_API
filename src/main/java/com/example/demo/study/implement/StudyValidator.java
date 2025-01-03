@@ -6,6 +6,7 @@ import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.StudyMemberId;
 import org.springframework.stereotype.Component;
 
@@ -61,10 +62,10 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateStudyScheduleOverlap(Study newStudy, List<Study> participantStudies) {
+	public void validateStudyScheduleOverlap(Schedule newSchedule, List<Study> participantStudies) {
 		boolean isOverlapped = participantStudies.stream()
-			.map(Study::getSchedule)
-			.anyMatch(schedule -> schedule.overlaps(newStudy.getSchedule()));
+			.map(study -> study.getContent().getSchedule())
+			.anyMatch(schedule -> schedule.overlaps(newSchedule));
 
 		if (isOverlapped) {
 			throw new CafegoryException(STUDY_ONCE_CONFLICT_TIME);

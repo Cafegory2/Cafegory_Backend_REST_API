@@ -54,7 +54,8 @@ public class CafeStudyController {
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
-		StudyId studyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
+		StudyId studyId = cafeStudyService.createStudy(
+				memberId, timeUtil.now(), request.toStudyContent(), request.toCafeId());
 		Study study = cafeStudyQueryService.getStudy(studyId);
 
 		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);

@@ -24,19 +24,21 @@ public class CommentRepositoryImpl2 implements CommentRepository2 {
 
 	@Override
 	public CommentId saveRootComment(CommentContent content, StudyId studyId, MemberId memberId) {
-		return new CommentId(commentJpaRepository.save(
-			CafeStudyCommentEntity.createRootComment(content, memberId, studyId, StudyRole.MEMBER)).getId());
+		CafeStudyCommentEntity commentEntity = commentJpaRepository.save(
+				CafeStudyCommentEntity.createRootComment(content, memberId, studyId, StudyRole.MEMBER));
+
+		return new CommentId(commentEntity.getId());
 	}
 
 	@Override
 	public CommentId saveSubComment(
-		CommentContent content, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId
+			CommentContent content, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId
 	) {
 		//TODO STUDYROLE 수정 필요
-		return new CommentId(
-			commentJpaRepository.save(
-					CafeStudyCommentEntity.createSubComment(content, parentCommentId, memberId, studyId, StudyRole.MEMBER))
-				.getId());
+		CafeStudyCommentEntity commentEntity = commentJpaRepository.save(
+				CafeStudyCommentEntity.createSubComment(content, parentCommentId, memberId, studyId, StudyRole.MEMBER));
+
+		return new CommentId(commentEntity.getId());
 	}
 
 	@Override

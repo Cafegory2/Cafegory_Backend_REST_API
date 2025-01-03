@@ -8,12 +8,7 @@ import java.util.stream.Collectors;
 
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.domain.Coordinator;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.ParticipantCount;
-import com.example.demo.study.domain.Study;
-import com.example.demo.study.domain.ViewCount;
+import com.example.demo.study.domain.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -85,19 +80,21 @@ public class CafeStudyDetailResponse {
 	private static CafeStudyInfo createCafeStudyInfo(
 		Study study, ViewCount viewCount, ParticipantCount participantCount
 	) {
-		return CafeStudyInfo.builder()
+        StudyContent content = study.getContent();
+
+        return CafeStudyInfo.builder()
 			.id(study.getId().getId())
-			.name(study.getName())
+			.name(content.getName())
 			.createdDate(study.getDateAudit().getCreatedDate())
 			.modifiedDate(study.getDateAudit().getModifiedDate())
-			.startDateTime(study.getSchedule().getStartDateTime())
-			.endDateTime(study.getSchedule().getEndDateTime())
-			.maximumParticipants(study.getMaxParticipantCount())
+			.startDateTime(content.getSchedule().getStartDateTime())
+			.endDateTime(content.getSchedule().getEndDateTime())
+			.maximumParticipants(content.getMaxParticipantCount())
 			.currentParticipants(participantCount.getCurrentCount())
-			.memberComms(study.getMemberComms())
+			.memberComms(content.getMemberComms())
 			.views(viewCount.getTotalViews())
-			.introduction(study.getIntroduction())
-			.tag(study.getTags())
+			.introduction(content.getIntroduction())
+			.tag(content.getTags())
 			.build();
 	}
 

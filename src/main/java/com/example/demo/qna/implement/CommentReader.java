@@ -17,8 +17,6 @@ public class CommentReader {
 
 	private final CommentQueryRepository2 commentQueryRepository2;
 
-	//TODO 트랜잭션 필요 없는 것 같은데?
-	@Transactional(readOnly = true)
 	public Comment read(CommentId commentId) {
 		return commentQueryRepository2.findWithMember(commentId)
 				.orElseThrow(() -> new CafegoryException(ExceptionType.STUDY_ONCE_COMMENT_NOT_FOUND));

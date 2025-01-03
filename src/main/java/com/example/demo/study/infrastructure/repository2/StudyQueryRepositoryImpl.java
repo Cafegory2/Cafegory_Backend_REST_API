@@ -4,15 +4,12 @@ import static com.example.demo.exception.ExceptionType.*;
 
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
-import com.example.demo.study.infrastructure.StudyQueryDslRepository;
+import com.example.demo.study.infrastructure.*;
 import com.example.demo.trash.dto.SliceResponse;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.CafeStudyRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,7 +54,8 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository2 {
 	}
 
 	@Override
-	public SliceResponse<CafeStudyEntity> findCafeStudies(CafeStudySearchListRequest request) {
-		return studyQueryDslRepository.findCafeStudies(request);
+	public SliceResponse<CafeStudySearchListResponse> findCafeStudies(CafeStudySearchListRequest request) {
+		SliceResponse<CafeStudyEntity> response = studyQueryDslRepository.findCafeStudies(request);
+		return response.map(CafeStudySearchListResponse::from);
 	}
 }

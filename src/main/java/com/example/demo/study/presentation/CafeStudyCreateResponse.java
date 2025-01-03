@@ -6,6 +6,7 @@ import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.domain.Study;
 
+import com.example.demo.study.domain.StudyContent;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,19 +31,21 @@ public class CafeStudyCreateResponse {
 	private RecruitmentStatus recruitmentStatus;
 
 	public static CafeStudyCreateResponse from(Study study) {
+		StudyContent content = study.getContent();
+
 		return CafeStudyCreateResponse.builder()
-			.name(study.getName())
-			.cafeId(study.getCafeId().getId())
-			.coordinatorId(study.getCoordinator().getId().getId())
-			.startDateTime(study.getStartDateTime())
-			.endDateTime(study.getEndDateTime())
-			.memberComms(study.getMemberComms())
-			.maxParticipants(study.getMaxParticipantCount())
-			.nowParticipants(1)
-			.introduction(study.getIntroduction())
-			.views(0)
-			.recruitmentStatus(study.getRecruitmentStatus())
-			.build();
+				.name(content.getName())
+				.cafeId(study.getCafeId().getId())
+				.coordinatorId(study.getCoordinator().getId().getId())
+				.startDateTime(content.getStartDateTime())
+				.endDateTime(content.getEndDateTime())
+				.memberComms(content.getMemberComms())
+				.maxParticipants(content.getMaxParticipantCount())
+				.nowParticipants(1)
+				.introduction(content.getIntroduction())
+				.views(0)
+				.recruitmentStatus(study.getRecruitmentStatus())
+				.build();
 	}
 
 	@Builder

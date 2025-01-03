@@ -6,7 +6,7 @@ import com.example.demo.member.domain.MemberId;
 
 public interface MemberRepository2 {
 
-	MemberId save(Member member);
+	MemberId save(Member content);
 
 	void update(MemberContent content, MemberId memberId);
 

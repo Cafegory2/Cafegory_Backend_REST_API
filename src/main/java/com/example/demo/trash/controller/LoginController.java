@@ -25,15 +25,8 @@ public class LoginController {
 		JwtToken jwtToken = loginService.socialLogin(kakaoOAuth2LoginRequest);
 		return ResponseEntity.ok(jwtToken);
 	}
-	//
-	//    @GetMapping("/naver")
-	//    public CafegoryToken naver(@RequestParam String code, @RequestParam String state) {
-	//        NaverOAuth2TokenRequest naverOAuth2LoginRequest = new NaverOAuth2TokenRequest(code, state);
-	//        return naverOAuth2Service.joinOrLogin(naverOAuth2LoginRequest);
-	//    }
-
-	//    @PostMapping("/refresh")
-	//    public CafegoryToken refresh(@RequestBody RefreshRequest refreshRequest) {
-	//        return authService.refreshCafegoryToken(refreshRequest.getRefreshToken());
-	//    }
+	// 인증인가
+	// 컨트롤러
+	// Member, study, qna, review, cafe,
+	// DB모듈
 }

@@ -6,10 +6,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 
 import com.example.demo.cafe.domain.CafeId;
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.Schedule;
-import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.*;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -43,21 +40,41 @@ public class CafeStudyCreateRequest {
 		this.tags = tags;
 	}
 
-	public Study toStudy() {
-		return Study.builder()
-			.name(this.name)
-			.cafeId(new CafeId(this.cafeId))
-			.schedule(
-				Schedule.builder()
-					.startDateTime(this.startDateTime)
-					.endDateTime(this.endDateTime)
-					.build()
-			)
-			.maxParticipantCount(this.maxParticipants)
-			.memberComms(this.memberComms)
-			.introduction(this.introduction)
-			.tags(this.tags)
-			.build();
+	public StudyContent toStudyContent() {
+		return StudyContent.builder()
+				.name(this.name)
+				.schedule(
+						Schedule.builder()
+								.startDateTime(this.startDateTime)
+								.endDateTime(this.endDateTime)
+								.build()
+				)
+				.memberComms(this.memberComms)
+				.maxParticipantCount(this.maxParticipants)
+				.introduction(this.introduction)
+				.tags(this.tags)
+				.build();
 	}
+
+	public CafeId toCafeId() {
+		return new CafeId(this.cafeId);
+	}
+
+//	public Study toStudy() {
+//		return Study.builder()
+//			.name(this.name)
+//			.cafeId(new CafeId(this.cafeId))
+//			.schedule(
+//				Schedule.builder()
+//					.startDateTime(this.startDateTime)
+//					.endDateTime(this.endDateTime)
+//					.build()
+//			)
+//			.maxParticipantCount(this.maxParticipants)
+//			.memberComms(this.memberComms)
+//			.introduction(this.introduction)
+//			.tags(this.tags)
+//			.build();
+//	}
 }
 
