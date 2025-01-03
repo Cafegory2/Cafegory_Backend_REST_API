@@ -38,7 +38,7 @@ public class CafeStudyQueryService {
 	public CafeStudyDetailResponse getCafeStudyDetail(Long cafeStudyId) {
 		Study study = studyReader.read(cafeStudyId);
 		ViewCount viewCount = studyReader.readViewCountBy(cafeStudyId);
-		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(cafeStudyId);
+		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(new StudyId(cafeStudyId));
 		Cafe cafe = cafeReader.read(study.getCafeId());
 
 		return CafeStudyDetailResponse.of(cafe, study, viewCount, participantCount);

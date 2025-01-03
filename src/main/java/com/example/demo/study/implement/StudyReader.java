@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
@@ -43,7 +44,7 @@ public class StudyReader {
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}
 
-	public List<Study> readUpcomingBy(Long memberId, LocalDateTime now) {
+	public List<Study> readUpcomingBy(MemberId memberId, LocalDateTime now) {
 		List<Participant> upcomings = studyMemberReader.readMyUpcomingsBy(memberId);
 		List<Long> studyIds = upcomings.stream().map(Participant::getStudyId).collect(Collectors.toList());
 

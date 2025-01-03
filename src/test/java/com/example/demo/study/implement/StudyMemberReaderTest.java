@@ -5,12 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.domain.MemberComms;
-import com.example.demo.study.domain.Schedule;
-import com.example.demo.study.domain.Study;
-import com.example.demo.study.infrastructure.CafeStudyRepository;
-import com.example.demo.study.service.CafeStudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +16,8 @@ import com.example.demo.helper.CafeStudyMemberSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 
@@ -54,7 +50,7 @@ class StudyMemberReaderTest extends ServiceTest {
 
 		cafeStudyMemberSaveHelper.saveCafeStudyMember(cafeStudy, member);
 		//when
-		int result = sut.loadParticipantCount(cafeStudy.getId());
+		int result = sut.loadParticipantCount(new StudyId(cafeStudy.getId()));
 		//then
 		assertThat(result).isEqualTo(2);
 	}
@@ -72,7 +68,7 @@ class StudyMemberReaderTest extends ServiceTest {
 
 		cafeStudyMemberSaveHelper.saveCafeStudyMember(cafeStudy, member);
 		//when
-		List<Long> result = sut.readParticipantIdsBy(cafeStudy.getId());
+		List<StudyMemberId> result = sut.readParticipantIdsBy(new StudyId(cafeStudy.getId()));
 		//then
 
 		assertThat(result).hasSize(2);

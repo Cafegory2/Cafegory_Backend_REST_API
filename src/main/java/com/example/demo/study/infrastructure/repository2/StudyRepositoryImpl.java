@@ -1,13 +1,10 @@
 package com.example.demo.study.infrastructure.repository2;
 
-import static com.example.demo.exception.ExceptionType.*;
-
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
@@ -36,6 +33,7 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	@Override
 	public void deleteWithCascade(StudyId studyId, MemberId memberId, LocalDateTime now) {
 		studyJpaRepository.findById(studyId.getId())
-				.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND)).softDelete(now);
+			.orElseThrow(() -> new IllegalArgumentException("해당 카공을 찾을 수 없습니다."))
+			.softDelete(now);
 	}
 }
