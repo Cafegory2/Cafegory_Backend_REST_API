@@ -11,4 +11,5 @@ public class ProfileMapper {
 	public WelcomeProfileResponse toWelcomeProfileResponse(MemberEntity member) {
 		return new WelcomeProfileResponse(member.getNickname(), member.getProfileUrl());
 	}
+
 }

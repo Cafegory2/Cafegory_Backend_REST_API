@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudyCafeStudyTagRepository;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
@@ -29,6 +30,16 @@ public class StudyStudyTagRepositoryImpl2 implements StudyStudyTagRepository2 {
 			.collect(Collectors.toList());
 	}
 
+	@Override
+	public List<StudyId> saveAll2(StudyId studyId, List<StudyId> studyTagIds) {
+		List<CafeStudyCafeStudyTagEntity> savedTags = studyStudyTagRepository.saveAll(
+			buildCafeStudyTags2(studyId, studyTagIds));
+
+		return savedTags.stream()
+			.map(tag -> new StudyId((tag.getId())))
+			.collect(Collectors.toList());
+	}
+
 	public void remove(Long studyId, LocalDateTime now) {
 		studyStudyTagRepository.findByCafeStudy_Id(studyId)
 			.forEach(studyTag -> studyTag.softDelete(now));
@@ -39,6 +50,16 @@ public class StudyStudyTagRepositoryImpl2 implements StudyStudyTagRepository2 {
 			.map(studyTagId -> CafeStudyCafeStudyTagEntity.builder()
 				.cafeStudy(new CafeStudyEntity(studyId))
 				.cafeStudyTag(new CafeStudyTagEntity(studyTagId))
+				.build()
+			)
+			.collect(Collectors.toList());
+	}
+
+	private List<CafeStudyCafeStudyTagEntity> buildCafeStudyTags2(StudyId studyId, List<StudyId> studyTagIds) {
+		return studyTagIds.stream()
+			.map(studyTagId -> CafeStudyCafeStudyTagEntity.builder()
+				.cafeStudy(new CafeStudyEntity(studyId.getId()))
+				.cafeStudyTag(new CafeStudyTagEntity(studyTagId.getId()))
 				.build()
 			)
 			.collect(Collectors.toList());

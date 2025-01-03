@@ -7,6 +7,7 @@ import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.study.domain.ParticipantCount;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.implement.StudyMemberReader;
 import com.example.demo.study.implement.StudyReader;
@@ -44,6 +45,10 @@ public class CafeStudyQueryService {
 	}
 
 	public Study getStudy(Long studyId) {
+		return studyReader.read(studyId);
+	}
+
+	public Study getStudy(StudyId studyId) {
 		return studyReader.read(studyId);
 	}
 }

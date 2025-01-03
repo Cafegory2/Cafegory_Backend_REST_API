@@ -8,7 +8,9 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.infrastructure.repository2.StudyMemberRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
 import com.example.demo.study.infrastructure.repository2.StudyRepository2;
@@ -37,6 +39,17 @@ public class StudyEditor {
 		Long savedStudyId = studyRepository2.save(study, memberId);
 		List<Long> studyTagIds = studyTagRepository2.countByTags(study.getTags());
 		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
+
+		return savedStudyId;
+	}
+
+	@Transactional
+	public StudyId saveWithCascade2(Study study, MemberId memberId) {
+		validateStudyDetails(study);
+
+		StudyId savedStudyId = studyRepository2.save(study, memberId);
+		List<StudyId> studyTagIds = studyTagRepository2.countByTags2(study.getTags());
+		studyStudyTagRepository2.saveAll2(savedStudyId, studyTagIds);
 
 		return savedStudyId;
 	}

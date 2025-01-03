@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Participant;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
-import com.example.demo.study.infrastructure.CafeStudyRepository;
 import com.example.demo.study.infrastructure.StudyMemberRepository;
 import com.example.demo.study.infrastructure.repository2.StudyMemberRepository2;
 
@@ -28,6 +28,12 @@ public class StudyMemberEditor {
 	private final StudyMemberRepository2 studyMemberRepository2;
 
 	public Long save(Long memberId, Long studyId, StudyRole studyRole) {
+		Participant participant = studyMemberRepository2.save(memberId, studyId, studyRole);
+
+		return participant.getId();
+	}
+
+	public Long save(MemberId memberId, StudyId studyId, StudyRole studyRole) {
 		Participant participant = studyMemberRepository2.save(memberId, studyId, studyRole);
 
 		return participant.getId();

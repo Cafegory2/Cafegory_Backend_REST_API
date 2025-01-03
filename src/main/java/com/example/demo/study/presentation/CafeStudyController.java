@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.study.service.CafeStudyQueryService;
@@ -51,8 +53,8 @@ public class CafeStudyController {
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		Long studyId = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+		StudyId studyId = cafeStudyService.createStudy2(memberId, timeUtil.now(), request.toStudy());
 		Study study = cafeStudyQueryService.getStudy(studyId);
 
 		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);

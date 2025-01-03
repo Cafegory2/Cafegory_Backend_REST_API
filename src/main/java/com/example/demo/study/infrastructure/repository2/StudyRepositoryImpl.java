@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyRepository;
 
@@ -24,6 +26,11 @@ public class StudyRepositoryImpl implements StudyRepository2 {
 	@Transactional
 	public Long save(Study study, Long memberId) {
 		return studyJpaRepository.save(new CafeStudyEntity(study, memberId)).getId();
+	}
+
+	@Override
+	public StudyId save(Study study, MemberId memberId) {
+		return new StudyId(studyJpaRepository.save(new CafeStudyEntity(study, memberId.getId())).getId());
 	}
 
 	@Override

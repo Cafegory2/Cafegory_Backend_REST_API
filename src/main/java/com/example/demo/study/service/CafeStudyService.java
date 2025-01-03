@@ -12,7 +12,9 @@ import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.BusinessHourValidator;
 import com.example.demo.cafe.implement.CafeReader;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.StudyEditor;
 import com.example.demo.study.implement.StudyMemberEditor;
@@ -46,6 +48,22 @@ public class CafeStudyService {
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
 		Long savedStudyId = studyEditor.saveWithCascade(study, memberId);
+		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
+
+		return savedStudyId;
+	}
+
+	@Transactional
+	public StudyId createStudy2(MemberId memberId, LocalDateTime now, Study study) {
+		validateStudyCreation(now, study.getSchedule().getStartDateTime());
+		List<Study> participantStudies = studyReader.readUpcomingBy(memberId.getId(), now);
+		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
+
+		Cafe cafe = cafeReader.read(study.getCafeId());
+		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
+		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
+
+		StudyId savedStudyId = studyEditor.saveWithCascade2(study, memberId);
 		studyMemberEditor.save(memberId, savedStudyId, StudyRole.COORDINATOR);
 
 		return savedStudyId;

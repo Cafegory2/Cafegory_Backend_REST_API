@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.cafe.domain.Review;
 import com.example.demo.cafe.service.ReviewService;
 import com.example.demo.member.domain.Member;
+import com.example.demo.member.domain.MemberContent;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.member.service.ProfileService;
 
@@ -28,18 +30,19 @@ public class ProfileController {
 
 	@GetMapping("/welcome")
 	public ResponseEntity<WelcomeProfileResponse> welcome(@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		WelcomeProfileResponse response = profileService.getWelcomeProfile(memberId);
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+		MemberContent memberContent = profileService.getWelcomeProfile(memberId);
+		WelcomeProfileResponse response = WelcomeProfileResponse.of(memberContent);
 
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/mypage")
 	public ResponseEntity<MyPageResponse> mypage(@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
 
 		Member member = memberService.getMember(memberId);
-		List<Review> reviews = reviewService.getReviews(memberId);
+		List<Review> reviews = reviewService.getReviews(memberId.getId());
 
 		MyPageResponse response = MyPageResponse.of(member, reviews);
 		return ResponseEntity.ok(response);

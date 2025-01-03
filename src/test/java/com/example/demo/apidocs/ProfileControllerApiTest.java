@@ -3,8 +3,6 @@ package com.example.demo.apidocs;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.infrastructure.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,7 @@ import com.example.demo.helper.ReviewCafeTagSaveHelper;
 import com.example.demo.helper.ReviewSaveHelper;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.trash.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 

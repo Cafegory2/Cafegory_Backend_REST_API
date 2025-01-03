@@ -8,9 +8,11 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.study.domain.Participant;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
@@ -33,6 +35,20 @@ public class StudyMemberRepositoryImpl2 implements StudyMemberRepository2 {
 			.orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
 
 		CafeStudyEntity studyEntity = studyJpaRepository.findById(studyId)
+			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
+
+		CafeStudyMemberEntity studyMemberEntity = createStudyMember(memberEntity, studyEntity, studyRole);
+
+		return studyMemberJpaRepository.save(studyMemberEntity)
+			.toParticipant();
+	}
+
+	@Override
+	public Participant save(MemberId memberId, StudyId studyId, StudyRole studyRole) {
+		MemberEntity memberEntity = memberJpaRepository.findById(memberId.getId())
+			.orElseThrow(() -> new CafegoryException(ExceptionType.MEMBER_NOT_FOUND));
+
+		CafeStudyEntity studyEntity = studyJpaRepository.findById(studyId.getId())
 			.orElseThrow(() -> new CafegoryException(ExceptionType.CAFE_STUDY_NOT_FOUND));
 
 		CafeStudyMemberEntity studyMemberEntity = createStudyMember(memberEntity, studyEntity, studyRole);
