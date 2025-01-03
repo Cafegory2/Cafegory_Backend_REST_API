@@ -5,6 +5,9 @@ import static com.example.demo.exception.ExceptionType.*;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.StudyQueryDslRepository;
+import com.example.demo.trash.dto.SliceResponse;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.exception.CafegoryException;
@@ -23,27 +26,38 @@ import java.util.stream.Collectors;
 public class StudyQueryRepositoryImpl implements StudyQueryRepository2 {
 
 	private final CafeStudyRepository studyJpaRepository;
+	private final StudyQueryDslRepository studyQueryDslRepository;
 
 	@Override
 	public Study findById(StudyId studyId) {
 		return studyJpaRepository.findById(studyId.getId())
 				.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND))
-				.toStudy();	}
-
-	@Override
-	public Optional<Study> findWithMember(Long studyId) {
-		return studyJpaRepository.findWithMember(studyId).map(CafeStudyEntity::toStudy);
+				.toStudy();
 	}
 
 	@Override
-	public Optional<ViewCount> findViewCountBy(Long studyId) {
-		return studyJpaRepository.findById(studyId).map(CafeStudyEntity::toViewCount);
+	public Optional<Study> findWithMember(StudyId studyId) {
+		return studyJpaRepository.findWithMember(studyId.getId()).map(CafeStudyEntity::toStudy);
 	}
 
 	@Override
-	public List<Study> findUpcomingsWithMemberBy(List<Long> studyIds, LocalDateTime now) {
-		return studyJpaRepository.findUpcomingsWithMemberBy(studyIds, now).stream()
+	public Optional<ViewCount> findViewCountBy(StudyId studyId) {
+		return studyJpaRepository.findById(studyId.getId()).map(CafeStudyEntity::toViewCount);
+	}
+
+	@Override
+	public List<Study> findUpcomingsWithMemberBy(List<StudyId> studyIds, LocalDateTime now) {
+		List<Long> ids = studyIds.stream()
+				.map(StudyId::getId)
+				.collect(Collectors.toList());
+
+		return studyJpaRepository.findUpcomingsWithMemberBy(ids, now).stream()
 				.map(CafeStudyEntity::toStudy)
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public SliceResponse<CafeStudyEntity> findCafeStudies(CafeStudySearchListRequest request) {
+		return studyQueryDslRepository.findCafeStudies(request);
 	}
 }

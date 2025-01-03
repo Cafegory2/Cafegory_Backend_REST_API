@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.example.demo.cafe.domain.CafeId;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -43,8 +44,8 @@ public class CafeStudyService {
 		List<Study> participantStudies = studyReader.readUpcomingBy(memberId, now);
 		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
 
-		Cafe cafe = cafeReader.read(study.getCafeId());
-		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
+		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId()));
+		BusinessHour businessHour = businessHourReader.readBy(new CafeId(cafe.getId()), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
 		StudyId savedStudyId = studyEditor.saveWithCascade(study, memberId);
@@ -53,9 +54,9 @@ public class CafeStudyService {
 		return savedStudyId;
 	}
 
-	public void deleteStudy(MemberId memberId, StudyId cafeStudyId, LocalDateTime now) {
-		Study study = studyReader.read(cafeStudyId);
-		List<StudyMemberId> participantIds = studyMemberReader.readParticipantIdsBy(cafeStudyId);
+	public void deleteStudy(MemberId memberId, StudyId studyId, LocalDateTime now) {
+		Study study = studyReader.read(studyId);
+		List<StudyMemberId> participantIds = studyMemberReader.readParticipantIdsBy(studyId);
 		studyValidator.validateCafeStudyMembersPresent(study, participantIds);
 
 		studyEditor.removeWithCascade(new StudyId(study.getId()), memberId, now);

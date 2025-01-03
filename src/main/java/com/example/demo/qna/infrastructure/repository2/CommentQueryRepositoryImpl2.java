@@ -3,6 +3,7 @@ package com.example.demo.qna.infrastructure.repository2;
 import java.util.Optional;
 
 import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.ParentCommentId;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.qna.domain.Comment;
@@ -24,7 +25,7 @@ public class CommentQueryRepositoryImpl2 implements CommentQueryRepository2 {
 	}
 
 	@Override
-	public boolean existsByParentComment_Id(Long parentCommentId) {
-		return commentRepository.existsByParentComment_Id(parentCommentId);
+	public boolean hasReplies(CommentId commentId) {
+		return commentRepository.existsByParentComment_Id(commentId.getId());
 	}
 }

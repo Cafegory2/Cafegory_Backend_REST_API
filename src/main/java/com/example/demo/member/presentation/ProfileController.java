@@ -42,7 +42,7 @@ public class ProfileController {
 		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
 
 		Member member = memberService.getMember(memberId);
-		List<Review> reviews = reviewService.getReviews(memberId.getId());
+		List<Review> reviews = reviewService.getReviews(memberId);
 
 		MyPageResponse response = MyPageResponse.of(member, reviews);
 		return ResponseEntity.ok(response);

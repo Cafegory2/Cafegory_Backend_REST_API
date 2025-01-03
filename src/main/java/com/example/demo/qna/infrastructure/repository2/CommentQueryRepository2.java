@@ -9,5 +9,5 @@ public interface CommentQueryRepository2 {
 
 	Optional<Comment> findWithMember(CommentId commentId);
 
-	boolean existsByParentComment_Id(Long parentCommentId);
+	boolean hasReplies(CommentId commentId);
 }

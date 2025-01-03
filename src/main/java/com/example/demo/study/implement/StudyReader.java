@@ -18,7 +18,7 @@ import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
-import com.example.demo.study.infrastructure.studyQueryDslRepository;
+import com.example.demo.study.infrastructure.StudyQueryDslRepository;
 import com.example.demo.trash.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -31,31 +31,25 @@ public class StudyReader {
 	private final StudyMemberReader studyMemberReader;
 
 	private final StudyQueryRepository2 studyQueryRepository2;
-	//TODO 구현체 제거 필수
-	private final studyQueryDslRepository studyQueryDslRepository;
-
-	public Study read(Long studyId) {
-		return studyQueryRepository2.findWithMember(studyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
-	}
 
 	public Study read(StudyId studyId) {
-		return studyQueryRepository2.findWithMember(studyId.getId())
+		return studyQueryRepository2.findWithMember(studyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}
 
 	public List<Study> readUpcomingBy(MemberId memberId, LocalDateTime now) {
 		List<Participant> upcomings = studyMemberReader.readMyUpcomingsBy(memberId);
-		List<Long> studyIds = upcomings.stream().map(Participant::getStudyId).collect(Collectors.toList());
+		List<StudyId> studyIds = upcomings.stream()
+				.map(participant -> new StudyId(participant.getStudyId())).collect(Collectors.toList());
 
 		return studyQueryRepository2.findUpcomingsWithMemberBy(studyIds, now);
 	}
 
 	public SliceResponse<CafeStudyEntity> searchCafeStudies(CafeStudySearchListRequest request) {
-		return studyQueryDslRepository.findCafeStudies(request);
+		return studyQueryRepository2.findCafeStudies(request);
 	}
 
-	public ViewCount readViewCountBy(Long studyId) {
+	public ViewCount readViewCountBy(StudyId studyId) {
 		return studyQueryRepository2.findViewCountBy(studyId)
 			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
 	}

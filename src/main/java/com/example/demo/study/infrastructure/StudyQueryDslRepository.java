@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class studyQueryDslRepository {
+public class StudyQueryDslRepository {
 
 	private final JPAQueryFactory queryFactory;
 

@@ -2,6 +2,7 @@ package com.example.demo.cafe.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.domain.Menu;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Address;
@@ -30,72 +32,95 @@ import lombok.NoArgsConstructor;
 @Table(name = "cafe")
 public class CafeEntity extends BaseEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "cafe_id")
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "cafe_id")
+    private Long id;
 
-	private String name;
+    private String name;
 
-	private String mainImageUrl;
+    private String mainImageUrl;
 
-	@Embedded
-	private AddressEmbeddable address;
+    @Embedded
+    private AddressEmbeddable address;
 
-	private String sns;
+    private String sns;
 
-	@OneToMany(mappedBy = "cafe")
-	private List<CafeKeywordEntity> cafeKeywords = new ArrayList<>();
+    @OneToMany(mappedBy = "cafe")
+    private List<CafeKeywordEntity> cafeKeywords = new ArrayList<>();
 
-	@OneToMany(mappedBy = "cafe")
-	private List<CafeCafeTagEntity> cafeCafeTags = new ArrayList<>();
+    @OneToMany(mappedBy = "cafe")
+    private List<CafeCafeTagEntity> cafeCafeTags = new ArrayList<>();
 
-	@OneToMany(mappedBy = "cafe")
-	private List<MenuEntity> menus = new ArrayList<>();
+    @OneToMany(mappedBy = "cafe")
+    private List<MenuEntity> menus = new ArrayList<>();
 
-	public CafeEntity(Long id) {
-		this.id = id;
-	}
+    public CafeEntity(Long id) {
+        this.id = id;
+    }
 
-	@Builder
-	private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {
-		this.name = name;
-		this.mainImageUrl = mainImageUrl;
-		this.address = address;
-		this.sns = sns;
-	}
+    @Builder
+    private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {
+        this.name = name;
+        this.mainImageUrl = mainImageUrl;
+        this.address = address;
+        this.sns = sns;
+    }
 
-	// TODO: cafe 도메인 정의
-	public Cafe toCafe() {
-		return Cafe.builder()
-			.id(this.id)
-			.name(this.name)
-			.imgUrl(this.mainImageUrl)
-			.build();
-	}
+    public Cafe toCafe() {
+        return Cafe.builder()
+                .id(this.id)
+                .name(this.name)
+                .imgUrl(this.mainImageUrl)
+                .sns(this.sns)
+                .cafeTagTypes(
+                        this.cafeCafeTags.stream()
+                                .map(CafeCafeTagEntity::getCafeTag)
+                                .filter(Objects::nonNull)
+                                .map(CafeTagEntity::getType)
+                                .collect(Collectors.toList())
+                )
+                .address(
+                        Address.builder()
+                                .fullAddress(this.address.getFullAddress())
+                                .region(this.address.getRegion())
+                                .build()
+                )
+                .menus(
+                        this.menus.stream()
+                                .map(menu ->
+                                        Menu.builder()
+                                                .name(menu.getName())
+                                                .price(menu.getPrice())
+                                                .build()
+                                )
+                                .collect(Collectors.toList())
+                )
+                .build();
+    }
 
-	public Cafe toCafeWithTagsAndMenu() {
-		return Cafe.builder()
-			.id(this.id)
-			.name(this.name)
-			.imgUrl(this.mainImageUrl)
-			.sns(this.sns)
-			.address(
-				Address.builder()
-					.fullAddress(this.address.getFullAddress())
-					.region(this.address.getRegion())
-					.build()
-			)
-			.cafeTagTypes(
-				this.cafeCafeTags.stream()
-					.map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
-					.collect(Collectors.toList())
-			)
-			.menus(
-				this.menus.stream()
-					.map(MenuEntity::toMenu)
-					.collect(Collectors.toList())
-			)
-			.build();
-	}
+    public Cafe toCafeWithTagsAndMenu() {
+        return Cafe.builder()
+                .id(this.id)
+                .name(this.name)
+                .imgUrl(this.mainImageUrl)
+                .sns(this.sns)
+                .address(
+                        Address.builder()
+                                .fullAddress(this.address.getFullAddress())
+                                .region(this.address.getRegion())
+                                .build()
+                )
+                .cafeTagTypes(
+                        this.cafeCafeTags.stream()
+                                .map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
+                                .collect(Collectors.toList())
+                )
+                .menus(
+                        this.menus.stream()
+                                .map(MenuEntity::toMenu)
+                                .collect(Collectors.toList())
+                )
+                .build();
+    }
 }

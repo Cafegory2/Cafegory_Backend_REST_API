@@ -1,11 +1,11 @@
-package com.example.demo.qna.domain;
+package com.example.demo.cafe.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CommentId {
+public class CafeId {
 
-	private final Long id;
+    private final Long id;
 }

@@ -1,5 +1,6 @@
 package com.example.demo.study.service;
 
+import com.example.demo.cafe.domain.CafeId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,17 +36,13 @@ public class CafeStudyQueryService {
 		return response.map(CafeStudySearchListResponse::from);
 	}
 
-	public CafeStudyDetailResponse getCafeStudyDetail(Long cafeStudyId) {
-		Study study = studyReader.read(cafeStudyId);
-		ViewCount viewCount = studyReader.readViewCountBy(cafeStudyId);
-		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(new StudyId(cafeStudyId));
-		Cafe cafe = cafeReader.read(study.getCafeId());
+	public CafeStudyDetailResponse getCafeStudyDetail(StudyId studyId) {
+		Study study = studyReader.read(studyId);
+		ViewCount viewCount = studyReader.readViewCountBy(studyId);
+		ParticipantCount participantCount = studyMemberReader.readParticipantCountBy(studyId);
+		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId()));
 
 		return CafeStudyDetailResponse.of(cafe, study, viewCount, participantCount);
-	}
-
-	public Study getStudy(Long studyId) {
-		return studyReader.read(studyId);
 	}
 
 	public Study getStudy(StudyId studyId) {

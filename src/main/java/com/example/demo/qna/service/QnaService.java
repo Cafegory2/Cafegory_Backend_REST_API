@@ -53,7 +53,7 @@ public class QnaService {
 	}
 
 	private void validateNoReplies(CommentId commentId) {
-		if (commentReader.existsReplies(commentId.getId())) {
+		if (commentReader.existsReplies(commentId)) {
 			throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
 		}
 	}

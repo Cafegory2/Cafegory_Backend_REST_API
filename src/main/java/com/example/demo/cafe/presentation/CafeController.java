@@ -2,6 +2,7 @@ package com.example.demo.cafe.presentation;
 
 import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.service.BusinessHourService;
 import com.example.demo.cafe.service.CafeDetailResponse;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class CafeController {
 
 	@GetMapping("/{cafeId}")
 	public ResponseEntity<CafeDetailResponse> getCafeDetail(@PathVariable Long cafeId) {
-		Cafe cafe = cafeQueryService.getCafe(cafeId);
-		BusinessHour businessHour = businessHourService.findBusinessHour(cafeId, timeUtil.now());
+		Cafe cafe = cafeQueryService.getCafe(new CafeId(cafeId));
+		BusinessHour businessHour = businessHourService.findBusinessHour(new CafeId(cafeId), timeUtil.now());
 		boolean isOpen = businessHourService.isOpen(businessHour, timeUtil.now());
 
 		CafeDetailResponse response = CafeDetailResponse.of(cafe, businessHour, isOpen);

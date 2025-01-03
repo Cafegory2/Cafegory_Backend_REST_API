@@ -1,5 +1,6 @@
 package com.example.demo.cafe.service;
 
+import com.example.demo.cafe.domain.CafeId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,7 @@ public class CafeQueryService {
 
     private final CafeReader cafeReader;
 
-    public Cafe getCafe(Long cafeId) {
+    public Cafe getCafe(CafeId cafeId) {
         return cafeReader.getWithTags(cafeId);
     }
 

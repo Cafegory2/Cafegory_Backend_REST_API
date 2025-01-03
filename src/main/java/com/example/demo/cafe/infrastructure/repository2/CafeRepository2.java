@@ -1,10 +1,13 @@
 package com.example.demo.cafe.infrastructure.repository2;
 
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
+
+import java.util.Optional;
 
 public interface CafeRepository2 {
 
-	Cafe findById(Long cafeId);
+	Optional<Cafe> findById(CafeId cafeId);
 
-	Cafe findWithTags(Long cafeId);
+	Optional<Cafe> findWithTags(CafeId cafeId);
 }

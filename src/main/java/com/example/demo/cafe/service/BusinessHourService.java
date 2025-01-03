@@ -1,6 +1,7 @@
 package com.example.demo.cafe.service;
 
 import com.example.demo.cafe.domain.BusinessHour;
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.implement.BusinessHourOpenChecker;
 import com.example.demo.cafe.implement.BusinessHourReader;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class BusinessHourService {
     private final BusinessHourReader businessHourReader;
     private final BusinessHourOpenChecker openChecker;
 
-    public BusinessHour findBusinessHour(Long cafeId, LocalDateTime now) {
+    public BusinessHour findBusinessHour(CafeId cafeId, LocalDateTime now) {
         return businessHourReader.readBy(cafeId, now.getDayOfWeek());
     }
 

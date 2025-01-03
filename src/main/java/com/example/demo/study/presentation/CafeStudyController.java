@@ -35,9 +35,9 @@ public class CafeStudyController {
 
 	private final TimeUtil timeUtil;
 
-	@GetMapping("/{cafeStudyId}")
-	public ResponseEntity<CafeStudyDetailResponse> getCafeStudyDetail(@PathVariable Long cafeStudyId) {
-		CafeStudyDetailResponse response = cafeStudyQueryService.getCafeStudyDetail(cafeStudyId);
+	@GetMapping("/{studyId}")
+	public ResponseEntity<CafeStudyDetailResponse> getCafeStudyDetail(@PathVariable Long studyId) {
+		CafeStudyDetailResponse response = cafeStudyQueryService.getCafeStudyDetail(new StudyId(studyId));
 		return ResponseEntity.ok(response);
 	}
 

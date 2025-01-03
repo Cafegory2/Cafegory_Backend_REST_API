@@ -3,6 +3,9 @@ package com.example.demo.study.infrastructure.repository2;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.trash.dto.SliceResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,9 +15,11 @@ public interface StudyQueryRepository2 {
 
 	Study findById(StudyId studyId);
 
-	Optional<Study> findWithMember(Long studyId);
+	Optional<Study> findWithMember(StudyId studyId);
 
-	Optional<ViewCount> findViewCountBy(Long studyId);
+	Optional<ViewCount> findViewCountBy(StudyId studyId);
 
-	List<Study> findUpcomingsWithMemberBy(List<Long> studyIds, LocalDateTime now);
+	List<Study> findUpcomingsWithMemberBy(List<StudyId> studyIds, LocalDateTime now);
+
+	SliceResponse<CafeStudyEntity> findCafeStudies(CafeStudySearchListRequest request);
 }
