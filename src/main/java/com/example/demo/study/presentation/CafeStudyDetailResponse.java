@@ -62,7 +62,7 @@ public class CafeStudyDetailResponse {
 
     private static CafeInfo createCafeInfo(Cafe cafe) {
         return CafeInfo.builder()
-            .id(cafe.getId())
+            .id(cafe.getId().getId())
             .imgUrl(cafe.getImgUrl())
             .name(cafe.getName())
             .build();

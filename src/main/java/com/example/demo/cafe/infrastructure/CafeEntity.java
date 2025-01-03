@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.domain.Menu;
 import org.hibernate.annotations.Where;
 
@@ -69,7 +70,7 @@ public class CafeEntity extends BaseEntity {
 
     public Cafe toCafe() {
         return Cafe.builder()
-                .id(this.id)
+                .id(new CafeId(this.id))
                 .name(this.name)
                 .imgUrl(this.mainImageUrl)
                 .sns(this.sns)
@@ -101,7 +102,7 @@ public class CafeEntity extends BaseEntity {
 
     public Cafe toCafeWithTagsAndMenu() {
         return Cafe.builder()
-                .id(this.id)
+                .id(new CafeId(this.id))
                 .name(this.name)
                 .imgUrl(this.mainImageUrl)
                 .sns(this.sns)

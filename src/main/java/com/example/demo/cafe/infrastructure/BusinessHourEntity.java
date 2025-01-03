@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.domain.BusinessHourId;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -72,7 +73,7 @@ public class BusinessHourEntity extends BaseEntity {
 
 	public BusinessHour toBusinessHour() {
 		return BusinessHour.builder()
-			.id(this.id)
+			.id(new BusinessHourId(this.id))
 			.dayOfWeek(this.dayOfWeek)
 			.openingTme(this.openingTime)
 			.closingTme(this.closingTime)

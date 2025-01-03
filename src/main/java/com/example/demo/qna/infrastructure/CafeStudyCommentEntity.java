@@ -85,7 +85,7 @@ public class CafeStudyCommentEntity extends BaseEntity {
 
 	public Comment toComment() {
 		return Comment.builder()
-			.commentId(new CommentId(this.id))
+			.id(new CommentId(this.id))
 			.commentContent(
 				CommentContent.builder()
 					.content(this.content)
@@ -109,7 +109,7 @@ public class CafeStudyCommentEntity extends BaseEntity {
 
 	public ChildComment toCommentOld() {
 		return ChildComment.builder()
-			.commentId(new CommentId(this.id))
+			.id(new CommentId(this.id))
 			.commentContent(
 				CommentContent.builder()
 					.content(this.content)
@@ -121,7 +121,7 @@ public class CafeStudyCommentEntity extends BaseEntity {
 					.nickname(this.author.getNickname())
 					.build()
 			)
-			.cafeStudyId(this.cafeStudy.getId())
+			.studyId(new StudyId(this.cafeStudy.getId()))
 			.date(
 				DateAudit.builder()
 					.createdDate(getCreatedDate())

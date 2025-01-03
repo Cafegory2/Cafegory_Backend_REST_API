@@ -76,7 +76,7 @@ public class CafeDetailResponse {
 
 	private static CafeInfo createCafeInfo(Cafe cafe, BusinessHour businessHour, boolean isOpen) {
 		return CafeInfo.builder()
-			.id(cafe.getId())
+			.id(cafe.getId().getId())
 			.name(cafe.getName())
 			.imgUrl(cafe.getImgUrl())
 			.address(cafe.getAddress().getFullAddress())

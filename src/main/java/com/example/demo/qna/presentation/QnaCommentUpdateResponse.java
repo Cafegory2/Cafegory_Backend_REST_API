@@ -1,7 +1,5 @@
 package com.example.demo.qna.presentation;
 
-import com.example.demo.qna.domain.ChildComment;
-
 import com.example.demo.qna.domain.Comment;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +20,6 @@ public class QnaCommentUpdateResponse {
 	}
 
 	public static QnaCommentUpdateResponse from(Comment comment) {
-		return new QnaCommentUpdateResponse(comment.getCommentId().getId(), comment.getContent());
+		return new QnaCommentUpdateResponse(comment.getId().getId(), comment.getContent());
 	}
 }

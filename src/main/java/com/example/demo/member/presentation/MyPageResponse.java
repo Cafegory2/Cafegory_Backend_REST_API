@@ -48,7 +48,7 @@ public class MyPageResponse {
 			.tags(review.getTags())
 			.cafeInfo(
 				ReviewInfo.CafeInfo.builder()
-					.id(cafe.getId())
+					.id(cafe.getId().getId())
 					.imgUrl(cafe.getImgUrl())
 					.name(cafe.getName())
 					.build()

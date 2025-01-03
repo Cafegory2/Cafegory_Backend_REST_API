@@ -101,7 +101,7 @@ class CommentEditorTest extends ServiceTest {
 					.content(content)
 					.build()
 			)
-			.cafeStudyId(cafeStudyId)
+			.studyId(new StudyId(cafeStudyId))
 			.parentCommentId(new ParentCommentId(parentCommentId))
 			.author(
 				MemberIdentity.builder()
@@ -131,7 +131,7 @@ class CommentEditorTest extends ServiceTest {
 		CommentContent content = createCommentContent("변경된 댓글 내용");
 
 		//when
-		sut.edit(content, comment.getCommentId());
+		sut.edit(content, comment.getId());
 
 		//then
 		CafeStudyCommentEntity result = cafeStudyCommentRepository.findById(commentEntity.getId()).orElse(null);
@@ -146,7 +146,7 @@ class CommentEditorTest extends ServiceTest {
 
 	private Comment createComment(String content, Long commentId) {
 		return Comment.builder()
-			.commentId(new CommentId(commentId))
+			.id(new CommentId(commentId))
 			.commentContent(
 				CommentContent.builder()
 					.content(content)

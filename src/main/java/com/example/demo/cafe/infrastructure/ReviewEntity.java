@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.domain.CafeId;
+import com.example.demo.cafe.domain.ReviewId;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Cafe;
@@ -60,7 +62,7 @@ public class ReviewEntity extends BaseEntity {
 
 	public Review toReview() {
 		return Review.builder()
-			.id(this.id)
+			.id(new ReviewId(this.id))
 			.tags(
 				reviewCafeTag.stream()
 					.map(tag -> tag.getCafeTag().getType())
@@ -68,7 +70,7 @@ public class ReviewEntity extends BaseEntity {
 			)
 			.cafe(
 				Cafe.builder()
-					.id(cafe.getId())
+					.id(new CafeId(cafe.getId()))
 					.name(cafe.getName())
 					.imgUrl(cafe.getMainImageUrl())
 					.build()

@@ -45,7 +45,7 @@ public class CafeStudyService {
 		studyValidator.validateStudyScheduleOverlap(study, participantStudies);
 
 		Cafe cafe = cafeReader.read(new CafeId(study.getCafeId()));
-		BusinessHour businessHour = businessHourReader.readBy(new CafeId(cafe.getId()), study.getStartDate());
+		BusinessHour businessHour = businessHourReader.readBy(cafe.getId(), study.getStartDate());
 		businessHourValidator.validateBetweenBusinessHour(study.getSchedule(), businessHour);
 
 		StudyId savedStudyId = studyEditor.saveWithCascade(study, memberId);

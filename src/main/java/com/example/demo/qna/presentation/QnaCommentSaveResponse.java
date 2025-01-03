@@ -45,7 +45,7 @@ public class QnaCommentSaveResponse {
 
 	private static CommentInfo createCommentInfo(Comment comment) {
 		return CommentInfo.builder()
-			.id(comment.getCommentId().getId())
+			.id(comment.getId().getId())
 			.content(comment.getContent())
 			.createdDate(comment.getDate().getCreatedDate())
 			.build();
