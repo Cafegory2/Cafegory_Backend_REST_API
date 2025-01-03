@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.domain.Cafe;
-import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.implement.CafeReader;
 import com.example.demo.study.domain.ParticipantCount;
 import com.example.demo.study.domain.Study;
@@ -12,11 +11,10 @@ import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.implement.StudyMemberReader;
 import com.example.demo.study.implement.StudyReader;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.study.presentation.CafeStudyDetailResponse;
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 
 import lombok.RequiredArgsConstructor;
 

@@ -5,7 +5,7 @@ import static com.example.demo.exception.ExceptionType.*;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.*;
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.exception.CafegoryException;

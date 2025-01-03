@@ -23,7 +23,7 @@ import com.example.demo.study.domain.ParticipantContent;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.domain.StudyRole;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

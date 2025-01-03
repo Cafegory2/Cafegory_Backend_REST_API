@@ -36,7 +36,7 @@ import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.StudyQueryDslRepository;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 @Import(StudyQueryDslRepository.class)

@@ -11,8 +11,8 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.implement.login.LoginProcessor;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.login.LoginProcessor;
+import com.example.demo.auth.implement.token.JwtToken;
 
 class LoginProcessorTest extends ServiceTest {
 

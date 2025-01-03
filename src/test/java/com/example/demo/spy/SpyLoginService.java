@@ -10,12 +10,12 @@ import com.example.demo.member.domain.MemberContent;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.implement.MemberEditor;
 import com.example.demo.member.implement.MemberReader;
-import com.example.demo.trash.dto.oauth2.OAuth2Profile;
-import com.example.demo.trash.dto.oauth2.OAuth2TokenRequest;
-import com.example.demo.trash.implement.login.LoginProcessor;
-import com.example.demo.trash.implement.signup.SignupProcessor;
-import com.example.demo.trash.implement.token.JwtToken;
-import com.example.demo.trash.service.login.LoginService;
+import com.example.demo.auth.dto.oauth2.OAuth2Profile;
+import com.example.demo.auth.dto.oauth2.OAuth2TokenRequest;
+import com.example.demo.auth.implement.login.LoginProcessor;
+import com.example.demo.auth.implement.signup.SignupProcessor;
+import com.example.demo.auth.implement.token.JwtToken;
+import com.example.demo.auth.service.login.LoginService;
 
 import lombok.RequiredArgsConstructor;
 

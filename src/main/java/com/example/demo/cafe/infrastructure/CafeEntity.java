@@ -19,7 +19,7 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Address;
 import com.example.demo.cafe.domain.Cafe;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

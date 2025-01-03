@@ -27,7 +27,7 @@ import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -16,7 +16,7 @@ import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberContent;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.Role;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

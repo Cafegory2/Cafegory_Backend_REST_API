@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.factory.TestJwtFactory;
-import com.example.demo.trash.implement.token.JwtClaims;
-import com.example.demo.trash.implement.token.JwtTokenValidator;
-import com.example.demo.trash.implement.tokenmanagerment.JwtTokenManager;
-import com.example.demo.trash.implement.tokenmanagerment.TokenClaims;
+import com.example.demo.auth.implement.token.JwtClaims;
+import com.example.demo.auth.implement.token.JwtTokenValidator;
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.auth.implement.tokenmanagerment.TokenClaims;
 
 class JwtTokenValidatorTest {
 

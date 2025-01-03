@@ -12,7 +12,7 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.StudyTag;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

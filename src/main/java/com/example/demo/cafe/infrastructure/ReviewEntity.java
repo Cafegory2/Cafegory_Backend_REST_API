@@ -24,7 +24,7 @@ import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.domain.Review;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

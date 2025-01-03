@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.token.JwtToken;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

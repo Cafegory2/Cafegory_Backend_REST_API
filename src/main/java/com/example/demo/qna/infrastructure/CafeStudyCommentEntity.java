@@ -30,7 +30,7 @@ import com.example.demo.qna.domain.RootComment;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;

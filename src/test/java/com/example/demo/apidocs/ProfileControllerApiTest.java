@@ -26,7 +26,7 @@ import com.example.demo.helper.ReviewSaveHelper;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;

@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import com.example.demo.config.AcceptanceTest;
-import com.example.demo.trash.implement.token.JwtAccessToken;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.token.JwtAccessToken;
+import com.example.demo.auth.implement.token.JwtToken;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

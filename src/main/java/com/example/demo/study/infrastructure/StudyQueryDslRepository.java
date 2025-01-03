@@ -13,7 +13,7 @@ import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;

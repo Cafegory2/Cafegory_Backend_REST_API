@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import com.example.demo.trash.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
 
 @ExtendWith(MockitoExtension.class)
 class JwtAuthenticationFilterTest {

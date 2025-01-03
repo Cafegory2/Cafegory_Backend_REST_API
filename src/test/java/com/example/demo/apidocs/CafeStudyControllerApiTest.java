@@ -31,7 +31,7 @@ import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudyTagEntity;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;

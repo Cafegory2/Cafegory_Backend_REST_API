@@ -3,10 +3,9 @@ package com.example.demo.study.infrastructure.repository2;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.ViewCount;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
