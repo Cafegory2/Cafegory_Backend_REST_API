@@ -8,6 +8,7 @@ import lombok.Getter;
 public class Participant {
 
 	private Long id;
-
 	private Long studyId;
+	private StudyRole studyRole;
+	private ParticipantContent content;
 }
