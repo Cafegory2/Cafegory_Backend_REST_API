@@ -16,6 +16,7 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Address;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
@@ -52,6 +53,9 @@ public class CafeEntity extends BaseEntity {
 
 	@OneToMany(mappedBy = "cafe")
 	private List<MenuEntity> menus = new ArrayList<>();
+
+	@OneToMany(mappedBy = "cafe")
+	private List<CafeStudyEntity> cafeStudies = new ArrayList<>();
 
 	@Builder
 	private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {

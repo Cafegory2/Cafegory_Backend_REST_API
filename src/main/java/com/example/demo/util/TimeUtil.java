@@ -15,4 +15,8 @@ public interface TimeUtil {
 	LocalTime localTime(int hour, int minute, int second);
 
 	LocalDateTime localDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second);
+
+	LocalDateTime minLocalDateTime(LocalDateTime now);
+
+	LocalDateTime maxLocalDateTime(LocalDateTime now);
 }
