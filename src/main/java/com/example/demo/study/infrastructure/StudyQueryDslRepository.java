@@ -1,16 +1,19 @@
 package com.example.demo.study.infrastructure;
 
+import static com.example.demo.cafe.infrastructure.QCafeEntity.*;
+import static com.example.demo.study.infrastructure.QCafeStudyEntity.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.study.domain.CafeStudyTagType;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
-import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -20,9 +23,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-
-import static com.example.demo.cafe.infrastructure.QCafeEntity.cafeEntity;
-import static com.example.demo.study.infrastructure.QCafeStudyEntity.cafeStudyEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -49,7 +49,7 @@ public class StudyQueryDslRepository {
 			)
 			.orderBy(
 				getRecruitmentStatusPriority().asc(),
-				cafeStudyEntity.createdDate.desc()
+				cafeStudyEntity.id.desc()
 			);
 
 		return SliceResponse.of(PagingUtil.toSlice(query, pageable));

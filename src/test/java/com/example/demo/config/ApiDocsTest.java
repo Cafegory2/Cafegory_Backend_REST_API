@@ -1,9 +1,7 @@
 package com.example.demo.config;
 
-import com.example.demo.helper.MemberSignupAcceptanceTestHelper;
-import io.restassured.RestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.specification.RequestSpecification;
+import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,37 +12,41 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
+import com.example.demo.helper.MemberSignupAcceptanceTestHelper;
+
+import io.restassured.RestAssured;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Import({HelperConfig.class, SignupAcceptanceTestConfig.class, DatabaseCleanup.class, RepositoryHolderConfig.class})
+@Import({SignupAcceptanceTestConfig.class, DatabaseCleanup.class, RepositoryHolderConfig.class})
 @ExtendWith(RestDocumentationExtension.class)
-public abstract class ApiDocsTest extends TestContainer{
+public abstract class ApiDocsTest extends TestContainer {
 
-    @LocalServerPort
-    private int port;
+	@LocalServerPort
+	private int port;
 
-    protected RequestSpecification spec;
+	protected RequestSpecification spec;
 
-    @Autowired
-    private DatabaseCleanup databaseCleanup;
-    @Autowired
-    protected MemberSignupAcceptanceTestHelper memberSignupHelper;
-    @Autowired
-    private RepositoryHolderConfig repositoryHolderConfig;
+	@Autowired
+	private DatabaseCleanup databaseCleanup;
+	@Autowired
+	protected MemberSignupAcceptanceTestHelper memberSignupHelper;
+	@Autowired
+	private RepositoryHolderConfig repositoryHolderConfig;
 
-    @BeforeEach
-    public void setUp(RestDocumentationContextProvider provider) {
-        if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
-            RestAssured.port = port;
-            databaseCleanup.afterPropertiesSet();
-        }
+	@BeforeEach
+	public void setUp(RestDocumentationContextProvider provider) {
+		if (RestAssured.port == RestAssured.UNDEFINED_PORT) {
+			RestAssured.port = port;
+			databaseCleanup.afterPropertiesSet();
+		}
 
-        databaseCleanup.execute();
-        repositoryHolderConfig.init();
+		databaseCleanup.execute();
+		repositoryHolderConfig.init();
 
-        this.spec = new RequestSpecBuilder().addFilter(documentationConfiguration(provider))
-            .build();
-    }
+		this.spec = new RequestSpecBuilder().addFilter(documentationConfiguration(provider))
+			.build();
+	}
 }

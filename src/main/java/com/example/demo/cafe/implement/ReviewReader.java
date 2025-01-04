@@ -2,10 +2,11 @@ package com.example.demo.cafe.implement;
 
 import java.util.List;
 
-import com.example.demo.cafe.domain.Review;
-import com.example.demo.cafe.infrastructure.repository2.ReviewRepository2;
-import com.example.demo.member.domain.MemberId;
 import org.springframework.stereotype.Component;
+
+import com.example.demo.cafe.domain.Review;
+import com.example.demo.cafe.infrastructure.repository2.ReviewRepository;
+import com.example.demo.member.domain.MemberId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -13,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReviewReader {
 
-	private final ReviewRepository2 reviewRepository2;
+	private final ReviewRepository reviewRepository;
 
 	public List<Review> readBy(MemberId memberId) {
-		return reviewRepository2.findAllByMemberId(memberId);
+		return reviewRepository.findAllByMemberId(memberId);
 	}
 }

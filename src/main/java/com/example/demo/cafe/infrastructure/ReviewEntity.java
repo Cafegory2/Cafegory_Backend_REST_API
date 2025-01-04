@@ -16,24 +16,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.demo.cafe.domain.CafeId;
-import com.example.demo.cafe.domain.ReviewId;
 import org.hibernate.annotations.Where;
 
+import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.domain.Review;
+import com.example.demo.cafe.domain.ReviewId;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "review")
 public class ReviewEntity extends BaseEntity {
@@ -54,12 +59,6 @@ public class ReviewEntity extends BaseEntity {
 
 	@OneToMany(mappedBy = "review")
 	private List<ReviewCafeTagEntity> reviewCafeTag = new ArrayList<>();
-
-	@Builder
-	private ReviewEntity(CafeEntity cafe, MemberEntity member) {
-		this.cafe = cafe;
-		this.member = member;
-	}
 
 	public Review toReview() {
 		return Review.builder()

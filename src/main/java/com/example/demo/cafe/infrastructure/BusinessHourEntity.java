@@ -15,20 +15,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.example.demo.cafe.domain.BusinessHourId;
 import org.hibernate.annotations.Where;
 
-import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.auth.implement.BaseEntity;
+import com.example.demo.cafe.domain.BusinessHour;
+import com.example.demo.cafe.domain.BusinessHourId;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "business_hour")
 public class BusinessHourEntity extends BaseEntity {
@@ -51,24 +56,12 @@ public class BusinessHourEntity extends BaseEntity {
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeEntity cafe;
 
-	@Builder
-	private BusinessHourEntity(DayOfWeek dayOfWeek, LocalTime openingTime, LocalTime closingTime, CafeEntity cafe) {
-		this.dayOfWeek = dayOfWeek;
-		this.openingTime = openingTime;
-		this.closingTime = closingTime;
-		this.cafe = cafe;
-	}
-
 	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
 		try {
 			return now.getDayOfWeek().equals(this.dayOfWeek);
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
-	}
-
-	public boolean matchesDayOfWeek(DayOfWeek dayOfWeek) {
-		return this.dayOfWeek.equals(dayOfWeek);
 	}
 
 	public BusinessHour toBusinessHour() {

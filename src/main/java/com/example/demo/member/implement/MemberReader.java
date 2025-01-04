@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberId;
-import com.example.demo.member.infrastructure.MemberRepository;
-import com.example.demo.member.infrastructure.repository2.MemberQueryRepository2;
+import com.example.demo.member.infrastructure.MemberJpaRepository;
+import com.example.demo.member.infrastructure.repository2.MemberQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,8 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberReader {
 
-	private final MemberRepository memberRepository;
-	private final MemberQueryRepository2 memberQueryRepository;
+	private final MemberJpaRepository memberRepository;
+	private final MemberQueryRepository memberQueryRepository;
 
 	public boolean exists(String email) {
 		return memberRepository.existsByEmail(email);

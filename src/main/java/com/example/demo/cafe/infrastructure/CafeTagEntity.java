@@ -10,17 +10,22 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.auth.implement.BaseEntity;
+import com.example.demo.cafe.domain.CafeTagType;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_tag")
 public class CafeTagEntity extends BaseEntity {
@@ -32,9 +37,4 @@ public class CafeTagEntity extends BaseEntity {
 
 	@Enumerated(EnumType.STRING)
 	private CafeTagType type;
-
-	@Builder
-	private CafeTagEntity(CafeTagType type) {
-		this.type = type;
-	}
 }

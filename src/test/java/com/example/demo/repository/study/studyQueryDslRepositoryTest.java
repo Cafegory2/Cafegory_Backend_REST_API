@@ -1,14 +1,13 @@
 package com.example.demo.repository.study;
 
 import static com.example.demo.cafe.domain.CafeTagType.*;
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.CafeTagPersister.*;
+import static com.example.demo.persister.MemberPersister.*;
+import static com.example.demo.persister.StudyConextPersister.*;
+import static com.example.demo.persister.StudyTagPersister.*;
 import static com.example.demo.study.domain.CafeStudyTagType.*;
-import static com.example.demo.study.domain.MemberComms.AVOID;
-import static com.example.demo.study.domain.MemberComms.WELCOME;
-import static com.example.demo.persister.CafeContextPersister.aCafe;
-import static com.example.demo.persister.CafeTagPersister.aCafeTag;
-import static com.example.demo.persister.MemberPersister.aMember;
-import static com.example.demo.persister.StudyConextPersister.aStudy;
-import static com.example.demo.persister.StudyTagPersister.aTag;
+import static com.example.demo.study.domain.MemberComms.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDate;
@@ -17,14 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.example.demo.auth.dto.SliceResponse;
-import com.example.demo.cafe.domain.CafeTagType;
-import com.example.demo.cafe.infrastructure.CafeTagEntity;
-import com.example.demo.study.domain.CafeStudyTagType;
-import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
-import com.example.demo.study.infrastructure.CafeStudyTagEntity;
-import com.example.demo.persister.StudyConextPersister;
-import com.example.demo.study.infrastructure.StudyQueryDslRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -33,12 +24,20 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import com.example.demo.auth.dto.SliceResponse;
+import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
-import com.example.demo.study.domain.MemberComms;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.persister.StudyConextPersister;
+import com.example.demo.study.domain.CafeStudyTagType;
+import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.CafeStudyTagEntity;
+import com.example.demo.study.infrastructure.StudyQueryDslRepository;
 import com.example.demo.util.TimeUtil;
 
 @Import(StudyQueryDslRepository.class)
@@ -56,9 +55,9 @@ class studyQueryDslRepositoryTest extends JpaTest {
 	void find_cafe_studies_by_keyword(String keyword, int expected) {
 		//given
 		CafeEntity cafe1 = aCafe()
-				.includeKeywords("강남", "스타벅스 강남대로점", "서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)").persist();
+			.includeKeywords("강남", "스타벅스 강남대로점", "서울 강남구 강남대로 456 한석타워 2층 1-2호 (역삼동)").persist();
 		CafeEntity cafe2 = aCafe()
-				.includeKeywords("강남", "스타벅스 신논현역점", "서울 서초구 강남대로 483 (반포동) 청호빌딩", "카공하기 좋은 카페").persist();
+			.includeKeywords("강남", "스타벅스 신논현역점", "서울 서초구 강남대로 483 (반포동) 청호빌딩", "카공하기 좋은 카페").persist();
 
 		MemberEntity coordinator = aMember().asCoordinator().persist();
 
@@ -70,38 +69,37 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		studyWithCafe2.but().withName("카페고리 스터디2").persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
+			createCafeStudySearchListRequest(keyword, null, null, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
 	}
 
-
 	private static Stream<Arguments> provideKeywords1() {
 		return Stream.of(
-				//Cafe1과 Cafe2 둘다 관련된 테스트
-				Arguments.of("강남", 3),
-				Arguments.of("강남 ", 3),
-				Arguments.of("스타벅스", 3),
-				Arguments.of("스타벅스 ", 3),
-				Arguments.of("카페고리", 2),
-				Arguments.of("카공하기 좋은 카페", 2),
+			//Cafe1과 Cafe2 둘다 관련된 테스트
+			Arguments.of("강남", 3),
+			Arguments.of("강남 ", 3),
+			Arguments.of("스타벅스", 3),
+			Arguments.of("스타벅스 ", 3),
+			Arguments.of("카페고리", 2),
+			Arguments.of("카공하기 좋은 카페", 2),
 
-				//Cafe1과 관련된 테스트
-				Arguments.of("스타벅스 강남대로", 2),
-				Arguments.of("스타벅스 강남대로점", 2),
-				Arguments.of("스타벅스강남대로점", 2),
-				Arguments.of("강남구", 2),
-				Arguments.of("카페고리 스터디1", 1),
-				Arguments.of("카페고리스터디1", 1),
+			//Cafe1과 관련된 테스트
+			Arguments.of("스타벅스 강남대로", 2),
+			Arguments.of("스타벅스 강남대로점", 2),
+			Arguments.of("스타벅스강남대로점", 2),
+			Arguments.of("강남구", 2),
+			Arguments.of("카페고리 스터디1", 1),
+			Arguments.of("카페고리스터디1", 1),
 
-				//Cafe2와 관련된 테스트
-				Arguments.of("신논현", 1),
-				Arguments.of("스타벅스 신논현역", 1),
-				Arguments.of("스타벅스 신논현역점", 1),
-				Arguments.of("스타벅스신논현역점", 1),
-				Arguments.of("반포동", 1),
-				Arguments.of("카페고리 스터디2", 1)
+			//Cafe2와 관련된 테스트
+			Arguments.of("신논현", 1),
+			Arguments.of("스타벅스 신논현역", 1),
+			Arguments.of("스타벅스 신논현역점", 1),
+			Arguments.of("스타벅스신논현역점", 1),
+			Arguments.of("반포동", 1),
+			Arguments.of("카페고리 스터디2", 1)
 		);
 	}
 
@@ -109,10 +107,10 @@ class studyQueryDslRepositoryTest extends JpaTest {
 	@MethodSource("provideTime1")
 	@DisplayName("특정 날짜로 필터링한 카공 목록을 조회한다.")
 	void find_cafe_studies_by_start_date_time(
-			LocalDateTime startFor1, LocalDateTime endFor1,
-			LocalDateTime startFor2, LocalDateTime endFor2,
-			LocalDateTime startFor3, LocalDateTime endFor3,
-			LocalDate specificDate, int expected
+		LocalDateTime startFor1, LocalDateTime endFor1,
+		LocalDateTime startFor2, LocalDateTime endFor2,
+		LocalDateTime startFor3, LocalDateTime endFor3,
+		LocalDate specificDate, int expected
 	) {
 		//given
 		CafeEntity cafe1 = aCafe().includeKeywords("강남").persistWith24For7();
@@ -125,7 +123,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		aStudy().withCafe(cafe2).withStudyPeriod(startFor3, endFor3).withMember(coordinator).persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
+			createCafeStudySearchListRequest("강남", specificDate, null, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -135,79 +133,79 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		TimeUtil timeUtil = new FakeTimeUtil();
 
 		return Stream.of(
-				Arguments.of(
-						// 첫번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
-						// 두번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						// 세번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 1),
-						// 기댓값
-						2
-				),
-				Arguments.of(
-						// 첫번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
-						// 두번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						// 세번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 2),
-						// 기댓값
-						1
-				),
-				Arguments.of(
-						// 첫번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
-						// 두번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						// 세번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 3),
-						// 기댓값
-						0
-				),
-				Arguments.of(
-						timeUtil.localDateTime(2000, 1, 1, 22, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 23, 59, 59),
-						// 두번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 23, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 1, 0, 0),
-						// 세번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 2, 0, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 2, 0, 0),
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 1),
-						// 기댓값
-						2
-				),
-				Arguments.of(
-						timeUtil.localDateTime(2000, 1, 1, 22, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 23, 59, 59),
-						// 두번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 1, 23, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 1, 0, 0),
-						// 세번째 카공 스터디
-						timeUtil.localDateTime(2000, 1, 2, 0, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 2, 0, 0),
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 2),
-						// 기댓값
-						1
-				)
+			Arguments.of(
+				// 첫번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				// 두번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				// 세번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 1),
+				// 기댓값
+				2
+			),
+			Arguments.of(
+				// 첫번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				// 두번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				// 세번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 2),
+				// 기댓값
+				1
+			),
+			Arguments.of(
+				// 첫번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				// 두번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				// 세번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0),
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 3),
+				// 기댓값
+				0
+			),
+			Arguments.of(
+				timeUtil.localDateTime(2000, 1, 1, 22, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 23, 59, 59),
+				// 두번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 23, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 1, 0, 0),
+				// 세번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 2, 0, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 2, 0, 0),
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 1),
+				// 기댓값
+				2
+			),
+			Arguments.of(
+				timeUtil.localDateTime(2000, 1, 1, 22, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 23, 59, 59),
+				// 두번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 1, 23, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 1, 0, 0),
+				// 세번째 카공 스터디
+				timeUtil.localDateTime(2000, 1, 2, 0, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 2, 0, 0),
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 2),
+				// 기댓값
+				1
+			)
 		);
 	}
 
@@ -225,15 +223,15 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		CafeStudyTagEntity design = aTag().withType(DESIGN).persist();
 
 		aStudy().withCafe(cafe1).withMember(coordinator)
-				.includeTags(development).persist();
+			.includeTags(development).persist();
 		aStudy().withCafe(cafe1).withMember(coordinator)
-				.includeTags(design).persist();
+			.includeTags(design).persist();
 
 		aStudy().withCafe(cafe2).withMember(coordinator)
-				.includeTags(development).persist();
+			.includeTags(development).persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
+			createCafeStudySearchListRequest("강남", null, type, null, null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -241,14 +239,14 @@ class studyQueryDslRepositoryTest extends JpaTest {
 
 	private static Stream<Arguments> provideCafeStudyTag1() {
 		return Stream.of(
-				//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
-				Arguments.of(SALES, 0),
+			//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+			Arguments.of(SALES, 0),
 
-				//CafeStudy1, CafeStudy3과 관련된 테스트
-				Arguments.of(DEVELOPMENT, 2),
+			//CafeStudy1, CafeStudy3과 관련된 테스트
+			Arguments.of(DEVELOPMENT, 2),
 
-				//CafeStudy2과 관련된 테스트
-				Arguments.of(DESIGN, 1)
+			//CafeStudy2과 관련된 테스트
+			Arguments.of(DESIGN, 1)
 		);
 	}
 
@@ -270,7 +268,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		aStudy().withCafe(cafe2).withMember(coordinator).shiftDays(2).persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, List.of(type), null, 0, 10)
+			createCafeStudySearchListRequest("강남", null, null, List.of(type), null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -278,12 +276,12 @@ class studyQueryDslRepositoryTest extends JpaTest {
 
 	private static Stream<Arguments> provideCafeStudyTag2() {
 		return Stream.of(
-				//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
-				Arguments.of(WIFI, 3),
-				Arguments.of(COMFORTABLE_SEATING, 0),
+			//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+			Arguments.of(WIFI, 3),
+			Arguments.of(COMFORTABLE_SEATING, 0),
 
-				//CafeStudy3과 관련된 테스트
-				Arguments.of(OUTLET, 1)
+			//CafeStudy3과 관련된 테스트
+			Arguments.of(OUTLET, 1)
 		);
 	}
 
@@ -298,7 +296,9 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		CafeTagEntity quiet = aCafeTag().withType(QUIET).persist();
 
 		CafeEntity cafe1 = aCafe().includeTags(wifi, outlet).includeKeywords("강남").persistWith7daysFrom9To21();
-		CafeEntity cafe2 = aCafe().includeTags(wifi, comfortableSeating).includeKeywords("강남").persistWith7daysFrom9To21();
+		CafeEntity cafe2 = aCafe().includeTags(wifi, comfortableSeating)
+			.includeKeywords("강남")
+			.persistWith7daysFrom9To21();
 
 		MemberEntity coordinator = aMember().asCoordinator().persist();
 
@@ -307,7 +307,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		aStudy().withCafe(cafe2).withMember(coordinator).shiftDays(2).persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, List.of(type1, type2), null, 0, 10)
+			createCafeStudySearchListRequest("강남", null, null, List.of(type1, type2), null, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -315,14 +315,14 @@ class studyQueryDslRepositoryTest extends JpaTest {
 
 	private static Stream<Arguments> provideCafeStudyTag3() {
 		return Stream.of(
-				//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
-				Arguments.of(WIFI, QUIET, 0),
+			//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+			Arguments.of(WIFI, QUIET, 0),
 
-				//CafeStudy1, CafeStudy2과 관련된 테스트
-				Arguments.of(WIFI, OUTLET, 2),
+			//CafeStudy1, CafeStudy2과 관련된 테스트
+			Arguments.of(WIFI, OUTLET, 2),
 
-				//CafeStudy3과 관련된 테스트
-				Arguments.of(WIFI, COMFORTABLE_SEATING, 1)
+			//CafeStudy3과 관련된 테스트
+			Arguments.of(WIFI, COMFORTABLE_SEATING, 1)
 		);
 	}
 
@@ -341,7 +341,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		aStudy().withMemberComms(WELCOME).withCafe(cafe2).withMember(coordinator).shiftDays(2).persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, null, memberComms, 0, 10)
+			createCafeStudySearchListRequest("강남", null, null, null, memberComms, 0, 10)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(expected);
@@ -349,14 +349,14 @@ class studyQueryDslRepositoryTest extends JpaTest {
 
 	private static Stream<Arguments> provideMemberComms1() {
 		return Stream.of(
-				//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
-				Arguments.of(MemberComms.MODERATE, 0),
+			//CafeStudy1, CafeStudy2, CafeStudy3과 관련된 테스트
+			Arguments.of(MemberComms.MODERATE, 0),
 
-				//CafeStudy1, CafeStudy3과 관련된 테스트
-				Arguments.of(WELCOME, 2),
+			//CafeStudy1, CafeStudy3과 관련된 테스트
+			Arguments.of(WELCOME, 2),
 
-				//CafeStudy2과 관련된 테스트
-				Arguments.of(AVOID, 1)
+			//CafeStudy2과 관련된 테스트
+			Arguments.of(AVOID, 1)
 		);
 	}
 
@@ -369,19 +369,19 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		MemberEntity coordinator = aMember().asCoordinator().persist();
 
 		CafeStudyEntity study1 = aStudy().withCafe(cafe).withMember(coordinator).persist();
-		CafeStudyEntity finishedStudy2 = aStudy().shiftDays(1).withCafe(cafe).withMember(coordinator).persist();
+		CafeStudyEntity finishedStudy2 = aStudy().close().shiftDays(1).withCafe(cafe).withMember(coordinator).persist();
 		CafeStudyEntity study3 = aStudy().shiftDays(2).withCafe(cafe).withMember(coordinator).persist();
-		CafeStudyEntity finishedStudy4 = aStudy().shiftDays(3).withCafe(cafe).withMember(coordinator).persist();
+		CafeStudyEntity finishedStudy4 = aStudy().close().shiftDays(3).withCafe(cafe).withMember(coordinator).persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
+			createCafeStudySearchListRequest("강남", null, null, null, null, 0, 10)
 		);
 		//then
 		List<CafeStudyEntity> content = result.getContent();
 		assertThat(content)
-				.extracting(CafeStudyEntity::getCreatedDate)
-				.containsExactly(study3.getCreatedDate(), study1.getCreatedDate(),
-						finishedStudy4.getCreatedDate(), finishedStudy2.getCreatedDate());
+			.extracting(CafeStudyEntity::getId)
+			.containsExactly(study3.getId(), study1.getId(),
+				finishedStudy4.getId(), finishedStudy2.getId());
 	}
 
 	@Test
@@ -396,7 +396,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		}
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, null, null, 0, 5)
+			createCafeStudySearchListRequest("강남", null, null, null, null, 0, 5)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(5);
@@ -415,7 +415,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		}
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, null, null, 1, 5)
+			createCafeStudySearchListRequest("강남", null, null, null, null, 1, 5)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(5);
@@ -434,7 +434,7 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		}
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", null, null, null, null, 2, 5)
+			createCafeStudySearchListRequest("강남", null, null, null, null, 2, 5)
 		);
 		//then
 		assertThat(result.getContent().size()).isEqualTo(1);
@@ -445,8 +445,8 @@ class studyQueryDslRepositoryTest extends JpaTest {
 	@MethodSource("provideMultipleFiltering1")
 	@DisplayName("다양한 필터링 조합으로 카공 목록을 조회한다.")
 	void find_cafe_studies_by_many_different_filtering(
-			LocalDate specificDate, List<CafeTagType> cafeTagTypes,
-			CafeStudyTagType cafeStudyTagType, MemberComms memberComms, int expected
+		LocalDate specificDate, List<CafeTagType> cafeTagTypes,
+		CafeStudyTagType cafeStudyTagType, MemberComms memberComms, int expected
 	) {
 		//given
 		CafeTagEntity wifi = aCafeTag().withType(WIFI).persist();
@@ -455,7 +455,9 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		CafeTagEntity quiet = aCafeTag().withType(QUIET).persist();
 
 		CafeEntity cafe1 = aCafe().includeKeywords("강남").includeTags(wifi, outlet).persistWith7daysFrom9To21();
-		CafeEntity cafe2 = aCafe().includeKeywords("강남").includeTags(wifi, comfortableSeating).persistWith7daysFrom9To21();
+		CafeEntity cafe2 = aCafe().includeKeywords("강남")
+			.includeTags(wifi, comfortableSeating)
+			.persistWith7daysFrom9To21();
 
 		MemberEntity coordinator = aMember().asCoordinator().persist();
 
@@ -463,34 +465,34 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		CafeStudyTagEntity design = aTag().withType(DESIGN).persist();
 
 		aStudy().withStudyPeriod(
-						timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 14, 0, 0)
-				)
-				.withMemberComms(WELCOME)
-				.withCafe(cafe1).withMember(coordinator)
-				.includeTags(development)
-				.persist();
+				timeUtil.localDateTime(2000, 1, 1, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 14, 0, 0)
+			)
+			.withMemberComms(WELCOME)
+			.withCafe(cafe1).withMember(coordinator)
+			.includeTags(development)
+			.persist();
 
 		aStudy().withStudyPeriod(
-						timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
-						timeUtil.localDateTime(2000, 1, 2, 14, 0, 0)
-				)
-				.withMemberComms(AVOID)
-				.withCafe(cafe2).withMember(coordinator)
-				.includeTags(design)
-				.persist();
+				timeUtil.localDateTime(2000, 1, 2, 12, 0, 0),
+				timeUtil.localDateTime(2000, 1, 2, 14, 0, 0)
+			)
+			.withMemberComms(AVOID)
+			.withCafe(cafe2).withMember(coordinator)
+			.includeTags(design)
+			.persist();
 
 		aStudy().withStudyPeriod(
-						timeUtil.localDateTime(2000, 1, 1, 15, 0, 0),
-						timeUtil.localDateTime(2000, 1, 1, 17, 0, 0)
-				)
-				.withMemberComms(WELCOME)
-				.withCafe(cafe1).withMember(coordinator)
-				.includeTags(design)
-				.persist();
+				timeUtil.localDateTime(2000, 1, 1, 15, 0, 0),
+				timeUtil.localDateTime(2000, 1, 1, 17, 0, 0)
+			)
+			.withMemberComms(WELCOME)
+			.withCafe(cafe1).withMember(coordinator)
+			.includeTags(design)
+			.persist();
 		//when
 		SliceResponse<CafeStudyEntity> result = sut.findCafeStudies(
-				createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
+			createCafeStudySearchListRequest("강남", specificDate, cafeStudyTagType, cafeTagTypes, memberComms, 0, 5)
 		);
 		assertThat(result.getContent().size()).isEqualTo(expected);
 	}
@@ -519,68 +521,68 @@ class studyQueryDslRepositoryTest extends JpaTest {
 		TimeUtil timeUtil = new FakeTimeUtil();
 
 		return Stream.of(
-				Arguments.of(
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 1),
-						// 카페 태그
-						List.of(WIFI),
-						// 카공 태그
-						null,
-						// 소통 여부
-						null,
-						// 기댓값
-						2
-				),
-				Arguments.of(
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 2),
-						// 카페 태그
-						Collections.EMPTY_LIST,
-						// 카공 태그
-						DESIGN,
-						// 소통 여부
-						null,
-						// 기댓값
-						1
-				),
-				Arguments.of(
-						// 특정 시작일
-						timeUtil.localDate(2000, 1, 1),
-						// 카페 태그
-						List.of(QUIET),
-						// 카공 태그
-						null,
-						// 소통 여부
-						null,
-						// 기댓값
-						0
-				),
-				Arguments.of(
-						// 특정 시작일
-						null,
-						// 카페 태그
-						Collections.EMPTY_LIST,
-						// 카공 태그
-						null,
-						// 소통 여부
-						AVOID,
-						// 기댓값
-						1
-				)
+			Arguments.of(
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 1),
+				// 카페 태그
+				List.of(WIFI),
+				// 카공 태그
+				null,
+				// 소통 여부
+				null,
+				// 기댓값
+				2
+			),
+			Arguments.of(
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 2),
+				// 카페 태그
+				Collections.EMPTY_LIST,
+				// 카공 태그
+				DESIGN,
+				// 소통 여부
+				null,
+				// 기댓값
+				1
+			),
+			Arguments.of(
+				// 특정 시작일
+				timeUtil.localDate(2000, 1, 1),
+				// 카페 태그
+				List.of(QUIET),
+				// 카공 태그
+				null,
+				// 소통 여부
+				null,
+				// 기댓값
+				0
+			),
+			Arguments.of(
+				// 특정 시작일
+				null,
+				// 카페 태그
+				Collections.EMPTY_LIST,
+				// 카공 태그
+				null,
+				// 소통 여부
+				AVOID,
+				// 기댓값
+				1
+			)
 		);
 	}
 
 	private CafeStudySearchListRequest createCafeStudySearchListRequest(
-			String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, List<CafeTagType> cafeTagTypes,
-			MemberComms memberComms, int page, int sizePerPage) {
+		String keyword, LocalDate date, CafeStudyTagType cafeStudyTagType, List<CafeTagType> cafeTagTypes,
+		MemberComms memberComms, int page, int sizePerPage) {
 		return CafeStudySearchListRequest.builder()
-				.keyword(keyword)
-				.date(date)
-				.cafeStudyTagType(cafeStudyTagType)
-				.cafeTagTypes(cafeTagTypes)
-				.memberComms(memberComms)
-				.page(page)
-				.sizePerPage(sizePerPage)
-				.build();
+			.keyword(keyword)
+			.date(date)
+			.cafeStudyTagType(cafeStudyTagType)
+			.cafeTagTypes(cafeTagTypes)
+			.memberComms(memberComms)
+			.page(page)
+			.sizePerPage(sizePerPage)
+			.build();
 	}
 }

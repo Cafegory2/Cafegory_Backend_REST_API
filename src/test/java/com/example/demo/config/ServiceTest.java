@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest()
 @ActiveProfiles("test")
-@Import({HelperConfig.class, DatabaseCleanup.class, FakeTimeUtil.class, RepositoryHolderConfig.class})
+@Import({DatabaseCleanup.class, FakeTimeUtil.class, RepositoryHolderConfig.class})
 public abstract class ServiceTest extends TestContainer {
 
 	@Autowired

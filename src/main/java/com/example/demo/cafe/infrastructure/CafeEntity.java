@@ -23,13 +23,18 @@ import com.example.demo.cafe.domain.Menu;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe")
 public class CafeEntity extends BaseEntity {
@@ -65,14 +70,6 @@ public class CafeEntity extends BaseEntity {
 		this.id = id;
 	}
 
-	@Builder
-	private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {
-		this.name = name;
-		this.mainImageUrl = mainImageUrl;
-		this.address = address;
-		this.sns = sns;
-	}
-
 	public Cafe toCafe() {
 		return Cafe.builder()
 			.id(new CafeId(this.id))
@@ -100,31 +97,6 @@ public class CafeEntity extends BaseEntity {
 							.price(menu.getPrice())
 							.build()
 					)
-					.collect(Collectors.toList())
-			)
-			.build();
-	}
-
-	public Cafe toCafeWithTagsAndMenu() {
-		return Cafe.builder()
-			.id(new CafeId(this.id))
-			.name(this.name)
-			.imgUrl(this.mainImageUrl)
-			.sns(this.sns)
-			.address(
-				Address.builder()
-					.fullAddress(this.address.getFullAddress())
-					.region(this.address.getRegion())
-					.build()
-			)
-			.cafeTagTypes(
-				this.cafeCafeTags.stream()
-					.map(cafeCafeTag -> cafeCafeTag.getCafeTag().getType())
-					.collect(Collectors.toList())
-			)
-			.menus(
-				this.menus.stream()
-					.map(MenuEntity::toMenu)
 					.collect(Collectors.toList())
 			)
 			.build();

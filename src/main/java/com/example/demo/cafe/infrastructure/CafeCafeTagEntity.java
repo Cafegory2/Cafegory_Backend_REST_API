@@ -16,13 +16,18 @@ import org.hibernate.annotations.Where;
 import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_cafe_tag")
 public class CafeCafeTagEntity extends BaseEntity {
@@ -41,11 +46,4 @@ public class CafeCafeTagEntity extends BaseEntity {
 	private CafeTagEntity cafeTag;
 
 	private int taggingCount;
-
-	@Builder
-	private CafeCafeTagEntity(CafeEntity cafe, CafeTagEntity cafeTag) {
-		this.cafe = cafe;
-		this.cafeTag = cafeTag;
-		this.taggingCount = 0;
-	}
 }

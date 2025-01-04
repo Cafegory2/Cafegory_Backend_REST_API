@@ -14,9 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import lombok.*;
 import org.hibernate.annotations.Where;
 
+import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Attendance;
 import com.example.demo.study.domain.Participant;
@@ -24,11 +24,20 @@ import com.example.demo.study.domain.ParticipantContent;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.domain.StudyRole;
-import com.example.demo.auth.implement.BaseEntity;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_member", uniqueConstraints = {
 	@UniqueConstraint(name = "unique_cafe_study_member", columnNames = {"cafe_study_id", "member_id"})})
@@ -50,22 +59,12 @@ public class CafeStudyMemberEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private StudyRole studyRole;
 
-	//TODO 테스트 빌더 클래스 리팩터링을 위해 Setter로 임시로 오픈, 엔티티가 DB단에 완벽히 존재할 때 Setter없어도 수정 가능할듯
-	@Setter
 	@Enumerated(EnumType.STRING)
-	private Attendance attendance;
+	private Attendance attendance = Attendance.YES;
 
 	public CafeStudyMemberEntity(Long studyId, Long memberId) {
 		this.cafeStudy = new CafeStudyEntity(studyId);
 		this.member = new MemberEntity(memberId);
-	}
-
-	@Builder
-	private CafeStudyMemberEntity(CafeStudyEntity cafeStudy, MemberEntity member, StudyRole studyRole) {
-		this.cafeStudy = cafeStudy;
-		this.member = member;
-		this.studyRole = studyRole;
-		this.attendance = Attendance.YES;
 	}
 
 	public Participant toParticipant() {

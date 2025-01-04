@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberContent;
 import com.example.demo.member.domain.MemberId;
-import com.example.demo.member.infrastructure.repository2.MemberRepository2;
+import com.example.demo.member.infrastructure.repository2.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,17 +15,17 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class MemberEditor {
 
-	private final MemberRepository2 memberRepository2;
+	private final MemberRepository memberRepository;
 
 	public MemberId save(Member member) {
-		return memberRepository2.save(member);
+		return memberRepository.save(member);
 	}
 
 	public void edit(MemberContent content, MemberId memberId) {
-		memberRepository2.update(content, memberId);
+		memberRepository.update(content, memberId);
 	}
 
 	public void updateRefreshToken(MemberId memberId, String refreshToken) {
-		memberRepository2.updateRefreshToken(memberId, refreshToken);
+		memberRepository.updateRefreshToken(memberId, refreshToken);
 	}
 }

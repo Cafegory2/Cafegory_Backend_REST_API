@@ -16,13 +16,18 @@ import org.hibernate.annotations.Where;
 import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_keyword")
 public class CafeKeywordEntity extends BaseEntity {
@@ -37,10 +42,4 @@ public class CafeKeywordEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeEntity cafe;
-
-	@Builder
-	private CafeKeywordEntity(String keyword, CafeEntity cafe) {
-		this.keyword = keyword;
-		this.cafe = cafe;
-	}
 }

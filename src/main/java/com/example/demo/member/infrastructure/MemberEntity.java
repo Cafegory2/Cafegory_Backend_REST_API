@@ -10,22 +10,25 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
+import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.BeverageSize;
 import com.example.demo.member.domain.Member;
 import com.example.demo.member.domain.MemberContent;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.Role;
-import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 @Setter
 @Where(clause = "deleted_date IS NULL")
@@ -70,19 +73,6 @@ public class MemberEntity extends BaseEntity {
 		this.bio = member.getBio();
 		this.beverageSize = member.getBeverageSize();
 		this.refreshToken = member.getRefreshToken();
-	}
-
-	@Builder
-	private MemberEntity(Role role, String nickname, String email, String profileUrl, String bio,
-		int participationCount, BeverageSize beverageSize, String refreshToken) {
-		this.role = role;
-		this.nickname = nickname;
-		this.email = email;
-		this.profileUrl = profileUrl;
-		this.bio = bio;
-		this.participationCount = participationCount;
-		this.beverageSize = beverageSize;
-		this.refreshToken = refreshToken;
 	}
 
 	public Member toMember() {

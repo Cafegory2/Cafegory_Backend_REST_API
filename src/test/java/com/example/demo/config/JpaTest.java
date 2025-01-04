@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
 @ActiveProfiles("test")
-@Import({HelperConfig.class, DataJpaConfig.class, DatabaseCleanup.class,
-		FakeTimeUtil.class, TestAuditingConfig.class, RepositoryHolderConfig.class})
+@Import({DataJpaConfig.class, DatabaseCleanup.class,
+	FakeTimeUtil.class, TestAuditingConfig.class, RepositoryHolderConfig.class})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class JpaTest extends TestContainer {

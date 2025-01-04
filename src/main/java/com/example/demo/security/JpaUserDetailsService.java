@@ -1,22 +1,22 @@
 package com.example.demo.security;
 
-import com.example.demo.exception.JwtTokenAuthenticationException;
-import com.example.demo.member.infrastructure.MemberRepository;
+import static com.example.demo.exception.ExceptionType.*;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.example.demo.exception.JwtTokenAuthenticationException;
+import com.example.demo.member.infrastructure.MemberJpaRepository;
 
-import static com.example.demo.exception.ExceptionType.*;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class JpaUserDetailsService {
 
-	private final MemberRepository memberRepository;
+	private final MemberJpaRepository memberRepository;
 
 	public CustomUserDetails loadUserByUserId(final String claimSubjectValue) throws UsernameNotFoundException {
 		Long memberId = Long.parseLong(claimSubjectValue);

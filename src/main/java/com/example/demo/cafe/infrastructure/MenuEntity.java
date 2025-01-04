@@ -13,17 +13,22 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.example.demo.cafe.domain.Menu;
 import com.example.demo.auth.implement.BaseEntity;
+import com.example.demo.cafe.domain.Menu;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Builder
 @Entity
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "menu")
 public class MenuEntity extends BaseEntity {
@@ -39,13 +44,6 @@ public class MenuEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeEntity cafe;
-
-	@Builder
-	private MenuEntity(String name, String price, CafeEntity cafe) {
-		this.name = name;
-		this.price = price;
-		this.cafe = cafe;
-	}
 
 	public Menu toMenu() {
 		return Menu.builder()

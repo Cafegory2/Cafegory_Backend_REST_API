@@ -19,148 +19,136 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.demo.domain.DateAudit;
-import com.example.demo.study.domain.*;
-import lombok.*;
 import org.hibernate.annotations.Where;
 
+import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.infrastructure.CafeEntity;
+import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.auth.implement.BaseEntity;
+import com.example.demo.study.domain.Coordinator;
+import com.example.demo.study.domain.MemberComms;
+import com.example.demo.study.domain.RecruitmentStatus;
+import com.example.demo.study.domain.Schedule;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyContent;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.ViewCount;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Builder
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study")
 public class CafeStudyEntity extends BaseEntity {
 
-    public static final int MIN_DELAY_BEFORE_START = 1 * 60 * 60;
+	public static final int MIN_DELAY_BEFORE_START = 1 * 60 * 60;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "cafe_study_id")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "cafe_study_id")
+	private Long id;
 
-    private String name;
+	private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private CafeEntity cafe;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private CafeEntity cafe;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private MemberEntity coordinator;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "coordinator_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+	private MemberEntity coordinator;
 
-    @Embedded
-    private StudyPeriod studyPeriod;
+	@Embedded
+	private StudyPeriod studyPeriod;
 
-    @Enumerated(EnumType.STRING)
-    private MemberComms memberComms;
-
-    private int maxParticipants;
-    private String introduction;
-    private int views;
-
-	// TODO 클래스 레벨에 Setter 여는 것에 대한 논의 필요
-	@Setter
 	@Enumerated(EnumType.STRING)
-	private RecruitmentStatus recruitmentStatus;
+	private MemberComms memberComms;
 
-    @OneToMany(mappedBy = "cafeStudy")
-    private List<CafeStudyMemberEntity> cafeStudyMembers = new ArrayList<>();
+	private int maxParticipants;
+	private String introduction;
+	private int views;
 
-    @OneToMany(mappedBy = "cafeStudy")
-    private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
+	@Enumerated(EnumType.STRING)
+	private RecruitmentStatus recruitmentStatus = RecruitmentStatus.OPEN;
 
-    public CafeStudyEntity(Long studyId) {
-        this.id = studyId;
-    }
+	@OneToMany(mappedBy = "cafeStudy")
+	private List<CafeStudyMemberEntity> cafeStudyMembers = new ArrayList<>();
 
-    public CafeStudyEntity(StudyContent content, Long cafeId, Long memberId) {
-        this.name = content.getName();
-        this.cafe = new CafeEntity(cafeId);
-        this.coordinator = new MemberEntity(memberId);
-        this.studyPeriod = StudyPeriod.builder()
-                .startDateTime(content.getStartDateTime())
-                .endDateTime(content.getEndDateTime())
-                .build();
-        this.memberComms = content.getMemberComms();
-        this.maxParticipants = content.getMaxParticipantCount();
-        this.introduction = content.getIntroduction();
-        this.views = 0;
-        this.recruitmentStatus = RecruitmentStatus.OPEN;
-    }
+	@OneToMany(mappedBy = "cafeStudy")
+	private List<CafeStudyCafeStudyTagEntity> cafeStudyCafeStudyTags = new ArrayList<>();
 
-    @Builder
-    private CafeStudyEntity(String name, CafeEntity cafe, MemberEntity coordinator, StudyPeriod studyPeriod,
-                            MemberComms memberComms, int maxParticipants, String introduction, List<CafeStudyCafeStudyTagEntity> tags) {
-        this.name = name;
-        this.cafe = cafe;
-        this.coordinator = coordinator;
-        this.studyPeriod = studyPeriod;
-        this.memberComms = memberComms;
-        this.maxParticipants = maxParticipants;
-        this.introduction = introduction;
-        this.views = 0;
-        this.recruitmentStatus = RecruitmentStatus.OPEN;
-        this.cafeStudyCafeStudyTags = tags;
+	public CafeStudyEntity(Long studyId) {
+		this.id = studyId;
+	}
 
-        addCoordinatorToStudy(coordinator);
-    }
+	public CafeStudyEntity(StudyContent content, Long cafeId, Long memberId) {
+		this.name = content.getName();
+		this.cafe = new CafeEntity(cafeId);
+		this.coordinator = new MemberEntity(memberId);
+		this.studyPeriod = StudyPeriod.builder()
+			.startDateTime(content.getStartDateTime())
+			.endDateTime(content.getEndDateTime())
+			.build();
+		this.memberComms = content.getMemberComms();
+		this.maxParticipants = content.getMaxParticipantCount();
+		this.introduction = content.getIntroduction();
+		this.views = 0;
+		this.recruitmentStatus = RecruitmentStatus.OPEN;
+	}
 
-    public Study toStudy() {
-        return Study.builder()
-                .id(new StudyId(this.id))
-                .content(
-                        StudyContent.builder()
-                                .name(this.name)
-                                .schedule(
-                                        Schedule.builder()
-                                                .startDateTime(this.getStudyPeriod().getStartDateTime())
-                                                .endDateTime(this.getStudyPeriod().getEndDateTime())
-                                                .build()
-                                )
-                                .memberComms(this.memberComms)
-                                .maxParticipantCount(this.maxParticipants)
-                                .introduction(this.introduction)
-                                .tags(this.cafeStudyCafeStudyTags.stream()
-                                        .map(cafeTag -> cafeTag.getCafeStudyTag().getType())
-                                        .collect(Collectors.toList()))
-                                .build()
+	public Study toStudy() {
+		return Study.builder()
+			.id(new StudyId(this.id))
+			.content(
+				StudyContent.builder()
+					.name(this.name)
+					.schedule(
+						Schedule.builder()
+							.startDateTime(this.getStudyPeriod().getStartDateTime())
+							.endDateTime(this.getStudyPeriod().getEndDateTime())
+							.build()
+					)
+					.memberComms(this.memberComms)
+					.maxParticipantCount(this.maxParticipants)
+					.introduction(this.introduction)
+					.tags(this.cafeStudyCafeStudyTags.stream()
+						.map(cafeTag -> cafeTag.getCafeStudyTag().getType())
+						.collect(Collectors.toList()))
+					.build()
 
-                )
-                .cafeId(new CafeId(this.cafe.getId()))
-                .coordinator(
-                        Coordinator.builder()
-                                .id(new MemberId(this.coordinator.getId()))
-                                .nickname(this.coordinator.getNickname())
-                                .build())
-                .recruitmentStatus(this.recruitmentStatus)
-                .dateAudit(
-                        DateAudit.builder()
-                                .createdDate(this.getCreatedDate())
-                                .modifiedDate(this.getLastModifiedDate())
-                                .build()
-                )
-                .build();
-    }
+			)
+			.cafeId(new CafeId(this.cafe.getId()))
+			.coordinator(
+				Coordinator.builder()
+					.id(new MemberId(this.coordinator.getId()))
+					.nickname(this.coordinator.getNickname())
+					.build())
+			.recruitmentStatus(this.recruitmentStatus)
+			.dateAudit(
+				DateAudit.builder()
+					.createdDate(this.getCreatedDate())
+					.modifiedDate(this.getLastModifiedDate())
+					.build()
+			)
+			.build();
+	}
 
-    public ViewCount toViewCount() {
-        return ViewCount.builder()
-                .totalViews(getViews())
-                .build();
-    }
-
-    private void addCoordinatorToStudy(MemberEntity coordinator) {
-        CafeStudyMemberEntity cafeStudyMember = CafeStudyMemberEntity.builder()
-                .cafeStudy(this)
-                .member(coordinator)
-                .studyRole(StudyRole.COORDINATOR)
-                .build();
-        cafeStudyMembers.add(cafeStudyMember);
-    }
+	public ViewCount toViewCount() {
+		return ViewCount.builder()
+			.totalViews(getViews())
+			.build();
+	}
 
 }

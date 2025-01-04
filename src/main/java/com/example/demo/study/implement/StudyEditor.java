@@ -5,20 +5,20 @@ import static com.example.demo.exception.ExceptionType.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.cafe.domain.CafeId;
-import com.example.demo.study.domain.StudyContent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyContent;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyTagId;
-import com.example.demo.study.infrastructure.repository2.StudyMemberRepository2;
-import com.example.demo.study.infrastructure.repository2.StudyQueryRepository2;
-import com.example.demo.study.infrastructure.repository2.StudyRepository2;
-import com.example.demo.study.infrastructure.repository2.StudyStudyTagRepository2;
-import com.example.demo.study.infrastructure.repository2.StudyTagRepository2;
+import com.example.demo.study.infrastructure.repository2.StudyMemberRepository;
+import com.example.demo.study.infrastructure.repository2.StudyQueryRepository;
+import com.example.demo.study.infrastructure.repository2.StudyRepository;
+import com.example.demo.study.infrastructure.repository2.StudyStudyTagRepository;
+import com.example.demo.study.infrastructure.repository2.StudyTagRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,12 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StudyEditor {
 
-	private final StudyRepository2 studyRepository2;
-	private final StudyQueryRepository2 studyQueryRepository2;
+	private final StudyRepository studyRepository;
+	private final StudyQueryRepository studyQueryRepository;
 
-	private final StudyTagRepository2 studyTagRepository2;
-	private final StudyStudyTagRepository2 studyStudyTagRepository2;
-	private final StudyMemberRepository2 studyMemberRepository2;
+	private final StudyTagRepository studyTagRepository;
+	private final StudyStudyTagRepository studyStudyTagRepository;
+	private final StudyMemberRepository studyMemberRepository;
 
 	private final StudyValidator studyValidator;
 
@@ -39,9 +39,9 @@ public class StudyEditor {
 	public StudyId saveWithCascade(StudyContent content, CafeId cafeId, MemberId memberId) {
 		validateStudyDetails(content);
 
-		StudyId savedStudyId = studyRepository2.save(content, cafeId, memberId);
-		List<StudyTagId> studyTagIds = studyTagRepository2.countByTags(content.getTags());
-		studyStudyTagRepository2.saveAll(savedStudyId, studyTagIds);
+		StudyId savedStudyId = studyRepository.save(content, cafeId, memberId);
+		List<StudyTagId> studyTagIds = studyTagRepository.countByTags(content.getTags());
+		studyStudyTagRepository.saveAll(savedStudyId, studyTagIds);
 
 		return savedStudyId;
 	}
@@ -54,13 +54,13 @@ public class StudyEditor {
 
 	@Transactional
 	public void removeWithCascade(StudyId studyId, MemberId candidateCoordinatorId, LocalDateTime now) {
-		Study study = studyQueryRepository2.findById(studyId);
+		Study study = studyQueryRepository.findById(studyId);
 		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId.getId(),
 			study.getCoordinator().getId().getId());
 
-		studyMemberRepository2.remove(studyId, candidateCoordinatorId, now);
-		studyStudyTagRepository2.remove(studyId, now);
+		studyMemberRepository.remove(studyId, candidateCoordinatorId, now);
+		studyStudyTagRepository.remove(studyId, now);
 
-		studyRepository2.deleteWithCascade(studyId, candidateCoordinatorId, now);
+		studyRepository.deleteWithCascade(studyId, candidateCoordinatorId, now);
 	}
 }
