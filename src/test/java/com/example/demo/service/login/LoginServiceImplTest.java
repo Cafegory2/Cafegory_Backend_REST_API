@@ -1,10 +1,10 @@
 package com.example.demo.service.login;
 
+import com.example.demo.auth.dto.oauth2.OAuth2Profile;
+import com.example.demo.auth.infrastructure.aws.AwsS3Client;
+import com.example.demo.auth.infrastructure.oauth2.OAuth2Client;
+import com.example.demo.auth.service.login.LoginServiceImpl;
 import com.example.demo.config.ServiceTest;
-import com.example.demo.trash.dto.oauth2.OAuth2Profile;
-import com.example.demo.trash.infrastructure.aws.AwsS3Client;
-import com.example.demo.trash.infrastructure.oauth2.OAuth2Client;
-import com.example.demo.trash.service.login.LoginServiceImpl;
 import com.example.demo.member.infrastructure.MemberRepository;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;

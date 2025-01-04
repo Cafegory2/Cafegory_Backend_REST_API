@@ -1,10 +1,11 @@
 package com.example.demo.builder;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Coordinator;
 
 public class CoordinatorBuilder {
 
-    private Long id = 1L;
+    private MemberId id = new MemberId(1L);
     private String nickname = "테스트 닉네임";
 
     private CoordinatorBuilder() {}
@@ -23,7 +24,7 @@ public class CoordinatorBuilder {
     }
 
     public CoordinatorBuilder withId(Long id) {
-        this.id = id;
+        this.id = new MemberId(id);
         return this;
     }
 

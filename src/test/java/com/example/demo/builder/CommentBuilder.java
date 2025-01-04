@@ -4,6 +4,9 @@ import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.ParentCommentId;
+import com.example.demo.study.domain.StudyId;
 
 import static com.example.demo.builder.CommentContentBuilder.*;
 import static com.example.demo.builder.DateAuditBuilder.*;
@@ -11,15 +14,17 @@ import static com.example.demo.builder.MemberIdentityBuilder.*;
 
 public class CommentBuilder {
 
+    private CommentId id = new CommentId(1L);
     private CommentContent commentContent = aCommentContent().build();
-    private Long parentCommentId = 1L;
-    private Long studyId = 1L;
+    private ParentCommentId parentCommentId;
+    private StudyId studyId = new StudyId(1L);
     private MemberIdentity author = aMemberIdentity().build();
     private DateAudit date = aDateAudit().build();
 
     private CommentBuilder() {}
 
     private CommentBuilder(CommentBuilder copy) {
+        this.id = copy.id;
         this.commentContent = copy.commentContent;
         this.parentCommentId = copy.parentCommentId;
         this.studyId = copy.studyId;
@@ -35,18 +40,23 @@ public class CommentBuilder {
         return new CommentBuilder();
     }
 
+    public CommentBuilder withId(Long Id) {
+        this.id = new CommentId(Id);
+        return this;
+    }
+
     public CommentBuilder with(CommentContentBuilder commentContentBuilder) {
         this.commentContent = commentContentBuilder.build();
         return this;
     }
 
     public CommentBuilder withParentCommentId(Long parentCommentId) {
-        this.parentCommentId = parentCommentId;
+        this.parentCommentId = new ParentCommentId(parentCommentId);
         return this;
     }
 
     public CommentBuilder withStudyId(Long studyId) {
-        this.studyId = studyId;
+        this.studyId = new StudyId(studyId);
         return this;
     }
 
@@ -62,6 +72,7 @@ public class CommentBuilder {
 
     public Comment build() {
         return Comment.builder()
+                .id(this.id)
                 .commentContent(this.commentContent)
                 .parentCommentId(this.parentCommentId)
                 .studyId(this.studyId)

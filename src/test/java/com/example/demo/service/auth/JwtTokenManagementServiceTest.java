@@ -1,16 +1,11 @@
 package com.example.demo.service.auth;
 
+import static com.example.demo.auth.implement.tokenmanagerment.TokenClaims.*;
 import static com.example.demo.builder.JwtTokenBuilder.*;
 import static com.example.demo.persister.MemberPersister.*;
-import static com.example.demo.trash.implement.tokenmanagerment.TokenClaims.*;
-import static com.example.demo.trash.implement.tokenmanagerment.TokenClaims.ACCESS_TOKEN;
-import static com.example.demo.trash.implement.tokenmanagerment.TokenClaims.TOKEN_TYPE;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.example.demo.builder.JwtTokenBuilder;
-import com.example.demo.persister.MemberPersister;
-import com.example.demo.trash.implement.tokenmanagerment.TokenClaims;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtTokenAuthenticationException;
-import com.example.demo.factory.TestJwtFactory;
-import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.auth.service.token.JwtTokenManagementService;
 
