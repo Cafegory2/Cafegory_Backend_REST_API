@@ -13,4 +13,8 @@ public interface CafeStudyTagRepository extends JpaRepository<CafeStudyTagEntity
 	@Query("select t from CafeStudyTagEntity t"
 		+ " where t.type in :tags")
 	List<CafeStudyTagEntity> findByTags(@Param("tags") List<CafeStudyTagType> tags);
+
+	@Query("select t.id from CafeStudyTagEntity t" +
+			" where t.type in :tags")
+	List<Long> countByTags(@Param("tags") List<CafeStudyTagType> tags);
 }

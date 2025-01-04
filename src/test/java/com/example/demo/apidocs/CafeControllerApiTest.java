@@ -106,7 +106,7 @@ public class CafeControllerApiTest extends ApiDocsTest {
 
 	@Test
 	@DisplayName("카페 상세정보 조회 API")
-	void getCafeStudyDetail() throws Exception {
+	void getCafeDetail() throws Exception {
 		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
 		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
 

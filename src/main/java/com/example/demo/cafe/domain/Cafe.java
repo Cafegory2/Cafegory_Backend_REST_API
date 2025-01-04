@@ -10,7 +10,7 @@ import lombok.Getter;
 @Builder
 public class Cafe {
 
-	private Long id;
+	private CafeId id;
 	private String name;
 	private String imgUrl;
 	private String sns;

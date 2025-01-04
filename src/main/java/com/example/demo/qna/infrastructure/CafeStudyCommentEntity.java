@@ -18,13 +18,19 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.domain.DateAudit;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.MemberIdentity;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.qna.domain.ChildComment;
 import com.example.demo.qna.domain.Comment;
 import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.ParentCommentId;
+import com.example.demo.qna.domain.RootComment;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -61,9 +67,15 @@ public class CafeStudyCommentEntity extends BaseEntity {
 	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeStudyEntity cafeStudy;
 
+	public CafeStudyCommentEntity(Long id) {
+		this.id = id;
+	}
+
 	@Builder
-	private CafeStudyCommentEntity(MemberEntity author, StudyRole studyRole, String content,
-		CafeStudyCommentEntity parentComment, CafeStudyEntity cafeStudy) {
+	private CafeStudyCommentEntity(
+		MemberEntity author, StudyRole studyRole, String content, CafeStudyCommentEntity parentComment,
+		CafeStudyEntity cafeStudy
+	) {
 		this.author = author;
 		this.studyRole = studyRole;
 		this.content = content;
@@ -73,9 +85,9 @@ public class CafeStudyCommentEntity extends BaseEntity {
 
 	public Comment toComment() {
 		return Comment.builder()
+			.id(new CommentId(this.id))
 			.commentContent(
 				CommentContent.builder()
-					.commentId(this.id)
 					.content(this.content)
 					.build()
 			)
@@ -85,13 +97,70 @@ public class CafeStudyCommentEntity extends BaseEntity {
 					.nickname(this.author.getNickname())
 					.build()
 			)
-			.cafeStudyId(this.cafeStudy.getId())
+			.studyId(new StudyId(this.cafeStudy.getId()))
 			.date(
 				DateAudit.builder()
 					.createdDate(getCreatedDate())
 					.modifiedDate(getLastModifiedDate())
 					.build()
 			)
+			.build();
+	}
+
+	public ChildComment toCommentOld() {
+		return ChildComment.builder()
+			.id(new CommentId(this.id))
+			.commentContent(
+				CommentContent.builder()
+					.content(this.content)
+					.build()
+			)
+			.author(
+				MemberIdentity.builder()
+					.id(this.author.getId())
+					.nickname(this.author.getNickname())
+					.build()
+			)
+			.studyId(new StudyId(this.cafeStudy.getId()))
+			.date(
+				DateAudit.builder()
+					.createdDate(getCreatedDate())
+					.modifiedDate(getLastModifiedDate())
+					.build()
+			)
+			.build();
+	}
+
+	public static CafeStudyCommentEntity from(RootComment comment, StudyRole studyRole) {
+		return CafeStudyCommentEntity.builder()
+			.author(new MemberEntity(comment.getAuthor().getId()))
+			.content(comment.getContent())
+			.parentComment(null)
+			.studyRole(studyRole)
+			.cafeStudy(new CafeStudyEntity(comment.getStudyId().getId()))
+			.build();
+	}
+
+	public static CafeStudyCommentEntity createRootComment(
+		CommentContent content, MemberId authorId, StudyId studyId, StudyRole studyRole
+	) {
+		return CafeStudyCommentEntity.builder()
+			.author(new MemberEntity(authorId.getId()))
+			.content(content.getContent())
+			.studyRole(studyRole)
+			.cafeStudy(new CafeStudyEntity(studyId.getId()))
+			.build();
+	}
+
+	public static CafeStudyCommentEntity createSubComment(
+		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+	) {
+		return CafeStudyCommentEntity.builder()
+			.author(new MemberEntity(authorId.getId()))
+			.content(content.getContent())
+			.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
+			.studyRole(studyRole)
+			.cafeStudy(new CafeStudyEntity(studyId.getId()))
 			.build();
 	}
 

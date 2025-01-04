@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 
 import com.example.demo.config.AcceptanceTest;
 import com.example.demo.member.presentation.WelcomeProfileResponse;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.token.JwtToken;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

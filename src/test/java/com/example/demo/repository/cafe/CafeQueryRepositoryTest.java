@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeQueryRepository;
@@ -28,7 +29,6 @@ import com.example.demo.helper.CafeStudySaveHelper;
 import com.example.demo.helper.CafeTagSaveHelper;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 @Import(CafeQueryRepository.class)

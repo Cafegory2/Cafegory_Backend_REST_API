@@ -19,8 +19,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.exception.JwtTokenAuthenticationException;
-import com.example.demo.trash.implement.token.JwtClaims;
-import com.example.demo.trash.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.auth.implement.token.JwtClaims;
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,6 +2,7 @@ package com.example.demo.cafe.infrastructure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.persistence.Column;
@@ -14,10 +15,12 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
+import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.cafe.domain.Address;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
+import com.example.demo.cafe.domain.Menu;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.trash.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,8 +57,13 @@ public class CafeEntity extends BaseEntity {
 	@OneToMany(mappedBy = "cafe")
 	private List<MenuEntity> menus = new ArrayList<>();
 
+	//TODO: 확인하기 - doha
 	@OneToMany(mappedBy = "cafe")
 	private List<CafeStudyEntity> cafeStudies = new ArrayList<>();
+
+	public CafeEntity(Long id) {
+		this.id = id;
+	}
 
 	@Builder
 	private CafeEntity(String name, String mainImageUrl, AddressEmbeddable address, String sns) {
@@ -65,18 +73,41 @@ public class CafeEntity extends BaseEntity {
 		this.sns = sns;
 	}
 
-	// TODO: cafe 도메인 정의
 	public Cafe toCafe() {
 		return Cafe.builder()
-			.id(this.id)
+			.id(new CafeId(this.id))
 			.name(this.name)
 			.imgUrl(this.mainImageUrl)
+			.sns(this.sns)
+			.cafeTagTypes(
+				this.cafeCafeTags.stream()
+					.map(CafeCafeTagEntity::getCafeTag)
+					.filter(Objects::nonNull)
+					.map(CafeTagEntity::getType)
+					.collect(Collectors.toList())
+			)
+			.address(
+				Address.builder()
+					.fullAddress(this.address.getFullAddress())
+					.region(this.address.getRegion())
+					.build()
+			)
+			.menus(
+				this.menus.stream()
+					.map(menu ->
+						Menu.builder()
+							.name(menu.getName())
+							.price(menu.getPrice())
+							.build()
+					)
+					.collect(Collectors.toList())
+			)
 			.build();
 	}
 
 	public Cafe toCafeWithTagsAndMenu() {
 		return Cafe.builder()
-			.id(this.id)
+			.id(new CafeId(this.id))
 			.name(this.name)
 			.imgUrl(this.mainImageUrl)
 			.sns(this.sns)

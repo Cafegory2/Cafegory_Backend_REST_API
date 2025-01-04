@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Where;
 
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,7 +25,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "cafe_study_cafe_study_tag")
-public class CafeStudyCafeStudyTagEntity extends BaseEntity {
+public class
+CafeStudyCafeStudyTagEntity extends BaseEntity {
 
 	@Id
 	@GeneratedValue
@@ -39,6 +40,11 @@ public class CafeStudyCafeStudyTagEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_study_tag_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeStudyTagEntity cafeStudyTag;
+
+	public CafeStudyCafeStudyTagEntity(Long studyId, Long studyTagId) {
+		this.cafeStudy = new CafeStudyEntity(studyId);
+		this.cafeStudyTag = new CafeStudyTagEntity(studyTagId);
+	}
 
 	@Builder
 	private CafeStudyCafeStudyTagEntity(CafeStudyEntity cafeStudy, CafeStudyTagEntity cafeStudyTag) {

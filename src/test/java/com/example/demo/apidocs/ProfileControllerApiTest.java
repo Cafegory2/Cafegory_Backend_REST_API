@@ -25,7 +25,8 @@ import com.example.demo.helper.ReviewCafeTagSaveHelper;
 import com.example.demo.helper.ReviewSaveHelper;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.member.infrastructure.MemberRepository;
+import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
@@ -55,6 +56,8 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 	private ReviewCafeTagSaveHelper reviewCafeTagSaveHelper;
 	@Autowired
 	private MemberReader memberReader;
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private TimeUtil timeUtil;
@@ -90,7 +93,7 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
 
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
-		MemberEntity member = memberReader.read("test@gmail.com");
+		MemberEntity member = memberRepository.findByEmail("test@gmail.com").get();
 
 		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
 		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);

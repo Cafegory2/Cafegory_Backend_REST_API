@@ -14,7 +14,7 @@ import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.service.token.JwtTokenManagementService;
+import com.example.demo.auth.service.token.JwtTokenManagementService;
 
 class JwtTokenManagementServiceTest extends ServiceTest {
 

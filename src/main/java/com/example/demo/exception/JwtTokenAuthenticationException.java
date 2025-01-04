@@ -2,7 +2,7 @@ package com.example.demo.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.example.demo.trash.implement.token.JwtClaims;
+import com.example.demo.auth.implement.token.JwtClaims;
 
 import lombok.Getter;
 

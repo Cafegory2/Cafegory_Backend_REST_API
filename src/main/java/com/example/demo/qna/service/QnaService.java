@@ -1,50 +1,60 @@
 package com.example.demo.qna.service;
 
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.qna.domain.Comment;
-import com.example.demo.qna.domain.CommentContent;
-import com.example.demo.qna.implement.CommentEditor;
-import com.example.demo.qna.implement.CommentReader;
-import com.example.demo.qna.implement.CommentValidator;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import static com.example.demo.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
-import static com.example.demo.exception.ExceptionType.*;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.member.domain.MemberId;
+import com.example.demo.qna.domain.Comment;
+import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.ParentCommentId;
+import com.example.demo.qna.implement.CommentEditor;
+import com.example.demo.qna.implement.CommentReader;
+import com.example.demo.qna.implement.CommentValidator;
+import com.example.demo.study.domain.StudyId;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class QnaService {
 
-    private final CommentEditor commentEditor;
-    private final CommentReader commentReader;
-    private final CommentValidator commentValidator;
+	private final CommentEditor commentEditor;
+	private final CommentReader commentReader;
+	private final CommentValidator commentValidator;
 
-    public Comment leaveComment(Comment comment, Long memberId) {
-        Long commentId = commentEditor.save(comment, memberId);
-        return commentReader.read(commentId);
-    }
+	public CommentId leaveComment(
+		CommentContent content, ParentCommentId parentCommentId, StudyId studyId, MemberId memberId
+	) {
+		if (parentCommentId.isNull()) {
+			return commentEditor.saveRootComment(content, studyId, memberId);
+		}
+		return commentEditor.saveSubComment(content, parentCommentId, studyId, memberId);
+	}
 
-    public void editComment(CommentContent comment, Long memberId) {
-        Comment readComment = commentReader.read(comment.getCommentId());
-        commentValidator.validateCommentAuthor(readComment, memberId);
-        validateNoReplies(readComment);
+	public void editComment(CommentContent content, CommentId commentId, MemberId memberId) {
+		Comment comment = commentReader.read(commentId);
+		commentValidator.validateCommentAuthor(comment, memberId);
+		validateNoReplies(commentId);
 
-        commentEditor.edit(readComment);
-    }
+		commentEditor.edit(content, commentId);
+	}
 
-    private void validateNoReplies(Comment comment) {
-        if(commentReader.existsReplies(comment.getCommentId())) {
-            throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
-        }
-    }
+	public void removeComment(CommentId commentId, MemberId memberId, LocalDateTime now) {
+		Comment comment = commentReader.read(commentId);
+		commentValidator.validateCommentAuthor(comment, memberId);
+		validateNoReplies(commentId);
 
-    public void removeComment(Long commentId, Long memberId, LocalDateTime now) {
-        Comment readComment = commentReader.read(commentId);
-        commentValidator.validateCommentAuthor(readComment, memberId);
-        validateNoReplies(readComment);
+		commentEditor.remove(commentId, now);
+	}
 
-        commentEditor.remove(commentId, now);
-    }
+	private void validateNoReplies(CommentId commentId) {
+		if (commentReader.existsReplies(commentId)) {
+			throw new CafegoryException(CAFE_STUDY_COMMENT_HAS_REPLY);
+		}
+	}
 }

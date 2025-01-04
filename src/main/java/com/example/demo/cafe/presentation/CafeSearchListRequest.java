@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.demo.auth.dto.PagedRequest;
 import com.example.demo.cafe.domain.CafeTagType;
-import com.example.demo.trash.dto.PagedRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Builder;

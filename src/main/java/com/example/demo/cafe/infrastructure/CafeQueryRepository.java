@@ -9,11 +9,11 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.presentation.CafeSearchListRequest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.PagingUtil;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;

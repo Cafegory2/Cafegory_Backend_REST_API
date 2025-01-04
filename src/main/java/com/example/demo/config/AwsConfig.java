@@ -10,7 +10,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.example.demo.trash.infrastructure.aws.AwsS3HandlerImpl;
+import com.example.demo.auth.infrastructure.aws.AwsS3HandlerImpl;
 
 @Configuration
 public class AwsConfig {

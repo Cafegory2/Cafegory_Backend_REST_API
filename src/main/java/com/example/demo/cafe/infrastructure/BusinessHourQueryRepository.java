@@ -1,6 +1,5 @@
 package com.example.demo.cafe.infrastructure;
 
-import static com.example.demo.cafe.infrastructure.QBusinessHourEntity.*;
 
 import java.time.DayOfWeek;
 
@@ -9,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
+
+import static com.example.demo.cafe.infrastructure.QBusinessHourEntity.businessHourEntity;
+
 
 @Repository
 @RequiredArgsConstructor

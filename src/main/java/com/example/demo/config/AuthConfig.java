@@ -7,17 +7,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.trash.dto.oauth2.OAuth2Provider;
-import com.example.demo.trash.implement.tokenmanagerment.JwtCafegoryTokenManager;
-import com.example.demo.trash.implement.tokenmanagerment.JwtTokenManager;
-import com.example.demo.trash.infrastructure.oauth2.KakaoOAuth2ProfileRequester;
-import com.example.demo.trash.infrastructure.oauth2.KakaoOAuth2TokenRequester;
-import com.example.demo.trash.infrastructure.oauth2.NaverOAuth2ProfileRequester;
-import com.example.demo.trash.infrastructure.oauth2.NaverOAuth2TokenRequester;
-import com.example.demo.trash.infrastructure.oauth2.OAuth2HandlerImpl;
-import com.example.demo.trash.infrastructure.oauth2.OAuth2ProfileRequester;
-import com.example.demo.trash.infrastructure.oauth2.OAuth2StrategyFactory;
-import com.example.demo.trash.infrastructure.oauth2.OAuth2TokenRequester;
+import com.example.demo.auth.dto.oauth2.OAuth2Provider;
+import com.example.demo.auth.implement.tokenmanagerment.JwtCafegoryTokenManager;
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.auth.infrastructure.oauth2.KakaoOAuth2ProfileRequester;
+import com.example.demo.auth.infrastructure.oauth2.KakaoOAuth2TokenRequester;
+import com.example.demo.auth.infrastructure.oauth2.NaverOAuth2ProfileRequester;
+import com.example.demo.auth.infrastructure.oauth2.NaverOAuth2TokenRequester;
+import com.example.demo.auth.infrastructure.oauth2.OAuth2HandlerImpl;
+import com.example.demo.auth.infrastructure.oauth2.OAuth2ProfileRequester;
+import com.example.demo.auth.infrastructure.oauth2.OAuth2StrategyFactory;
+import com.example.demo.auth.infrastructure.oauth2.OAuth2TokenRequester;
 
 @Configuration
 public class AuthConfig {

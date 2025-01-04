@@ -20,7 +20,7 @@ import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.trash.implement.token.JwtToken;
+import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;

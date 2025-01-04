@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.cafe.domain.Cafe;
+import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.service.BusinessHourService;
 import com.example.demo.cafe.service.CafeQueryService;
-import com.example.demo.trash.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,8 @@ public class CafeController {
 
 	@GetMapping("/{cafeId}")
 	public ResponseEntity<CafeDetailResponse> getCafeDetail(@PathVariable Long cafeId) {
-		Cafe cafe = cafeQueryService.getCafe(cafeId);
-		BusinessHour businessHour = businessHourService.findBusinessHour(cafeId, timeUtil.now());
+		Cafe cafe = cafeQueryService.getCafe(new CafeId(cafeId));
+		BusinessHour businessHour = businessHourService.findBusinessHour(cafe.getId(), timeUtil.now());
 		boolean isOpen = businessHourService.isOpen(businessHour, timeUtil.now());
 
 		CafeDetailResponse response = CafeDetailResponse.of(cafe, businessHour, isOpen);
