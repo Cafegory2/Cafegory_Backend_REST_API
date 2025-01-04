@@ -14,14 +14,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BusinessHourValidator {
 
-	private final BusinessHourOpenChecker openChecker;
+    private final BusinessHourOpenChecker openChecker;
 
-	public void validateBetweenBusinessHour(Schedule schedule, BusinessHour businessHour) {
-		boolean isBetweenBusinessHour = openChecker.checkBetweenBusinessHours(businessHour.getOpeningTme(),
-			businessHour.getClosingTme(), schedule.getStartDateTime().toLocalTime(),
-			schedule.getEndDateTime().toLocalTime());
-		if (!isBetweenBusinessHour) {
-			throw new CafegoryException(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS);
-		}
-	}
+    public void validateBetweenBusinessHour(Schedule schedule, BusinessHour businessHour) {
+        boolean isBetweenBusinessHour = openChecker.checkBetweenBusinessHours(
+                businessHour.getOpeningTme(), businessHour.getClosingTme(),
+                schedule.getStartDateTime().toLocalTime(), schedule.getEndDateTime().toLocalTime());
+
+        if (!isBetweenBusinessHour) {
+            throw new CafegoryException(STUDY_ONCE_CREATE_BETWEEN_CAFE_BUSINESS_HOURS);
+        }
+    }
 }

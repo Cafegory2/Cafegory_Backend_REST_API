@@ -11,15 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QnaCommentUpdateResponse {
 
-    private Long commentId;
-    private String content;
+	private Long commentId;
+	private String content;
 
-    private QnaCommentUpdateResponse(Long commentId, String content) {
-        this.commentId = commentId;
-        this.content = content;
-    }
+	private QnaCommentUpdateResponse(Long commentId, String content) {
+		this.commentId = commentId;
+		this.content = content;
+	}
 
-    public static QnaCommentUpdateResponse from(Comment comment) {
-        return new QnaCommentUpdateResponse(comment.getCommentId(), comment.getContent());
-    }
+	public static QnaCommentUpdateResponse from(Comment comment) {
+		return new QnaCommentUpdateResponse(comment.getId().getId(), comment.getContent());
+	}
 }

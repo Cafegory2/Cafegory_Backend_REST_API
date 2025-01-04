@@ -18,7 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.demo.security.JpaUserDetailsService;
 import com.example.demo.security.JwtAuthenticationFilter;
-import com.example.demo.trash.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
 
 @Configuration
 @EnableWebSecurity

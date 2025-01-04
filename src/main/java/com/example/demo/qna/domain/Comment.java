@@ -2,6 +2,8 @@ package com.example.demo.qna.domain;
 
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.study.domain.StudyId;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,21 +11,19 @@ import lombok.Getter;
 @Builder
 public class Comment {
 
-    private CommentContent commentContent;
-    private Long parentCommentId;
-    private Long studyId;
-    private MemberIdentity author;
-    private DateAudit date;
+	private CommentId id;
+	private CommentContent commentContent;
+	private ParentCommentId parentCommentId;
+	private StudyId studyId;
+	private MemberIdentity author;
 
-    public boolean isAuthor(Long memberId) {
-        return this.author.isSameMember(memberId);
-    }
+	private DateAudit date;
 
-    public Long getCommentId() {
-        return this.commentContent.getCommentId();
-    }
+	public boolean isAuthor(Long memberId) {
+		return this.author.isSameMember(memberId);
+	}
 
-    public String getContent() {
-        return this.commentContent.getContent();
-    }
+	public String getContent() {
+		return this.commentContent.getContent();
+	}
 }

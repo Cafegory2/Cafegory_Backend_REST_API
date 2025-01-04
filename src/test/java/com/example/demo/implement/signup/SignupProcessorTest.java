@@ -14,7 +14,7 @@ import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
-import com.example.demo.trash.implement.signup.SignupProcessor;
+import com.example.demo.auth.implement.signup.SignupProcessor;
 
 class SignupProcessorTest extends ServiceTest {
 

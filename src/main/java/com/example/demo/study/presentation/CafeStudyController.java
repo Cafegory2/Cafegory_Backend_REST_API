@@ -1,7 +1,5 @@
 package com.example.demo.study.presentation;
 
-import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
-import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
+import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.study.service.CafeStudyQueryService;
 import com.example.demo.study.service.CafeStudyService;
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -33,9 +35,9 @@ public class CafeStudyController {
 
 	private final TimeUtil timeUtil;
 
-	@GetMapping("/{cafeStudyId}")
-	public ResponseEntity<CafeStudyDetailResponse> getCafeStudyDetail(@PathVariable Long cafeStudyId) {
-		CafeStudyDetailResponse response = cafeStudyQueryService.getCafeStudyDetail(cafeStudyId);
+	@GetMapping("/{studyId}")
+	public ResponseEntity<CafeStudyDetailResponse> getCafeStudyDetail(@PathVariable Long studyId) {
+		CafeStudyDetailResponse response = cafeStudyQueryService.getCafeStudyDetail(new StudyId(studyId));
 		return ResponseEntity.ok(response);
 	}
 
@@ -51,8 +53,10 @@ public class CafeStudyController {
 	public ResponseEntity<CafeStudyCreateResponse> create(
 		@RequestBody @Validated CafeStudyCreateRequest request,
 		@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		Study study = cafeStudyService.createStudy(memberId, timeUtil.now(), request.toStudy());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+		StudyId studyId = cafeStudyService.createStudy(
+				memberId, timeUtil.now(), request.toStudyContent(), request.toCafeId());
+		Study study = cafeStudyQueryService.getStudy(studyId);
 
 		CafeStudyCreateResponse response = CafeStudyCreateResponse.from(study);
 		return ResponseEntity.ok(response);
@@ -61,8 +65,8 @@ public class CafeStudyController {
 	@DeleteMapping("/{cafeStudyId:[0-9]+}")
 	public ResponseEntity<Void> delete(@PathVariable Long cafeStudyId,
 		@AuthenticationPrincipal UserDetails userDetails) {
-		Long memberId = Long.parseLong(userDetails.getUsername());
-		cafeStudyService.deleteStudy(memberId, cafeStudyId, timeUtil.now());
+		MemberId memberId = new MemberId(Long.parseLong(userDetails.getUsername()));
+		cafeStudyService.deleteStudy(memberId, new StudyId(cafeStudyId), timeUtil.now());
 
 		return ResponseEntity.ok().build();
 	}

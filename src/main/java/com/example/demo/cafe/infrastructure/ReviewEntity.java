@@ -16,13 +16,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.example.demo.cafe.domain.CafeId;
+import com.example.demo.cafe.domain.ReviewId;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.Cafe;
 import com.example.demo.cafe.domain.Review;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -61,7 +63,7 @@ public class ReviewEntity extends BaseEntity {
 
 	public Review toReview() {
 		return Review.builder()
-			.id(this.id)
+			.id(new ReviewId(this.id))
 			.tags(
 				reviewCafeTag.stream()
 					.map(tag -> tag.getCafeTag().getType())
@@ -69,7 +71,7 @@ public class ReviewEntity extends BaseEntity {
 			)
 			.cafe(
 				Cafe.builder()
-					.id(cafe.getId())
+					.id(new CafeId(cafe.getId()))
 					.name(cafe.getName())
 					.imgUrl(cafe.getMainImageUrl())
 					.build()

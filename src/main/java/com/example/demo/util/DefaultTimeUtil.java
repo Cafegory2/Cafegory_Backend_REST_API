@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,4 +34,15 @@ public class DefaultTimeUtil implements TimeUtil {
 	public LocalDateTime localDateTime(int year, int month, int dayOfMonth, int hour, int minute, int second) {
 		return LocalDateTime.of(year, month, dayOfMonth, hour, minute);
 	}
+
+	@Override
+	public LocalDateTime minLocalDateTime(LocalDateTime now) {
+		return now.withHour(0).withMinute(0).withSecond(0);
+	}
+
+	@Override
+	public LocalDateTime maxLocalDateTime(LocalDateTime now) {
+		return now.withHour(23).withMinute(59).withSecond(59);
+	}
+
 }

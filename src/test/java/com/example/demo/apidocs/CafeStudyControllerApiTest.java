@@ -38,24 +38,6 @@ import io.restassured.http.ContentType;
 class CafeStudyControllerApiTest extends ApiDocsTest {
 
     @Autowired
-    private CafeSaveHelper cafeSaveHelper;
-    @Autowired
-    private CafeKeywordSaveHelper cafeKeywordSaveHelper;
-    @Autowired
-    private CafeStudyTagSaveHelper cafeStudyTagSaveHelper;
-    @Autowired
-    private CafeStudySaveHelper cafeStudySaveHelper;
-    @Autowired
-    private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
-    @Autowired
-    private MemberSaveHelper memberSaveHelper;
-    @Autowired
-    private CafeTagSaveHelper cafeTagSaveHelper;
-    @Autowired
-    private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
-    @Autowired
-    private MemberReader memberReader;
-    @Autowired
     private TimeUtil timeUtil;
 
     // TODO feat/mypage 12.20에 수정된 코드 pull 되면 수정할 것

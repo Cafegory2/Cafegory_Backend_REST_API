@@ -6,6 +6,8 @@ import static com.example.demo.persister.ReviewContextPersister.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
+import com.example.demo.auth.implement.token.JwtToken;
+import com.example.demo.member.infrastructure.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,6 @@ import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.trash.implement.token.JwtToken;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -26,6 +27,8 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 
 	@Autowired
 	private MemberReader memberReader;
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Test
 	void welcome() {
@@ -58,7 +61,7 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 		CafeEntity cafe2 = aCafe().persistWith24For7();
 
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
-		MemberEntity member = memberReader.read("test@gmail.com");
+		MemberEntity member = memberRepository.findByEmail("test@gmail.com").get();
 
 		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).persist();
 		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).persist();

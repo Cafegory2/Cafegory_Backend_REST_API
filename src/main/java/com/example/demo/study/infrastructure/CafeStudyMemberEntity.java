@@ -20,8 +20,11 @@ import org.hibernate.annotations.Where;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Attendance;
 import com.example.demo.study.domain.Participant;
+import com.example.demo.study.domain.ParticipantContent;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.domain.StudyRole;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,6 +55,11 @@ public class CafeStudyMemberEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Attendance attendance;
 
+	public CafeStudyMemberEntity(Long studyId, Long memberId) {
+		this.cafeStudy = new CafeStudyEntity(studyId);
+		this.member = new MemberEntity(memberId);
+	}
+
 	@Builder
 	private CafeStudyMemberEntity(CafeStudyEntity cafeStudy, MemberEntity member, StudyRole studyRole) {
 		this.cafeStudy = cafeStudy;
@@ -62,13 +70,12 @@ public class CafeStudyMemberEntity extends BaseEntity {
 
 	public Participant toParticipant() {
 		return Participant.builder()
-			.id(this.id)
-			.studyId(this.cafeStudy.getId())
+			.id(new StudyMemberId(this.id))
+			.studyId(new StudyId(this.cafeStudy.getId()))
+			.studyRole(this.studyRole)
+			.content(ParticipantContent.builder()
+				.attendance(this.attendance)
+				.build())
 			.build();
 	}
-
-	// public boolean isLeader(Member member) {
-	// 	return this.id.getMemberId().equals(member.getId());
-	// }
-
 }

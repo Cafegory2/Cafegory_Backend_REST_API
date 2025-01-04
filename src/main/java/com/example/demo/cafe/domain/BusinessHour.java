@@ -10,7 +10,7 @@ import lombok.Getter;
 @Builder
 public class BusinessHour {
 
-	private Long id;
+	private BusinessHourId id;
 	private DayOfWeek dayOfWeek;
 	private LocalTime openingTme;
 	private LocalTime closingTme;

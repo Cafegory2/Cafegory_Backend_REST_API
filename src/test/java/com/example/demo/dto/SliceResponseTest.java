@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 
-import com.example.demo.trash.dto.SliceResponse;
+import com.example.demo.auth.dto.SliceResponse;
 
 import lombok.Getter;
 

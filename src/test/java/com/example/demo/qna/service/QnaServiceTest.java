@@ -1,5 +1,14 @@
 package com.example.demo.qna.service;
 
+import static com.example.demo.builder.CommentContentBuilder.*;
+import static org.assertj.core.api.Assertions.*;
+
+import com.example.demo.builder.CommentContentBuilder;
+import com.example.demo.member.domain.MemberId;
+import com.example.demo.qna.domain.CommentId;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
@@ -9,21 +18,17 @@ import com.example.demo.qna.domain.CommentContent;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.example.demo.exception.ExceptionType.CAFE_STUDY_COMMENT_HAS_REPLY;
 import static com.example.demo.persister.CafeContextPersister.*;
 import static com.example.demo.persister.CommentPersister.*;
 import static com.example.demo.persister.MemberPersister.*;
 import static com.example.demo.persister.StudyConextPersister.*;
-import static org.assertj.core.api.Assertions.*;
 
 class QnaServiceTest extends ServiceTest {
 
-    @Autowired
-    private QnaService sut;
+	@Autowired
+	private QnaService sut;
 
     @Autowired
     private TimeUtil timeUtil;
@@ -40,19 +45,19 @@ class QnaServiceTest extends ServiceTest {
         CafeStudyEntity study = aStudy().withCafe(cafe).withMember(member).persist();
         CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).persist();
         aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).persist();
-        CommentContent commentContent = createCommentContent("변경된 댓글 내용", rootComment.getId());
         //when & then
-        assertThatThrownBy(() -> sut.editComment(commentContent, member.getId()))
+        assertThatThrownBy(() -> sut.editComment(
+                aCommentContent().withContent("변경된 댓글 내용").build(),
+                new CommentId(rootComment.getId()), new MemberId(member.getId())))
             .isInstanceOf(CafegoryException.class)
             .hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
     }
 
-    private CommentContent createCommentContent(String content, Long commentId) {
-        return CommentContent.builder()
-            .commentId(commentId)
-            .content(content)
-            .build();
-    }
+	private CommentContent createCommentContent(String content) {
+		return CommentContent.builder()
+			.content(content)
+			.build();
+	}
 
     @Test
     @DisplayName("답변이 작성된 댓글은 삭제할 수 없다.")
@@ -67,7 +72,8 @@ class QnaServiceTest extends ServiceTest {
         CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).persist();
         aComment().replyTo(rootComment).withStudy(study).withCoordinator(coordinator).persist();
         //when & then
-        assertThatThrownBy(() -> sut.removeComment(rootComment.getId(), member.getId(), timeUtil.now()))
+        assertThatThrownBy(() -> sut.removeComment(
+                new CommentId(rootComment.getId()), new MemberId(member.getId()), timeUtil.now()))
             .isInstanceOf(CafegoryException.class)
             .hasMessage(CAFE_STUDY_COMMENT_HAS_REPLY.getErrorMessage());
     }

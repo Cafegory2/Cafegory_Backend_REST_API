@@ -8,13 +8,13 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 
+import com.example.demo.auth.implement.token.JwtClaims;
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.exception.JwtTokenAuthenticationException;
-import com.example.demo.trash.implement.token.JwtClaims;
-import com.example.demo.trash.implement.tokenmanagerment.JwtTokenManager;
 
 class JwtTokenManagerTest {
 

@@ -11,8 +11,9 @@ import lombok.Getter;
 @Builder
 public class Review {
 
-	private Long id;
+	private ReviewId id;
 	private List<CafeTagType> tags;
 	private Cafe cafe;
+	
 	private DateAudit dateAudit;
 }

@@ -13,9 +13,10 @@ import org.hibernate.annotations.Where;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.member.domain.BeverageSize;
 import com.example.demo.member.domain.Member;
-import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.member.domain.MemberContent;
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.domain.Role;
-import com.example.demo.trash.implement.BaseEntity;
+import com.example.demo.auth.implement.BaseEntity;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,6 +27,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Where(clause = "deleted_date IS NULL")
 @Table(name = "member")
 public class MemberEntity extends BaseEntity {
@@ -50,11 +52,24 @@ public class MemberEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private BeverageSize beverageSize;
 
-	@Setter
 	private String refreshToken;
 
 	public void changeProfileUrl(String profileUrl) {
 		this.profileUrl = profileUrl;
+	}
+
+	public MemberEntity(Long id) {
+		this.id = id;
+	}
+
+	public MemberEntity(Member member) {
+		this.role = member.getRole();
+		this.nickname = member.getContent().getNickname();
+		this.email = member.getEmail();
+		this.profileUrl = member.getContent().getImgUrl();
+		this.bio = member.getBio();
+		this.beverageSize = member.getBeverageSize();
+		this.refreshToken = member.getRefreshToken();
 	}
 
 	@Builder
@@ -72,18 +87,18 @@ public class MemberEntity extends BaseEntity {
 
 	public Member toMember() {
 		return Member.builder()
-			.identity(
-				MemberIdentity.builder()
-					.id(this.id)
+			.id(new MemberId(this.id))
+			// .id(this.id)
+			.content(
+				MemberContent.builder()
 					.nickname(this.nickname)
+					.imgUrl(this.profileUrl)
 					.build()
 			)
 			.role(this.role)
-			.nickname(this.nickname)
 			.email(this.email)
 			.bio(this.bio)
 			.beverageSize(this.beverageSize)
-			.imgUrl(this.profileUrl)
 			.dateAudit(
 				DateAudit.builder()
 					.createdDate(this.getCreatedDate())
@@ -93,37 +108,4 @@ public class MemberEntity extends BaseEntity {
 			.refreshToken(this.refreshToken)
 			.build();
 	}
-
-	public static MemberEntity fromMember(Member member) {
-		return MemberEntity.builder()
-			.role(member.getRole())
-			.nickname(member.getNickname())
-			.email(member.getEmail())
-			.profileUrl(member.getImgUrl())
-			.bio(member.getBio())
-			.refreshToken(member.getRefreshToken())
-			.build();
-	}
-
-	// public void addStudyMember(StudyMember studyMember) {
-	// 	this.studyMembers.add(studyMember);
-	// }
-	//
-	// public void updateProfile(String name, String introduction) {
-	// 	validateIntroduction(introduction);
-	// 	this.name = name;
-	// 	this.introduction = introduction;
-	// }
-	//
-	// private void validateIntroduction(String introduction) {
-	// 	if (introduction.length() > 300) {
-	// 		throw new CafegoryException(PROFILE_UPDATE_INVALID_INTRODUCTION);
-	// 	}
-	// }
-	//
-	// public boolean hasStudyScheduleConflict(LocalDateTime start, LocalDateTime end) {
-	// 	return this.studyMembers.stream()
-	// 		.anyMatch(studyMember -> studyMember.isConflictWith(start, end));
-	// }
-
 }

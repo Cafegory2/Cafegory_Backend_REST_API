@@ -1,13 +1,15 @@
 package com.example.demo.qna.implement;
 
-import com.example.demo.builder.CommentBuilder;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
+
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.qna.domain.Comment;
-import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.qna.domain.CommentId;
+import com.example.demo.qna.domain.ParentCommentId;
 import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
 import com.example.demo.qna.infrastructure.CafeStudyCommentRepository;
+import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.util.TimeUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static com.example.demo.builder.CommentContentBuilder.*;
-import static com.example.demo.builder.MemberIdentityBuilder.*;
 import static com.example.demo.persister.CafeContextPersister.*;
 import static com.example.demo.persister.CommentPersister.*;
 import static com.example.demo.persister.MemberPersister.*;
@@ -26,14 +27,14 @@ import static org.assertj.core.api.Assertions.*;
 
 class CommentEditorTest extends ServiceTest {
 
-    @Autowired
-    private CommentEditor sut;
+	@Autowired
+	private CommentEditor sut;
 
     @Autowired
     private CafeStudyCommentRepository cafeStudyCommentRepository;
 
-    @Autowired
-    private TimeUtil timeUtil;
+	@Autowired
+	private TimeUtil timeUtil;
 
     @Test
     @DisplayName("댓글을 저장한다.")
@@ -42,17 +43,12 @@ class CommentEditorTest extends ServiceTest {
         CafeEntity cafe = aCafe().persist();
         MemberEntity coordinator = aMember().asCoordinator().persist();
         CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
-
-        Comment comment = CommentBuilder.aComment()
-                .with(aCommentContent().withContent("댓글 내용"))
-                .withStudyId(study.getId())
-                .with(aMemberIdentity().withMemberId(coordinator.getId()))
-                .withParentCommentId(null)
-                .build();
         //when
-        Long savedCommentId = sut.save(comment, coordinator.getId());
+        CommentId savedCommentId = sut.saveRootComment(
+				aCommentContent().withContent("댓글 내용").build(),
+				new StudyId(study.getId()), new MemberId(coordinator.getId()));
         //then
-        assertThat(savedCommentId).isNotNull();
+        assertThat(savedCommentId.getId()).isNotNull();
     }
 
     @Test
@@ -66,17 +62,12 @@ class CommentEditorTest extends ServiceTest {
 
         CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
         CafeStudyCommentEntity rootComment = aComment().withStudy(study).withMember(member).persist();
-
-        Comment comment = CommentBuilder.aComment()
-                .with(aCommentContent().withContent("대댓글 내용"))
-                .withStudyId(study.getId())
-                .with(aMemberIdentity().withMemberId(coordinator.getId()))
-                .withParentCommentId(rootComment.getId())
-                .build();
         //when
-        Long savedCommentId = sut.save(comment, member.getId());
+        CommentId savedCommentId = sut.saveSubComment(
+				aCommentContent().withContent("대댓글 내용").build(),
+				new ParentCommentId(rootComment.getId()), new StudyId(study.getId()), new MemberId(member.getId()));
         //then
-        assertThat(savedCommentId).isNotNull();
+        assertThat(savedCommentId.getId()).isNotNull();
     }
 
     @Test
@@ -90,28 +81,13 @@ class CommentEditorTest extends ServiceTest {
 
         CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
         CafeStudyCommentEntity commentEntity = aComment().withContent("테스트 댓글 내용").withStudy(study).withMember(member).persist();
-
-        Comment comment = CommentBuilder.aComment()
-                .with(aCommentContent().withCommentId(commentEntity.getId()).withContent("변경된 댓글 내용"))
-                .withStudyId(study.getId())
-                .with(aMemberIdentity().withMemberId(coordinator.getId()))
-                .build();
         //when
-        sut.edit(comment);
+        sut.edit(
+				aCommentContent().withContent("변경된 댓글 내용").build(), new CommentId(commentEntity.getId())
+		);
         //then
         CafeStudyCommentEntity result = cafeStudyCommentRepository.findById(commentEntity.getId()).orElse(null);
         assertThat(result.getContent()).isEqualTo("변경된 댓글 내용");
-    }
-
-    private Comment createComment(String content, Long commentId) {
-        return Comment.builder()
-                .commentContent(
-                        CommentContent.builder()
-                                .commentId(commentId)
-                                .content(content)
-                                .build()
-                )
-                .build();
     }
 
     @Test
@@ -126,7 +102,7 @@ class CommentEditorTest extends ServiceTest {
         CafeStudyEntity study = aStudy().withCafe(cafe).withMember(coordinator).persist();
         CafeStudyCommentEntity comment = aComment().withStudy(study).withMember(member).persist();
         //when
-        sut.remove(comment.getId(), timeUtil.now());
+        sut.remove(new CommentId(comment.getId()), timeUtil.now());
         //then
         List<CafeStudyCommentEntity> result = cafeStudyCommentRepository.findAll();
         assertThat(result).hasSize(0);

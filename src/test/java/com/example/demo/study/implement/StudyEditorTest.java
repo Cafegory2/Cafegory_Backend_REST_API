@@ -6,7 +6,10 @@ import static com.example.demo.persister.MemberPersister.*;
 import static com.example.demo.persister.StudyMemberPersister.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.example.demo.member.domain.MemberId;
 import com.example.demo.persister.StudyConextPersister;
+
+import com.example.demo.study.domain.StudyId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,7 @@ class StudyEditorTest extends ServiceTest {
 		aStudyMember().withStudy(study).withMember(coordinator).withStudyRole(COORDINATOR).persist();
 		//when & then
 		assertDoesNotThrow(
-			() -> sut.removeWithCascade(study.getId(), coordinator.getId(), timeUtil.now())
+			() -> sut.removeWithCascade(new StudyId(study.getId()), new MemberId(coordinator.getId()), timeUtil.now())
 		);
 	}
 }

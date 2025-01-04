@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 
 class StudyMemberReaderTest extends ServiceTest {
@@ -35,7 +37,7 @@ class StudyMemberReaderTest extends ServiceTest {
 		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().persist();
 		aStudyMember().withStudy(study).withMember(participant).asParticipant().persist();
 		//when
-		int result = sut.loadParticipantCount(study.getId());
+		int result = sut.loadParticipantCount(new StudyId(study.getId()));
 		//then
 		assertThat(result).isEqualTo(2);
 	}
@@ -53,7 +55,7 @@ class StudyMemberReaderTest extends ServiceTest {
 		aStudyMember().withStudy(study).withMember(coordinator).asCoordinator().persist();
 		aStudyMember().withStudy(study).withMember(participant).asParticipant().persist();
 		//when
-		List<Long> result = sut.readParticipantIdsBy(study.getId());
+		List<StudyMemberId> result = sut.readParticipantIdsBy(new StudyId(study.getId()));
 		//then
 		assertThat(result).hasSize(2);
 	}
