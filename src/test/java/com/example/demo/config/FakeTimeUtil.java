@@ -14,6 +14,10 @@ import com.example.demo.util.TimeUtil;
 @Primary
 public class FakeTimeUtil implements TimeUtil {
 
+	public static LocalDateTime nowStatic() {
+		return LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+	}
+
 	@Override
 	public LocalTime maxLocalTime() {
 		return LocalTime.of(23, 59, 59);

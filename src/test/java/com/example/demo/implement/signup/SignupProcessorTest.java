@@ -1,5 +1,6 @@
 package com.example.demo.implement.signup;
 
+import static com.example.demo.persister.MemberPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.member.infrastructure.MemberRepository;
 import com.example.demo.auth.implement.signup.SignupProcessor;
@@ -22,8 +22,6 @@ class SignupProcessorTest extends ServiceTest {
 	private SignupProcessor sut;
 	@Autowired
 	private MemberRepository memberRepository;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
 
 	@Test
 	@DisplayName("회원가입을 한다.")
@@ -39,7 +37,7 @@ class SignupProcessorTest extends ServiceTest {
 	@DisplayName("이미 등록된 이메일로는 회원가입을 할 수 없다.")
 	void email_already_registered_prevents_signup() {
 		//given
-		memberSaveHelper.saveMember("new@gmail.com");
+		aMember().withEmail("new@gmail.com").persist();
 		//then
 		assertThatThrownBy(() -> sut.signup("new@gmail.com", "newUser"))
 			.isInstanceOf(CafegoryException.class)

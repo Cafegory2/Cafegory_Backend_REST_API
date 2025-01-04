@@ -21,6 +21,7 @@ import javax.persistence.Table;
 
 import com.example.demo.domain.DateAudit;
 import com.example.demo.study.domain.*;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.cafe.domain.CafeId;
@@ -28,11 +29,6 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.auth.implement.BaseEntity;
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -68,8 +64,10 @@ public class CafeStudyEntity extends BaseEntity {
     private String introduction;
     private int views;
 
-    @Enumerated(EnumType.STRING)
-    private RecruitmentStatus recruitmentStatus;
+	// TODO 클래스 레벨에 Setter 여는 것에 대한 논의 필요
+	@Setter
+	@Enumerated(EnumType.STRING)
+	private RecruitmentStatus recruitmentStatus;
 
     @OneToMany(mappedBy = "cafeStudy")
     private List<CafeStudyMemberEntity> cafeStudyMembers = new ArrayList<>();

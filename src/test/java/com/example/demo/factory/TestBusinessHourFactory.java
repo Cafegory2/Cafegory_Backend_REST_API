@@ -8,14 +8,6 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.util.TimeUtil;
 
 public class TestBusinessHourFactory {
-	//
-	//	public static BusinessHour createBusinessHourWithDayAnd24For7(String day) {
-	//		return BusinessHour.builder()
-	//			.startTime(LocalTime.MIN)
-	//			.endTime(MAX_LOCAL_TIME)
-	//			.day(day)
-	//			.build();
-	//	}
 
 	public static BusinessHourEntity createBusinessHourWithDayAnd24For7(CafeEntity cafe, DayOfWeek day,
 																		TimeUtil timeUtil) {
@@ -44,15 +36,4 @@ public class TestBusinessHourFactory {
 				.closingTime(closingTime)
 				.build();
 		}
-	//
-	//	public static BusinessHour createBusinessHour(Long id, String day, LocalTime startTime, LocalTime endTime,
-	//		Cafe cafe) {
-	//		return BusinessHour.builder()
-	//			.id(id)
-	//			.day(day)
-	//			.startTime(startTime)
-	//			.endTime(endTime)
-	//			.cafe(cafe)
-	//			.build();
-	//	}
 }

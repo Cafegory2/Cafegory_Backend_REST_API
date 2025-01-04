@@ -3,7 +3,6 @@ package com.example.demo.qna.implement;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.qna.domain.CommentContent;

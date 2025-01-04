@@ -1,5 +1,6 @@
 package com.example.demo.implement.login;
 
+import static com.example.demo.persister.MemberPersister.*;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
-import com.example.demo.helper.MemberSaveHelper;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.auth.implement.login.LoginProcessor;
 import com.example.demo.auth.implement.token.JwtToken;
@@ -18,14 +18,12 @@ class LoginProcessorTest extends ServiceTest {
 
 	@Autowired
 	private LoginProcessor sut;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
 
 	@Test
 	@DisplayName("로그인이 성공하면 토큰을 발급한다.")
 	void login_succeed() {
 		//given
-		MemberEntity member = memberSaveHelper.saveMember();
+		MemberEntity member = aMember().persist();
 		//when
 		JwtToken token = sut.login(member.getEmail());
 		//then

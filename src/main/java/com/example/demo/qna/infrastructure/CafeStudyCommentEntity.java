@@ -44,131 +44,131 @@ import lombok.NoArgsConstructor;
 @Table(name = "cafe_study_comment")
 public class CafeStudyCommentEntity extends BaseEntity {
 
-	@Id
-	@GeneratedValue
-	@Column(name = "cafe_study_comment_id")
-	private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "cafe_study_comment_id")
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private MemberEntity author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private MemberEntity author;
 
-	private StudyRole studyRole;
-	private String content;
+    private StudyRole studyRole;
+    private String content;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_comment_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudyCommentEntity parentComment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_comment_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private CafeStudyCommentEntity parentComment;
 
-	@OneToMany(mappedBy = "parentComment")
-	private List<CafeStudyCommentEntity> childrenComments = new ArrayList<>();
+    @OneToMany(mappedBy = "parentComment")
+    private List<CafeStudyCommentEntity> childrenComments = new ArrayList<>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-	private CafeStudyEntity cafeStudy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cafe_study_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private CafeStudyEntity cafeStudy;
 
-	public CafeStudyCommentEntity(Long id) {
-		this.id = id;
-	}
+    public CafeStudyCommentEntity(Long id) {
+        this.id = id;
+    }
 
-	@Builder
-	private CafeStudyCommentEntity(
-		MemberEntity author, StudyRole studyRole, String content, CafeStudyCommentEntity parentComment,
-		CafeStudyEntity cafeStudy
-	) {
-		this.author = author;
-		this.studyRole = studyRole;
-		this.content = content;
-		this.parentComment = parentComment;
-		this.cafeStudy = cafeStudy;
-	}
+    @Builder
+    private CafeStudyCommentEntity(
+            MemberEntity author, StudyRole studyRole, String content, CafeStudyCommentEntity parentComment,
+            CafeStudyEntity cafeStudy
+    ) {
+        this.author = author;
+        this.studyRole = studyRole;
+        this.content = content;
+        this.parentComment = parentComment;
+        this.cafeStudy = cafeStudy;
+    }
 
-	public Comment toComment() {
-		return Comment.builder()
-			.id(new CommentId(this.id))
-			.commentContent(
-				CommentContent.builder()
-					.content(this.content)
-					.build()
-			)
-			.author(
-				MemberIdentity.builder()
-					.id(this.author.getId())
-					.nickname(this.author.getNickname())
-					.build()
-			)
-			.studyId(new StudyId(this.cafeStudy.getId()))
-			.date(
-				DateAudit.builder()
-					.createdDate(getCreatedDate())
-					.modifiedDate(getLastModifiedDate())
-					.build()
-			)
-			.build();
-	}
+    public Comment toComment() {
+        return Comment.builder()
+                .id(new CommentId(this.id))
+                .commentContent(
+                        CommentContent.builder()
+                                .content(this.content)
+                                .build()
+                )
+                .author(
+                        MemberIdentity.builder()
+                                .id(this.author.getId())
+                                .nickname(this.author.getNickname())
+                                .build()
+                )
+                .studyId(new StudyId(this.cafeStudy.getId()))
+                .date(
+                        DateAudit.builder()
+                                .createdDate(getCreatedDate())
+                                .modifiedDate(getLastModifiedDate())
+                                .build()
+                )
+                .build();
+    }
 
-	public ChildComment toCommentOld() {
-		return ChildComment.builder()
-			.id(new CommentId(this.id))
-			.commentContent(
-				CommentContent.builder()
-					.content(this.content)
-					.build()
-			)
-			.author(
-				MemberIdentity.builder()
-					.id(this.author.getId())
-					.nickname(this.author.getNickname())
-					.build()
-			)
-			.studyId(new StudyId(this.cafeStudy.getId()))
-			.date(
-				DateAudit.builder()
-					.createdDate(getCreatedDate())
-					.modifiedDate(getLastModifiedDate())
-					.build()
-			)
-			.build();
-	}
+    public ChildComment toCommentOld() {
+        return ChildComment.builder()
+                .id(new CommentId(this.id))
+                .commentContent(
+                        CommentContent.builder()
+                                .content(this.content)
+                                .build()
+                )
+                .author(
+                        MemberIdentity.builder()
+                                .id(this.author.getId())
+                                .nickname(this.author.getNickname())
+                                .build()
+                )
+                .studyId(new StudyId(this.cafeStudy.getId()))
+                .date(
+                        DateAudit.builder()
+                                .createdDate(getCreatedDate())
+                                .modifiedDate(getLastModifiedDate())
+                                .build()
+                )
+                .build();
+    }
 
-	public static CafeStudyCommentEntity from(RootComment comment, StudyRole studyRole) {
-		return CafeStudyCommentEntity.builder()
-			.author(new MemberEntity(comment.getAuthor().getId()))
-			.content(comment.getContent())
-			.parentComment(null)
-			.studyRole(studyRole)
-			.cafeStudy(new CafeStudyEntity(comment.getStudyId().getId()))
-			.build();
-	}
+    public static CafeStudyCommentEntity from(RootComment comment, StudyRole studyRole) {
+        return CafeStudyCommentEntity.builder()
+                .author(new MemberEntity(comment.getAuthor().getId()))
+                .content(comment.getContent())
+                .parentComment(null)
+                .studyRole(studyRole)
+                .cafeStudy(new CafeStudyEntity(comment.getStudyId().getId()))
+                .build();
+    }
 
-	public static CafeStudyCommentEntity createRootComment(
-		CommentContent content, MemberId authorId, StudyId studyId, StudyRole studyRole
-	) {
-		return CafeStudyCommentEntity.builder()
-			.author(new MemberEntity(authorId.getId()))
-			.content(content.getContent())
-			.studyRole(studyRole)
-			.cafeStudy(new CafeStudyEntity(studyId.getId()))
-			.build();
-	}
+    public static CafeStudyCommentEntity createRootComment(
+            CommentContent content, MemberId authorId, StudyId studyId, StudyRole studyRole
+    ) {
+        return CafeStudyCommentEntity.builder()
+                .author(new MemberEntity(authorId.getId()))
+                .content(content.getContent())
+                .studyRole(studyRole)
+                .cafeStudy(new CafeStudyEntity(studyId.getId()))
+                .build();
+    }
 
-	public static CafeStudyCommentEntity createSubComment(
-		CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
-	) {
-		return CafeStudyCommentEntity.builder()
-			.author(new MemberEntity(authorId.getId()))
-			.content(content.getContent())
-			.parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
-			.studyRole(studyRole)
-			.cafeStudy(new CafeStudyEntity(studyId.getId()))
-			.build();
-	}
+    public static CafeStudyCommentEntity createSubComment(
+            CommentContent content, ParentCommentId parentCommentId, MemberId authorId, StudyId studyId, StudyRole studyRole
+    ) {
+        return CafeStudyCommentEntity.builder()
+                .author(new MemberEntity(authorId.getId()))
+                .content(content.getContent())
+                .parentComment(new CafeStudyCommentEntity(parentCommentId.getId()))
+                .studyRole(studyRole)
+                .cafeStudy(new CafeStudyEntity(studyId.getId()))
+                .build();
+    }
 
-	public void changeContent(String content) {
-		this.content = content;
-	}
+    public void changeContent(String content) {
+        this.content = content;
+    }
 
-	public boolean hasParentComment() {
-		return this.parentComment != null;
-	}
+    public boolean hasParentComment() {
+        return this.parentComment != null;
+    }
 }

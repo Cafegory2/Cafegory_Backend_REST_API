@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.member.infrastructure.MemberEntity;
@@ -24,11 +25,6 @@ import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.domain.StudyRole;
 import com.example.demo.auth.implement.BaseEntity;
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,6 +50,8 @@ public class CafeStudyMemberEntity extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private StudyRole studyRole;
 
+	//TODO 테스트 빌더 클래스 리팩터링을 위해 Setter로 임시로 오픈, 엔티티가 DB단에 완벽히 존재할 때 Setter없어도 수정 가능할듯
+	@Setter
 	@Enumerated(EnumType.STRING)
 	private Attendance attendance;
 

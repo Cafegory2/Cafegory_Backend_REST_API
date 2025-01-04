@@ -1,8 +1,13 @@
 package com.example.demo.apidocs;
 
+import static com.example.demo.persister.CafeContextPersister.*;
+import static com.example.demo.persister.CafeTagPersister.*;
+import static com.example.demo.persister.ReviewContextPersister.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 
+import com.example.demo.auth.implement.token.JwtToken;
+import com.example.demo.member.infrastructure.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,23 +16,9 @@ import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.cafe.domain.CafeTagType;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
-import com.example.demo.cafe.infrastructure.ReviewEntity;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.helper.CafeCafeTagSaveHelper;
-import com.example.demo.helper.CafeKeywordSaveHelper;
-import com.example.demo.helper.CafeSaveHelper;
-import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeStudySaveHelper;
-import com.example.demo.helper.CafeStudyTagSaveHelper;
-import com.example.demo.helper.CafeTagSaveHelper;
-import com.example.demo.helper.MemberSaveHelper;
-import com.example.demo.helper.ReviewCafeTagSaveHelper;
-import com.example.demo.helper.ReviewSaveHelper;
 import com.example.demo.member.implement.MemberReader;
 import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.infrastructure.MemberRepository;
-import com.example.demo.auth.implement.token.JwtToken;
-import com.example.demo.util.TimeUtil;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -35,32 +26,9 @@ import io.restassured.http.ContentType;
 public class ProfileControllerApiTest extends ApiDocsTest {
 
 	@Autowired
-	private CafeSaveHelper cafeSaveHelper;
-	@Autowired
-	private CafeKeywordSaveHelper cafeKeywordSaveHelper;
-	@Autowired
-	private CafeStudyTagSaveHelper cafeStudyTagSaveHelper;
-	@Autowired
-	private CafeStudySaveHelper cafeStudySaveHelper;
-	@Autowired
-	private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
-	@Autowired
-	private MemberSaveHelper memberSaveHelper;
-	@Autowired
-	private CafeTagSaveHelper cafeTagSaveHelper;
-	@Autowired
-	private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
-	@Autowired
-	private ReviewSaveHelper reviewSaveHelper;
-	@Autowired
-	private ReviewCafeTagSaveHelper reviewCafeTagSaveHelper;
-	@Autowired
 	private MemberReader memberReader;
 	@Autowired
 	private MemberRepository memberRepository;
-
-	@Autowired
-	private TimeUtil timeUtil;
 
 	@Test
 	void welcome() {
@@ -89,20 +57,17 @@ public class ProfileControllerApiTest extends ApiDocsTest {
 	@Test
 	@DisplayName("마이페이지 조회 API")
 	void mypage() {
-		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith24For7();
-		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
+		CafeEntity cafe1 = aCafe().persistWith24For7();
+		CafeEntity cafe2 = aCafe().persistWith24For7();
 
 		JwtToken jwtToken = memberSignupHelper.로그인_되어_있음();
 		MemberEntity member = memberRepository.findByEmail("test@gmail.com").get();
 
-		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
-		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+		CafeTagEntity wifi = aCafeTag().withType(CafeTagType.WIFI).persist();
+		CafeTagEntity outlet = aCafeTag().withType(CafeTagType.OUTLET).persist();
 
-		ReviewEntity review1 = reviewSaveHelper.saveReview(cafe1, member);
-		reviewCafeTagSaveHelper.saveReview(review1, cafeTag1);
-		ReviewEntity review2 = reviewSaveHelper.saveReview(cafe2, member);
-		reviewCafeTagSaveHelper.saveReview(review2, cafeTag1);
-		reviewCafeTagSaveHelper.saveReview(review2, cafeTag2);
+		aReview().withCafe(cafe1).withMember(member).includeTags(wifi).save();
+		aReview().withCafe(cafe2).withMember(member).includeTags(wifi, outlet).save();
 
 		RestAssured.given(spec).log().all()
 			.filter(RestAssuredRestDocumentationWrapper.document(

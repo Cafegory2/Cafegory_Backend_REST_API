@@ -1,12 +1,14 @@
 package com.example.demo.study.implement;
 
+import static com.example.demo.builder.CoordinatorBuilder.*;
+import static com.example.demo.builder.StudyBuilder.*;
 import static com.example.demo.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import com.example.demo.study.domain.*;
+import com.example.demo.study.domain.StudyMemberId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +16,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.member.domain.MemberId;
 
 class StudyValidatorTest {
 
@@ -70,47 +71,24 @@ class StudyValidatorTest {
         );
     }
 
-    @Test
-    @DisplayName("스터디에 카공장만 존재한다")
-    void validate_study_member_is_coordinator_only() {
-        List<StudyMemberId> participantsIds = List.of(new StudyMemberId(1L));
+	@Test
+	@DisplayName("스터디에 카공장만 존재한다")
+	void validate_study_member_is_coordinator_only() {
+		assertDoesNotThrow(
+			() -> sut.validateCafeStudyMembersPresent(
+					aStudy().with(aCoordinator().withId(1L)).build(),
+					List.of(new StudyMemberId(1L))
+			));
+	}
 
-        Study study = createStudy();
-
-        assertDoesNotThrow(
-                () -> sut.validateCafeStudyMembersPresent(study, participantsIds)
-        );
-    }
-
-    @Test
-    @DisplayName("스터디에 카공장외에 다른 참가자도 존재한다")
-    void validate_study_member_is_not_coordinator_only() {
-        StudyMemberId coordinatorId = new StudyMemberId(1L);
-        List<StudyMemberId> participantsIds = List.of(coordinatorId, new StudyMemberId(2L));
-        Study study = createStudy();
-
-        assertThatThrownBy(
-                () -> sut.validateCafeStudyMembersPresent(study, participantsIds)
-        ).isInstanceOf(CafegoryException.class)
-                .hasMessage(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT.getErrorMessage());
-    }
-
-    private Study createStudy() {
-        Coordinator coordinator = Coordinator.builder()
-                .id(new MemberId(1L))
-                .build();
-
-        return Study.builder()
-                .content(
-                        StudyContent.builder()
-                                .name("카페고리 스터디")
-                                .maxParticipantCount(5)
-                                .memberComms(MemberComms.WELCOME)
-                                .introduction("자기소개 글")
-                                .build()
-                )
-                .coordinator(coordinator)
-                .build();
-    }
-
+	@Test
+	@DisplayName("스터디에 카공장외에 다른 참가자도 존재한다")
+	void validate_study_member_is_not_coordinator_only() {
+		assertThatThrownBy(
+			() -> sut.validateCafeStudyMembersPresent(
+					aStudy().with(aCoordinator().withId(1L)).build(),
+                    List.of(new StudyMemberId(1L), new StudyMemberId(2L))
+			)).isInstanceOf(CafegoryException.class)
+			.hasMessage(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT.getErrorMessage());
+	}
 }
