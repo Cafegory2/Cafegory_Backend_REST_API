@@ -6,6 +6,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.cafe.domain.CafeTagType;
@@ -13,6 +15,7 @@ import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.cafe.infrastructure.CafeTagEntity;
 import com.example.demo.config.ApiDocsTest;
 import com.example.demo.helper.CafeCafeTagSaveHelper;
+import com.example.demo.helper.CafeKeywordSaveHelper;
 import com.example.demo.helper.CafeSaveHelper;
 import com.example.demo.helper.CafeStudyCafeStudyTagSaveHelper;
 import com.example.demo.helper.CafeStudySaveHelper;
@@ -25,7 +28,7 @@ import com.example.demo.util.TimeUtil;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
-public class CafeApiTest extends ApiDocsTest {
+public class CafeControllerApiTest extends ApiDocsTest {
 
 	@Autowired
 	private CafeSaveHelper cafeSaveHelper;
@@ -33,6 +36,8 @@ public class CafeApiTest extends ApiDocsTest {
 	private CafeTagSaveHelper cafeTagSaveHelper;
 	@Autowired
 	private CafeCafeTagSaveHelper cafeCafeTagSaveHelper;
+	@Autowired
+	private CafeKeywordSaveHelper cafeKeywordSaveHelper;
 	@Autowired
 	private MenuSaveHelper menuSaveHelper;
 	@Autowired
@@ -45,6 +50,59 @@ public class CafeApiTest extends ApiDocsTest {
 	private CafeStudyCafeStudyTagSaveHelper cafeStudyCafeStudyTagSaveHelper;
 	@Autowired
 	private TimeUtil timeUtil;
+
+	@Test
+	void searchCafes() {
+		CafeTagEntity cafeTag1 = cafeTagSaveHelper.saveCafeTag(CafeTagType.WIFI);
+		CafeTagEntity cafeTag2 = cafeTagSaveHelper.saveCafeTag(CafeTagType.OUTLET);
+		CafeTagEntity cafeTag3 = cafeTagSaveHelper.saveCafeTag(CafeTagType.COMFORTABLE_SEATING);
+
+		CafeEntity cafe1 = cafeSaveHelper.saveCafeWith7daysFrom9To21();
+		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe1);
+		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag1);
+		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe1, cafeTag2);
+		CafeEntity cafe2 = cafeSaveHelper.saveCafeWith24For7();
+		cafeKeywordSaveHelper.saveCafeKeyword("강남", cafe2);
+		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag1);
+		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag2);
+		cafeCafeTagSaveHelper.saveCafeCafeTag(cafe2, cafeTag3);
+
+		// note: String type이 아니면 오류 발생...
+		// LocalDateTime openingDateTime = timeUtil.localDateTime(2001, 1, 1, 10, 0, 0);
+		// LocalDateTime closingDateTime = timeUtil.localDateTime(2001, 1, 1, 23, 59, 59);
+
+		String openingDateTime = "2000-01-01T10:00:00";
+		String closingDateTime = "2000-01-01T20:00:00";
+
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("keyword", "강남");
+		params.add("openingDateTime", openingDateTime);
+		params.add("closingDateTime", closingDateTime);
+		params.add("cafeTags", CafeTagType.WIFI.toString());
+		params.add("cafeTags", CafeTagType.OUTLET.toString());
+		params.add("page", "0");
+		params.add("sizePerPage", "10");
+
+		RestAssured.given(spec).log().all()
+			.filter(RestAssuredRestDocumentationWrapper.document(
+					"카페 목록 조회 API",
+					requestParameters(
+						parameterWithName("keyword").description("검색어"),
+						parameterWithName("openingDateTime").description("필터링 오픈시간"),
+						parameterWithName("closingDateTime").description("필터링 마감시간"),
+						parameterWithName("cafeTags").description("카페 태그 리스트, 여러개의 카페 태그를 넣을 수 있다."),
+						parameterWithName("page").description("페이지 번호, 0부터 시작한다."),
+						parameterWithName("sizePerPage").description("한 페이지에 들어가는 컨텐츠 개수")
+					)
+				)
+			)
+			.contentType(ContentType.JSON)
+			.params(params)
+			.when()
+			.get("/cafes")
+			.then().log().all()
+			.statusCode(200);
+	}
 
 	@Test
 	@DisplayName("카페 상세정보 조회 API")
@@ -96,30 +154,6 @@ public class CafeApiTest extends ApiDocsTest {
 
 						fieldWithPath("menusInfo[].name").description("메뉴 이름"),
 						fieldWithPath("menusInfo[].price").description("메뉴 가격")
-
-						// fieldWithPath("openCafeStudiesInfo[].id").description("오픈된 카공 ID"),
-						// fieldWithPath("openCafeStudiesInfo[].name").description("오픈된 카공 이름"),
-						// fieldWithPath("openCafeStudiesInfo[].tags[]").description("오픈된 카공 태그 리스트"),
-						// fieldWithPath("openCafeStudiesInfo[].startDateTime").description("오픈된 카공 시작 시간"),
-						// fieldWithPath("openCafeStudiesInfo[].endDateTime").description("오픈된 카공 종료 시간"),
-						// fieldWithPath("openCafeStudiesInfo[].maximumParticipants").description("오픈된 카공 최대 참가자 수"),
-						// fieldWithPath("openCafeStudiesInfo[].currentParticipants").description("오픈된 카공 현재 참가자 수"),
-						// fieldWithPath("openCafeStudiesInfo[].views").description("오픈된 카공 조회수"),
-						// fieldWithPath("openCafeStudiesInfo[].memberComms").description("오픈된 카공 참여자 소통 여부"),
-						// fieldWithPath("openCafeStudiesInfo[].recruitmentStatus").description("오픈된 카공 현재 모집 여부"),
-						// fieldWithPath("openCafeStudiesInfo[].writer").description("오픈된 카공 작성자"),
-						//
-						// fieldWithPath("closeCafeStudiesInfo[].id").description("닫힌 카공 ID"),
-						// fieldWithPath("closeCafeStudiesInfo[].name").description("닫힌 카공 이름"),
-						// fieldWithPath("closeCafeStudiesInfo[].tags[]").description("닫힌 카공 태그 리스트"),
-						// fieldWithPath("closeCafeStudiesInfo[].startDateTime").description("닫힌 카공 시작 시간"),
-						// fieldWithPath("closeCafeStudiesInfo[].endDateTime").description("닫힌 카공 종료 시간"),
-						// fieldWithPath("closeCafeStudiesInfo[].maximumParticipants").description("닫힌 카공 최대 참가자 수"),
-						// fieldWithPath("closeCafeStudiesInfo[].currentParticipants").description("닫힌 카공 현재 참가자 수"),
-						// fieldWithPath("closeCafeStudiesInfo[].views").description("닫힌 카공 조회수"),
-						// fieldWithPath("closeCafeStudiesInfo[].memberComms").description("닫힌 카공 참여자 소통 여부"),
-						// fieldWithPath("closeCafeStudiesInfo[].recruitmentStatus").description("닫힌 카공 현재 모집 여부"),
-						// fieldWithPath("closeCafeStudiesInfo[].writer").description("닫힌 카공 작성자")
 					)
 				)
 			)

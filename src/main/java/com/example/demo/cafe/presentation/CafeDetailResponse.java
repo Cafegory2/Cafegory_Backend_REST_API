@@ -1,4 +1,4 @@
-package com.example.demo.cafe.service;
+package com.example.demo.cafe.presentation;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -32,32 +32,6 @@ public class CafeDetailResponse {
 
 		return response;
 	}
-	//
-	// private static List<CafeStudyInfo> createCafeStudiesInfo(List<CafeStudyEntity> cafeStudies) {
-	// 	return cafeStudies.stream()
-	// 		.map(CafeDetailResponse::createCafeStudyInfo)
-	// 		.collect(Collectors.toList());
-	// }
-	//
-	// private static CafeStudyInfo createCafeStudyInfo(CafeStudyEntity cafeStudy) {
-	// 	return CafeStudyInfo.builder()
-	// 		.id(cafeStudy.getId())
-	// 		.name(cafeStudy.getName())
-	// 		.tags(
-	// 			cafeStudy.getCafeStudyCafeStudyTags().stream()
-	// 				.map(cafeStudyCafeStudyTag -> cafeStudyCafeStudyTag.getCafeStudyTag().getType())
-	// 				.collect(Collectors.toList())
-	// 		)
-	// 		.startDateTime(cafeStudy.getStudyPeriod().getStartDateTime())
-	// 		.endDateTime(cafeStudy.getStudyPeriod().getEndDateTime())
-	// 		.maximumParticipants(cafeStudy.getMaxParticipants())
-	// 		.currentParticipants(cafeStudy.getCafeStudyMembers().size())
-	// 		.views(cafeStudy.getViews())
-	// 		.memberComms(cafeStudy.getMemberComms())
-	// 		.recruitmentStatus(cafeStudy.getRecruitmentStatus())
-	// 		.writer(cafeStudy.getCoordinator().getNickname())
-	// 		.build();
-	// }
 
 	private static List<MenuInfo> createMenusInfo(Cafe cafe) {
 		List<Menu> menus = cafe.getMenus();
