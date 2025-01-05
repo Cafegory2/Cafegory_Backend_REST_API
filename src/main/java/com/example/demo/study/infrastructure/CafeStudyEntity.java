@@ -25,9 +25,9 @@ import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.infrastructure.CafeEntity;
 import com.example.demo.domain.DateAudit;
-import com.example.demo.member.domain.MemberId;
 import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.study.domain.Coordinator;
+import com.example.demo.study.domain.CoordinatorId;
 import com.example.demo.study.domain.MemberComms;
 import com.example.demo.study.domain.RecruitmentStatus;
 import com.example.demo.study.domain.Schedule;
@@ -132,7 +132,7 @@ public class CafeStudyEntity extends BaseEntity {
 			.cafeId(new CafeId(this.cafe.getId()))
 			.coordinator(
 				Coordinator.builder()
-					.id(new MemberId(this.coordinator.getId()))
+					.id(new CoordinatorId(this.coordinator.getId()))
 					.nickname(this.coordinator.getNickname())
 					.build())
 			.recruitmentStatus(this.recruitmentStatus)
@@ -142,6 +142,13 @@ public class CafeStudyEntity extends BaseEntity {
 					.modifiedDate(this.getLastModifiedDate())
 					.build()
 			)
+			.build();
+	}
+
+	public Coordinator toCoordinator() {
+		return Coordinator.builder()
+			.id(new CoordinatorId(coordinator.getId()))
+			.nickname(coordinator.getNickname())
 			.build();
 	}
 

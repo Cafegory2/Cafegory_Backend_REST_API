@@ -6,13 +6,14 @@ import static com.example.demo.study.infrastructure.CafeStudyEntity.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.study.domain.Schedule;
-import com.example.demo.study.domain.StudyMemberId;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
+import com.example.demo.study.domain.Coordinator;
+import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.util.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
@@ -72,17 +73,17 @@ public class StudyValidator {
 		}
 	}
 
-	public void validateMemberIsCafeStudyCoordinator(Long memberId, Long coordinatorId) {
-		if (!coordinatorId.equals(memberId)) {
+	public void validateCoordinatorIsInStudy(Study study, List<Coordinator> coordinators) {
+		boolean isCoordinator = coordinators.stream()
+			.anyMatch(coordinator -> study.getCoordinator().getId().getId().equals(coordinator.getId().getId()));
+
+		if (!isCoordinator) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);
 		}
 	}
 
-	public void validateCafeStudyMembersPresent(Study study, List<StudyMemberId> participantsIds) {
-		boolean isNotCoordinatorOnly = participantsIds.stream()
-			.anyMatch(participantId -> !study.isManagedBy(participantId.getId()));
-
-		if (isNotCoordinatorOnly) {
+	public void validateStudyMemberOnlyOne(List<StudyMemberId> participantsIds) {
+		if (participantsIds.size() > 1) {
 			throw new CafegoryException(CAFE_STUDY_DELETE_FAIL_MEMBERS_PRESENT);
 		}
 	}

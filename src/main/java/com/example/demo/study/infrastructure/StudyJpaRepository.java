@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface StudyJpaRepository extends JpaRepository<CafeStudyEntity, Long> {
 
+	List<CafeStudyEntity> findByCoordinator_Id(Long coordinatorId);
+
 	// TODO: 카공 생성 시 tag 삽입 기능 구현 하면 tag fetch join으로 가져오기
 	@Query(value = "select s from CafeStudyEntity s" +
 		" inner join fetch s.coordinator" +

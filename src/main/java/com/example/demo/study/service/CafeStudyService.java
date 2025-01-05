@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import com.example.demo.study.domain.*;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.cafe.domain.BusinessHour;
@@ -13,6 +12,11 @@ import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.cafe.implement.BusinessHourReader;
 import com.example.demo.cafe.implement.BusinessHourValidator;
 import com.example.demo.member.domain.MemberId;
+import com.example.demo.study.domain.Study;
+import com.example.demo.study.domain.StudyContent;
+import com.example.demo.study.domain.StudyId;
+import com.example.demo.study.domain.StudyMemberId;
+import com.example.demo.study.domain.StudyRole;
 import com.example.demo.study.implement.StudyEditor;
 import com.example.demo.study.implement.StudyMemberEditor;
 import com.example.demo.study.implement.StudyMemberReader;
@@ -49,9 +53,8 @@ public class CafeStudyService {
 	}
 
 	public void deleteStudy(MemberId memberId, StudyId studyId, LocalDateTime now) {
-		Study study = studyReader.read(studyId);
 		List<StudyMemberId> participantIds = studyMemberReader.readParticipantIdsBy(studyId);
-		studyValidator.validateCafeStudyMembersPresent(study, participantIds);
+		studyValidator.validateStudyMemberOnlyOne(participantIds);
 
 		studyEditor.removeWithCascade(studyId, memberId, now);
 	}

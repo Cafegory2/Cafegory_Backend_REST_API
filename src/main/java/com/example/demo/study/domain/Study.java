@@ -1,9 +1,5 @@
 package com.example.demo.study.domain;
 
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.domain.DateAudit;
 
@@ -22,7 +18,4 @@ public class Study {
 
 	private DateAudit dateAudit;
 
-	public boolean isManagedBy(Long memberId) {
-		return coordinator.isCoordinator(memberId);
-	}
 }

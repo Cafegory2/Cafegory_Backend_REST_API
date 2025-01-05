@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.cafe.domain.CafeId;
 import com.example.demo.member.domain.MemberId;
+import com.example.demo.study.domain.Coordinator;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyContent;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyTagId;
+import com.example.demo.study.infrastructure.repository2.CoordinatorRepository;
 import com.example.demo.study.infrastructure.repository2.StudyMemberRepository;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository;
 import com.example.demo.study.infrastructure.repository2.StudyRepository;
@@ -32,6 +34,7 @@ public class StudyEditor {
 	private final StudyTagRepository studyTagRepository;
 	private final StudyStudyTagRepository studyStudyTagRepository;
 	private final StudyMemberRepository studyMemberRepository;
+	private final CoordinatorRepository coordinatorRepository;
 
 	private final StudyValidator studyValidator;
 
@@ -55,8 +58,10 @@ public class StudyEditor {
 	@Transactional
 	public void removeWithCascade(StudyId studyId, MemberId candidateCoordinatorId, LocalDateTime now) {
 		Study study = studyQueryRepository.findById(studyId);
-		studyValidator.validateMemberIsCafeStudyCoordinator(candidateCoordinatorId.getId(),
-			study.getCoordinator().getId().getId());
+
+		List<Coordinator> coordinators = coordinatorRepository.findBy(candidateCoordinatorId);
+
+		studyValidator.validateCoordinatorIsInStudy(study, coordinators);
 
 		studyMemberRepository.remove(studyId, candidateCoordinatorId, now);
 		studyStudyTagRepository.remove(studyId, now);
