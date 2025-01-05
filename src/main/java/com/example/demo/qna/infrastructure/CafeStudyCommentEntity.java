@@ -99,16 +99,6 @@ public class CafeStudyCommentEntity extends BaseEntity {
 			.build();
 	}
 
-	public static CafeStudyCommentEntity of(RootComment comment, StudyRole studyRole) {
-		return CafeStudyCommentEntity.builder()
-			.author(new MemberEntity(comment.getAuthor().getId()))
-			.content(comment.getContent())
-			.parentComment(null)
-			.studyRole(studyRole)
-			.cafeStudy(new CafeStudyEntity(comment.getStudyId().getId()))
-			.build();
-	}
-
 	public static CafeStudyCommentEntity createRootComment(
 		CommentContent content, MemberId authorId, StudyId studyId, StudyRole studyRole
 	) {

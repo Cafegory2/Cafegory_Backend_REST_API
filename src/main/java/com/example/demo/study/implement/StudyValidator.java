@@ -75,7 +75,7 @@ public class StudyValidator {
 
 	public void validateCoordinatorIsInStudy(Study study, List<Coordinator> coordinators) {
 		boolean isCoordinator = coordinators.stream()
-			.anyMatch(coordinator -> study.getCoordinator().getId().getId().equals(coordinator.getId().getId()));
+				.anyMatch(study::isManagedBy);
 
 		if (!isCoordinator) {
 			throw new CafegoryException(CAFE_STUDY_INVALID_LEADER);

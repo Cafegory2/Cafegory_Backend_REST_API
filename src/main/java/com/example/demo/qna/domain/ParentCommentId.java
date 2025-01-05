@@ -12,4 +12,8 @@ public class ParentCommentId {
 	public boolean isNull() {
 		return id == null;
 	}
+
+	public boolean isSameId(ParentCommentId id) {
+		return this.id.equals(id.getId());
+	}
 }

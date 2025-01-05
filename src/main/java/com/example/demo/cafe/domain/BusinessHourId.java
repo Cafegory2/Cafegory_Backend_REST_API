@@ -8,4 +8,8 @@ import lombok.RequiredArgsConstructor;
 public class BusinessHourId {
 
     private final Long id;
+
+    public boolean isSameId(BusinessHourId id) {
+        return this.id.equals(id.getId());
+    }
 }

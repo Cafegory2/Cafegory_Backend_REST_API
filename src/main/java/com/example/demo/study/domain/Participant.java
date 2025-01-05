@@ -11,4 +11,12 @@ public class Participant {
 	private StudyId studyId;
 	private StudyRole studyRole;
 	private ParticipantContent content;
+
+	public boolean hasId(StudyMemberId id) {
+		return this.id.isSameId(id);
+	}
+
+	public boolean hasStudyId(StudyId id) {
+		return this.studyId.isSameId(id);
+	}
 }

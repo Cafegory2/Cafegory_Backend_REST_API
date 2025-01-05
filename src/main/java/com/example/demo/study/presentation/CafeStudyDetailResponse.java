@@ -26,7 +26,7 @@ public class CafeStudyDetailResponse {
 	private CafeInfo cafeInfo;
 
 	public static CafeStudyDetailResponse of(
-		Cafe cafe, Study study, ViewCount viewCount, ParticipantCount participantCount
+		Cafe cafe, Study study, int viewCount, int participantCount
 	) {
 		CafeStudyDetailResponse response = new CafeStudyDetailResponse();
 
@@ -78,7 +78,7 @@ public class CafeStudyDetailResponse {
 	}
 
 	private static CafeStudyInfo createCafeStudyInfo(
-		Study study, ViewCount viewCount, ParticipantCount participantCount
+		Study study, int viewCount, int participantCount
 	) {
         StudyContent content = study.getContent();
 
@@ -90,9 +90,9 @@ public class CafeStudyDetailResponse {
 			.startDateTime(content.getSchedule().getStartDateTime())
 			.endDateTime(content.getSchedule().getEndDateTime())
 			.maximumParticipants(content.getMaxParticipantCount())
-			.currentParticipants(participantCount.getCurrentCount())
+			.currentParticipants(participantCount)
 			.memberComms(content.getMemberComms())
-			.views(viewCount.getTotalViews())
+			.views(viewCount)
 			.introduction(content.getIntroduction())
 			.tag(content.getTags())
 			.build();

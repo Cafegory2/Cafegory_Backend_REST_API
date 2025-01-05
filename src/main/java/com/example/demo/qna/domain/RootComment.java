@@ -22,6 +22,14 @@ public class RootComment {
 		return this.author.isSameMember(memberId);
 	}
 
+	public boolean hasId(CommentId id) {
+		return this.id.isSameId(id);
+	}
+
+	public boolean hasStudyId(StudyId id) {
+		return this.studyId.isSameId(id);
+	}
+
 	public String getContent() {
 		return this.commentContent.getContent();
 	}

@@ -44,11 +44,4 @@ public class MenuEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "cafe_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	private CafeEntity cafe;
-
-	public Menu toMenu() {
-		return Menu.builder()
-			.name(this.name)
-			.price(this.price)
-			.build();
-	}
 }

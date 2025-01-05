@@ -10,8 +10,4 @@ public enum Attendance {
 	Attendance(boolean isPresent) {
 		this.isPresent = isPresent;
 	}
-
-	public boolean isPresent() {
-		return isPresent;
-	}
 }

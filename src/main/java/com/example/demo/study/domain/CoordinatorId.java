@@ -7,4 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CoordinatorId {
 	private final Long id;
+
+	public boolean isSameId(CoordinatorId id) {
+		return this.id.equals(id.getId());
+	}
 }

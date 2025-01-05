@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Participant;
-import com.example.demo.study.domain.ParticipantCount;
 import com.example.demo.study.domain.StudyId;
 import com.example.demo.study.domain.StudyMemberId;
 import com.example.demo.study.infrastructure.repository2.StudyMemberQueryRepository;
@@ -35,11 +34,7 @@ public class StudyMemberReader {
 			.collect(Collectors.toList());
 	}
 
-	public ParticipantCount readParticipantCountBy(StudyId studyId) {
-		List<StudyMemberId> studyMemberIds = readParticipantIdsBy(studyId);
-
-		return ParticipantCount.builder()
-			.currentCount(studyMemberIds.size())
-			.build();
+	public int readParticipantCountBy(StudyId studyId) {
+		return readParticipantIdsBy(studyId).size();
 	}
 }

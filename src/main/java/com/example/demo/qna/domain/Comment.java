@@ -23,6 +23,18 @@ public class Comment {
 		return this.author.isSameMember(memberId);
 	}
 
+	public boolean hasId(CommentId id) {
+		return this.id.isSameId(id);
+	}
+
+	public boolean hasParentCommentId(ParentCommentId id) {
+		return this.parentCommentId.isSameId(id);
+	}
+
+	public boolean hasStudyId(StudyId id) {
+		return this.studyId.isSameId(id);
+	}
+
 	public String getContent() {
 		return this.commentContent.getContent();
 	}

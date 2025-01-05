@@ -27,4 +27,7 @@ public interface StudyJpaRepository extends JpaRepository<CafeStudyEntity, Long>
 		+ " WHERE c.id IN :studyIds AND c.studyPeriod.startDateTime >= :now")
 	List<CafeStudyEntity> findUpcomingsWithMemberBy(@Param("studyIds") List<Long> studyIds,
 		@Param("now") LocalDateTime now);
+
+	@Query("SELECT c.views FROM CafeStudyEntity c WHERE c.id = :id")
+	int findViewsById(@Param("id") Long id);
 }

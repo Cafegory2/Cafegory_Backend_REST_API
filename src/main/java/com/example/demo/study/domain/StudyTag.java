@@ -7,5 +7,9 @@ import lombok.Getter;
 @Builder
 public class StudyTag {
 
-	private final Long id;
+	private final StudyTagId id;
+
+	public boolean hasId(StudyTagId id) {
+		return this.id.isSameId(id);
+	}
 }

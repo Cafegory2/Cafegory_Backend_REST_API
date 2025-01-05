@@ -17,4 +17,8 @@ public class Member {
 	private BeverageSize beverageSize;
 	private DateAudit dateAudit;
 	private String refreshToken;
+
+	public boolean hasId(MemberId id) {
+		return this.id.isSameId(id);
+	}
 }

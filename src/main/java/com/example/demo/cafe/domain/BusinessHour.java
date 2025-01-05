@@ -14,4 +14,8 @@ public class BusinessHour {
 	private DayOfWeek dayOfWeek;
 	private LocalTime openingTme;
 	private LocalTime closingTme;
+
+	public boolean hasId(BusinessHourId id) {
+		return this.id.isSameId(id);
+	}
 }

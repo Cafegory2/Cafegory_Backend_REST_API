@@ -10,10 +10,6 @@ import com.example.demo.study.domain.CafeStudyTagType;
 
 public interface StudyTagJpaRepository extends JpaRepository<CafeStudyTagEntity, Long> {
 
-	@Query("select t from CafeStudyTagEntity t"
-		+ " where t.type in :tags")
-	List<CafeStudyTagEntity> findByTags(@Param("tags") List<CafeStudyTagType> tags);
-
 	@Query("select t.id from CafeStudyTagEntity t" +
 		" where t.type in :tags")
 	List<Long> countByTags(@Param("tags") List<CafeStudyTagType> tags);

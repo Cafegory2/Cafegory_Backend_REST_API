@@ -17,4 +17,8 @@ public class Cafe {
 	private List<CafeTagType> cafeTagTypes = new ArrayList<>();
 	private Address address;
 	private List<Menu> menus;
+
+	public boolean hasId(CafeId id) {
+		return this.id.isSameId(id);
+	}
 }

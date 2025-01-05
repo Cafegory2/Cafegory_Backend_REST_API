@@ -57,10 +57,6 @@ public class MemberEntity extends BaseEntity {
 
 	private String refreshToken;
 
-	public void changeProfileUrl(String profileUrl) {
-		this.profileUrl = profileUrl;
-	}
-
 	public MemberEntity(Long id) {
 		this.id = id;
 	}
@@ -78,7 +74,6 @@ public class MemberEntity extends BaseEntity {
 	public Member toMember() {
 		return Member.builder()
 			.id(new MemberId(this.id))
-			// .id(this.id)
 			.content(
 				MemberContent.builder()
 					.nickname(this.nickname)

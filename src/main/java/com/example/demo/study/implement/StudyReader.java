@@ -14,7 +14,6 @@ import com.example.demo.member.domain.MemberId;
 import com.example.demo.study.domain.Participant;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
-import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
 import com.example.demo.study.infrastructure.repository2.StudyQueryRepository;
@@ -46,8 +45,7 @@ public class StudyReader {
 		return studyQueryRepository.findCafeStudies(request);
 	}
 
-	public ViewCount readViewCountBy(StudyId studyId) {
-		return studyQueryRepository.findViewCountBy(studyId)
-			.orElseThrow(() -> new CafegoryException(CAFE_STUDY_NOT_FOUND));
+	public int readViewCountBy(StudyId studyId) {
+		return studyQueryRepository.findViewCountBy(studyId);
 	}
 }

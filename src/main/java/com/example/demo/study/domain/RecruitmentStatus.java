@@ -4,8 +4,4 @@ public enum RecruitmentStatus {
 
 	OPEN,
 	CLOSED;
-
-	public boolean isRecruitmentOpen() {
-		return this == OPEN;
-	}
 }

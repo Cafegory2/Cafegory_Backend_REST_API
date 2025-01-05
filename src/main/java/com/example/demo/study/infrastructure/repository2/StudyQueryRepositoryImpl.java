@@ -13,7 +13,6 @@ import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyId;
-import com.example.demo.study.domain.ViewCount;
 import com.example.demo.study.infrastructure.CafeStudyEntity;
 import com.example.demo.study.infrastructure.CafeStudySearchListRequest;
 import com.example.demo.study.infrastructure.CafeStudySearchListResponse;
@@ -42,8 +41,8 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository {
 	}
 
 	@Override
-	public Optional<ViewCount> findViewCountBy(StudyId studyId) {
-		return studyJpaRepository.findById(studyId.getId()).map(CafeStudyEntity::toViewCount);
+	public int findViewCountBy(StudyId studyId) {
+		return studyJpaRepository.findViewsById(studyId.getId());
 	}
 
 	@Override

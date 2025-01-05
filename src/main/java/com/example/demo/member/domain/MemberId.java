@@ -8,4 +8,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberId {
 
 	private final Long id;
+
+	public boolean isSameId(MemberId id) {
+		return this.id.equals(id.getId());
+	}
 }

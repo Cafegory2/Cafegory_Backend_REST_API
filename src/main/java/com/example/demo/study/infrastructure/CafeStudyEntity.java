@@ -34,7 +34,6 @@ import com.example.demo.study.domain.Schedule;
 import com.example.demo.study.domain.Study;
 import com.example.demo.study.domain.StudyContent;
 import com.example.demo.study.domain.StudyId;
-import com.example.demo.study.domain.ViewCount;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -151,11 +150,4 @@ public class CafeStudyEntity extends BaseEntity {
 			.nickname(coordinator.getNickname())
 			.build();
 	}
-
-	public ViewCount toViewCount() {
-		return ViewCount.builder()
-			.totalViews(getViews())
-			.build();
-	}
-
 }

@@ -18,4 +18,15 @@ public class Study {
 
 	private DateAudit dateAudit;
 
+	public boolean hasId(StudyId id) {
+		return this.id.isSameId(id);
+	}
+
+	public boolean hasCafeId(CafeId id) {
+		return this.cafeId.isSameId(id);
+	}
+
+	public boolean isManagedBy(Coordinator coordinator) {
+		return this.coordinator.isSameCoordinator(coordinator);
+	}
 }

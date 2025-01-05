@@ -16,4 +16,8 @@ public class Review {
 	private Cafe cafe;
 	
 	private DateAudit dateAudit;
+
+	public boolean hasId(ReviewId id) {
+		return this.id.isSameId(id);
+	}
 }

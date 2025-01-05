@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.example.demo.study.domain.StudyTagId;
 import org.hibernate.annotations.Where;
 
 import com.example.demo.auth.implement.BaseEntity;
@@ -41,11 +42,5 @@ public class CafeStudyTagEntity extends BaseEntity {
 
 	public CafeStudyTagEntity(Long id) {
 		this.id = id;
-	}
-
-	public StudyTag toStudyTag() {
-		return StudyTag.builder()
-			.id(id)
-			.build();
 	}
 }
