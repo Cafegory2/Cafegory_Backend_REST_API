@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.cafe.infrastructure.BusinessHourEntity;
+import com.example.demo.cafe.domain.BusinessHour;
 import com.example.demo.exception.CafegoryException;
 import com.example.demo.exception.ExceptionType;
 import com.example.demo.util.TimeUtil;
@@ -66,14 +66,13 @@ public class BusinessHourOpenChecker {
 		return (currentTime.isAfter(startTime) || currentTime.equals(startTime)) && currentTime.isBefore(endTime);
 	}
 
-	// TODO 엔티티 제거
-	public boolean checkWithBusinessHours(List<BusinessHourEntity> businessHourEntities, LocalDateTime now) {
-		if (!hasMatchingDayOfWeek(businessHourEntities, now)) {
+	public boolean checkWithBusinessHours(List<BusinessHour> businessHours, LocalDateTime now) {
+		if (!hasMatchingDayOfWeek(businessHours, now)) {
 			throw new CafegoryException(ExceptionType.CAFE_NOT_FOUND_DAY_OF_WEEK);
 		}
-		return businessHourEntities.stream()
+		return businessHours.stream()
 			.anyMatch(
-				hour -> checkByNowTime(hour.getDayOfWeek(), hour.getOpeningTime(), hour.getClosingTime(), now));
+				hour -> checkByNowTime(hour.getDayOfWeek(), hour.getOpeningTme(), hour.getClosingTme(), now));
 	}
 
 	public boolean checkBetweenBusinessHours(LocalTime businessStartTime, LocalTime businessEndTime,
@@ -117,8 +116,8 @@ public class BusinessHourOpenChecker {
 		return false;
 	}
 
-	private boolean hasMatchingDayOfWeek(List<BusinessHourEntity> businessHourEntities, LocalDateTime now) {
-		return businessHourEntities.stream()
+	private boolean hasMatchingDayOfWeek(List<BusinessHour> businessHours, LocalDateTime now) {
+		return businessHours.stream()
 			.anyMatch(hour -> hour.existsMatchingDayOfWeek(now));
 	}
 }

@@ -1,6 +1,7 @@
 package com.example.demo.cafe.domain;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import lombok.Builder;
@@ -17,5 +18,13 @@ public class BusinessHour {
 
 	public boolean hasId(BusinessHourId id) {
 		return this.id.isSameId(id);
+	}
+
+	public boolean existsMatchingDayOfWeek(LocalDateTime now) {
+		try {
+			return now.getDayOfWeek().equals(this.dayOfWeek);
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
 	}
 }

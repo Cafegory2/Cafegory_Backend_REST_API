@@ -18,6 +18,14 @@ public class FakeTimeUtil implements TimeUtil {
 		return LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 	}
 
+	public static LocalTime maxLocalTimeStatic() {
+		return LocalTime.of(23, 59, 59);
+	}
+
+	public static LocalTime localTimeStatic(int hour, int minute, int second) {
+		return LocalTime.of(hour, minute, second);
+	}
+
 	@Override
 	public LocalTime maxLocalTime() {
 		return LocalTime.of(23, 59, 59);
