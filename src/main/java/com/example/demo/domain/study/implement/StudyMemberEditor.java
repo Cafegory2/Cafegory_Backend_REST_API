@@ -2,7 +2,7 @@ package com.example.demo.domain.study.implement;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.db.study.repository2.StudyMemberRepository;
+import com.example.demo.domain.study.repository.StudyMemberRepository;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.study.domain.StudyId;
 import com.example.demo.domain.study.domain.StudyMemberId;

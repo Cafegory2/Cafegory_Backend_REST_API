@@ -6,12 +6,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyEntity;
-import com.example.demo.db.study.CafeStudyTagEntity;
-import com.example.demo.db.study.StudyJpaRepository;
-import com.example.demo.db.study.StudyPeriod;
+import com.example.demo.db.study.study.CafeStudyEntity;
+import com.example.demo.db.study.study.StudyJpaRepository;
+import com.example.demo.db.study.study.StudyPeriod;
+import com.example.demo.db.study.tag.CafeStudyTagEntity;
 import com.example.demo.domain.study.domain.MemberComms;
 import com.example.demo.domain.study.domain.RecruitmentStatus;
 

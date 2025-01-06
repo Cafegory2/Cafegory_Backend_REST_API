@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import com.example.demo.auth.service.token.JwtTokenManagementService;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtTokenAuthenticationException;
+import com.example.demo.domain.exception.ExceptionType;
+import com.example.demo.domain.exception.JwtTokenAuthenticationException;
 
 class JwtTokenManagementServiceTest extends ServiceTest {
 

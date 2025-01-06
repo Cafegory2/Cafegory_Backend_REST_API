@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.db.study.repository2.StudyMemberQueryRepository;
+import com.example.demo.domain.study.repository.StudyMemberQueryRepository;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.study.domain.Participant;
 import com.example.demo.domain.study.domain.StudyId;

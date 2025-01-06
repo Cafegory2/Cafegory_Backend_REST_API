@@ -1,8 +1,8 @@
 package com.example.demo.persister;
 
-import com.example.demo.db.cafe.CafeEntity;
-import com.example.demo.db.cafe.CafeKeywordEntity;
-import com.example.demo.db.cafe.CafeKeywordJpaRepository;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.db.cafe.keyword.CafeKeywordEntity;
+import com.example.demo.db.cafe.keyword.CafeKeywordJpaRepository;
 
 public class CafeKeywordPersister {
 

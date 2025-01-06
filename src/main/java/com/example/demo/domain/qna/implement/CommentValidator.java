@@ -1,11 +1,11 @@
 package com.example.demo.domain.qna.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.qna.domain.Comment;
 

@@ -1,20 +1,20 @@
 package com.example.demo.domain.study.implement;
 
-import static com.example.demo.db.study.CafeStudyEntity.*;
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.db.study.study.CafeStudyEntity.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
+import com.example.demo.domain.exception.CafegoryException;
+import com.example.demo.domain.exception.ExceptionType;
 import com.example.demo.domain.study.domain.Coordinator;
 import com.example.demo.domain.study.domain.Schedule;
 import com.example.demo.domain.study.domain.Study;
 import com.example.demo.domain.study.domain.StudyMemberId;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

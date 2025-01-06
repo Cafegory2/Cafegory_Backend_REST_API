@@ -9,9 +9,9 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.domain.cafe.domain.BusinessHour;
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.domain.exception.CafegoryException;
+import com.example.demo.domain.exception.ExceptionType;
+import com.example.demo.time.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 

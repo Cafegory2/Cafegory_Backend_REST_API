@@ -1,19 +1,19 @@
 package com.example.demo.auth.service.token;
 
-import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.auth.implement.tokenmanagerment.TokenClaims.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.auth.implement.token.JwtAccessToken;
 import com.example.demo.auth.implement.token.JwtClaims;
 import com.example.demo.auth.implement.token.JwtTokenValidator;
 import com.example.demo.auth.implement.tokenmanagerment.JwtCafegoryTokenManager;
 import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
+import com.example.demo.domain.exception.ExceptionType;
+import com.example.demo.domain.exception.JwtTokenAuthenticationException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
 import com.example.demo.domain.study.domain.StudyId;
 import com.example.demo.domain.study.domain.StudyMemberId;
 

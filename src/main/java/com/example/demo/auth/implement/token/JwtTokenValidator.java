@@ -1,12 +1,12 @@
 package com.example.demo.auth.implement.token;
 
-import static com.example.demo.exception.ExceptionType.*;
 import static com.example.demo.auth.implement.tokenmanagerment.TokenClaims.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtTokenAuthenticationException;
+import com.example.demo.domain.exception.ExceptionType;
+import com.example.demo.domain.exception.JwtTokenAuthenticationException;
 
 @Component
 public class JwtTokenValidator {

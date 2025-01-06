@@ -14,7 +14,7 @@ import com.example.demo.domain.cafe.domain.Cafe;
 import com.example.demo.domain.cafe.domain.CafeId;
 import com.example.demo.domain.cafe.service.BusinessHourService;
 import com.example.demo.domain.cafe.service.CafeQueryService;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 

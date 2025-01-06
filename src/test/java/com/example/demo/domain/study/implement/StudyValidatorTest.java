@@ -2,7 +2,7 @@ package com.example.demo.domain.study.implement;
 
 import static com.example.demo.builder.CoordinatorBuilder.*;
 import static com.example.demo.builder.StudyBuilder.*;
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,10 +14,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.example.demo.config.FakeTimeUtil;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.study.domain.Coordinator;
 import com.example.demo.domain.study.domain.Study;
 import com.example.demo.domain.study.domain.StudyMemberId;
-import com.example.demo.exception.CafegoryException;
 
 class StudyValidatorTest {
 

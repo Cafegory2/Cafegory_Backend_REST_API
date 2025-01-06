@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.config.JpaTest;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
 import com.example.demo.persister.CommentPersister;
 
 class CafeStudyCommentRepositoryTest extends JpaTest {

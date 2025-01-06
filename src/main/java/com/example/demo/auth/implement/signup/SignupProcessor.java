@@ -1,11 +1,11 @@
 package com.example.demo.auth.implement.signup;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.Member;
 import com.example.demo.domain.member.domain.MemberContent;
 import com.example.demo.domain.member.domain.MemberId;

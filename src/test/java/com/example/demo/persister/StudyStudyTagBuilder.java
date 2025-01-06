@@ -1,9 +1,9 @@
 package com.example.demo.persister;
 
-import com.example.demo.db.study.CafeStudyCafeStudyTagEntity;
-import com.example.demo.db.study.CafeStudyEntity;
-import com.example.demo.db.study.CafeStudyTagEntity;
-import com.example.demo.db.study.StudyStudyTagJpaRepository;
+import com.example.demo.db.study.study.CafeStudyEntity;
+import com.example.demo.db.study.tag.CafeStudyCafeStudyTagEntity;
+import com.example.demo.db.study.tag.CafeStudyTagEntity;
+import com.example.demo.db.study.tag.StudyStudyTagJpaRepository;
 
 public class StudyStudyTagBuilder {
 

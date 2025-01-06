@@ -1,0 +1,79 @@
+package com.example.demo.auth.security;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+	private final JwtTokenManager jwtTokenManager;
+	private final MemberDetailsService memberDetailsService;
+	private final AuthenticationEntryPoint authEntryPoint;
+
+	public SecurityConfig(JwtTokenManager jwtTokenManager, MemberDetailsService memberDetailsService,
+		@Qualifier("jwtTokenAuthenticationEntrypoint") AuthenticationEntryPoint authenticationEntryPoint) {
+		this.jwtTokenManager = jwtTokenManager;
+		this.memberDetailsService = memberDetailsService;
+		this.authEntryPoint = authenticationEntryPoint;
+	}
+
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		//JWT 토큰 검증을 하지 않으려면 anyMatchers에 url을 추가하고 JwtAuthenticationFilter 클래스 안에도 추가해야한다.
+		http
+			.csrf().disable()
+			.cors().and()
+			.authorizeHttpRequests(authorize -> authorize
+				.antMatchers("/favicon.ico").permitAll()
+				.antMatchers("/docs/**").permitAll()
+				.antMatchers("/login/**").permitAll()
+				.antMatchers("/auth/refresh").permitAll()
+				.antMatchers(HttpMethod.GET, "/cafe-studies/**").permitAll()
+				.antMatchers(HttpMethod.GET, "/cafes/**").permitAll()
+				.anyRequest().authenticated()
+			)
+			.addFilterBefore(new JwtAuthenticationFilter(jwtTokenManager, memberDetailsService),
+				UsernamePasswordAuthenticationFilter.class)
+			.exceptionHandling()
+			.authenticationEntryPoint(authEntryPoint)
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		return http.build();
+	}
+
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(
+			List.of("http://localhost:5173")
+		);
+		configuration.setAllowedMethods(
+			List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+		);
+		configuration.setAllowedHeaders(
+			List.of("Authorization", "Content-Type")
+		);
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
+}

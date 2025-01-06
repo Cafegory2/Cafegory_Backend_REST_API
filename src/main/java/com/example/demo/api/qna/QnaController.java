@@ -17,7 +17,7 @@ import com.example.demo.domain.qna.domain.Comment;
 import com.example.demo.domain.qna.domain.CommentId;
 import com.example.demo.domain.qna.service.QnaQueryService;
 import com.example.demo.domain.qna.service.QnaService;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 

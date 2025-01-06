@@ -1,9 +1,9 @@
 package com.example.demo.persister;
 
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyEntity;
-import com.example.demo.db.study.CafeStudyMemberEntity;
-import com.example.demo.db.study.StudyMemberJpaRepository;
+import com.example.demo.db.study.study.CafeStudyEntity;
+import com.example.demo.db.study.studymember.CafeStudyMemberEntity;
+import com.example.demo.db.study.studymember.StudyMemberJpaRepository;
 import com.example.demo.domain.study.domain.Attendance;
 import com.example.demo.domain.study.domain.StudyRole;
 

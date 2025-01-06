@@ -20,11 +20,14 @@ import com.example.demo.api.cafe.CafeSearchListRequest;
 import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeQueryDslRepository;
+import com.example.demo.db.cafe.tag.CafeTagEntity;
 import com.example.demo.db.member.MemberEntity;
 import com.example.demo.domain.cafe.domain.CafeTagType;
 import com.example.demo.persister.MemberPersister;
 import com.example.demo.persister.StudyConextPersister;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 @Import(CafeQueryDslRepository.class)
 public class CafeQueryDslRepositoryTest extends JpaTest {

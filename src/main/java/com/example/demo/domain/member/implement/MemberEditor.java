@@ -3,7 +3,7 @@ package com.example.demo.domain.member.implement;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.db.member.repository2.MemberRepository;
+import com.example.demo.domain.member.repository.MemberRepository;
 import com.example.demo.domain.member.domain.Member;
 import com.example.demo.domain.member.domain.MemberContent;
 import com.example.demo.domain.member.domain.MemberId;

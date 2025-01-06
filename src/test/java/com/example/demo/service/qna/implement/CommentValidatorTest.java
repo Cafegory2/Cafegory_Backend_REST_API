@@ -1,6 +1,6 @@
 package com.example.demo.service.qna.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.member.domain.MemberIdentity;
 import com.example.demo.domain.qna.domain.Comment;
 import com.example.demo.domain.qna.implement.CommentValidator;
-import com.example.demo.exception.CafegoryException;
 
 class CommentValidatorTest {
 

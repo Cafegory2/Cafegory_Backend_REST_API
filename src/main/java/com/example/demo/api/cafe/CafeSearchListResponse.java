@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
 import com.example.demo.domain.cafe.domain.BusinessHour;
 import com.example.demo.domain.cafe.domain.Cafe;
 import com.example.demo.domain.cafe.domain.CafeTagType;

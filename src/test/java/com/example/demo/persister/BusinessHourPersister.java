@@ -4,10 +4,10 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import com.example.demo.config.FakeTimeUtil;
-import com.example.demo.db.cafe.BusinessHourEntity;
-import com.example.demo.db.cafe.BusinessHourJpaRepository;
-import com.example.demo.db.cafe.CafeEntity;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.db.cafe.businessHour.BusinessHourEntity;
+import com.example.demo.db.cafe.businessHour.BusinessHourJpaRepository;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.time.TimeUtil;
 
 public class BusinessHourPersister {
 

@@ -27,14 +27,18 @@ import org.springframework.context.annotation.Import;
 import com.example.demo.auth.dto.SliceResponse;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.config.JpaTest;
-import com.example.demo.db.cafe.CafeEntity;
-import com.example.demo.db.cafe.CafeTagEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.db.cafe.tag.CafeTagEntity;
 import com.example.demo.db.member.MemberEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
+import com.example.demo.db.study.study.StudyQueryDslRepository;
+import com.example.demo.db.study.tag.CafeStudyTagEntity;
 import com.example.demo.domain.cafe.domain.CafeTagType;
 import com.example.demo.domain.study.domain.CafeStudyTagType;
 import com.example.demo.domain.study.domain.MemberComms;
+import com.example.demo.domain.study.repository.CafeStudySearchListRequest;
 import com.example.demo.persister.StudyConextPersister;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 @Import(StudyQueryDslRepository.class)
 class studyQueryDslRepositoryTest extends JpaTest {

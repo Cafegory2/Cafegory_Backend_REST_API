@@ -4,14 +4,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.api.study.CafeStudyDetailResponse;
 import com.example.demo.auth.dto.SliceResponse;
-import com.example.demo.db.study.CafeStudySearchListRequest;
-import com.example.demo.db.study.CafeStudySearchListResponse;
 import com.example.demo.domain.cafe.domain.Cafe;
 import com.example.demo.domain.cafe.implement.CafeReader;
 import com.example.demo.domain.study.domain.Study;
 import com.example.demo.domain.study.domain.StudyId;
 import com.example.demo.domain.study.implement.StudyMemberReader;
 import com.example.demo.domain.study.implement.StudyReader;
+import com.example.demo.domain.study.repository.CafeStudySearchListRequest;
+import com.example.demo.domain.study.repository.CafeStudySearchListResponse;
 
 import lombok.RequiredArgsConstructor;
 

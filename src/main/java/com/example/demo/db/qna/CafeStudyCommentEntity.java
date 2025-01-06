@@ -19,7 +19,7 @@ import org.hibernate.annotations.Where;
 
 import com.example.demo.auth.implement.BaseEntity;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
 import com.example.demo.domain.DateAudit;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.member.domain.MemberIdentity;

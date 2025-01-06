@@ -1,16 +1,16 @@
 package com.example.demo.domain.cafe.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 
 import com.example.demo.api.cafe.CafeSearchListRequest;
 import com.example.demo.auth.dto.SliceResponse;
-import com.example.demo.db.cafe.repository2.CafeQueryRepository;
-import com.example.demo.db.cafe.repository2.CafeRepository;
 import com.example.demo.domain.cafe.domain.Cafe;
 import com.example.demo.domain.cafe.domain.CafeId;
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.cafe.repository.CafeQueryRepository;
+import com.example.demo.domain.cafe.repository.CafeRepository;
+import com.example.demo.domain.exception.CafegoryException;
 
 import lombok.RequiredArgsConstructor;
 

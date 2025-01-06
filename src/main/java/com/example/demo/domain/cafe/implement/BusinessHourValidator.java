@@ -1,11 +1,11 @@
 package com.example.demo.domain.cafe.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 
 import com.example.demo.domain.cafe.domain.BusinessHour;
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.study.domain.Schedule;
 
 import lombok.RequiredArgsConstructor;

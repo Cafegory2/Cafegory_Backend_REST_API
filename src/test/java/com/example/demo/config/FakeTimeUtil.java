@@ -8,7 +8,7 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.context.annotation.Primary;
 
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 @TestComponent
 @Primary

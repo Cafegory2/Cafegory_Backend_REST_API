@@ -1,12 +1,12 @@
 package com.example.demo.domain.qna.service;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.qna.domain.Comment;
 import com.example.demo.domain.qna.domain.CommentContent;

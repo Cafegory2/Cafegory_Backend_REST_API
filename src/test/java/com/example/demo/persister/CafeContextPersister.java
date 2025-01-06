@@ -11,10 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.demo.db.cafe.AddressEmbeddable;
-import com.example.demo.db.cafe.CafeEntity;
-import com.example.demo.db.cafe.CafeJpaRepository;
-import com.example.demo.db.cafe.CafeTagEntity;
+import com.example.demo.db.cafe.cafe.AddressEmbeddable;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeJpaRepository;
+import com.example.demo.db.cafe.tag.CafeTagEntity;
 
 public class CafeContextPersister {
 

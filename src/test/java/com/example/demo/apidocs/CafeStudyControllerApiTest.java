@@ -14,14 +14,14 @@ import org.springframework.util.MultiValueMap;
 
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.db.cafe.CafeEntity;
-import com.example.demo.db.cafe.CafeTagEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.db.cafe.tag.CafeTagEntity;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyTagEntity;
+import com.example.demo.db.study.tag.CafeStudyTagEntity;
 import com.example.demo.domain.cafe.domain.CafeTagType;
 import com.example.demo.domain.study.domain.CafeStudyTagType;
 import com.example.demo.domain.study.domain.MemberComms;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

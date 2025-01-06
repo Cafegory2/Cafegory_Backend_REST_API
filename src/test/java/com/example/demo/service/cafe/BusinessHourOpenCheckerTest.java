@@ -18,7 +18,7 @@ import com.example.demo.builder.BusinessHourBuilder;
 import com.example.demo.config.FakeTimeUtil;
 import com.example.demo.domain.cafe.domain.BusinessHour;
 import com.example.demo.domain.cafe.implement.BusinessHourOpenChecker;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 public class BusinessHourOpenCheckerTest {
 

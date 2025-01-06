@@ -5,12 +5,6 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.domain.member.domain.Member;
-import com.example.demo.domain.member.domain.MemberContent;
-import com.example.demo.domain.member.domain.MemberId;
-import com.example.demo.domain.member.implement.MemberEditor;
-import com.example.demo.domain.member.implement.MemberReader;
 import com.example.demo.auth.dto.oauth2.OAuth2Profile;
 import com.example.demo.auth.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.auth.implement.login.LoginProcessor;
@@ -18,8 +12,14 @@ import com.example.demo.auth.implement.signup.SignupProcessor;
 import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.auth.infrastructure.aws.AwsS3Client;
 import com.example.demo.auth.infrastructure.oauth2.OAuth2Client;
-import com.example.demo.util.ImageData;
-import com.example.demo.util.ImageDownloadUtil;
+import com.example.demo.auth.util.ImageData;
+import com.example.demo.auth.util.ImageDownloadUtil;
+import com.example.demo.domain.exception.CafegoryException;
+import com.example.demo.domain.member.domain.Member;
+import com.example.demo.domain.member.domain.MemberContent;
+import com.example.demo.domain.member.domain.MemberId;
+import com.example.demo.domain.member.implement.MemberEditor;
+import com.example.demo.domain.member.implement.MemberReader;
 
 import lombok.RequiredArgsConstructor;
 

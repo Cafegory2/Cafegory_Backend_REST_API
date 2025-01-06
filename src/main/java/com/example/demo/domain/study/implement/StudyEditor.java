@@ -1,6 +1,6 @@
 package com.example.demo.domain.study.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -8,12 +8,6 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.db.study.repository2.CoordinatorRepository;
-import com.example.demo.db.study.repository2.StudyMemberRepository;
-import com.example.demo.db.study.repository2.StudyQueryRepository;
-import com.example.demo.db.study.repository2.StudyRepository;
-import com.example.demo.db.study.repository2.StudyStudyTagRepository;
-import com.example.demo.db.study.repository2.StudyTagRepository;
 import com.example.demo.domain.cafe.domain.CafeId;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.study.domain.Coordinator;
@@ -21,6 +15,12 @@ import com.example.demo.domain.study.domain.Study;
 import com.example.demo.domain.study.domain.StudyContent;
 import com.example.demo.domain.study.domain.StudyId;
 import com.example.demo.domain.study.domain.StudyTagId;
+import com.example.demo.domain.study.repository.CoordinatorRepository;
+import com.example.demo.domain.study.repository.StudyMemberRepository;
+import com.example.demo.domain.study.repository.StudyQueryRepository;
+import com.example.demo.domain.study.repository.StudyRepository;
+import com.example.demo.domain.study.repository.StudyStudyTagRepository;
+import com.example.demo.domain.study.repository.StudyTagRepository;
 
 import lombok.RequiredArgsConstructor;
 

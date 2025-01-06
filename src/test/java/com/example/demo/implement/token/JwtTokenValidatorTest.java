@@ -10,13 +10,13 @@ import java.util.Map;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.exception.JwtTokenAuthenticationException;
-import com.example.demo.factory.TestJwtFactory;
 import com.example.demo.auth.implement.token.JwtClaims;
 import com.example.demo.auth.implement.token.JwtTokenValidator;
 import com.example.demo.auth.implement.tokenmanagerment.JwtTokenManager;
 import com.example.demo.auth.implement.tokenmanagerment.TokenClaims;
+import com.example.demo.domain.exception.ExceptionType;
+import com.example.demo.domain.exception.JwtTokenAuthenticationException;
+import com.example.demo.factory.TestJwtFactory;
 
 class JwtTokenValidatorTest {
 

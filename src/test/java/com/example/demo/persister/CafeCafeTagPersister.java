@@ -1,9 +1,9 @@
 package com.example.demo.persister;
 
-import com.example.demo.db.cafe.CafeCafeTagEntity;
-import com.example.demo.db.cafe.CafeCafeTagJpaRepository;
-import com.example.demo.db.cafe.CafeEntity;
-import com.example.demo.db.cafe.CafeTagEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
+import com.example.demo.db.cafe.tag.CafeCafeTagEntity;
+import com.example.demo.db.cafe.tag.CafeCafeTagJpaRepository;
+import com.example.demo.db.cafe.tag.CafeTagEntity;
 
 public class CafeCafeTagPersister {
 

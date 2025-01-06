@@ -1,6 +1,6 @@
 package com.example.demo.domain.study.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.auth.dto.SliceResponse;
-import com.example.demo.db.study.CafeStudySearchListRequest;
-import com.example.demo.db.study.CafeStudySearchListResponse;
-import com.example.demo.db.study.repository2.StudyQueryRepository;
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.study.domain.Participant;
 import com.example.demo.domain.study.domain.Study;
 import com.example.demo.domain.study.domain.StudyId;
+import com.example.demo.domain.study.repository.CafeStudySearchListRequest;
+import com.example.demo.domain.study.repository.CafeStudySearchListResponse;
+import com.example.demo.domain.study.repository.StudyQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 

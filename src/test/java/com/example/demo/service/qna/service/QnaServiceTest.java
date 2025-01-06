@@ -1,7 +1,7 @@
 package com.example.demo.service.qna.service;
 
 import static com.example.demo.builder.CommentContentBuilder.*;
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 import static com.example.demo.persister.CafeContextPersister.*;
 import static com.example.demo.persister.CommentPersister.*;
 import static com.example.demo.persister.MemberPersister.*;
@@ -13,16 +13,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.demo.config.ServiceTest;
-import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
 import com.example.demo.db.member.MemberEntity;
 import com.example.demo.db.qna.CafeStudyCommentEntity;
-import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.qna.domain.CommentContent;
 import com.example.demo.domain.qna.domain.CommentId;
 import com.example.demo.domain.qna.service.QnaService;
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 class QnaServiceTest extends ServiceTest {
 

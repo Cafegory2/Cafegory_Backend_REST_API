@@ -1,13 +1,13 @@
 package com.example.demo.auth.implement.tokenmanagerment;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.demo.exception.JwtTokenAuthenticationException;
 import com.example.demo.auth.implement.token.JwtClaims;
+import com.example.demo.domain.exception.JwtTokenAuthenticationException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

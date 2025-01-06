@@ -13,8 +13,8 @@ import com.example.demo.auth.implement.signup.SignupProcessor;
 import com.example.demo.config.ServiceTest;
 import com.example.demo.db.member.MemberEntity;
 import com.example.demo.db.member.MemberJpaRepository;
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
+import com.example.demo.domain.exception.CafegoryException;
+import com.example.demo.domain.exception.ExceptionType;
 
 class SignupProcessorTest extends ServiceTest {
 

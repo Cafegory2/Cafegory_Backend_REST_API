@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.db.qna.repository2.CommentRepository;
+import com.example.demo.domain.qna.repository.CommentRepository;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.qna.domain.CommentContent;
 import com.example.demo.domain.qna.domain.CommentId;

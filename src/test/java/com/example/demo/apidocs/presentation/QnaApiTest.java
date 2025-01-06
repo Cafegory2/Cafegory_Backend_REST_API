@@ -16,11 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.epages.restdocs.apispec.RestAssuredRestDocumentationWrapper;
 import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.config.ApiDocsTest;
-import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.cafe.CafeEntity;
 import com.example.demo.db.member.MemberEntity;
-import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
 import com.example.demo.domain.study.domain.MemberComms;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

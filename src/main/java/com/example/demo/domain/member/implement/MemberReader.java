@@ -1,14 +1,14 @@
 package com.example.demo.domain.member.implement;
 
-import static com.example.demo.exception.ExceptionType.*;
+import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 
 import com.example.demo.db.member.MemberJpaRepository;
-import com.example.demo.db.member.repository2.MemberQueryRepository;
-import com.example.demo.exception.CafegoryException;
+import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.Member;
 import com.example.demo.domain.member.domain.MemberId;
+import com.example.demo.domain.member.repository.MemberQueryRepository;
 
 import lombok.RequiredArgsConstructor;
 

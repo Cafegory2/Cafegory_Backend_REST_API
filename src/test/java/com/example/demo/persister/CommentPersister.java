@@ -3,7 +3,7 @@ package com.example.demo.persister;
 import com.example.demo.db.member.MemberEntity;
 import com.example.demo.db.qna.CafeStudyCommentEntity;
 import com.example.demo.db.qna.CommentJpaRepository;
-import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.study.CafeStudyEntity;
 import com.example.demo.domain.study.domain.StudyRole;
 
 public class CommentPersister {

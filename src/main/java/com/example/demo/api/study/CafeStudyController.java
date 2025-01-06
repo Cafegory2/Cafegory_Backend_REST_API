@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.auth.dto.SliceResponse;
-import com.example.demo.db.study.CafeStudySearchListRequest;
-import com.example.demo.db.study.CafeStudySearchListResponse;
 import com.example.demo.domain.member.domain.MemberId;
 import com.example.demo.domain.study.domain.Study;
 import com.example.demo.domain.study.domain.StudyId;
+import com.example.demo.domain.study.repository.CafeStudySearchListRequest;
+import com.example.demo.domain.study.repository.CafeStudySearchListResponse;
 import com.example.demo.domain.study.service.CafeStudyQueryService;
 import com.example.demo.domain.study.service.CafeStudyService;
-import com.example.demo.util.TimeUtil;
+import com.example.demo.time.TimeUtil;
 
 import lombok.RequiredArgsConstructor;
 
