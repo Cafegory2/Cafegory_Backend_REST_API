@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.implement.MemberReader;
+import com.example.demo.domain.member.domain.Member;
+import com.example.demo.domain.member.implement.MemberReader;
 import com.example.demo.auth.implement.token.JwtToken;
 import com.example.demo.auth.implement.tokenmanagerment.JwtCafegoryTokenManager;
 

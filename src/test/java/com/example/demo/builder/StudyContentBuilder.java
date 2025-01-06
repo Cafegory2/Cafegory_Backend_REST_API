@@ -1,6 +1,10 @@
 package com.example.demo.builder;
 
-import com.example.demo.study.domain.*;
+import com.example.demo.domain.study.domain.CafeStudyTagType;
+import com.example.demo.domain.study.domain.MemberComms;
+import com.example.demo.domain.study.domain.Schedule;
+import com.example.demo.domain.study.domain.StudyContent;
+
 import java.util.ArrayList;
 import java.util.List;
 

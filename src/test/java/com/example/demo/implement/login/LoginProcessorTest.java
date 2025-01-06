@@ -7,12 +7,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.demo.config.ServiceTest;
-import com.example.demo.exception.CafegoryException;
-import com.example.demo.exception.ExceptionType;
-import com.example.demo.member.infrastructure.MemberEntity;
 import com.example.demo.auth.implement.login.LoginProcessor;
 import com.example.demo.auth.implement.token.JwtToken;
+import com.example.demo.config.ServiceTest;
+import com.example.demo.db.member.MemberEntity;
+import com.example.demo.exception.CafegoryException;
+import com.example.demo.exception.ExceptionType;
 
 class LoginProcessorTest extends ServiceTest {
 

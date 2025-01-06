@@ -1,0 +1,44 @@
+package com.example.demo.domain.study.service;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.api.study.CafeStudyDetailResponse;
+import com.example.demo.auth.dto.SliceResponse;
+import com.example.demo.db.study.CafeStudySearchListRequest;
+import com.example.demo.db.study.CafeStudySearchListResponse;
+import com.example.demo.domain.cafe.domain.Cafe;
+import com.example.demo.domain.cafe.implement.CafeReader;
+import com.example.demo.domain.study.domain.Study;
+import com.example.demo.domain.study.domain.StudyId;
+import com.example.demo.domain.study.implement.StudyMemberReader;
+import com.example.demo.domain.study.implement.StudyReader;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class CafeStudyQueryService {
+
+	private final StudyReader studyReader;
+	private final StudyMemberReader studyMemberReader;
+	private final CafeReader cafeReader;
+
+	public SliceResponse<CafeStudySearchListResponse> searchCafeStudiesByDynamicFilter(
+		CafeStudySearchListRequest request
+	) {
+		return studyReader.searchCafeStudies(request);
+	}
+
+	public CafeStudyDetailResponse getCafeStudyDetail(StudyId studyId) {
+		Study study = studyReader.read(studyId);
+		int viewCount = studyReader.readViewCountBy(studyId);
+		int participantCount = studyMemberReader.readParticipantCountBy(studyId);
+		Cafe cafe = cafeReader.read(study.getCafeId());
+
+		return CafeStudyDetailResponse.of(cafe, study, viewCount, participantCount);
+	}
+
+	public Study getStudy(StudyId studyId) {
+		return studyReader.read(studyId);
+	}
+}

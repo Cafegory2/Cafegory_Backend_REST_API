@@ -1,7 +1,7 @@
 package com.example.demo.builder;
 
-import com.example.demo.study.domain.Coordinator;
-import com.example.demo.study.domain.CoordinatorId;
+import com.example.demo.domain.study.domain.Coordinator;
+import com.example.demo.domain.study.domain.CoordinatorId;
 
 public class CoordinatorBuilder {
 

@@ -1,9 +1,9 @@
 package com.example.demo.persister;
 
-import com.example.demo.member.domain.BeverageSize;
-import com.example.demo.member.domain.Role;
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.member.infrastructure.MemberJpaRepository;
+import com.example.demo.db.member.MemberEntity;
+import com.example.demo.db.member.MemberJpaRepository;
+import com.example.demo.domain.member.domain.BeverageSize;
+import com.example.demo.domain.member.domain.Role;
 
 public class MemberPersister {
 

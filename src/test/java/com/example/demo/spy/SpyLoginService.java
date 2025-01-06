@@ -5,11 +5,11 @@ import java.util.UUID;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.domain.MemberContent;
-import com.example.demo.member.domain.MemberId;
-import com.example.demo.member.implement.MemberEditor;
-import com.example.demo.member.implement.MemberReader;
+import com.example.demo.domain.member.domain.Member;
+import com.example.demo.domain.member.domain.MemberContent;
+import com.example.demo.domain.member.domain.MemberId;
+import com.example.demo.domain.member.implement.MemberEditor;
+import com.example.demo.domain.member.implement.MemberReader;
 import com.example.demo.auth.dto.oauth2.OAuth2Profile;
 import com.example.demo.auth.dto.oauth2.OAuth2TokenRequest;
 import com.example.demo.auth.implement.login.LoginProcessor;

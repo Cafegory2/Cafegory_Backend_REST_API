@@ -1,6 +1,6 @@
 package com.example.demo.builder;
 
-import com.example.demo.member.domain.MemberIdentity;
+import com.example.demo.domain.member.domain.MemberIdentity;
 
 public class MemberIdentityBuilder {
 

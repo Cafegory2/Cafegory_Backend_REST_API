@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.CafegoryException;
-import com.example.demo.member.domain.Member;
-import com.example.demo.member.domain.MemberContent;
-import com.example.demo.member.domain.MemberId;
-import com.example.demo.member.domain.Role;
-import com.example.demo.member.implement.MemberEditor;
-import com.example.demo.member.implement.MemberReader;
+import com.example.demo.domain.member.domain.Member;
+import com.example.demo.domain.member.domain.MemberContent;
+import com.example.demo.domain.member.domain.MemberId;
+import com.example.demo.domain.member.domain.Role;
+import com.example.demo.domain.member.implement.MemberEditor;
+import com.example.demo.domain.member.implement.MemberReader;
 
 import lombok.RequiredArgsConstructor;
 

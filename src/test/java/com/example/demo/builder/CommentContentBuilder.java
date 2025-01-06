@@ -1,6 +1,6 @@
 package com.example.demo.builder;
 
-import com.example.demo.qna.domain.CommentContent;
+import com.example.demo.domain.qna.domain.CommentContent;
 
 public class CommentContentBuilder {
 

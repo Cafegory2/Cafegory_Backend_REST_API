@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.db.member.MemberJpaRepository;
 import com.example.demo.exception.JwtTokenAuthenticationException;
-import com.example.demo.member.infrastructure.MemberJpaRepository;
 
 import lombok.RequiredArgsConstructor;
 

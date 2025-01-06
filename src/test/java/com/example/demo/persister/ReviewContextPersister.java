@@ -5,11 +5,11 @@ import static com.example.demo.persister.ReviewCafeTagPersister.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.cafe.infrastructure.CafeTagEntity;
-import com.example.demo.cafe.infrastructure.ReviewEntity;
-import com.example.demo.cafe.infrastructure.ReviewJpaRepository;
-import com.example.demo.member.infrastructure.MemberEntity;
+import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.CafeTagEntity;
+import com.example.demo.db.cafe.ReviewEntity;
+import com.example.demo.db.cafe.ReviewJpaRepository;
+import com.example.demo.db.member.MemberEntity;
 
 public class ReviewContextPersister {
 

@@ -1,12 +1,12 @@
 package com.example.demo.builder;
 
 import com.example.demo.domain.DateAudit;
-import com.example.demo.member.domain.MemberIdentity;
-import com.example.demo.qna.domain.Comment;
-import com.example.demo.qna.domain.CommentContent;
-import com.example.demo.qna.domain.CommentId;
-import com.example.demo.qna.domain.ParentCommentId;
-import com.example.demo.study.domain.StudyId;
+import com.example.demo.domain.member.domain.MemberIdentity;
+import com.example.demo.domain.qna.domain.Comment;
+import com.example.demo.domain.qna.domain.CommentContent;
+import com.example.demo.domain.qna.domain.CommentId;
+import com.example.demo.domain.qna.domain.ParentCommentId;
+import com.example.demo.domain.study.domain.StudyId;
 
 import static com.example.demo.builder.CommentContentBuilder.*;
 import static com.example.demo.builder.DateAuditBuilder.*;

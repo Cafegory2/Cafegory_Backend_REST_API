@@ -6,9 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
-import com.example.demo.config.AcceptanceTest;
-import com.example.demo.member.presentation.WelcomeProfileResponse;
+import com.example.demo.api.member.WelcomeProfileResponse;
 import com.example.demo.auth.implement.token.JwtToken;
+import com.example.demo.config.AcceptanceTest;
 
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;

@@ -1,10 +1,10 @@
 package com.example.demo.persister;
 
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.qna.infrastructure.CafeStudyCommentEntity;
-import com.example.demo.qna.infrastructure.CommentJpaRepository;
-import com.example.demo.study.domain.StudyRole;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
+import com.example.demo.db.member.MemberEntity;
+import com.example.demo.db.qna.CafeStudyCommentEntity;
+import com.example.demo.db.qna.CommentJpaRepository;
+import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.domain.study.domain.StudyRole;
 
 public class CommentPersister {
 

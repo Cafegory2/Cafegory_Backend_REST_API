@@ -3,9 +3,9 @@ package com.example.demo.builder;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-import com.example.demo.cafe.domain.BusinessHour;
-import com.example.demo.cafe.domain.BusinessHourId;
 import com.example.demo.config.FakeTimeUtil;
+import com.example.demo.domain.cafe.domain.BusinessHour;
+import com.example.demo.domain.cafe.domain.BusinessHourId;
 
 public class BusinessHourBuilder {
 

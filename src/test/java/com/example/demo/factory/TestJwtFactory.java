@@ -9,6 +9,7 @@ import java.util.Map;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+// TODO 제거하기
 public class TestJwtFactory {
 
 	private static final String TEST_SECRET = "01234567890123456789012345678901234567890123456789";

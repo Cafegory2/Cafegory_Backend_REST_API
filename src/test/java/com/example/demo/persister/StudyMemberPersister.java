@@ -1,11 +1,11 @@
 package com.example.demo.persister;
 
-import com.example.demo.member.infrastructure.MemberEntity;
-import com.example.demo.study.domain.Attendance;
-import com.example.demo.study.domain.StudyRole;
-import com.example.demo.study.infrastructure.CafeStudyEntity;
-import com.example.demo.study.infrastructure.CafeStudyMemberEntity;
-import com.example.demo.study.infrastructure.StudyMemberJpaRepository;
+import com.example.demo.db.member.MemberEntity;
+import com.example.demo.db.study.CafeStudyEntity;
+import com.example.demo.db.study.CafeStudyMemberEntity;
+import com.example.demo.db.study.StudyMemberJpaRepository;
+import com.example.demo.domain.study.domain.Attendance;
+import com.example.demo.domain.study.domain.StudyRole;
 
 public class StudyMemberPersister {
 

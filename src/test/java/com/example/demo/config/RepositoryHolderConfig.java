@@ -3,15 +3,20 @@ package com.example.demo.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
-import com.example.demo.cafe.infrastructure.BusinessHourJpaRepository;
-import com.example.demo.cafe.infrastructure.CafeCafeTagJpaRepository;
-import com.example.demo.cafe.infrastructure.CafeJpaRepository;
-import com.example.demo.cafe.infrastructure.CafeKeywordJpaRepository;
-import com.example.demo.cafe.infrastructure.CafeTagJpaRepository;
-import com.example.demo.cafe.infrastructure.MenuJpaRepository;
-import com.example.demo.cafe.infrastructure.ReviewCafeTagJpaRepository;
-import com.example.demo.cafe.infrastructure.ReviewJpaRepository;
-import com.example.demo.member.infrastructure.MemberJpaRepository;
+import com.example.demo.db.cafe.BusinessHourJpaRepository;
+import com.example.demo.db.cafe.CafeCafeTagJpaRepository;
+import com.example.demo.db.cafe.CafeJpaRepository;
+import com.example.demo.db.cafe.CafeKeywordJpaRepository;
+import com.example.demo.db.cafe.CafeTagJpaRepository;
+import com.example.demo.db.cafe.MenuJpaRepository;
+import com.example.demo.db.cafe.ReviewCafeTagJpaRepository;
+import com.example.demo.db.cafe.ReviewJpaRepository;
+import com.example.demo.db.member.MemberJpaRepository;
+import com.example.demo.db.qna.CommentJpaRepository;
+import com.example.demo.db.study.StudyJpaRepository;
+import com.example.demo.db.study.StudyMemberJpaRepository;
+import com.example.demo.db.study.StudyStudyTagJpaRepository;
+import com.example.demo.db.study.StudyTagJpaRepository;
 import com.example.demo.persister.BusinessHourPersister;
 import com.example.demo.persister.CafeCafeTagPersister;
 import com.example.demo.persister.CafeContextPersister;
@@ -26,11 +31,6 @@ import com.example.demo.persister.StudyConextPersister;
 import com.example.demo.persister.StudyMemberPersister;
 import com.example.demo.persister.StudyStudyTagBuilder;
 import com.example.demo.persister.StudyTagPersister;
-import com.example.demo.qna.infrastructure.CommentJpaRepository;
-import com.example.demo.study.infrastructure.StudyJpaRepository;
-import com.example.demo.study.infrastructure.StudyMemberJpaRepository;
-import com.example.demo.study.infrastructure.StudyStudyTagJpaRepository;
-import com.example.demo.study.infrastructure.StudyTagJpaRepository;
 
 @TestComponent
 public class RepositoryHolderConfig {

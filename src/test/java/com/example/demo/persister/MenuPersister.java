@@ -1,8 +1,8 @@
 package com.example.demo.persister;
 
-import com.example.demo.cafe.infrastructure.CafeEntity;
-import com.example.demo.cafe.infrastructure.MenuEntity;
-import com.example.demo.cafe.infrastructure.MenuJpaRepository;
+import com.example.demo.db.cafe.CafeEntity;
+import com.example.demo.db.cafe.MenuEntity;
+import com.example.demo.db.cafe.MenuJpaRepository;
 
 public class MenuPersister {
 

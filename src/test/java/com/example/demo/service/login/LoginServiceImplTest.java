@@ -8,7 +8,7 @@ import com.example.demo.auth.infrastructure.aws.AwsS3Client;
 import com.example.demo.auth.infrastructure.oauth2.OAuth2Client;
 import com.example.demo.auth.service.login.LoginServiceImpl;
 import com.example.demo.config.ServiceTest;
-import com.example.demo.member.infrastructure.MemberJpaRepository;
+import com.example.demo.db.member.MemberJpaRepository;
 
 //TODO 두개의 테스트 모두 401 오류 발생, 설정파일 또는 카카오 Developer 등 확인 필요
 class LoginServiceImplTest extends ServiceTest {

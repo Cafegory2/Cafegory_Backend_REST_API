@@ -1,6 +1,6 @@
 package com.example.demo.builder;
 
-import com.example.demo.study.domain.Schedule;
+import com.example.demo.domain.study.domain.Schedule;
 
 import java.time.LocalDateTime;
 

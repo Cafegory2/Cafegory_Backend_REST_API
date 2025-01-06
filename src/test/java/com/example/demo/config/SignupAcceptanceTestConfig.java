@@ -1,12 +1,12 @@
 package com.example.demo.config;
 
-import com.example.demo.member.implement.MemberEditor;
+import com.example.demo.domain.member.implement.MemberEditor;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
 import com.example.demo.helper.MemberSignupAcceptanceTestHelper;
-import com.example.demo.member.implement.MemberReader;
+import com.example.demo.domain.member.implement.MemberReader;
 import com.example.demo.spy.SpyLoginService;
 import com.example.demo.auth.implement.login.LoginProcessor;
 import com.example.demo.auth.implement.signup.SignupProcessor;
