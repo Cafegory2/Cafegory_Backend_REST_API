@@ -4,7 +4,6 @@ import static com.example.demo.domain.exception.ExceptionType.*;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.db.member.MemberJpaRepository;
 import com.example.demo.domain.exception.CafegoryException;
 import com.example.demo.domain.member.domain.Member;
 import com.example.demo.domain.member.domain.MemberId;
@@ -16,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberReader {
 
-	private final MemberJpaRepository memberRepository;
+	// private final MemberJpaRepository memberJpaRepository;
 	private final MemberQueryRepository memberQueryRepository;
 
 	public boolean exists(String email) {
-		return memberRepository.existsByEmail(email);
+		return memberQueryRepository.existsByEmail(email);
 	}
 
 	public Member read(String email) {

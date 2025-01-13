@@ -24,4 +24,9 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
 	public Optional<Member> findById(Long id) {
 		return memberJpaRepository.findById(id).map(MemberEntity::toMember);
 	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		return memberJpaRepository.existsByEmail(email);
+	}
 }
